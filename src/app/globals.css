@@ -1,0 +1,51 @@
+@import "tailwindcss";
+
+/* 1. Dark Mode Variant (En üstte olması daha sağlıklı) */
+@custom-variant dark (&:is(.dark *));
+
+/* 2. Global Tema Tanımları */
+@theme {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card)); /* Bunu ekle */
+  --color-card-foreground: hsl(var(--card-foreground)); /* Bunu ekle */
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-border: hsl(var(--border));
+}
+
+/* 2. Renk Değişkenleri (Global) */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%; /* Buton yazısı için kritik */
+    --border: 214.3 31.8% 91.4%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --border: 217.2 32.6% 17.5%;
+  }
+}
+
+/* 3. Dark Mode'u 'class' tabanlı yapmak için şart */
+@custom-variant dark (&:is(.dark *));
+
+/* 4. Global Kenarlık ve Yazı Ayarı */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
