@@ -3,15 +3,15 @@
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetHeader } from "@/components/ui/sheet";
-import { Github, Menu, Boxes } from "lucide-react";
+import { ModeToggle } from "@/components/mode-toggle"; // Dark mode geri geldi
+import { Sheet, SheetContent, SheetTrigger, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Github, Menu, Boxes, ArrowRight, Twitter, Linkedin, Mail } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = React.useState(false);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  // Scroll takibi
   React.useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -19,114 +19,129 @@ export function Header() {
   }, []);
 
   const navItems = [
-    { name: "Hakkımda", href: "/#about" },
+    { name: "Giriş", href: "/#hero" },
     { name: "Projeler", href: "/#projects" },
-    { name: "Blog", href: "/#blog" },
+    { name: "Lab", href: "/#ai-lab" },
+    { name: "Blog", href: "/#blog" }, // Geri eklendi
     { name: "İletişim", href: "/#contact" },
   ];
 
-  // LOGO BİLEŞENİ
-  const BrandLogo = ({ onClick }: { onClick?: () => void }) => (
-    <Link 
-      href="/" 
-      className="flex items-center gap-2 group select-none z-50" 
-      onClick={onClick}
-    >
-      <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary text-primary-foreground group-hover:scale-105 transition-transform duration-300 shadow-sm">
+  const BrandLogo = () => (
+    <Link href="/" className="group flex items-center gap-2 select-none" onClick={() => setIsOpen(false)}>
+      <motion.div 
+        whileHover={{ rotate: 180 }}
+        transition={{ duration: 0.5 }}
+        className="flex items-center justify-center w-9 h-9 rounded-xl bg-primary text-primary-foreground shadow-[0_0_15px_rgba(var(--primary),0.5)]"
+      >
         <Boxes className="w-5 h-5" strokeWidth={2.5} />
-      </div>
-      <span className="text-xl font-black tracking-tighter text-foreground">
-        BERKAY
+      </motion.div>
+      <span className="text-lg font-black tracking-tighter text-foreground group-hover:text-primary transition-colors">
+        BERKAY<span className="text-primary animate-pulse">.</span>
       </span>
     </Link>
   );
 
   return (
-    <header
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
-        isScrolled
-          ? "bg-background/80 backdrop-blur-md border-b border-border/40 shadow-sm py-2"
-          : "bg-transparent border-transparent py-4"
-      }`}
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-50 flex justify-center transition-all duration-300 pointer-events-none ${isScrolled ? 'py-4' : 'py-6'}`}
     >
-      <div className="container mx-auto flex items-center justify-between px-4 h-12">
+      <div className={`
+        pointer-events-auto flex items-center justify-between 
+        w-full max-w-6xl mx-4 px-4 py-2 rounded-full 
+        transition-all duration-300
+        ${isScrolled 
+          ? "bg-background/70 backdrop-blur-xl border border-border/40 shadow-xl" 
+          : "bg-transparent border border-transparent"
+        }
+      `}>
         
-        {/* --- SOL: LOGO --- */}
+        {/* SOL: Logo */}
         <BrandLogo />
 
-        {/* --- ORTA: MASAÜSTÜ MENÜ (Mobilde Gizli) --- */}
-        <nav className="hidden md:flex items-center gap-8">
+        {/* ORTA: Masaüstü Menü */}
+        <nav className="hidden md:flex items-center gap-1 bg-secondary/30 p-1 rounded-full border border-border/10 backdrop-blur-sm">
           {navItems.map((item) => (
             <Link
               key={item.name}
               href={item.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+              className="px-4 py-1.5 rounded-full text-[12px] font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:bg-background transition-all duration-300"
             >
               {item.name}
             </Link>
           ))}
         </nav>
 
-        {/* --- SAĞ: AKSİYONLAR (Git, DarkMode, Menu) --- */}
-        <div className="flex items-center gap-1 md:gap-2">
-          
-          {/* GitHub (Her zaman görünür, mobilde de) */}
-          <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full" asChild>
+        {/* SAĞ: Aksiyonlar */}
+        <div className="flex items-center gap-2">
+          {/* Masaüstünde Dark Mode ve Github */}
+          <div className="hidden md:flex items-center gap-2">
              <Link href="https://github.com/kullaniciadin" target="_blank">
-                <Github className="h-[1.2rem] w-[1.2rem]" />
+                <Button variant="ghost" size="icon" className="rounded-full w-9 h-9">
+                   <Github className="w-4 h-4" />
+                </Button>
              </Link>
-          </Button>
+             <ModeToggle />
+          </div>
 
-          {/* Dark Mode (Her zaman görünür) */}
-          <ModeToggle />
-
-          {/* --- HAMBURGER MENÜ (Sadece Mobilde) --- */}
-          <div className="md:hidden ml-1">
+          {/* Mobil Menü Tetikleyici */}
+          <div className="md:hidden flex items-center gap-2">
+            <ModeToggle /> {/* Mobilde dışarıda da olsun, erişim kolaylığı */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="h-9 w-9">
-                  <Menu className="h-5 w-5" />
-                  <span className="sr-only">Menüyü aç</span>
+                <Button variant="outline" size="icon" className="rounded-full bg-background/50 border-border/40 w-10 h-10">
+                  <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-
-              {/* SHEET CONTENT: Tam ekran, sağdan kayan */}
-              <SheetContent 
-                side="right" 
-                className="w-full h-full border-none bg-background p-0 sm:max-w-none flex flex-col"
-              >
-                {/* Sheet Header: Logo ve Kapat Butonu için alan */}
-                <SheetHeader className="flex flex-row items-center justify-between p-4 px-6 border-b">
-                   <SheetTitle className="sr-only">Navigasyon Menüsü</SheetTitle> {/* Erişim için gerekli */}
-                   <BrandLogo onClick={() => setIsOpen(false)} />
-                   {/* Kapat butonu SheetContent içinde otomatik gelir, biz sadece hizaladık */}
+              <SheetContent side="right" className="w-full sm:max-w-md bg-background/95 backdrop-blur-2xl border-l border-border/10 p-0 flex flex-col">
+                
+                {/* Mobil Header */}
+                <SheetHeader className="p-6 border-b border-border/10 flex flex-row items-center justify-between">
+                   <SheetTitle className="sr-only">Navigasyon</SheetTitle>
+                   <BrandLogo />
+                   {/* Kapat butonu otomatik geliyor */}
                 </SheetHeader>
 
-                {/* Menü Linkleri */}
-                <div className="flex flex-col px-6 py-8 gap-6 mt-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                  {navItems.map((item) => (
-                    <Link
+                {/* Mobil Body (Linkler) */}
+                <div className="flex-1 flex flex-col justify-center px-8 gap-6">
+                  {navItems.map((item, i) => (
+                    <motion.div
                       key={item.name}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className="text-2xl font-bold tracking-tight hover:text-primary hover:pl-2 transition-all duration-300 border-b pb-4 border-border/40"
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.1 }}
                     >
-                      {item.name}
-                    </Link>
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className="group flex items-center justify-between text-3xl font-black tracking-tighter text-muted-foreground hover:text-foreground transition-all"
+                      >
+                        <span>{item.name}</span>
+                        <ArrowRight className="opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                      </Link>
+                    </motion.div>
                   ))}
                 </div>
 
-                {/* Alt Kısım (Opsiyonel Footer) */}
-                <div className="mt-auto p-6 pb-10">
-                   <p className="text-sm text-muted-foreground">
-                      © 2024 Berkay. Tüm hakları saklıdır.
+                {/* Mobil Footer (Sosyal & Info) */}
+                <div className="p-8 bg-secondary/10 border-t border-border/10">
+                   <div className="flex gap-4 mb-6">
+                      <Button variant="outline" size="icon" className="rounded-full"><Github className="w-4 h-4" /></Button>
+                      <Button variant="outline" size="icon" className="rounded-full"><Twitter className="w-4 h-4" /></Button>
+                      <Button variant="outline" size="icon" className="rounded-full"><Linkedin className="w-4 h-4" /></Button>
+                      <Button variant="outline" size="icon" className="rounded-full"><Mail className="w-4 h-4" /></Button>
+                   </div>
+                   <p className="text-xs text-muted-foreground font-mono tracking-widest uppercase">
+                      © 2026 Berkay.dev
                    </p>
                 </div>
+
               </SheetContent>
             </Sheet>
           </div>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
