@@ -90,7 +90,7 @@ export function HeroSection() {
             System Online: v2.5
           </div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-white">
+          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-foreground">
             BERKAY <br />
             {/* Gradient Text */}
             <span className={`text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-600`}>
@@ -101,7 +101,7 @@ export function HeroSection() {
           <p className="text-xl text-slate-400 font-light max-w-lg mx-auto lg:mx-0 leading-relaxed">
             Sıradan kod yazmıyorum. <br />
             <span className={`font-bold ${themes[themeColor].primary}`}>Next.js</span>, <span className={`font-bold ${themes[themeColor].primary}`}>Docker</span> ve <span className={`font-bold ${themes[themeColor].primary}`}>n8n</span> ile 
-            <span className={`block mt-2 text-2xl ${markerFont.className} text-white transform -rotate-1`}>
+            <span className={`block mt-2 text-2xl ${markerFont.className} text-foreground transform -rotate-1`}>
               sistemler otonomlaşıyor.
             </span>
           </p>
@@ -112,7 +112,7 @@ export function HeroSection() {
             </MagneticButton>
             
             {/* Renk Değiştirici (Easter Egg) */}
-            <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+            <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/5 border border-border backdrop-blur-md">
                {(Object.keys(themes) as Array<keyof typeof themes>).map(c => (
                  <button 
                     key={c} 
@@ -133,7 +133,7 @@ export function HeroSection() {
            className="relative"
         >
           {/* Terminal Window */}
-          <div className="rounded-[2rem] bg-[#0c0c0c] border border-white/10 shadow-2xl overflow-hidden relative group">
+          <div className="rounded-[2rem] bg-[#0c0c0c] border border-border shadow-2xl overflow-hidden relative group">
              {/* Header */}
              <div className="flex items-center justify-between px-6 py-4 bg-white/5 border-b border-white/5">
                 <div className="flex gap-2">
@@ -162,7 +162,7 @@ export function HeroSection() {
              <div className="absolute bottom-6 right-6">
                <button 
                  onClick={startListening}
-                 className={`p-4 rounded-full transition-all duration-300 ${isListening ? 'bg-red-500 animate-pulse shadow-red-500/50 shadow-lg' : `bg-white/10 hover:${themes[themeColor].bg} hover:text-black text-white`}`}
+                 className={`p-4 rounded-full transition-all duration-300 ${isListening ? 'bg-red-500 animate-pulse shadow-red-500/50 shadow-lg' : `bg-white/10 hover:${themes[themeColor].bg} hover:text-black text-foreground`}`}
                >
                   {isListening ? <MicOff size={24} /> : <Mic size={24} />}
                </button>

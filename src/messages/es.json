@@ -1,0 +1,157 @@
+{
+  "Navigation": {
+    "home": "Inicio",
+    "projects": "Proyectos",
+    "blog": "Blog",
+    "lab": "AI Lab",
+    "contact": "Contacto"
+  },
+  "HomePage": {
+    "badge": "Una nueva visión desde cero",
+    "title": "Diseño el<br />futuro digital",
+    "description": "Con la potencia de un portátil Monster, combino tecnologías web modernas con automatización mediante IA para crear sistemas escalables.",
+    "cta_projects": "Ver proyectos",
+    "cta_lab": "AI Lab",
+    "hero": {
+      "name": "BERKAY",
+      "portfolio": "PORTFOLIO"
+    },
+    "sections": {
+      "projects_preview_title": "Proyectos destacados",
+      "projects_preview_desc": "Aplicaciones web modernas desarrolladas de principio a fin, desde la idea hasta producción.",
+      "view_all_work": "Ver todo"
+    },
+    "projects": {
+      "saas_card": {
+        "title": "Kit de inicio SaaS",
+        "subtitle": "Next.js 15 & Supabase"
+      },
+      "code_card": {
+        "comment": "// Construyendo el futuro...",
+        "wip": "En desarrollo"
+      }
+    },
+    "automation": {
+      "system_active": "Sistema: Activo"
+    },
+    "ai_lab": {
+      "tag": "Experimental",
+      "title": "Laboratorio de Innovación en IA",
+      "description": "Proyectos experimentales y arquitecturas RAG que funcionan con modelos de IA locales."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Artículos y reflexiones",
+      "view_all": "Ver todo",
+      "posts": {
+        "1": {
+          "title": "Arquitectura de Next.js 15 y Server Actions",
+          "excerpt": "Estándares de rendimiento en aplicaciones web modernas.",
+          "category": "Arquitectura"
+        },
+        "2": {
+          "title": "LLM locales y automatización",
+          "excerpt": "Construir asistentes de IA enfocados en la privacidad.",
+          "category": "Ingeniería"
+        }
+      }
+    }
+  },
+  "AiLabPage": {
+    "welcome": "¿En qué puedo ayudarte?",
+    "sidebar": {
+      "categories": {
+        "tools": "HERRAMIENTAS",
+        "apps": "APLICACIONES"
+      },
+      "items": {
+        "chat": "Chat general",
+        "pdf": "Análisis de PDF",
+        "prompt": "Ingeniero de Prompts",
+        "youtube": "Análisis de video",
+        "scheduler": "Asistente inteligente"
+      },
+      "new_chat": "Nueva sesión",
+      "user_status": "Administrador"
+    },
+    "input": {
+      "placeholders": {
+        "chat": "Pregunta algo o solicita código...",
+        "pdf": "Pregunta sobre el PDF que subiste...",
+        "prompt": "Escribe tu idea y la convertiré en un prompt profesional..."
+      },
+      "warning": "AI Lab utiliza modelos locales. Puede cometer errores."
+    }
+  },
+  "ProjectsPage": {
+    "badge": "PORTFOLIO",
+    "title": "Trabajos",
+    "description": "Detalles técnicos de los proyectos que he construido, desde desarrollo full-stack hasta soluciones de automatización."
+  },
+  "ProjectsSection": {
+    "title": "Proyectos destacados",
+    "description": "Portafolio de proyectos en vivo gestionado dinámicamente con Google Sheets y automatizaciones n8n.",
+    "tech_stack_title": "TECNOLOGÍAS UTILIZADAS",
+    "buttons": {
+      "view_project": "Ver proyecto",
+      "load_more": "Mostrar más",
+      "retry": "Reintentar"
+    },
+    "states": {
+      "empty": "Aún no hay proyectos para mostrar.",
+      "error_title": "Error de conexión",
+      "error_desc": "Ocurrió un problema al cargar los proyectos desde el servidor."
+    }
+  },
+  "BlogHub": {
+    "title": "Blog y notas",
+    "description": "Mis pensamientos sobre software, IA y tecnología.",
+    "search_placeholder": "Buscar en los artículos...",
+    "categories": {
+      "all": "Todos",
+      "architecture": "Arquitectura",
+      "ai": "Inteligencia Artificial",
+      "automation": "Automatización"
+    },
+    "no_results": "No se encontraron artículos que coincidan con tu búsqueda."
+  },
+  "ContactForm": {
+    "tag": "Contacto",
+    "title": "Contáctame",
+    "subtitle": "¿Tienes una nueva idea de proyecto o solo quieres decir hola?",
+    "inputs": {
+      "name": "Nombre completo",
+      "email": "Correo electrónico",
+      "message": "Cuéntame sobre tu proyecto...",
+      "errors": {
+        "required": "Este campo es obligatorio.",
+        "invalid_email": "Formato de correo electrónico no válido."
+      }
+    },
+    "button": {
+      "default": "Enviar mensaje",
+      "sending": "Enviando..."
+    },
+    "success": {
+      "title": "¡Mensaje enviado!",
+      "description": "Tu mensaje fue recibido. Me pondré en contacto pronto.",
+      "reset": "Enviar nuevo mensaje"
+    },
+    "error": {
+      "title": "Ocurrió un error",
+      "description": "No se pudo establecer la conexión. Por favor envía un correo electrónico."
+    }
+  },
+  "Footer": {
+    "description": "Diseño sistemas autónomos y experiencias web modernas que dejan huella en el mundo digital. Creo valor más allá del código.",
+    "system_status": "Sistemas: Activos",
+    "explore": "Explorar",
+    "stay_connected": "Mantente conectado",
+    "project_idea": "¿Tienes una nueva idea de proyecto?",
+    "write_me": "escríbeme a",
+    "powered_by": "INFRAESTRUCTURA"
+  },
+  "LanguageSwitcher": {
+    "label": "Seleccionar idioma"
+  }
+}

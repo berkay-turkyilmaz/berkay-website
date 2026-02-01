@@ -1,0 +1,171 @@
+{
+  "Navigation": {
+    "home": "Giriş",
+    "projects": "Projeler",
+    "blog": "Blog",
+    "lab": "AI Lab",
+    "contact": "İletişim"
+  },
+  "HomePage": {
+    "badge": "Sıfırdan Başlayan Yeni Vizyon",
+    "title": "Dijital Geleceği Tasarlıyorum",
+    "description": "Monster notebook gücüyle, modern web teknolojileri ve yapay zeka otomasyonlarını birleştirerek ölçeklenebilir sistemler kuruyorum.",
+    "cta_projects": "Projeleri İncele",
+    "cta_lab": "AI Lab",
+    "hero": {
+      "name": "BERKAY",
+      "portfolio": "PORTFOLYO"
+    },
+    "sections": {
+      "projects_preview_title": "Seçilmiş Projeler",
+      "projects_preview_desc": "Fikir aşamasından canlı ortama, uçtan uca geliştirdiğim modern web uygulamaları.",
+      "view_all_work": "Tümünü Gör"
+    },
+    "projects": {
+      "saas_card": {
+        "title": "SaaS Başlangıç Kiti",
+        "subtitle": "Next.js 15 & Supabase"
+      },
+      "code_card": {
+        "comment": "// Geleceği inşa ediyor...",
+        "wip": "Geliştirme Aşamasında"
+      }
+    },
+    "automation": {
+      "system_active": "Sistem: Aktif"
+    },
+    "ai_lab": {
+      "tag": "Deneysel",
+      "title": "AI İnovasyon Lab",
+      "description": "Yerel yapay zeka modelleriyle çalışan deneysel projeler ve RAG mimarileri."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Yazılar & Düşünceler",
+      "view_all": "Tümünü Gör",
+      "posts": {
+        "1": {
+          "title": "Next.js 15 Mimarisi ve Server Actions",
+          "excerpt": "Modern web uygulamalarında performans standartları.",
+          "category": "Mimari"
+        },
+        "2": {
+          "title": "Yerel LLM ve Otomasyon",
+          "excerpt": "Gizlilik odaklı yapay zeka asistanları kurmak.",
+          "category": "Mühendislik"
+        }
+      }
+    },
+    "blog_preview": {
+      "title": "Son Yazılar",
+      "description": "Teknoloji dünyasından notlar ve teknik incelemeler.",
+      "view_all": "Tümünü Oku"
+    }
+  },
+  "AiLabPage": {
+    "welcome": "Nasıl yardımcı olabilirim?",
+    "sidebar": {
+      "categories": {
+        "tools": "ARAÇLAR",
+        "apps": "UYGULAMALAR"
+      },
+      "items": {
+        "chat": "Genel Sohbet",
+        "pdf": "PDF Analizi",
+        "prompt": "Prompt Mühendisi",
+        "youtube": "Video Analizi",
+        "scheduler": "Akıllı Asistan"
+      },
+      "new_chat": "Yeni Çalışma",
+      "user_status": "Yönetici"
+    },
+    "input": {
+      "placeholders": {
+        "chat": "Bir şeyler sor veya kod iste...",
+        "pdf": "Yüklediğin PDF hakkında soru sor...",
+        "prompt": "Fikrini yaz, profesyonel bir prompt'a dönüştüreyim..."
+      },
+      "warning": "AI Lab yerel modeller kullanır. Hata yapabilir."
+    }
+  },
+  "ProjectsPage": {
+    "badge": "PORTFOLYO",
+    "title": "Çalışmalar",
+    "description": "Full-stack geliştirmeden otomasyon çözümlerine kadar inşa ettiğim projelerin teknik detayları."
+  },
+  "ProjectsSection": {
+    "title": "Seçilmiş Projeler",
+    "description": "Google Sheets ve n8n otomasyonlarıyla beslenen, dinamik olarak yönetilen canlı proje portfolyosu.",
+    "tech_stack_title": "KULLANILAN TEKNOLOJİLER",
+    "buttons": {
+      "view_project": "Projeyi İncele",
+      "load_more": "Daha Fazla Göster",
+      "retry": "Tekrar Dene"
+    },
+    "states": {
+      "empty": "Henüz görüntülenecek proje bulunamadı.",
+      "error_title": "Bağlantı Hatası",
+      "error_desc": "Projeler sunucudan çekilirken bir sorun oluştu."
+    }
+  },
+  "BlogHub": {
+    "title": "Yazılar & Düşünceler",
+    "description": "Yazılım mimarisi, yapay zeka ve otomasyon üzerine notlar, rehberler ve teknik derinlemesine incelemeler.",
+    "search_placeholder": "Yazılarda ara...",
+    "no_results": "Aradığınız kriterlere uygun yazı bulunamadı.",
+    "categories": {
+      "all": "Tümü",
+      "architecture": "Mimari",
+      "ai": "Yapay Zeka",
+      "automation": "Otomasyon"
+    }
+  },
+  "BlogDetail": {
+    "enjoyed_article": "Bu yazıyı beğendin mi?",
+    "read_more_articles": "Daha Fazla Oku",
+    "back_to_blog": "Blog'a Dön",
+    "read_time": "dakika okuma",
+    "share": "Paylaş",
+    "next_post": "Sıradaki",
+    "toc_title": "İçindekiler"
+  },
+  "ContactForm": {
+    "tag": "İletişim",
+    "title": "Bana Ulaşın",
+    "subtitle": "Yeni bir proje fikriniz mi var veya sadece merhaba mı demek istiyorsunuz?",
+    "inputs": {
+      "name": "İsim Soyisim",
+      "email": "E-posta Adresi",
+      "message": "Projenizden bahsedin...",
+      "errors": {
+        "required": "Bu alan zorunludur.",
+        "invalid_email": "Geçersiz e-posta formatı."
+      }
+    },
+    "button": {
+      "default": "Mesajı Gönder",
+      "sending": "Gönderiliyor..."
+    },
+    "success": {
+      "title": "Mesaj İletildi!",
+      "description": "Mesajınız sisteme düştü. En kısa sürede geri dönüş yapacağım.",
+      "reset": "Yeni Mesaj Gönder"
+    },
+    "error": {
+      "title": "Hata Oluştu",
+      "description": "Bağlantı kurulamadı. Lütfen e-posta gönderin."
+    }
+  },
+  "Footer": {
+    "description": "Dijital dünyada iz bırakan, otonom sistemler ve modern web deneyimleri tasarlıyorum. Kodun ötesinde değer üretiyorum.",
+    "system_status": "Sistemler: Aktif",
+    "explore": "Keşfet",
+    "stay_connected": "İletişimde Kal",
+    "project_idea": "Yeni bir proje fikriniz mi var?",
+    "write_me": "adresine yazın",
+    "powered_by": "ALTYAPI"
+  },
+  "LanguageSwitcher": {
+    "label": "Dil Seçiniz"
+  }
+}

@@ -165,11 +165,11 @@ export default function AiLab() {
                 <div className="relative">
                   <div className="absolute inset-0 bg-blue-500 blur-xl opacity-50" />
                   <div className="relative p-2 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500">
-                    <Brain className="w-5 h-5 md:w-6 md:h-6 text-white" />
+                    <Brain className="w-5 h-5 md:w-6 md:h-6 text-foreground" />
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-lg md:text-xl font-bold text-white">AI Lab</h1>
+                  <h1 className="text-lg md:text-xl font-bold text-foreground">AI Lab</h1>
                   <p className="text-xs text-slate-500 hidden sm:block">Hybrid Intelligence Platform</p>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export default function AiLab() {
                 {messages.length > 0 && (
                   <button
                     onClick={clearConversation}
-                    className="p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-white transition-colors"
+                    className="p-2 rounded-lg hover:bg-slate-800/50 text-slate-400 hover:text-foreground transition-colors"
                     title="Clear conversation"
                   >
                     <X className="w-4 h-4" />
@@ -219,12 +219,12 @@ export default function AiLab() {
                     activeTab === tab.id ? `text-${tab.color}-400` : 'text-slate-500'
                   }`} />
                   <span className={`text-sm font-medium transition-colors hidden sm:inline ${
-                    activeTab === tab.id ? 'text-white' : 'text-slate-500'
+                    activeTab === tab.id ? 'text-foreground' : 'text-slate-500'
                   }`}>
                     {tab.fullLabel}
                   </span>
                   <span className={`text-sm font-medium transition-colors sm:hidden ${
-                    activeTab === tab.id ? 'text-white' : 'text-slate-500'
+                    activeTab === tab.id ? 'text-foreground' : 'text-slate-500'
                   }`}>
                     {tab.label}
                   </span>
@@ -241,7 +241,7 @@ export default function AiLab() {
                 <div className="inline-flex p-4 rounded-2xl bg-slate-900/50 border border-slate-800/50 mb-6">
                   <currentTab.icon className={`w-8 h-8 md:w-12 md:h-12 text-${currentTab.color}-400`} />
                 </div>
-                <h2 className="text-xl md:text-2xl font-bold text-white mb-3">
+                <h2 className="text-xl md:text-2xl font-bold text-foreground mb-3">
                   {currentTab.fullLabel}
                 </h2>
                 <p className="text-sm md:text-base text-slate-400 max-w-md mx-auto mb-6">
@@ -268,14 +268,14 @@ export default function AiLab() {
                   >
                     {message.role === 'assistant' && (
                       <div className={`flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-${currentTab.color}-500 to-${currentTab.color}-600 flex items-center justify-center`}>
-                        <Sparkles className="w-4 h-4 text-white" />
+                        <Sparkles className="w-4 h-4 text-foreground" />
                       </div>
                     )}
                     
                     <div className={`flex-1 max-w-[85%] md:max-w-[75%] ${message.role === 'user' ? 'order-1' : ''}`}>
                       <div className={`rounded-2xl p-4 ${
                         message.role === 'user' 
-                          ? 'bg-blue-600 text-white' 
+                          ? 'bg-blue-600 text-foreground' 
                           : 'bg-slate-900/50 border border-slate-800/50 text-slate-100'
                       }`}>
                         <div className="text-sm md:text-base leading-relaxed whitespace-pre-wrap break-words">
@@ -308,7 +308,7 @@ export default function AiLab() {
                     </div>
 
                     {message.role === 'user' && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white text-sm font-semibold">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-foreground text-sm font-semibold">
                         U
                       </div>
                     )}
@@ -322,7 +322,7 @@ export default function AiLab() {
             {isLoading && (
               <div className="flex gap-4">
                 <div className={`flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-${currentTab.color}-500 to-${currentTab.color}-600 flex items-center justify-center`}>
-                  <Sparkles className="w-4 h-4 text-white" />
+                  <Sparkles className="w-4 h-4 text-foreground" />
                 </div>
                 <div className="flex-1">
                   <div className="rounded-2xl p-4 bg-slate-900/50 border border-slate-800/50">
@@ -430,7 +430,7 @@ export default function AiLab() {
 
       {/* Copied Toast */}
       {showCopied && (
-        <div className="fixed bottom-24 right-4 px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium shadow-lg animate-in slide-in-from-bottom-5 fade-in">
+        <div className="fixed bottom-24 right-4 px-4 py-2 rounded-lg bg-emerald-600 text-foreground text-sm font-medium shadow-lg animate-in slide-in-from-bottom-5 fade-in">
           Copied to clipboard!
         </div>
       )}

@@ -1,0 +1,157 @@
+{
+  "Navigation": {
+    "home": "Startseite",
+    "projects": "Projekte",
+    "blog": "Blog",
+    "lab": "AI Lab",
+    "contact": "Kontakt"
+  },
+  "HomePage": {
+    "badge": "Eine neue Vision von Grund auf",
+    "title": "Ich gestalte die<br />digitale Zukunft",
+    "description": "Mit der Leistung eines Monster-Notebooks entwickle ich skalierbare Systeme, indem ich moderne Webtechnologien mit KI-Automatisierungen kombiniere.",
+    "cta_projects": "Projekte ansehen",
+    "cta_lab": "AI Lab",
+    "hero": {
+      "name": "BERKAY",
+      "portfolio": "PORTFOLIO"
+    },
+    "sections": {
+      "projects_preview_title": "Ausgewählte Projekte",
+      "projects_preview_desc": "Moderne Webanwendungen, die ich von der Idee bis zur Live-Schaltung vollständig entwickelt habe.",
+      "view_all_work": "Alle anzeigen"
+    },
+    "projects": {
+      "saas_card": {
+        "title": "SaaS Starter-Kit",
+        "subtitle": "Next.js 15 & Supabase"
+      },
+      "code_card": {
+        "comment": "// Zukunft wird gebaut...",
+        "wip": "In Entwicklung"
+      }
+    },
+    "automation": {
+      "system_active": "System: Aktiv"
+    },
+    "ai_lab": {
+      "tag": "Experimentell",
+      "title": "AI Innovationslabor",
+      "description": "Experimentelle Projekte und RAG-Architekturen mit lokal ausgeführten KI-Modellen."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Artikel & Gedanken",
+      "view_all": "Alle anzeigen",
+      "posts": {
+        "1": {
+          "title": "Next.js 15 Architektur und Server Actions",
+          "excerpt": "Performance-Standards moderner Webanwendungen.",
+          "category": "Architektur"
+        },
+        "2": {
+          "title": "Lokale LLMs und Automatisierung",
+          "excerpt": "Datenschutzorientierte KI-Assistenten aufbauen.",
+          "category": "Engineering"
+        }
+      }
+    }
+  },
+  "AiLabPage": {
+    "welcome": "Wie kann ich helfen?",
+    "sidebar": {
+      "categories": {
+        "tools": "WERKZEUGE",
+        "apps": "ANWENDUNGEN"
+      },
+      "items": {
+        "chat": "Allgemeiner Chat",
+        "pdf": "PDF-Analyse",
+        "prompt": "Prompt-Engineer",
+        "youtube": "Videoanalyse",
+        "scheduler": "Intelligenter Assistent"
+      },
+      "new_chat": "Neue Sitzung",
+      "user_status": "Administrator"
+    },
+    "input": {
+      "placeholders": {
+        "chat": "Frag etwas oder fordere Code an...",
+        "pdf": "Stelle eine Frage zu deiner hochgeladenen PDF...",
+        "prompt": "Schreibe deine Idee, ich verwandle sie in einen professionellen Prompt..."
+      },
+      "warning": "AI Lab verwendet lokale Modelle. Fehler sind möglich."
+    }
+  },
+  "ProjectsPage": {
+    "badge": "PORTFOLIO",
+    "title": "Arbeiten",
+    "description": "Technische Details der Projekte, die ich von Full-Stack-Entwicklung bis hin zu Automatisierungslösungen umgesetzt habe."
+  },
+  "ProjectsSection": {
+    "title": "Ausgewählte Projekte",
+    "description": "Ein dynamisch verwaltetes, live Projektportfolio, gespeist durch Google Sheets und n8n-Automatisierungen.",
+    "tech_stack_title": "VERWENDETE TECHNOLOGIEN",
+    "buttons": {
+      "view_project": "Projekt ansehen",
+      "load_more": "Mehr anzeigen",
+      "retry": "Erneut versuchen"
+    },
+    "states": {
+      "empty": "Es wurden noch keine Projekte gefunden.",
+      "error_title": "Verbindungsfehler",
+      "error_desc": "Beim Laden der Projekte vom Server ist ein Fehler aufgetreten."
+    }
+  },
+  "BlogHub": {
+    "title": "Blog & Notizen",
+    "description": "Meine Gedanken zu Software, KI und Technologie.",
+    "search_placeholder": "In Artikeln suchen...",
+    "categories": {
+      "all": "Alle",
+      "architecture": "Architektur",
+      "ai": "Künstliche Intelligenz",
+      "automation": "Automatisierung"
+    },
+    "no_results": "Es wurden keine Beiträge gefunden, die deinen Kriterien entsprechen."
+  },
+  "ContactForm": {
+    "tag": "Kontakt",
+    "title": "Kontakt aufnehmen",
+    "subtitle": "Haben Sie eine neue Projektidee oder möchten Sie einfach Hallo sagen?",
+    "inputs": {
+      "name": "Vor- und Nachname",
+      "email": "E-Mail-Adresse",
+      "message": "Erzählen Sie von Ihrem Projekt...",
+      "errors": {
+        "required": "Dieses Feld ist erforderlich.",
+        "invalid_email": "Ungültiges E-Mail-Format."
+      }
+    },
+    "button": {
+      "default": "Nachricht senden",
+      "sending": "Wird gesendet..."
+    },
+    "success": {
+      "title": "Nachricht gesendet!",
+      "description": "Ihre Nachricht wurde übermittelt. Ich melde mich so schnell wie möglich.",
+      "reset": "Neue Nachricht senden"
+    },
+    "error": {
+      "title": "Fehler aufgetreten",
+      "description": "Verbindung fehlgeschlagen. Bitte senden Sie eine E-Mail."
+    }
+  },
+  "Footer": {
+    "description": "Ich entwerfe autonome Systeme und moderne Web-Erlebnisse, die in der digitalen Welt Spuren hinterlassen. Ich schaffe Mehrwert über den Code hinaus.",
+    "system_status": "Systeme: Aktiv",
+    "explore": "Entdecken",
+    "stay_connected": "In Verbindung bleiben",
+    "project_idea": "Haben Sie eine neue Projektidee?",
+    "write_me": "schreiben Sie mir an",
+    "powered_by": "INFRASTRUKTUR"
+  },
+  "LanguageSwitcher": {
+    "label": "Sprache auswählen"
+  }
+}

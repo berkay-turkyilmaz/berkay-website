@@ -1,0 +1,171 @@
+{
+  "Navigation": {
+    "home": "Home",
+    "projects": "Projects",
+    "blog": "Blog",
+    "lab": "AI Lab",
+    "contact": "Contact"
+  },
+  "HomePage": {
+    "badge": "New Vision from Scratch",
+    "title": "Architecting the<br />Digital Future",
+    "description": "Building scalable systems by combining modern web technologies and AI automation, powered by Monster notebook performance.",
+    "cta_projects": "View Projects",
+    "cta_lab": "AI Lab",
+    "hero": {
+      "name": "BERKAY",
+      "portfolio": "PORTFOLIO"
+    },
+    "sections": {
+      "projects_preview_title": "Selected Works",
+      "projects_preview_desc": "End-to-end modern web applications developed from concept to production.",
+      "view_all_work": "View All Work"
+    },
+    "projects": {
+      "saas_card": {
+        "title": "SaaS Starter Kit",
+        "subtitle": "Next.js 15 & Supabase"
+      },
+      "code_card": {
+        "comment": "// Building the future...",
+        "wip": "Work in Progress"
+      }
+    },
+    "automation": {
+      "system_active": "System: Active"
+    },
+    "ai_lab": {
+      "tag": "Experimental",
+      "title": "AI Innovation Lab",
+      "description": "Experimental projects and RAG architectures running on local AI models."
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Writing & Thoughts",
+      "view_all": "View All",
+      "posts": {
+        "1": {
+          "title": "Next.js 15 Architecture & Server Actions",
+          "excerpt": "Performance standards in modern web applications.",
+          "category": "Architecture"
+        },
+        "2": {
+          "title": "Local LLM & Automation",
+          "excerpt": "Building privacy-focused AI assistants.",
+          "category": "Engineering"
+        }
+      }
+    },
+    "blog_preview": {
+      "title": "Latest Articles",
+      "description": "Notes and technical deep dives from the tech world.",
+      "view_all": "Read All"
+    }
+  },
+  "AiLabPage": {
+    "welcome": "How can I help you?",
+    "sidebar": {
+      "categories": {
+        "tools": "TOOLS",
+        "apps": "APPLICATIONS"
+      },
+      "items": {
+        "chat": "General Chat",
+        "pdf": "PDF Analysis",
+        "prompt": "Prompt Engineer",
+        "youtube": "Video Analysis",
+        "scheduler": "Smart Assistant"
+      },
+      "new_chat": "New Chat",
+      "user_status": "Admin"
+    },
+    "input": {
+      "placeholders": {
+        "chat": "Ask anything or request code...",
+        "pdf": "Ask a question about the uploaded PDF...",
+        "prompt": "Enter your idea to transform it into a prompt..."
+      },
+      "warning": "AI Lab uses local models. May make mistakes."
+    }
+  },
+  "ProjectsPage": {
+    "badge": "PORTFOLIO",
+    "title": "Works",
+    "description": "Technical details of the projects I've built, from full-stack development to automation solutions."
+  },
+  "ProjectsSection": {
+    "title": "Selected Projects",
+    "description": "A dynamic project portfolio managed via Google Sheets and n8n automation pipeline.",
+    "tech_stack_title": "TECH STACK",
+    "buttons": {
+      "view_project": "View Project",
+      "load_more": "Load More",
+      "retry": "Try Again"
+    },
+    "states": {
+      "empty": "No projects found to display.",
+      "error_title": "Connection Error",
+      "error_desc": "An issue occurred while fetching projects from the server."
+    }
+  },
+  "ContactForm": {
+    "tag": "Contact",
+    "title": "Get in Touch",
+    "subtitle": "Have a project in mind or just want to say hi?",
+    "inputs": {
+      "name": "Full Name",
+      "email": "Email Address",
+      "message": "Tell me about your project...",
+      "errors": {
+        "required": "This field is required.",
+        "invalid_email": "Invalid email format."
+      }
+    },
+    "button": {
+      "default": "Send Message",
+      "sending": "Sending..."
+    },
+    "success": {
+      "title": "Message Sent!",
+      "description": "Your message has been received. I'll get back to you shortly.",
+      "reset": "Send New Message"
+    },
+    "error": {
+      "title": "Error Occurred",
+      "description": "Connection failed. Please send an email directly."
+    }
+  },
+  "BlogHub": {
+    "title": "Writing & Thoughts",
+    "description": "Notes, guides, and technical deep dives on software architecture, AI, and automation.",
+    "search_placeholder": "Search articles...",
+    "no_results": "No articles found matching your criteria.",
+    "categories": {
+      "all": "All",
+      "architecture": "Architecture",
+      "ai": "Artificial Intelligence",
+      "automation": "Automation"
+    }
+  },
+  "BlogDetail": {
+    "enjoyed_article": "Enjoyed this article?",
+    "read_more_articles": "Read More",
+    "back_to_blog": "Back to Blog",
+    "read_time": "min read",
+    "share": "Share",
+    "next_post": "Next Up",
+    "toc_title": "Table of Contents"
+  },
+  "Footer": {
+    "description": "Designing digital footprints, autonomous systems, and modern web experiences. Creating value beyond code.",
+    "system_status": "Systems: Online",
+    "explore": "Explore",
+    "stay_connected": "Stay Connected",
+    "project_idea": "Have a project idea?",
+    "write_me": "write to",
+    "powered_by": "POWERED BY"
+  },
+  "LanguageSwitcher": {
+    "label": "Select Language"
+  }
+}
