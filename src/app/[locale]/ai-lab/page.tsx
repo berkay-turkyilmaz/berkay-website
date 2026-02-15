@@ -7,10 +7,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   MessageSquare, FileText, Terminal, Video, Calendar,
   Settings, PanelLeft, Plus, Send, Paperclip,
-  Sparkles, Bot, User, Command
+  Sparkles, Bot, User, Command, GraduationCap
 } from 'lucide-react';
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "@/i18n/routing";
 
 type ToolType = 'chat' | 'prompt' | 'pdf';
 
@@ -22,6 +23,7 @@ interface Message {
 
 export default function AiLabWorkspace() {
   const t = useTranslations("AiLabPage");
+  const router = useRouter();
   
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [activeTool, setActiveTool] = useState<ToolType>('chat');
@@ -52,6 +54,14 @@ export default function AiLabWorkspace() {
         { id: 'chat', label: t("sidebar.items.chat"), icon: MessageSquare, type: 'tool', beta: false },
         { id: 'pdf', label: t("sidebar.items.pdf"), icon: FileText, type: 'tool', beta: false },
         { id: 'prompt', label: t("sidebar.items.prompt"), icon: Terminal, type: 'tool', beta: false },
+        { 
+          id: 'english', 
+          label: 'English Lab', // Veya t("sidebar.items.english") 
+          icon: GraduationCap, 
+          type: 'link', 
+          href: '/ai-lab/english-practice', // Oluşturduğumuz sayfanın yolu
+          beta: false 
+        },
       ]
     },
     {
@@ -64,8 +74,8 @@ export default function AiLabWorkspace() {
   ];
 
   const handleToolClick = (item: any) => {
-    if (item.type === 'link') {
-       // Link mantığı
+    if (item.type === 'link' && item.href) {
+       router.push(item.href); // <--- Yönlendirmeyi yap
     } else {
        setActiveTool(item.id as ToolType);
        if (window.innerWidth < 768) setIsSidebarOpen(false);
