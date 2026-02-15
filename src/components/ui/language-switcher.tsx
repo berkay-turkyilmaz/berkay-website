@@ -21,7 +21,7 @@ export default function LanguageSwitcher() {
   const languages = [
     { code: "tr", label: "Türkçe", flag: "🇹🇷" },
     { code: "en", label: "English", flag: "🇺🇸" },
-    // { code: "de", label: "Deutsch", flag: "🇩🇪" }, // Gelecek için hazır
+    { code: "de", label: "Deutsch", flag: "🇩🇪" }, 
     // { code: "es", label: "Espana", flag: "es" },
     // { code: "fr", label: "France", flag: "fr" },
     // { code: "ar", label: "Arabic", flag: "ar" },

@@ -14,7 +14,7 @@ export function Footer() {
     { icon: Github, href: "https://github.com/berkayturkyilmaz", label: "Github" },
     { icon: Linkedin, href: "https://linkedin.com/in/berkayturkyilmaz", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Mail, href: "mailto:hello@berkay.dev", label: "Email" },
+    { icon: Mail, href: "mailto:hello@berkaytrkylmzz@gmail.com", label: "Email" },
   ];
 
   // Site İçi Linkler
@@ -38,7 +38,7 @@ export function Footer() {
           <div className="md:col-span-5 space-y-6">
             <Link href="/" className="flex items-center gap-2 font-black text-2xl tracking-tighter group w-fit">
               <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded-md text-xl group-hover:rotate-12 transition-transform duration-300">B.</span>
-              <span className="text-foreground">BERKAY.DEV</span>
+              <span className="text-foreground">berkaytrkylmzz@gmail.com</span>
             </Link>
             
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
@@ -86,8 +86,8 @@ export function Footer() {
             
             <p className="text-xs text-muted-foreground leading-relaxed">
               {t("project_idea")} <br />
-              <a href="mailto:hello@berkay.dev" className="text-primary hover:underline font-semibold">
-                hello@berkay.dev
+              <a href="mailto:hello@berkaytrkylmzz@gmail.com" className="text-primary hover:underline font-semibold">
+                hello@berkaytrkylmzz@gmail.com
               </a> {t("write_me")}.
             </p>
           </div>

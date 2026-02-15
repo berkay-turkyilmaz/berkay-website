@@ -8,8 +8,8 @@
   },
   "HomePage": {
     "badge": "Eine neue Vision von Grund auf",
-    "title": "Ich gestalte die<br />digitale Zukunft",
-    "description": "Mit der Leistung eines Monster-Notebooks entwickle ich skalierbare Systeme, indem ich moderne Webtechnologien mit KI-Automatisierungen kombiniere.",
+    "title": "Ich gestalte die digitale Zukunft",
+    "description": "Aufbau skalierbarer Systeme mit der Kraft von Monster-Notebooks, unter Kombination moderner Webtechnologien und KI-Automatisierung.",
     "cta_projects": "Projekte ansehen",
     "cta_lab": "AI Lab",
     "hero": {
@@ -18,16 +18,16 @@
     },
     "sections": {
       "projects_preview_title": "Ausgewählte Projekte",
-      "projects_preview_desc": "Moderne Webanwendungen, die ich von der Idee bis zur Live-Schaltung vollständig entwickelt habe.",
-      "view_all_work": "Alle anzeigen"
+      "projects_preview_desc": "End-to-End moderne Webanwendungen, entwickelt von der Idee bis zum Live-Betrieb.",
+      "view_all_work": "Alle ansehen"
     },
     "projects": {
       "saas_card": {
-        "title": "SaaS Starter-Kit",
+        "title": "SaaS Starter Kit",
         "subtitle": "Next.js 15 & Supabase"
       },
       "code_card": {
-        "comment": "// Zukunft wird gebaut...",
+        "comment": "// Die Zukunft bauen...",
         "wip": "In Entwicklung"
       }
     },
@@ -36,25 +36,30 @@
     },
     "ai_lab": {
       "tag": "Experimentell",
-      "title": "AI Innovationslabor",
-      "description": "Experimentelle Projekte und RAG-Architekturen mit lokal ausgeführten KI-Modellen."
+      "title": "AI Innovation Lab",
+      "description": "Experimentelle Projekte, die auf lokalen KI-Modellen und RAG-Architekturen basieren."
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Artikel & Gedanken",
-      "view_all": "Alle anzeigen",
+      "subtitle": "Schreiben & Gedanken",
+      "view_all": "Alle ansehen",
       "posts": {
         "1": {
           "title": "Next.js 15 Architektur und Server Actions",
-          "excerpt": "Performance-Standards moderner Webanwendungen.",
+          "excerpt": "Leistungsstandards in modernen Webanwendungen.",
           "category": "Architektur"
         },
         "2": {
-          "title": "Lokale LLMs und Automatisierung",
-          "excerpt": "Datenschutzorientierte KI-Assistenten aufbauen.",
+          "title": "Lokale LLM und Automatisierung",
+          "excerpt": "Aufbau datenschutzorientierter KI-Assistenten.",
           "category": "Engineering"
         }
       }
+    },
+    "blog_preview": {
+      "title": "Neueste Beiträge",
+      "description": "Notizen und technische Berichte aus der Welt der Technologie.",
+      "view_all": "Alles lesen"
     }
   },
   "AiLabPage": {
@@ -62,67 +67,76 @@
     "sidebar": {
       "categories": {
         "tools": "WERKZEUGE",
-        "apps": "ANWENDUNGEN"
+        "apps": "APPS"
       },
       "items": {
         "chat": "Allgemeiner Chat",
         "pdf": "PDF-Analyse",
         "prompt": "Prompt-Engineer",
-        "youtube": "Videoanalyse",
+        "youtube": "Video-Analyse",
         "scheduler": "Intelligenter Assistent"
       },
-      "new_chat": "Neue Sitzung",
-      "user_status": "Administrator"
+      "new_chat": "Neuer Arbeitsbereich",
+      "user_status": "Admin"
     },
     "input": {
       "placeholders": {
         "chat": "Frag etwas oder fordere Code an...",
-        "pdf": "Stelle eine Frage zu deiner hochgeladenen PDF...",
-        "prompt": "Schreibe deine Idee, ich verwandle sie in einen professionellen Prompt..."
+        "pdf": "Stell Fragen zum hochgeladenen PDF...",
+        "prompt": "Schreib deine Idee, ich mache einen Profi-Prompt daraus..."
       },
-      "warning": "AI Lab verwendet lokale Modelle. Fehler sind möglich."
+      "warning": "AI Lab verwendet lokale Modelle. Es können Fehler auftreten."
     }
   },
   "ProjectsPage": {
     "badge": "PORTFOLIO",
     "title": "Arbeiten",
-    "description": "Technische Details der Projekte, die ich von Full-Stack-Entwicklung bis hin zu Automatisierungslösungen umgesetzt habe."
+    "description": "Technische Details zu Projekten, von Full-Stack-Entwicklung bis hin zu Automatisierungslösungen."
   },
   "ProjectsSection": {
     "title": "Ausgewählte Projekte",
-    "description": "Ein dynamisch verwaltetes, live Projektportfolio, gespeist durch Google Sheets und n8n-Automatisierungen.",
+    "description": "Ein dynamisches Live-Projektportfolio, das durch Google Sheets und n8n-Automatisierungen gespeist wird.",
     "tech_stack_title": "VERWENDETE TECHNOLOGIEN",
     "buttons": {
       "view_project": "Projekt ansehen",
-      "load_more": "Mehr anzeigen",
-      "retry": "Erneut versuchen"
+      "load_more": "Mehr laden",
+      "retry": "Wiederholen"
     },
     "states": {
-      "empty": "Es wurden noch keine Projekte gefunden.",
+      "empty": "Noch keine Projekte gefunden.",
       "error_title": "Verbindungsfehler",
-      "error_desc": "Beim Laden der Projekte vom Server ist ein Fehler aufgetreten."
+      "error_desc": "Beim Abrufen der Projekte vom Server ist ein Fehler aufgetreten."
     }
   },
   "BlogHub": {
-    "title": "Blog & Notizen",
-    "description": "Meine Gedanken zu Software, KI und Technologie.",
-    "search_placeholder": "In Artikeln suchen...",
+    "title": "Schreiben & Gedanken",
+    "description": "Notizen, Anleitungen und technische Vertiefungen zu Softwarearchitektur, KI und Automatisierung.",
+    "search_placeholder": "Artikel suchen...",
+    "no_results": "Keine Artikel gefunden, die deinen Kriterien entsprechen.",
     "categories": {
       "all": "Alle",
       "architecture": "Architektur",
-      "ai": "Künstliche Intelligenz",
+      "ai": "KI",
       "automation": "Automatisierung"
-    },
-    "no_results": "Es wurden keine Beiträge gefunden, die deinen Kriterien entsprechen."
+    }
+  },
+  "BlogDetail": {
+    "enjoyed_article": "Hat dir dieser Artikel gefallen?",
+    "read_more_articles": "Weiterlesen",
+    "back_to_blog": "Zurück zum Blog",
+    "read_time": "Min. Lesezeit",
+    "share": "Teilen",
+    "next_post": "Nächster Beitrag",
+    "toc_title": "Inhaltsverzeichnis"
   },
   "ContactForm": {
     "tag": "Kontakt",
-    "title": "Kontakt aufnehmen",
-    "subtitle": "Haben Sie eine neue Projektidee oder möchten Sie einfach Hallo sagen?",
+    "title": "Kontaktiere mich",
+    "subtitle": "Hast du eine neue Projektidee oder möchtest du einfach Hallo sagen?",
     "inputs": {
       "name": "Vor- und Nachname",
       "email": "E-Mail-Adresse",
-      "message": "Erzählen Sie von Ihrem Projekt...",
+      "message": "Erzähl mir von deinem Projekt...",
       "errors": {
         "required": "Dieses Feld ist erforderlich.",
         "invalid_email": "Ungültiges E-Mail-Format."
@@ -130,28 +144,38 @@
     },
     "button": {
       "default": "Nachricht senden",
-      "sending": "Wird gesendet..."
+      "sending": "Senden..."
     },
     "success": {
       "title": "Nachricht gesendet!",
-      "description": "Ihre Nachricht wurde übermittelt. Ich melde mich so schnell wie möglich.",
+      "description": "Deine Nachricht ist im System eingegangen. Ich werde mich so schnell wie möglich melden.",
       "reset": "Neue Nachricht senden"
     },
     "error": {
-      "title": "Fehler aufgetreten",
-      "description": "Verbindung fehlgeschlagen. Bitte senden Sie eine E-Mail."
+      "title": "Ein Fehler ist aufgetreten",
+      "description": "Verbindung fehlgeschlagen. Bitte sende direkt eine E-Mail."
     }
   },
   "Footer": {
-    "description": "Ich entwerfe autonome Systeme und moderne Web-Erlebnisse, die in der digitalen Welt Spuren hinterlassen. Ich schaffe Mehrwert über den Code hinaus.",
+    "description": "Ich entwerfe autonome Systeme und moderne Web-Erlebnisse, die Spuren in der digitalen Welt hinterlassen. Ich schaffe Werte jenseits von Code.",
     "system_status": "Systeme: Aktiv",
-    "explore": "Entdecken",
+    "explore": "Erkunden",
     "stay_connected": "In Verbindung bleiben",
-    "project_idea": "Haben Sie eine neue Projektidee?",
-    "write_me": "schreiben Sie mir an",
+    "project_idea": "Hast du eine neue Projektidee?",
+    "write_me": "schreib mir an",
     "powered_by": "INFRASTRUKTUR"
   },
   "LanguageSwitcher": {
-    "label": "Sprache auswählen"
+    "label": "Sprache wählen"
+  },
+  "ContactPage": {
+    "status_badge": "Offen für neue Projekte",
+    "title_line1": "Lass uns dein nächstes",
+    "title_highlight": "Projekt gemeinsam entwerfen.",
+    "description": "Ob eine neue Idee, technische Beratung oder einfach nur ein Hallo. Ich bin hier, um digitale Produkte zu entwickeln und komplexe Probleme zu lösen.",
+    "email_label": "Schreib mir",
+    "response_time": "Antwortet normalerweise innerhalb von 24 Stunden",
+    "location_label": "Standort",
+    "social_label": "Soziale Netzwerke"
   }
 }

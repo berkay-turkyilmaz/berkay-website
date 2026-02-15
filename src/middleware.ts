@@ -5,5 +5,5 @@ export default createMiddleware(routing);
  
 export const config = {
   // Buradaki '/' ifadesi localhost:3000'i yakalamasını sağlar
-  matcher: ['/', '/(tr|en)/:path*', '/((?!_next|_vercel|.*\\..*).*)']
+  matcher: ['/', '/(tr|en|de)/:path*', '/((?!_next|_vercel|.*\\..*).*)']
 };

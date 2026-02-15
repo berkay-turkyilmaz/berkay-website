@@ -167,5 +167,15 @@
   },
   "LanguageSwitcher": {
     "label": "Dil Seçiniz"
+  },
+  "ContactPage": {
+    "status_badge": "Yeni Projelere Açık",
+    "title_line1": "Bir sonraki projenizi",
+    "title_highlight": "birlikte tasarlayalım.",
+    "description": "Yeni bir fikir, teknik danışmanlık veya sadece bir merhaba. Dijital ürünler geliştirmek ve karmaşık sorunları çözmek için buradayım.",
+    "email_label": "Bana Yazın",
+    "response_time": "Genellikle 24 saat içinde yanıtlarım",
+    "location_label": "Konum",
+    "social_label": "Sosyal Ağlar"
   }
 }

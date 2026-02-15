@@ -41,7 +41,7 @@ export function Header() {
     { key: "projects", href: "/projects" },
     { key: "blog", href: "/blog" },
     { key: "lab", href: "/ai-lab" },
-    { key: "contact", href: "/#contact" }, 
+    { key: "contact", href: "/contact" }, 
   ];
 
   return (
@@ -108,7 +108,7 @@ export function Header() {
             <div className="w-px h-6 bg-border/50 mx-1" />
             
             <Link 
-              href="https://github.com/yourusername" 
+              href="https://github.com/berkay-turkyilmaz" 
               target="_blank"
               rel="noopener noreferrer"
               className="group p-2.5 rounded-full hover:bg-secondary/70 transition-all duration-300 text-muted-foreground hover:text-foreground cursor-pointer border border-transparent hover:border-border/50 hover:shadow-sm"
@@ -194,7 +194,7 @@ export function Header() {
                 <LanguageSwitcher />
                 <ThemeToggle />
                 <Link 
-                  href="https://github.com/yourusername" 
+                  href="https://github.com/berkay-turkyilmaz" 
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-secondary/70 hover:bg-secondary rounded-full cursor-pointer transition-all hover:scale-110 border border-border/50"
