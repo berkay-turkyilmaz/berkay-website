@@ -1,181 +1,195 @@
 {
   "Navigation": {
     "home": "Home",
-    "projects": "Projects",
-    "blog": "Blog",
+    "projects": "Works",
+    "blog": "Articles",
     "lab": "AI Lab",
     "contact": "Contact"
   },
   "HomePage": {
-    "badge": "A New Vision Starting from Scratch",
-    "title": "Designing the Digital Future",
-    "description": "Building scalable systems using the power of Monster notebooks, combining modern web technologies and AI automation.",
-    "cta_projects": "View Projects",
-    "cta_lab": "AI Lab",
+    "badge": "System Online & Open for Opportunities",
+    "title": "Engineering-Driven Digital Experiences",
+    "description": "I architect scalable interfaces and AI-driven autonomous workflows (n8n) utilizing modern web architectures like Next.js.",
+    "cta_projects": "Explore Projects",
+    "cta_lab": "Discover AI Lab",
     "hero": {
       "name": "BERKAY",
-      "portfolio": "PORTFOLIO"
+      "portfolio": "WORKSPACE"
     },
     "sections": {
-      "projects_preview_title": "Selected Projects",
-      "projects_preview_desc": "End-to-end modern web applications developed from concept to live environment.",
-      "view_all_work": "View All Work"
+      "projects_preview_title": "Selected Works",
+      "projects_preview_desc": "Performance-oriented and scalable digital product architectures meeting complex business requirements.",
+      "view_all_work": "View All Works"
     },
     "projects": {
       "saas_card": {
-        "title": "SaaS Starter Kit",
-        "subtitle": "Next.js 15 & Supabase"
+        "title": "Enterprise SaaS Architecture",
+        "subtitle": "Next.js 15 & Supabase Infrastructure"
       },
       "code_card": {
-        "comment": "// Building the future...",
-        "wip": "Work in Progress"
+        "comment": "// Initializing innovation and scalability...",
+        "wip": "Preparing for Production"
       }
     },
     "automation": {
-      "system_active": "System: Active"
+      "system_active": "System: Active & Online"
     },
     "ai_lab": {
-      "tag": "Experimental",
-      "title": "AI Innovation Lab",
-      "description": "Experimental projects running on local AI models and RAG architectures."
+      "tag": "R&D Phase",
+      "title": "AI & Automation Laboratory",
+      "description": "Smart data processing and autonomous system test environment built with local LLMs and webhook integrations."
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Writings & Thoughts",
-      "view_all": "View All",
+      "subtitle": "Technical Articles & Architecture Notes",
+      "view_all": "Read All",
       "posts": {
         "1": {
-          "title": "Next.js 15 Architecture and Server Actions",
-          "excerpt": "Performance standards in modern web applications.",
+          "title": "Next.js 15 and Micro-Frontend Architecture",
+          "excerpt": "Enterprise web architecture design with Server Actions and React Server Components.",
           "category": "Architecture"
         },
         "2": {
-          "title": "Local LLM and Automation",
-          "excerpt": "Building privacy-focused AI assistants.",
+          "title": "LLM and n8n Automation in Business Workflows",
+          "excerpt": "A guide to transforming manual data flows into autonomous systems via webhooks.",
           "category": "Engineering"
         }
       }
     },
     "blog_preview": {
-      "title": "Latest Posts",
-      "description": "Notes and technical reviews from the world of technology.",
+      "title": "Technical Publications",
+      "description": "In-depth analyses on software architecture and modern web technologies.",
       "view_all": "Read All"
     }
   },
   "AiLabPage": {
-    "welcome": "How can I help?",
+    "welcome": "System ready. What data would you like to analyze?",
     "sidebar": {
       "categories": {
-        "tools": "TOOLS",
-        "apps": "APPS"
+        "tools": "ENGINEERING TOOLS",
+        "apps": "SYSTEM INTEGRATIONS"
       },
       "items": {
-        "chat": "General Chat",
-        "pdf": "PDF Analysis",
-        "prompt": "Prompt Engineer",
-        "youtube": "Video Analysis",
-        "scheduler": "Smart Assistant"
+        "chat": "LLM Terminal",
+        "pdf": "Document Analysis",
+        "prompt": "System Engineer",
+        "youtube": "Data Extraction",
+        "scheduler": "Appointment Automation"
       },
-      "new_chat": "New Workspace",
-      "user_status": "Admin"
+      "new_chat": "New Session",
+      "user_status": "Authorized User"
     },
     "input": {
       "placeholders": {
-        "chat": "Ask something or request code...",
-        "pdf": "Ask about the uploaded PDF...",
-        "prompt": "Type your idea, I'll turn it into a pro prompt..."
+        "chat": "Consult about system architecture, code analysis, or integration scenarios...",
+        "pdf": "Request data structures or summaries from the uploaded document...",
+        "prompt": "State your requirement, I'll compile it into an optimized command prompt..."
       },
-      "warning": "AI Lab uses local models. It may make mistakes."
+      "warning": "This system utilizes local LLMs for R&D purposes. Please verify outputs before critical operations."
     }
   },
   "ProjectsPage": {
-    "badge": "PORTFOLIO",
-    "title": "Works",
-    "description": "Technical details of projects built from full-stack development to automation solutions."
+    "badge": "PORTFOLIO & ARCHITECTURE",
+    "title": "Systems & Products",
+    "description": "End-to-end architected digital products, from full-stack development to data automation solutions."
   },
   "ProjectsSection": {
-    "title": "Selected Projects",
-    "description": "A dynamic live project portfolio fed by Google Sheets and n8n automations.",
-    "tech_stack_title": "USED TECHNOLOGIES",
+    "title": "System Catalog",
+    "description": "A dynamic portfolio interface managed in real-time using n8n webhooks and serverless architectures.",
+    "tech_stack_title": "TECH STACK",
     "buttons": {
-      "view_project": "View Project",
-      "load_more": "Load More",
-      "retry": "Retry"
+      "view_project": "Live Preview",
+      "load_more": "Expand Catalog",
+      "retry": "Refresh Connection"
     },
     "states": {
-      "empty": "No projects found yet.",
-      "error_title": "Connection Error",
-      "error_desc": "An error occurred while fetching projects from the server."
+      "empty": "No active products available to list at the moment.",
+      "error_title": "Database Error",
+      "error_desc": "A timeout occurred while fetching projects via API."
+    },
+    "mock_projects": {
+      "1": {
+        "title": "Enterprise Appointment Automation",
+        "description": "Autonomous booking system synchronized with Google Calendar and SMS webhooks, architected via n8n and serverless architecture."
+      },
+      "2": {
+        "title": "Modern Web Architecture v1",
+        "description": "High-performance digital ecosystem developed with Next.js 15, React Server Components, and i18n infrastructure."
+      },
+      "3": {
+        "title": "Financial Data Processing & Reporting Bot",
+        "description": "Data automation system architected with n8n and API integrations to autonomously extract, analyze, and report financial metrics from external sources."
+      }
     }
   },
   "BlogHub": {
-    "title": "Writings & Thoughts",
-    "description": "Notes, guides, and technical deep dives on software architecture, AI, and automation.",
-    "search_placeholder": "Search articles...",
-    "no_results": "No articles found matching your criteria.",
+    "title": "Articles & Analyses",
+    "description": "Technical notes on modern web architecture, scalability, AI integrations, and DevOps processes.",
+    "search_placeholder": "Search articles, tags, or technologies...",
+    "no_results": "No technical articles found matching these criteria.",
     "categories": {
       "all": "All",
-      "architecture": "Architecture",
-      "ai": "AI",
+      "architecture": "System Architecture",
+      "ai": "Artificial Intelligence",
       "automation": "Automation"
     }
   },
   "BlogDetail": {
-    "enjoyed_article": "Did you enjoy this article?",
-    "read_more_articles": "Read More",
-    "back_to_blog": "Back to Blog",
-    "read_time": "min read",
-    "share": "Share",
-    "next_post": "Next Up",
+    "enjoyed_article": "Found this technical analysis useful?",
+    "read_more_articles": "Related Articles",
+    "back_to_blog": "Back to Articles",
+    "read_time": "min read time",
+    "share": "Share to Network",
+    "next_post": "Next Article",
     "toc_title": "Table of Contents"
   },
   "ContactForm": {
-    "tag": "Contact",
-    "title": "Contact Me",
-    "subtitle": "Have a new project idea or just want to say hello?",
+    "tag": "Establish Connection",
+    "title": "Get in Touch",
+    "subtitle": "Leave a message for enterprise-scale projects, architectural consulting, or tech-driven collaborations.",
     "inputs": {
       "name": "Full Name",
-      "email": "Email Address",
-      "message": "Tell me about your project...",
+      "email": "Corporate Email",
+      "message": "Tell me about the technical details or collaboration model of your project...",
       "errors": {
-        "required": "This field is required.",
-        "invalid_email": "Invalid email format."
+        "required": "System requirement: This field cannot be empty.",
+        "invalid_email": "Please enter a valid email format."
       }
     },
     "button": {
-      "default": "Send Message",
-      "sending": "Sending..."
+      "default": "Transmit Data",
+      "sending": "Transmitting to Server..."
     },
     "success": {
-      "title": "Message Sent!",
-      "description": "Your message has reached the system. I will get back to you as soon as possible.",
-      "reset": "Send New Message"
+      "title": "Contact Request Received",
+      "description": "Your message has been securely logged into the system. You will receive a response shortly.",
+      "reset": "Create New Request"
     },
     "error": {
-      "title": "An Error Occurred",
-      "description": "Connection failed. Please send an email directly."
+      "title": "Connection Refused",
+      "description": "Failed to communicate with the API. Please reach out directly via email."
     }
   },
   "Footer": {
-    "description": "Designing autonomous systems and modern web experiences that leave a mark on the digital world. I create value beyond code.",
-    "system_status": "Systems: Active",
-    "explore": "Explore",
-    "stay_connected": "Stay Connected",
-    "project_idea": "Have a new project idea?",
-    "write_me": "write to me at",
-    "powered_by": "INFRASTRUCTURE"
+    "description": "Digital solutions built on modern web standards and autonomous systems, focused on performance and scalability.",
+    "system_status": "All Systems: Online & Stable",
+    "explore": "System Map",
+    "stay_connected": "Communication Networks",
+    "project_idea": "Looking to solve a complex problem with software?",
+    "write_me": "reach out via",
+    "powered_by": "ARCHITECTURE INFRASTRUCTURE"
   },
   "LanguageSwitcher": {
-    "label": "Select Language"
+    "label": "Change Language Model"
   },
   "ContactPage": {
-    "status_badge": "Open to New Projects",
-    "title_line1": "Let's design your next",
-    "title_highlight": "project together.",
-    "description": "Whether it's a new idea, technical consultancy, or just a hello. I am here to develop digital products and solve complex problems.",
-    "email_label": "Email Me",
-    "response_time": "Usually replies within 24 hours",
-    "location_label": "Location",
-    "social_label": "Social Networks"
+    "status_badge": "Open to New B2B & Career Opportunities",
+    "title_line1": "Let's transform complex systems into",
+    "title_highlight": "scalable products.",
+    "description": "Reach out to overcome engineering challenges, get technical consulting, or build a modern digital infrastructure.",
+    "email_label": "Direct Communication",
+    "response_time": "SLA: Usually replies within 24 hours",
+    "location_label": "Development Hub",
+    "social_label": "Networks & Repository"
   }
 }

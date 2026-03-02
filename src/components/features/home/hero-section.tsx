@@ -1,176 +1,166 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Mic, MicOff, Terminal, ArrowRight, MousePointer2 } from "lucide-react";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import { Permanent_Marker } from 'next/font/google';
-
-// Fontu burada da çağırıyoruz ki component içinde kullanabilelim
-const markerFont = Permanent_Marker({ weight: '400', subsets: ['latin'] });
+import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { Terminal, ArrowRight, Code2, GitBranch, Cpu } from "lucide-react";
 
 export function HeroSection() {
+  const t = useTranslations("Hero");
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-  const [isListening, setIsListening] = useState(false);
-  const [logs, setLogs] = useState([
-    " [SYSTEM]: Kernel v2.4 başlatıldı.",
-    " [AI]: Neural Engine aktif.",
-    " [USER]: Bekleniyor..."
-  ]);
-  const [themeColor, setThemeColor] = useState<"blue" | "purple" | "emerald">("blue");
+  const [terminalStep, setTerminalStep] = useState(0);
 
-  // Temalar (Renk yönetimi)
-  const themes = {
-    blue: { primary: "text-blue-500", bg: "bg-blue-500", border: "border-blue-500", shadow: "shadow-blue-500/20", glow: "rgba(59, 130, 246, 0.4)" },
-    purple: { primary: "text-purple-500", bg: "bg-purple-500", border: "border-purple-500", shadow: "shadow-purple-500/20", glow: "rgba(168, 85, 247, 0.4)" },
-    emerald: { primary: "text-emerald-500", bg: "bg-emerald-500", border: "border-emerald-500", shadow: "shadow-emerald-500/20", glow: "rgba(16, 185, 129, 0.4)" },
-  };
-
-  // Mouse Takibi (Spotlight için)
+  // Spotlight (Mouse Takibi)
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => setMousePos({ x: e.clientX, y: e.clientY });
+    const handleMouseMove = (e: MouseEvent) => {
+      // Sadece ana ekranda çalışması için window nesnesini dinliyoruz
+      setMousePos({ x: e.clientX, y: e.clientY });
+    };
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Ses Tanıma (Basitleştirilmiş)
-  const startListening = () => {
-    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-    if (!SpeechRecognition) return alert("Tarayıcınız ses özelliğini desteklemiyor (Chrome kullanın).");
+  // Terminal Animasyonu (Boot Sequence)
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTerminalStep((prev) => (prev < 4 ? prev + 1 : prev));
+    }, 1200);
+    return () => clearInterval(timer);
+  }, []);
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = "tr-TR";
-    recognition.start();
-    setIsListening(true);
-    setLogs(prev => [...prev.slice(-3), " [MIC]: Dinleniyor..."]);
-
-    recognition.onresult = (event: any) => {
-      const command = event.results[0][0].transcript;
-      setLogs(prev => [...prev.slice(-3), ` [VOICE]: "${command}" algılandı.`]);
-      setIsListening(false);
-      
-      // Basit bir renk değiştirme komutu örneği
-      if (command.toLowerCase().includes("mavi")) setThemeColor("blue");
-      if (command.toLowerCase().includes("mor")) setThemeColor("purple");
-      if (command.toLowerCase().includes("yeşil")) setThemeColor("emerald");
-    };
-
-    recognition.onerror = () => {
-      setIsListening(false);
-      setLogs(prev => [...prev.slice(-3), " [ERROR]: Ses algılanamadı."]);
-    };
-  };
+  // Terminalde gösterilecek teknik loglar (İngilizce olması global/teknik algıyı artırır)
+  const bootLogs = [
+    { text: "initializing core environment...", icon: <Cpu size={14} className="text-zinc-500" /> },
+    { text: "fetching translations (tr, en, de)...", icon: <Code2 size={14} className="text-blue-400" /> },
+    { text: "mounting React Server Components...", icon: <Code2 size={14} className="text-cyan-400" /> },
+    { text: "establishing n8n webhook nodes...", icon: <GitBranch size={14} className="text-green-400" /> },
+    { text: "system architecture deployed successfully.", icon: <Terminal size={14} className="text-primary" /> },
+  ];
 
   return (
-    <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20">
+    <section className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-20 bg-background font-sans selection:bg-primary/20">
       
-      {/* 1. SPOTLIGHT EFFECT (Arka Plan) */}
+      {/* 1. SPOTLIGHT EFFECT (Temaya Duyarlı) */}
       <div 
-        className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 opacity-20"
+        className="fixed inset-0 pointer-events-none z-0 transition-opacity duration-500 opacity-[0.15] dark:opacity-20"
         style={{ 
-          background: `radial-gradient(600px at ${mousePos.x}px ${mousePos.y}px, ${themes[themeColor].glow}, transparent 80%)` 
+          background: `radial-gradient(600px at ${mousePos.x}px ${mousePos.y}px, rgba(var(--primary), 0.15), transparent 80%)` 
         }}
       />
 
-      <div className="container px-6 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <div className="container px-6 lg:px-12 relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-8 items-center">
         
         {/* --- SOL: TYPOGRAPHY & HERO TEXT --- */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }} 
           animate={{ opacity: 1, y: 0 }} 
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="text-center lg:text-left space-y-8"
         >
           {/* Status Badge */}
-          <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border bg-white/5 backdrop-blur-md ${themes[themeColor].border}/30 text-[10px] font-bold uppercase tracking-[0.2em] ${themes[themeColor].primary}`}>
+          <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-border/50 bg-secondary/30 backdrop-blur-md shadow-sm">
             <span className="relative flex h-2 w-2">
-               <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${themes[themeColor].bg}`}></span>
-               <span className={`relative inline-flex rounded-full h-2 w-2 ${themes[themeColor].bg}`}></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
-            System Online: v2.5
+            <span className="text-xs font-semibold tracking-widest uppercase text-foreground/80">
+              {t("badge")}
+            </span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-foreground">
-            BERKAY <br />
-            {/* Gradient Text */}
-            <span className={`text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-600`}>
-              TÜRKYILMAZ
-            </span>
-          </h1>
+          <div className="space-y-4">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-extrabold tracking-tighter leading-[1.05] text-foreground text-balance">
+              BERKAY <br />
+              {/* Gradient Text - Kurumsal ve Temiz */}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">
+                TÜRKYILMAZ
+              </span>
+            </h1>
+          </div>
 
-          <p className="text-xl text-slate-400 font-light max-w-lg mx-auto lg:mx-0 leading-relaxed">
-            Sıradan kod yazmıyorum. <br />
-            <span className={`font-bold ${themes[themeColor].primary}`}>Next.js</span>, <span className={`font-bold ${themes[themeColor].primary}`}>Docker</span> ve <span className={`font-bold ${themes[themeColor].primary}`}>n8n</span> ile 
-            <span className={`block mt-2 text-2xl ${markerFont.className} text-foreground transform -rotate-1`}>
-              sistemler otonomlaşıyor.
-            </span>
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground/90 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed text-balance">
+            {t("description")}
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-4">
-            <MagneticButton className={`px-8 py-4 rounded-2xl font-bold text-black ${themes[themeColor].bg} hover:brightness-110 transition-all shadow-xl`}>
-               <span className="flex items-center gap-2">Projeleri Keşfet <ArrowRight size={18} /></span>
-            </MagneticButton>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start pt-2">
+            <Link href="/projects">
+              <button className="w-full sm:w-auto px-8 py-4 rounded-full font-bold text-primary-foreground bg-primary hover:bg-primary/90 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(var(--primary),0.2)] hover:shadow-[0_0_30px_rgba(var(--primary),0.4)] flex items-center justify-center gap-2">
+                {t("cta_primary")} <ArrowRight size={18} />
+              </button>
+            </Link>
             
-            {/* Renk Değiştirici (Easter Egg) */}
-            <div className="flex items-center gap-2 p-2 rounded-2xl bg-white/5 border border-border backdrop-blur-md">
-               {(Object.keys(themes) as Array<keyof typeof themes>).map(c => (
-                 <button 
-                    key={c} 
-                    onClick={() => setThemeColor(c)}
-                    className={`w-6 h-6 rounded-full ${themes[c].bg} ${themeColor === c ? 'ring-2 ring-white scale-110' : 'opacity-40 hover:opacity-100'} transition-all`}
-                 />
-               ))}
-            </div>
+            <Link href="/contact">
+              <button className="w-full sm:w-auto px-8 py-4 rounded-full font-semibold text-foreground bg-secondary/50 hover:bg-secondary border border-border/50 transition-all active:scale-[0.98] flex items-center justify-center">
+                {t("cta_secondary")}
+              </button>
+            </Link>
           </div>
         </motion.div>
 
 
-        {/* --- SAĞ: INTERACTIVE TERMINAL & VOICE --- */}
+        {/* --- SAĞ: ENGINEERING TERMINAL --- */}
         <motion.div 
-           initial={{ opacity: 0, scale: 0.9 }}
+           initial={{ opacity: 0, scale: 0.95 }}
            animate={{ opacity: 1, scale: 1 }}
-           transition={{ delay: 0.2, duration: 0.8 }}
-           className="relative"
+           transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+           className="relative mx-auto w-full max-w-lg lg:max-w-none"
         >
           {/* Terminal Window */}
-          <div className="rounded-[2rem] bg-[#0c0c0c] border border-border shadow-2xl overflow-hidden relative group">
+          <div className="rounded-2xl bg-[#09090b] border border-zinc-800/80 shadow-2xl overflow-hidden relative group backdrop-blur-3xl">
+             
              {/* Header */}
-             <div className="flex items-center justify-between px-6 py-4 bg-white/5 border-b border-white/5">
+             <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/50 border-b border-zinc-800/80">
                 <div className="flex gap-2">
-                   <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                   <div className="w-3 h-3 rounded-full bg-yellow-500/50" />
-                   <div className="w-3 h-3 rounded-full bg-emerald-500/50" />
+                   <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                   <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                   <div className="w-3 h-3 rounded-full bg-green-500/80" />
                 </div>
-                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-slate-500">
+                <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-zinc-500">
                    <Terminal size={12} />
-                   <span>Voice_Command.exe</span>
+                   <span>system_boot.sh</span>
                 </div>
              </div>
 
-             {/* Logs */}
-             <div className="p-8 font-mono text-xs md:text-sm h-[200px] flex flex-col justify-end">
-                {logs.map((log, i) => (
-                  <div key={i} className="mb-2 text-slate-300">
-                    <span className={`${themes[themeColor].primary} opacity-50 mr-2`}>➜</span>
-                    {log}
-                  </div>
+             {/* Logs / Boot Sequence */}
+             <div className="p-6 sm:p-8 font-mono text-xs sm:text-sm h-[260px] flex flex-col justify-start space-y-3 overflow-hidden">
+                <div className="text-zinc-500 mb-2">
+                  <span className="text-primary mr-2">➜</span> ~/portfolio/core run build
+                </div>
+                
+                {bootLogs.map((log, i) => (
+                  <motion.div 
+                    key={i} 
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: i <= terminalStep ? 1 : 0, x: i <= terminalStep ? 0 : -10 }}
+                    className="flex items-center gap-3 text-zinc-300"
+                  >
+                    {log.icon}
+                    <span>{log.text}</span>
+                  </motion.div>
                 ))}
-                <div className={`w-2 h-4 ${themes[themeColor].bg} animate-pulse`} />
+
+                {/* Blinking Cursor */}
+                {terminalStep >= 4 && (
+                  <motion.div 
+                    initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+                    className="flex items-center gap-2 mt-4 text-green-400 font-semibold"
+                  >
+                    <span className="text-primary mr-2">➜</span> {t("terminal_ready")}
+                    <motion.div 
+                      animate={{ opacity: [0, 1, 0] }} transition={{ repeat: Infinity, duration: 1 }}
+                      className="w-2.5 h-4 bg-primary align-middle" 
+                    />
+                  </motion.div>
+                )}
              </div>
 
-             {/* Mic Button Overlay */}
-             <div className="absolute bottom-6 right-6">
-               <button 
-                 onClick={startListening}
-                 className={`p-4 rounded-full transition-all duration-300 ${isListening ? 'bg-red-500 animate-pulse shadow-red-500/50 shadow-lg' : `bg-white/10 hover:${themes[themeColor].bg} hover:text-black text-foreground`}`}
-               >
-                  {isListening ? <MicOff size={24} /> : <Mic size={24} />}
-               </button>
-             </div>
+             {/* Refined Glow */}
+             <div className="absolute inset-0 bg-gradient-to-tr from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
           </div>
 
           {/* Decorative Elements */}
-          <div className={`absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] ${themes[themeColor].bg} opacity-10 blur-[100px] rounded-full`} />
+          <div className="absolute -z-10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-primary/10 blur-[100px] rounded-full" aria-hidden="true" />
         </motion.div>
 
       </div>

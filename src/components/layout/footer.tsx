@@ -11,8 +11,8 @@ export function Footer() {
 
   // Sosyal Medya Linkleri (Veri Yapısı)
   const socialLinks = [
-    { icon: Github, href: "https://github.com/berkayturkyilmaz", label: "Github" },
-    { icon: Linkedin, href: "https://linkedin.com/in/berkayturkyilmaz", label: "LinkedIn" },
+    { icon: Github, href: "https://github.com/berkay-turkyilmaz", label: "Github" },
+    { icon: Linkedin, href: "https://linkedin.com/in/berkay-turkyilmaz", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
     { icon: Mail, href: "mailto:hello@berkaytrkylmzz@gmail.com", label: "Email" },
   ];

@@ -32,7 +32,7 @@ export default function ContactForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("http://localhost:5678/webhook-test/contact-form", {
+      const response = await fetch("https://n8n.138.197.186.170.sslip.io/webhook/contact-form", {
         method: "POST",
         body: JSON.stringify({
           ...data,

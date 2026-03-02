@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "tr_TR",
-    url: "https://berkayturkyilmaz.com",
+    url: "https://berkay-dev.vercel.app/",
     siteName: "Berkay Portfolio",
     images: [
       {

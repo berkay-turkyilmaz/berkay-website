@@ -1,181 +1,195 @@
 {
   "Navigation": {
-    "home": "Giriş",
-    "projects": "Projeler",
-    "blog": "Blog",
+    "home": "Ana Sayfa",
+    "projects": "Çalışmalar",
+    "blog": "Projeler",
     "lab": "AI Lab",
     "contact": "İletişim"
   },
   "HomePage": {
-    "badge": "Sıfırdan Başlayan Yeni Vizyon",
-    "title": "Dijital Geleceği Tasarlıyorum",
-    "description": "Monster notebook gücüyle, modern web teknolojileri ve yapay zeka otomasyonlarını birleştirerek ölçeklenebilir sistemler kuruyorum.",
+    "badge": "Sistem Operasyonel & Fırsatlara Açık",
+    "title": "Mühendislik Odaklı Dijital Deneyimler",
+    "description": "Modern web mimarileri (Next.js), ölçeklenebilir arayüzler ve yapay zeka destekli otonom iş akışları (n8n) inşa ediyorum.",
     "cta_projects": "Projeleri İncele",
-    "cta_lab": "AI Lab",
+    "cta_lab": "AI Lab'i Keşfet",
     "hero": {
       "name": "BERKAY",
-      "portfolio": "PORTFOLYO"
+      "portfolio": "WORKSPACE"
     },
     "sections": {
-      "projects_preview_title": "Seçilmiş Projeler",
-      "projects_preview_desc": "Fikir aşamasından canlı ortama, uçtan uca geliştirdiğim modern web uygulamaları.",
-      "view_all_work": "Tümünü Gör"
+      "projects_preview_title": "Seçilmiş Çalışmalar",
+      "projects_preview_desc": "Karmaşık iş gereksinimlerini karşılayan, performans odaklı ve ölçeklenebilir dijital ürün mimarileri.",
+      "view_all_work": "Tümünü İncele"
     },
     "projects": {
       "saas_card": {
-        "title": "SaaS Başlangıç Kiti",
-        "subtitle": "Next.js 15 & Supabase"
+        "title": "Kurumsal SaaS Mimarisi",
+        "subtitle": "Next.js 15 & Supabase Altyapısı"
       },
       "code_card": {
-        "comment": "// Geleceği inşa ediyor...",
-        "wip": "Geliştirme Aşamasında"
+        "comment": "// İnovasyon ve ölçeklenebilirlik başlatılıyor...",
+        "wip": "Üretim Ortamına Hazırlanıyor"
       }
     },
     "automation": {
-      "system_active": "Sistem: Aktif"
+      "system_active": "Sistem: Aktif & Çevrimiçi"
     },
     "ai_lab": {
-      "tag": "Deneysel",
-      "title": "AI İnovasyon Lab",
-      "description": "Yerel yapay zeka modelleriyle çalışan deneysel projeler ve RAG mimarileri."
+      "tag": "Ar-Ge Aşaması",
+      "title": "AI & Otomasyon Laboratuvarı",
+      "description": "Yerel LLM modelleri ve webhook entegrasyonlarıyla kurgulanmış akıllı veri işleme ve otonom sistem test ortamı."
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Yazılar & Düşünceler",
-      "view_all": "Tümünü Gör",
+      "subtitle": "Teknik Makaleler & Mimari Notlar",
+      "view_all": "Tümünü Oku",
       "posts": {
         "1": {
-          "title": "Next.js 15 Mimarisi ve Server Actions",
-          "excerpt": "Modern web uygulamalarında performans standartları.",
+          "title": "Next.js 15 ve Mikro-Frontend Mimarisi",
+          "excerpt": "Server Actions ve React Server Components ile kurumsal web mimarisi tasarımı.",
           "category": "Mimari"
         },
         "2": {
-          "title": "Yerel LLM ve Otomasyon",
-          "excerpt": "Gizlilik odaklı yapay zeka asistanları kurmak.",
+          "title": "İş Süreçlerinde LLM ve n8n Otomasyonu",
+          "excerpt": "Manuel veri akışlarını webhook'lar ile otonom sistemlere dönüştürme rehberi.",
           "category": "Mühendislik"
         }
       }
     },
     "blog_preview": {
-      "title": "Son Yazılar",
-      "description": "Teknoloji dünyasından notlar ve teknik incelemeler.",
+      "title": "Teknik Yayınlar",
+      "description": "Yazılım mimarisi ve modern web teknolojileri üzerine derinlemesine analizler.",
       "view_all": "Tümünü Oku"
     }
   },
   "AiLabPage": {
-    "welcome": "Nasıl yardımcı olabilirim?",
+    "welcome": "Sistem hazır. Hangi veriyi analiz etmek istersiniz?",
     "sidebar": {
       "categories": {
-        "tools": "ARAÇLAR",
-        "apps": "UYGULAMALAR"
+        "tools": "MÜHENDİSLİK ARAÇLARI",
+        "apps": "SİSTEM ENTEGRASYONLARI"
       },
       "items": {
-        "chat": "Genel Sohbet",
-        "pdf": "PDF Analizi",
-        "prompt": "Prompt Mühendisi",
-        "youtube": "Video Analizi",
-        "scheduler": "Akıllı Asistan"
+        "chat": "LLM Terminali",
+        "pdf": "Döküman Analizi",
+        "prompt": "Sistem Mühendisi",
+        "youtube": "Veri Çıkarımı",
+        "scheduler": "Randevu Otomasyonu"
       },
-      "new_chat": "Yeni Çalışma",
-      "user_status": "Yönetici"
+      "new_chat": "Yeni Oturum",
+      "user_status": "Yetkili Kullanıcı"
     },
     "input": {
       "placeholders": {
-        "chat": "Bir şeyler sor veya kod iste...",
-        "pdf": "Yüklediğin PDF hakkında soru sor...",
-        "prompt": "Fikrini yaz, profesyonel bir prompt'a dönüştüreyim..."
+        "chat": "Sistem mimarisi, kod analizi veya entegrasyon senaryoları hakkında danışın...",
+        "pdf": "Yüklenen dökümandan veri yapıları veya özetler talep edin...",
+        "prompt": "İhtiyacınızı belirtin, optimize edilmiş bir komut dizisine dönüştüreyim..."
       },
-      "warning": "AI Lab yerel modeller kullanır. Hata yapabilir."
+      "warning": "Bu sistem Ar-Ge amaçlı yerel LLM modelleri kullanmaktadır. Kritik operasyonlar öncesi çıktıları doğrulayınız."
     }
   },
   "ProjectsPage": {
-    "badge": "PORTFOLYO",
-    "title": "Çalışmalar",
-    "description": "Full-stack geliştirmeden otomasyon çözümlerine kadar inşa ettiğim projelerin teknik detayları."
+    "badge": "PORTFOLYO & MİMARİ",
+    "title": "Sistemler ve Ürünler",
+    "description": "Full-stack geliştirmeden veri otomasyon çözümlerine kadar uçtan uca mimarisini kurduğum dijital ürünler."
   },
   "ProjectsSection": {
-    "title": "Seçilmiş Projeler",
-    "description": "Google Sheets ve n8n otomasyonlarıyla beslenen, dinamik olarak yönetilen canlı proje portfolyosu.",
-    "tech_stack_title": "KULLANILAN TEKNOLOJİLER",
+    "title": "Sistem Kataloğu",
+    "description": "n8n webhook'ları ve serverless mimariler kullanılarak gerçek zamanlı yönetilen, dinamik portfolyo arayüzü.",
+    "tech_stack_title": "TEKNOLOJİ YIĞINI (TECH STACK)",
     "buttons": {
-      "view_project": "Projeyi İncele",
-      "load_more": "Daha Fazla Göster",
-      "retry": "Tekrar Dene"
+      "view_project": "Canlı İncele",
+      "load_more": "Kataloğu Genişlet",
+      "retry": "Bağlantıyı Yenile"
     },
     "states": {
-      "empty": "Henüz görüntülenecek proje bulunamadı.",
-      "error_title": "Bağlantı Hatası",
-      "error_desc": "Projeler sunucudan çekilirken bir sorun oluştu."
+      "empty": "Şu an için listelenecek aktif ürün bulunmuyor.",
+      "error_title": "Veritabanı Hatası",
+      "error_desc": "Projeler API üzerinden çekilirken bir zaman aşımı oluştu."
+    },
+    "mock_projects": {
+      "1": {
+        "title": "Otonom Rezervasyon & CRM",
+        "description": "n8n ve serverless mimari ile kurgulanmış, Google Calendar ve SMS webhook'larını senkronize eden kurumsal randevu otomasyonu."
+      },
+      "2": {
+        "title": "Kurumsal Web Mimarisi v1",
+        "description": "Next.js 15, React Server Components ve i18n (çoklu dil) altyapısıyla geliştirilmiş, yüksek performanslı dijital ekosistem."
+      },
+      "3": {
+        "title": "Finansal Veri İşleme & Raporlama Botu",
+        "description": "API entegrasyonları ve n8n iş akışları kullanılarak dış kaynaklardan gelen finansal verilerin otonom olarak analiz edilip raporlandığı otomasyon sistemi."
+      }
     }
   },
   "BlogHub": {
-    "title": "Yazılar & Düşünceler",
-    "description": "Yazılım mimarisi, yapay zeka ve otomasyon üzerine notlar, rehberler ve teknik derinlemesine incelemeler.",
-    "search_placeholder": "Yazılarda ara...",
-    "no_results": "Aradığınız kriterlere uygun yazı bulunamadı.",
+    "title": "Makaleler & Analizler",
+    "description": "Modern web mimarisi, ölçeklenebilirlik, yapay zeka entegrasyonları ve DevOps süreçleri üzerine teknik notlar.",
+    "search_placeholder": "Makale, etiket veya teknoloji ara...",
+    "no_results": "Bu kriterlere uygun bir teknik makale bulunamadı.",
     "categories": {
       "all": "Tümü",
-      "architecture": "Mimari",
+      "architecture": "Sistem Mimarisi",
       "ai": "Yapay Zeka",
       "automation": "Otomasyon"
     }
   },
   "BlogDetail": {
-    "enjoyed_article": "Bu yazıyı beğendin mi?",
-    "read_more_articles": "Daha Fazla Oku",
-    "back_to_blog": "Blog'a Dön",
-    "read_time": "dakika okuma",
-    "share": "Paylaş",
-    "next_post": "Sıradaki",
-    "toc_title": "İçindekiler"
+    "enjoyed_article": "Teknik analizi faydalı buldunuz mu?",
+    "read_more_articles": "İlgili Makaleler",
+    "back_to_blog": "Makalelere Dön",
+    "read_time": "dk okuma süresi",
+    "share": "Ağına Paylaş",
+    "next_post": "Sonraki Makale",
+    "toc_title": "İçerik Akışı"
   },
   "ContactForm": {
-    "tag": "İletişim",
-    "title": "Bana Ulaşın",
-    "subtitle": "Yeni bir proje fikriniz mi var veya sadece merhaba mı demek istiyorsunuz?",
+    "tag": "Bağlantı Kur",
+    "title": "İletişime Geçin",
+    "subtitle": "Kurumsal ölçekli projeler, mimari danışmanlık veya teknoloji odaklı işbirlikleri için mesaj bırakabilirsiniz.",
     "inputs": {
       "name": "İsim Soyisim",
-      "email": "E-posta Adresi",
-      "message": "Projenizden bahsedin...",
+      "email": "Kurumsal E-posta",
+      "message": "Projenizin teknik detaylarından veya işbirliği modelinden bahsedin...",
       "errors": {
-        "required": "Bu alan zorunludur.",
-        "invalid_email": "Geçersiz e-posta formatı."
+        "required": "Sistem gereksinimi: Bu alan boş bırakılamaz.",
+        "invalid_email": "Lütfen geçerli bir e-posta formatı giriniz."
       }
     },
     "button": {
-      "default": "Mesajı Gönder",
-      "sending": "Gönderiliyor..."
+      "default": "Veriyi İlet",
+      "sending": "Sunucuya İletiliyor..."
     },
     "success": {
-      "title": "Mesaj İletildi!",
-      "description": "Mesajınız sisteme düştü. En kısa sürede geri dönüş yapacağım.",
-      "reset": "Yeni Mesaj Gönder"
+      "title": "İletişim Talebi Alındı",
+      "description": "Mesajınız güvenli bir şekilde sisteme kaydedildi. En kısa sürede tarafınıza dönüş sağlanacaktır.",
+      "reset": "Yeni Talep Oluştur"
     },
     "error": {
-      "title": "Hata Oluştu",
-      "description": "Bağlantı kurulamadı. Lütfen e-posta gönderin."
+      "title": "Bağlantı Reddedildi",
+      "description": "API ile iletişim kurulamadı. Lütfen doğrudan e-posta adresi üzerinden ulaşınız."
     }
   },
   "Footer": {
-    "description": "Dijital dünyada iz bırakan, otonom sistemler ve modern web deneyimleri tasarlıyorum. Kodun ötesinde değer üretiyorum.",
-    "system_status": "Sistemler: Aktif",
-    "explore": "Keşfet",
-    "stay_connected": "İletişimde Kal",
-    "project_idea": "Yeni bir proje fikriniz mi var?",
-    "write_me": "adresine yazın",
-    "powered_by": "ALTYAPI"
+    "description": "Modern web standartları ve otonom sistemler üzerine inşa edilmiş, performans ve ölçeklenebilirlik odaklı dijital çözümler.",
+    "system_status": "Tüm Sistemler: Çevrimiçi & Stabil",
+    "explore": "Sistem Haritası",
+    "stay_connected": "İletişim Ağları",
+    "project_idea": "Karmaşık bir problemi yazılımla çözmek mi istiyorsunuz?",
+    "write_me": "üzerinden ulaşın.",
+    "powered_by": "MİMARİ ALTYAPI"
   },
   "LanguageSwitcher": {
-    "label": "Dil Seçiniz"
+    "label": "Dil Modeli Değiştir"
   },
   "ContactPage": {
-    "status_badge": "Yeni Projelere Açık",
-    "title_line1": "Bir sonraki projenizi",
-    "title_highlight": "birlikte tasarlayalım.",
-    "description": "Yeni bir fikir, teknik danışmanlık veya sadece bir merhaba. Dijital ürünler geliştirmek ve karmaşık sorunları çözmek için buradayım.",
-    "email_label": "Bana Yazın",
-    "response_time": "Genellikle 24 saat içinde yanıtlarım",
-    "location_label": "Konum",
-    "social_label": "Sosyal Ağlar"
+    "status_badge": "Yeni B2B & Kariyer Fırsatlarına Açık",
+    "title_line1": "Karmaşık sistemleri,",
+    "title_highlight": "ölçeklenebilir ürünlere dönüştürelim.",
+    "description": "Mühendislik zorluklarını aşmak, teknik danışmanlık almak veya modern bir dijital altyapı kurmak için iletişime geçebilirsiniz.",
+    "email_label": "Doğrudan İletişim",
+    "response_time": "SLA: Genellikle 24 saat içerisinde yanıtlanır",
+    "location_label": "Geliştirme Merkezi",
+    "social_label": "Ağlar & Repository"
   }
 }

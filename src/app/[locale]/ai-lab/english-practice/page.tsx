@@ -1,36 +1,51 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  Chart as ChartJS, 
-  CategoryScale, 
-  LinearScale, 
-  PointElement, 
-  LineElement, 
-  Title, 
-  Tooltip, 
-  Legend,
-  Filler
-} from 'chart.js';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 
-// Chart.js modüllerini kaydet
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend,
-  Filler
-);
+// Register Chart.js components
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend, Filler);
 
-// --- TİP TANIMLAMALARI (TypeScript için) ---
-type Flashcard = { front: string; back: string; pronunciation: string };
-type GrammarRule = { unit: string; icon: string; color: string; rules: string[]; examples: string[] };
-type PrepositionExercise = { sentence: string; options: string[]; correct: number; explanation: string };
-type Question = { id: number; unit: string; topic: string; type: string; question: string; options: string[]; correct: number; explanation: string; hint: string };
+// ============ TYPES ============
+type Flashcard = {
+  f: string; // front (English)
+  b: string; // back (Turkish)
+  p: string; // pronunciation
+};
+
+type Preposition = {
+  s: string; // sentence
+  o: string[]; // options
+  c: number; // correct index
+  e: string; // explanation
+  cat: string; // category
+  d: 'easy' | 'medium' | 'hard'; // difficulty
+};
+
+type Question = {
+  id: number;
+  u: string; // unit
+  t: string; // topic
+  q: string; // question
+  o: string[]; // options
+  c: number; // correct index
+  e: string; // explanation
+  h: string; // hint
+  de: string; // detailed explanation
+  cm: string[]; // common mistakes
+  src: 'zip' | 'headway' | 'original';
+};
+
+type GrammarRule = {
+  u: string; // unit
+  i: string; // icon
+  title: string; // user friendly title
+  r: string[]; // rules
+  e: string[]; // examples
+  note?: string; // extra note
+};
+
 type UserData = {
   level: number;
   xp: number;
@@ -41,1121 +56,1426 @@ type UserData = {
   totalQuestions: number;
   correctAnswers: number;
   achievements: string[];
-  stats: { flashcardsViewed: number; prepPracticed: number };
+  stats: {
+    flashcardsViewed: number;
+    prepPracticed: number;
+  };
 };
+
 type Settings = {
-  voiceAccent: string;
-  speechSpeed: number;
-  autoSpeak: boolean;
+  voiceAccent: 'en-GB' | 'en-US';
   showHints: boolean;
   darkMode: boolean;
 };
 
-// --- VERİ SETLERİ ---
-const FLASHCARD_DATA: Record<string, Flashcard[]> = {
+type ExamResults = {
+  questions: Array<Question & { userAnswer: number; isCorrect: boolean }>;
+  correct: number;
+  total: number;
+  timeSpent: number;
+  units: Record<string, { correct: number; total: number }>;
+  score: number;
+};
+
+// ============ DATA ============
+const ZIP_QUESTIONS = [
+  "1. Circle the correct alternative: My name is/are Susan.",
+  "2. Mrs. Rose isn't/aren't my aunt.",
+  "3. Complete with in, on, at: I get up ___ 7 o'clock.",
+  "4. Fill CAN/CAN'T: I ___ speak three languages.",
+  "5. Prepositions of time: I was born ___ July / ___ 2006.",
+  "6. Daily Routines: Wake up → get up → brush teeth sequence.",
+  "7. Vocabulary: Match family members (father, mother, sister).",
+  "8. Present Simple: She _____ (go) to work by bus.",
+  "9. There is/are: _____ a library near here?",
+  "10. Past Simple: I _____ (finish) my homework yesterday."
+];
+
+const PREPOSITIONS: Preposition[] = [
+  { s: "I get up ___ 7 o'clock.", o: ["in", "on", "at", "to"], c: 2, e: "Saatlerle 'at' kullanılır.", cat: "time", d: "easy" },
+  { s: "My birthday is ___ July.", o: ["in", "on", "at", "to"], c: 0, e: "Aylarla 'in': in July", cat: "time", d: "easy" },
+  { s: "We meet ___ Monday.", o: ["in", "on", "at", "to"], c: 1, e: "Günlerle 'on': on Monday", cat: "time", d: "easy" },
+  { s: "She was born ___ 1995.", o: ["in", "on", "at", "for"], c: 0, e: "Yıllarla 'in': in 1995", cat: "time", d: "easy" },
+  { s: "I study ___ the evening.", o: ["in", "on", "at", "to"], c: 0, e: "'In the evening' (but: at night)", cat: "time", d: "medium" },
+  { s: "The movie starts ___ midnight.", o: ["in", "on", "at", "to"], c: 2, e: "'At midnight' sabit ifade", cat: "time", d: "medium" },
+  { s: "I'll see you ___ Christmas.", o: ["in", "on", "at", "for"], c: 2, e: "Bayramlar: at Christmas", cat: "time", d: "medium" },
+  { s: "The book is ___ the table.", o: ["in", "on", "at", "to"], c: 1, e: "Yüzey üzerinde 'on'", cat: "place", d: "easy" },
+  { s: "I live ___ Istanbul.", o: ["in", "on", "at", "to"], c: 0, e: "Şehirler: in Istanbul", cat: "place", d: "easy" },
+  { s: "She's waiting ___ the bus stop.", o: ["in", "on", "at", "to"], c: 2, e: "Belirli nokta: at the bus stop", cat: "place", d: "medium" },
+  { s: "He works ___ a hospital.", o: ["in", "on", "at", "for"], c: 0, e: "Bina içinde 'in'", cat: "place", d: "easy" },
+  { s: "There's a picture ___ the wall.", o: ["in", "on", "at", "to"], c: 1, e: "Duvarda asılı: on the wall", cat: "place", d: "easy" },
+  { s: "She's ___ home now.", o: ["in", "on", "at", "to"], c: 2, e: "'At home' sabit ifade", cat: "place", d: "medium" },
+  { s: "I'm going ___ school.", o: ["in", "on", "at", "to"], c: 3, e: "Hareket yönü: go to school", cat: "move", d: "easy" },
+  { s: "She arrived ___ London.", o: ["in", "on", "at", "to"], c: 0, e: "Varış + şehir: arrive in", cat: "move", d: "hard" },
+  { s: "This gift is ___ you.", o: ["for", "to", "at", "with"], c: 0, e: "'For' kime: for you", cat: "other", d: "easy" },
+  { s: "I need this ___ tomorrow.", o: ["for", "to", "at", "by"], c: 0, e: "'For' zaman: for tomorrow", cat: "other", d: "medium" },
+  { s: "Can I speak ___ you?", o: ["to", "with", "at", "for"], c: 0, e: "'Speak to' veya 'with'", cat: "other", d: "medium" },
+  { s: "She came ___ her sister.", o: ["for", "to", "with", "by"], c: 2, e: "'With' birlikte", cat: "other", d: "easy" },
+  { s: "I made this ___ my hands.", o: ["by", "with", "from", "in"], c: 1, e: "'With' araç: with my hands", cat: "other", d: "hard" },
+  { s: "I go to work ___ bus.", o: ["by", "with", "in", "on"], c: 0, e: "'By' taşıma: by bus (artikelsiz)", cat: "other", d: "medium" },
+  { s: "This book is ___ grammar.", o: ["about", "for", "of", "on"], c: 0, e: "'About' konu: about grammar", cat: "other", d: "medium" },
+  { s: "I'm worried ___ the exam.", o: ["about", "for", "of", "with"], c: 0, e: "'Worried about' sabit ifade", cat: "other", d: "hard" },
+  { s: "She's good ___ math.", o: ["at", "in", "on", "with"], c: 0, e: "'Good at' yetenek", cat: "other", d: "hard" },
+  { s: "I'm interested ___ history.", o: ["in", "at", "on", "for"], c: 0, e: "'Interested in' sabit", cat: "other", d: "hard" },
+  { s: "He's afraid ___ dogs.", o: ["of", "from", "with", "by"], c: 0, e: "'Afraid of' sabit", cat: "other", d: "medium" },
+  { s: "The answer ___ your question.", o: ["to", "for", "of", "at"], c: 0, e: "'Answer to' the question", cat: "other", d: "hard" },
+  { s: "I'm sorry ___ being late.", o: ["for", "about", "of", "to"], c: 0, e: "'Sorry for' özür", cat: "other", d: "medium" },
+  { s: "This depends ___ weather.", o: ["on", "of", "from", "to"], c: 0, e: "'Depend on' bağlı olmak", cat: "other", d: "hard" },
+  { s: "I agree ___ you.", o: ["with", "to", "on", "for"], c: 0, e: "'Agree with' someone", cat: "other", d: "hard" },
+  { s: "She's famous ___ singing.", o: ["for", "in", "at", "with"], c: 0, e: "'Famous for' something", cat: "other", d: "hard" },
+  { s: "I'm tired ___ waiting.", o: ["of", "from", "with", "for"], c: 0, e: "'Tired of' doing something", cat: "other", d: "medium" },
+  { s: "He's proud ___ his son.", o: ["of", "for", "with", "about"], c: 0, e: "'Proud of' someone", cat: "other", d: "medium" },
+  { s: "Different ___ the others.", o: ["from", "of", "to", "with"], c: 0, e: "'Different from' comparison", cat: "other", d: "hard" },
+  { s: "Angry ___ the situation.", o: ["about", "with", "at", "for"], c: 0, e: "'Angry about' something", cat: "other", d: "hard" },
+];
+
+const QUESTIONS: Question[] = [
+  { id: 1, u: "Unit 1-2", t: "To Be", q: "My name _____ John and I _____ from England.", o: ["is/am", "are/is", "am/are", "is/is"], c: 0, e: "'My name' tekil → is. 'I' → am.", h: "Öznelere dikkat et: 'My name' (it) ve 'I'.", de: "'My name' tekil ve 3. şahıs → 'is'. 'I' her zaman 'am' alır. Bu temel to be konjugasyonudur.", cm: ["'I is' demek YANLIŞ", "'My name are' çoğul gibi düşünme"], src: "zip" },
+  { id: 2, u: "Unit 1-2", t: "To Be", q: "_____ your sister a teacher?", o: ["Is", "Are", "Am", "Be"], c: 0, e: "'Your sister' tekil (she) → Is.", h: "'Your sister' zamiri 'She'ye karşılık gelir.", de: "Soru yapısında to be fiili öne gelir. 'Your sister' = she (tekil 3. şahıs) → 'Is she...?'", cm: ["'Are your sister' çoğul karışıklığı"], src: "headway" },
+  { id: 3, u: "Unit 1-2", t: "To Be", q: "We _____ from Spain. We're from Italy.", o: ["isn't", "aren't", "am not", "not"], c: 1, e: "'We' çoğul → aren't (are not).", h: "'Biz' (We) çoğul olduğu için çoğul yardımcı fiili kullan.", de: "Çoğul özneler 'are' alır, olumsuz hali 'aren't' (kısaltma) veya 'are not' (tam hali).", cm: ["'We isn't' tekil/çoğul karışıklığı"], src: "zip" },
+  { id: 4, u: "Unit 3-4", t: "Present Simple", q: "She _____ to work by bus every day.", o: ["go", "goes", "going", "is going"], c: 1, e: "He/she/it + verb+s → goes.", h: "'Every day' geniş zaman ipucudur. 'She' öznesine dikkat.", de: "Present Simple'da he/she/it özneleri fiil+s/es alır. 'Go' → 'goes' (o ile bittiği için -es).", cm: ["'She go' ek unutma", "'She going' yanlış zaman"], src: "headway" },
+  { id: 5, u: "Unit 3-4", t: "Present Simple", q: "I _____ coffee. I prefer tea.", o: ["don't drink", "doesn't drink", "am not drink", "not drink"], c: 0, e: "I/you/we/they → don't + verb.", h: "Geniş zamanda 'I' ile olumsuzluk eki 'don't'dur.", de: "Present Simple olumsuz: yardımcı fiil 'do/does' + 'not'. I/you/we/they ile 'don't', ana fiil yalın kalır.", cm: ["'I doesn't drink' yanlış yardımcı", "'I am not drink' yanlış yapı"], src: "original" },
+  { id: 6, u: "Unit 5", t: "There is/are", q: "_____ a library near your house?", o: ["There is", "Is there", "There are", "Are there"], c: 1, e: "Soru: Is there + tekil.", h: "Soru olduğu için yardımcı fiil başa gelmeli ve 'library' tekil.", de: "'There is' yapısında soru yapmak için fiile yer değiştirme: 'Is there...?'. Tekil isimler için 'Is there', çoğul için 'Are there'.", cm: ["'There is a library?' fiil öne alınmadan"], src: "zip" },
+  { id: 7, u: "Unit 6", t: "Can", q: "I _____ swim very well. I learned when I was 5.", o: ["can", "could", "can't", "am"], c: 0, e: "Şimdiki yetenek: can.", h: "Yüzebildiğini (olumlu yetenek) belirtiyor.", de: "'Can' modal fiilidir, yetenek/izin/olasılık ifade eder. Sonra fiil yalın gelir (to yok). 'Could' geçmiş yetenek içindir.", cm: ["'I can to swim' to eklemek", "'I cans' -s eklemek"], src: "headway" },
+  { id: 8, u: "Unit 7-8", t: "Present Continuous", q: "She _____ a book right now. Don't disturb her.", o: ["reads", "is reading", "read", "reading"], c: 1, e: "Şu anda: am/is/are + verb-ing.", h: "'Right now' şu an demektir, şimdiki zaman kullan.", de: "Present Continuous şu anda devam eden eylemleri anlatır. Yapısı: am/is/are + verb-ing. She → is reading.", cm: ["'She reading' to be unutma", "'She reads' yanlış zaman"], src: "zip" },
+  { id: 9, u: "Unit 9-10", t: "Past Simple", q: "I _____ my homework yesterday evening.", o: ["finish", "finished", "finishing", "finishes"], c: 1, e: "Past Simple: verb + -ed.", h: "'Yesterday' geçmiş zamandır. Düzenli fiil 'ed' alır.", de: "Past Simple geçmişte biten eylemleri anlatır. Düzenli fiillere '-ed': finish → finished. 'Yesterday' geçmiş zaman belirteci.", cm: ["'I finish' zaman uyumsuz", "'I finisheded' gereksiz tekrar"], src: "original" },
+  { id: 10, u: "Unit 11", t: "Comparatives", q: "This book is _____ than that one.", o: ["interesting", "more interesting", "most interesting", "interestinger"], c: 1, e: "2+ hece: more + adjective + than.", h: "'Interesting' uzun bir sıfattır, 'more' ile kullanılır.", de: "Karşılaştırma: Kısa sıfatlar '-er' (tall→taller), uzun sıfatlar 'more' (interesting→more interesting) alır.", cm: ["'Interestinger' yanlış ek", "'Most interesting' üstünlük derecesi"], src: "headway" },
+  { id: 11, u: "Unit 12", t: "Prepositions", q: "I usually wake up ___ 6:30 in the morning.", o: ["in", "on", "at", "to"], c: 2, e: "Saatlerle 'at': at 6:30.", h: "Saatlerden önce her zaman 'at' gelir.", de: "Zaman edatları: AT (saatler), ON (günler), IN (aylar/yıllar). 'At 6:30' = Saat 6:30'da.", cm: ["'In 6:30' veya 'on 6:30'"], src: "zip" },
+  { id: 12, u: "Unit 13-14", t: "Going to", q: "I _____ visit my grandparents next weekend.", o: ["will", "am going to", "going to", "go to"], c: 1, e: "Planlar: be going to.", h: "Planlanmış gelecek zaman: am/is/are + going to.", de: "'Going to' planlar ve niyetler için. 'Will' anlık kararlar için. Yapısı: am/is/are + going to + verb.", cm: ["'I going to' to be unutma", "'I go to visit' yanlış yapı"], src: "headway" },
+  { id: 13, u: "Vocabulary", t: "Family", q: "My mother's sister is my _____.", o: ["aunt", "uncle", "cousin", "niece"], c: 0, e: "Annenin kız kardeşi: aunt.", h: "Annenin kız kardeşi senin teyzen olur.", de: "Aile bağları: aunt (teyze/hala), uncle (amca/dayı), cousin (kuzen), niece (yeğen-kız).", cm: ["Cousin ile karıştırma - cousin amcanın çocuğu"], src: "zip" },
+  { id: 14, u: "Vocabulary", t: "Daily Routines", q: "I always _____ my teeth before bed.", o: ["wash", "brush", "clean", "make"], c: 1, e: "'Brush your teeth' sabit collocation.", h: "Dişler yıkanmaz (wash), fırçalanır.", de: "İngilizce'de bazı kelimeler sabit birlikte kullanılır. 'Brush teeth' bunlardan biri. 'Wash' eller için.", cm: ["'Wash teeth' yanlış collocation"], src: "original" },
+  { id: 15, u: "Unit 3-4", t: "Present Simple", q: "_____ your brother play football on Saturdays?", o: ["Do", "Does", "Is", "Are"], c: 1, e: "He/she/it soru: Does.", h: "'Your brother' (He) olduğu için 'Does' ile soru sorulur.", de: "Present Simple soru: do/does kullanılır. He/she/it → does, ana fiil yalın kalır (plays değil play).", cm: ["'Do your brother' yanlış yardımcı", "'Is your brother play' yanlış yapı"], src: "headway" },
+];
+
+const FLASHCARDS: Record<string, Flashcard[]> = {
   family: [
-    { front: "Mother", back: "Anne", pronunciation: "/ˈmʌðə(r)/" },
-    { front: "Father", back: "Baba", pronunciation: "/ˈfɑːðə(r)/" },
-    { front: "Sister", back: "Kız kardeş", pronunciation: "/ˈsɪstə(r)/" },
-    { front: "Brother", back: "Erkek kardeş", pronunciation: "/ˈbrʌðə(r)/" },
-    { front: "Aunt", back: "Teyze/Hala", pronunciation: "/ɑːnt/" },
-    { front: "Uncle", back: "Amca/Dayı", pronunciation: "/ˈʌŋkl/" },
-    { front: "Cousin", back: "Kuzen", pronunciation: "/ˈkʌzn/" },
-    { front: "Grandmother", back: "Büyükanne", pronunciation: "/ˈɡrænmʌðə(r)/" },
-    { front: "Grandfather", back: "Büyükbaba", pronunciation: "/ˈɡrænfɑːðə(r)/" },
-    { front: "Parents", back: "Ebeveynler", pronunciation: "/ˈpeərənts/" },
-    { front: "Children", back: "Çocuklar", pronunciation: "/ˈtʃɪldrən/" },
-    { front: "Son", back: "Oğul", pronunciation: "/sʌn/" },
-    { front: "Daughter", back: "Kız evlat", pronunciation: "/ˈdɔːtə(r)/" },
+    { f: "Mother", b: "Anne", p: "/ˈmʌðə/" },
+    { f: "Father", b: "Baba", p: "/ˈfɑːðə/" },
+    { f: "Sister", b: "Kız kardeş", p: "/ˈsɪstə/" },
+    { f: "Brother", b: "Erkek kardeş", p: "/ˈbrʌðə/" },
+    { f: "Aunt", b: "Teyze/Hala", p: "/ɑːnt/" },
+    { f: "Uncle", b: "Amca/Dayı", p: "/ˈʌŋkl/" }
   ],
   food: [
-    { front: "Bread", back: "Ekmek", pronunciation: "/bred/" },
-    { front: "Water", back: "Su", pronunciation: "/ˈwɔːtə(r)/" },
-    { front: "Coffee", back: "Kahve", pronunciation: "/ˈkɒfi/" },
-    { front: "Tea", back: "Çay", pronunciation: "/tiː/" },
-    { front: "Milk", back: "Süt", pronunciation: "/mɪlk/" },
-    { front: "Apple", back: "Elma", pronunciation: "/ˈæpl/" },
-    { front: "Banana", back: "Muz", pronunciation: "/bəˈnɑːnə/" },
-    { front: "Orange", back: "Portakal", pronunciation: "/ˈɒrɪndʒ/" },
-    { front: "Egg", back: "Yumurta", pronunciation: "/eɡ/" },
-    { front: "Cheese", back: "Peynir", pronunciation: "/tʃiːz/" },
-    { front: "Butter", back: "Tereyağı", pronunciation: "/ˈbʌtə(r)/" },
-    { front: "Rice", back: "Pirinç", pronunciation: "/raɪs/" },
-    { front: "Pasta", back: "Makarna", pronunciation: "/ˈpæstə/" },
-    { front: "Chicken", back: "Tavuk", pronunciation: "/ˈtʃɪkɪn/" },
-    { front: "Fish", back: "Balık", pronunciation: "/fɪʃ/" },
-    { front: "Meat", back: "Et", pronunciation: "/miːt/" },
-    { front: "Vegetables", back: "Sebzeler", pronunciation: "/ˈvedʒtəblz/" },
-    { front: "Fruit", back: "Meyve", pronunciation: "/fruːt/" },
-    { front: "Juice", back: "Meyve suyu", pronunciation: "/dʒuːs/" },
-    { front: "Soup", back: "Çorba", pronunciation: "/suːp/" },
+    { f: "Bread", b: "Ekmek", p: "/bred/" },
+    { f: "Water", b: "Su", p: "/ˈwɔːtə/" },
+    { f: "Coffee", b: "Kahve", p: "/ˈkɒfi/" },
+    { f: "Tea", b: "Çay", p: "/tiː/" },
+    { f: "Milk", b: "Süt", p: "/mɪlk/" }
   ],
   daily: [
-    { front: "Wake up", back: "Uyanmak", pronunciation: "/weɪk ʌp/" },
-    { front: "Get up", back: "Kalkmak", pronunciation: "/ɡet ʌp/" },
-    { front: "Brush teeth", back: "Diş fırçalamak", pronunciation: "/brʌʃ tiːθ/" },
-    { front: "Have breakfast", back: "Kahvaltı yapmak", pronunciation: "/hæv ˈbrekfəst/" },
-    { front: "Go to work", back: "İşe gitmek", pronunciation: "/ɡəʊ tə wɜːk/" },
-    { front: "Have lunch", back: "Öğle yemeği yemek", pronunciation: "/hæv lʌntʃ/" },
-    { front: "Go home", back: "Eve gitmek", pronunciation: "/ɡəʊ həʊm/" },
-    { front: "Watch TV", back: "TV izlemek", pronunciation: "/wɒtʃ tiːˈviː/" },
-    { front: "Do homework", back: "Ödev yapmak", pronunciation: "/duː ˈhəʊmwɜːk/" },
-    { front: "Go to bed", back: "Yatmak", pronunciation: "/ɡəʊ tə bed/" },
-    { front: "Take a shower", back: "Duş almak", pronunciation: "/teɪk ə ˈʃaʊə(r)/" },
-    { front: "Get dressed", back: "Giyinmek", pronunciation: "/ɡet drest/" },
-    { front: "Have dinner", back: "Akşam yemeği yemek", pronunciation: "/hæv ˈdɪnə(r)/" },
-  ],
-  adjectives: [
-    { front: "Big", back: "Büyük", pronunciation: "/bɪɡ/" },
-    { front: "Small", back: "Küçük", pronunciation: "/smɔːl/" },
-    { front: "Happy", back: "Mutlu", pronunciation: "/ˈhæpi/" },
-    { front: "Sad", back: "Üzgün", pronunciation: "/sæd/" },
-    { front: "Hot", back: "Sıcak", pronunciation: "/hɒt/" },
-    { front: "Cold", back: "Soğuk", pronunciation: "/kəʊld/" },
-    { front: "Good", back: "İyi", pronunciation: "/ɡʊd/" },
-    { front: "Bad", back: "Kötü", pronunciation: "/bæd/" },
-    { front: "Beautiful", back: "Güzel", pronunciation: "/ˈbjuːtɪfl/" },
-    { front: "Ugly", back: "Çirkin", pronunciation: "/ˈʌɡli/" },
-    { front: "Old", back: "Yaşlı/Eski", pronunciation: "/əʊld/" },
-    { front: "Young", back: "Genç", pronunciation: "/jʌŋ/" },
-    { front: "New", back: "Yeni", pronunciation: "/njuː/" },
-    { front: "Expensive", back: "Pahalı", pronunciation: "/ɪkˈspensɪv/" },
-    { front: "Cheap", back: "Ucuz", pronunciation: "/tʃiːp/" },
-    { front: "Fast", back: "Hızlı", pronunciation: "/fɑːst/" },
-    { front: "Slow", back: "Yavaş", pronunciation: "/sləʊ/" },
-    { front: "Easy", back: "Kolay", pronunciation: "/ˈiːzi/" },
-    { front: "Difficult", back: "Zor", pronunciation: "/ˈdɪfɪkəlt/" },
-    { front: "Interesting", back: "İlginç", pronunciation: "/ˈɪntrəstɪŋ/" },
-    { front: "Boring", back: "Sıkıcı", pronunciation: "/ˈbɔːrɪŋ/" },
+    { f: "Wake up", b: "Uyanmak", p: "/weɪk ʌp/" },
+    { f: "Get up", b: "Kalkmak", p: "/ɡet ʌp/" },
+    { f: "Brush teeth", b: "Diş fırçalamak", p: "/brʌʃ tiːθ/" },
+    { f: "Have breakfast", b: "Kahvaltı yapmak", p: "/hæv ˈbrekfəst/" }
   ],
   verbs: [
-    { front: "Go", back: "Gitmek", pronunciation: "/ɡəʊ/" },
-    { front: "Come", back: "Gelmek", pronunciation: "/kʌm/" },
-    { front: "See", back: "Görmek", pronunciation: "/siː/" },
-    { front: "Eat", back: "Yemek", pronunciation: "/iːt/" },
-    { front: "Drink", back: "İçmek", pronunciation: "/drɪŋk/" },
-    { front: "Sleep", back: "Uyumak", pronunciation: "/sliːp/" },
-    { front: "Work", back: "Çalışmak", pronunciation: "/wɜːk/" },
-    { front: "Study", back: "Ders çalışmak", pronunciation: "/ˈstʌdi/" },
-    { front: "Read", back: "Okumak", pronunciation: "/riːd/" },
-    { front: "Write", back: "Yazmak", pronunciation: "/raɪt/" },
-    { front: "Listen", back: "Dinlemek", pronunciation: "/ˈlɪsn/" },
-    { front: "Speak", back: "Konuşmak", pronunciation: "/spiːk/" },
-    { front: "Play", back: "Oynamak", pronunciation: "/pleɪ/" },
-    { front: "Buy", back: "Satın almak", pronunciation: "/baɪ/" },
-    { front: "Sell", back: "Satmak", pronunciation: "/sel/" },
-    { front: "Open", back: "Açmak", pronunciation: "/ˈəʊpən/" },
-    { front: "Close", back: "Kapatmak", pronunciation: "/kləʊz/" },
-    { front: "Start", back: "Başlamak", pronunciation: "/stɑːt/" },
-    { front: "Finish", back: "Bitirmek", pronunciation: "/ˈfɪnɪʃ/" },
-    { front: "Help", back: "Yardım etmek", pronunciation: "/help/" },
+    { f: "Go", b: "Gitmek", p: "/ɡəʊ/" },
+    { f: "Come", b: "Gelmek", p: "/kʌm/" },
+    { f: "Eat", b: "Yemek", p: "/iːt/" },
+    { f: "Drink", b: "İçmek", p: "/drɪŋk/" }
   ],
-  places: [
-    { front: "School", back: "Okul", pronunciation: "/skuːl/" },
-    { front: "Hospital", back: "Hastane", pronunciation: "/ˈhɒspɪtl/" },
-    { front: "Bank", back: "Banka", pronunciation: "/bæŋk/" },
-    { front: "Restaurant", back: "Restoran", pronunciation: "/ˈrestrɒnt/" },
-    { front: "Hotel", back: "Otel", pronunciation: "/həʊˈtel/" },
-    { front: "Airport", back: "Havalimanı", pronunciation: "/ˈeəpɔːt/" },
-    { front: "Station", back: "İstasyon", pronunciation: "/ˈsteɪʃn/" },
-    { front: "Museum", back: "Müze", pronunciation: "/mjuˈziːəm/" },
-    { front: "Library", back: "Kütüphane", pronunciation: "/ˈlaɪbrəri/" },
-    { front: "Park", back: "Park", pronunciation: "/pɑːk/" },
-    { front: "Cinema", back: "Sinema", pronunciation: "/ˈsɪnəmə/" },
-    { front: "Shop", back: "Mağaza", pronunciation: "/ʃɒp/" },
-    { front: "Supermarket", back: "Süpermarket", pronunciation: "/ˈsuːpəmɑːkɪt/" },
-    { front: "Pharmacy", back: "Eczane", pronunciation: "/ˈfɑːməsi/" },
-    { front: "Post office", back: "Postane", pronunciation: "/ˈpəʊst ɒfɪs/" },
+  // Yeni eklenen kategoriler
+  jobs: [
+    { f: "Teacher", b: "Öğretmen", p: "/ˈtiːtʃə/" },
+    { f: "Doctor", b: "Doktor", p: "/ˈdɒktə/" },
+    { f: "Engineer", b: "Mühendis", p: "/ˌendʒɪˈnɪə/" },
+    { f: "Nurse", b: "Hemşire", p: "/nɜːs/" },
+    { f: "Police Officer", b: "Polis Memuru", p: "/pəˈliːs ˈɒfɪsə/" }
+  ],
+  adjectives: [
+    { f: "Happy", b: "Mutlu", p: "/ˈhæpi/" },
+    { f: "Sad", b: "Üzgün", p: "/sæd/" },
+    { f: "Big", b: "Büyük", p: "/bɪɡ/" },
+    { f: "Small", b: "Küçük", p: "/smɔːl/" },
+    { f: "Beautiful", b: "Güzel", p: "/ˈbjuːtɪfl/" }
   ]
 };
 
-const GRAMMAR_RULES: GrammarRule[] = [
-  {
-    unit: "Unit 1-2: To Be",
-    icon: "📍",
-    color: "blue",
-    rules: [
-      "✓ I am, You are, He/She/It is, We/You/They are",
-      "✓ Negative: am not, isn't, aren't",
-      "✓ Question: Am I? Is he? Are they?",
-      "✓ Kullanım: İsim, meslek, yaş, yer bildirmek için"
-    ],
-    examples: ["I am a student.", "She isn't a teacher.", "Are you from Turkey?"]
+const GRAMMAR: GrammarRule[] = [
+  { 
+    u: "Unit 1-2", 
+    i: "📍", 
+    title: "Verb 'to be'",
+    r: ["I am (I'm)", "You/We/They are (You're)", "He/She/It is (He's)", "Olumsuz: not (I am not, She isn't)", "Soru: Fiil başa gelir (Are you...?)"], 
+    e: ["I am a student at university.", "She is not from England.", "Are they married?"],
+    note: "En temel fiildir. Durum, konum ve kimlik belirtir."
   },
-  {
-    unit: "Unit 3-4: Present Simple",
-    icon: "🔄",
-    color: "green",
-    rules: [
-      "✓ Alışkanlıklar ve genel gerçekler",
-      "✓ I/You/We/They + verb (go, work, like)",
-      "✓ He/She/It + verb+s/es (goes, works, likes)",
-      "✓ Negative: don't/doesn't + verb",
-      "✓ Question: Do/Does + subject + verb?"
-    ],
-    examples: ["I work every day.", "She doesn't like coffee.", "Do you speak English?"]
+  { 
+    u: "Unit 3-4", 
+    i: "🔄", 
+    title: "Present Simple",
+    r: ["Rutinler ve genel gerçekler için kullanılır.", "He/She/It öznelerinde fiil -s takısı alır.", "Soru/Olumsuz için 'do/does' kullanılır."], 
+    e: ["I wake up at 7:00 every day.", "He plays football on Sundays.", "They don't like pizza."],
+    note: "Unutma: Does kullanıldığında ana fiil 's' takısını atar (Does he play?)."
   },
-  {
-    unit: "Unit 5: There is/are",
-    icon: "🏠",
-    color: "purple",
-    rules: [
-      "✓ Bir yerde bir şeyin varlığı",
-      "✓ There is + tekil (a book, an apple)",
-      "✓ There are + çoğul (books, apples)",
-      "✓ Question: Is there? / Are there?",
-      "✓ Short answer: Yes, there is. / No, there aren't."
-    ],
-    examples: ["There is a cat.", "There are two dogs.", "Is there a bank near here?"]
+  { 
+    u: "Unit 7-8", 
+    i: "⏳", 
+    title: "Present Continuous",
+    r: ["Şu anda (konuşma anında) yapılan eylemler.", "Formül: Subject + am/is/are + Verb-ing", "Zaman zarfları: now, at the moment, right now."], 
+    e: ["I am watching TV now.", "She is sleeping at the moment.", "We are not working today."],
+    note: "-ing takısı Türkçedeki '-yor' ekine benzer."
   },
-  {
-    unit: "Unit 6: Can/Can't",
-    icon: "💪",
-    color: "orange",
-    rules: [
-      "✓ Yetenek, izin, olasılık",
-      "✓ can + verb (yalın hali)",
-      "✓ can't = cannot (olumsuz)",
-      "✓ Can you...? (soru)",
-      "✓ Could: geçmiş yetenek veya kibar istek"
-    ],
-    examples: ["I can swim.", "She can't drive.", "Can you help me?"]
-  },
-  {
-    unit: "Unit 7-8: Present Continuous",
-    icon: "⏳",
-    color: "pink",
-    rules: [
-      "✓ Şu anda devam eden eylemler",
-      "✓ am/is/are + verb-ing",
-      "✓ Zaman belirteçleri: now, at the moment, right now",
-      "✓ Negative: am not/isn't/aren't + verb-ing",
-      "✓ Question: Am/Is/Are + subject + verb-ing?"
-    ],
-    examples: ["I am studying now.", "She isn't working.", "Are you listening?"]
-  },
-  {
-    unit: "Unit 9-10: Past Simple",
-    icon: "📅",
-    color: "red",
-    rules: [
-      "✓ Geçmişte biten eylemler",
-      "✓ Regular verbs: verb + -ed (worked, played)",
-      "✓ Irregular verbs: özel formlar (went, ate, saw)",
-      "✓ Negative: didn't + verb (yalın hali)",
-      "✓ Question: Did + subject + verb?",
-      "✓ Zaman: yesterday, last week, ago, in 2020"
-    ],
-    examples: ["I worked yesterday.", "She didn't go.", "Did you see him?"]
-  },
-  {
-    unit: "Unit 11: Comparatives & Superlatives",
-    icon: "📊",
-    color: "yellow",
-    rules: [
-      "✓ Comparative: -er / more... than",
-      "✓ Kısa sıfatlar: tall → taller",
-      "✓ Uzun sıfatlar: interesting → more interesting",
-      "✓ Superlative: the -est / the most...",
-      "✓ Düzensiz: good→better→best, bad→worse→worst"
-    ],
-    examples: ["She is taller than me.", "This is the most expensive car."]
-  },
-  {
-    unit: "Unit 12: Prepositions (in, on, at)",
-    icon: "📍",
-    color: "indigo",
-    rules: [
-      "✓ AT: Saatler (at 7 o'clock), yerler (at home, at school)",
-      "✓ ON: Günler (on Monday), tarihler (on July 4th), yüzeyler (on the table)",
-      "✓ IN: Aylar (in July), yıllar (in 2024), şehirler (in London)",
-      "✓ Özel: in the morning, at night, on the weekend"
-    ],
-    examples: ["I wake up at 6 AM.", "My birthday is on May 15th.", "She lives in Istanbul."]
-  },
-  {
-    unit: "Unit 13-14: Going to (Future)",
-    icon: "🔮",
-    color: "teal",
-    rules: [
-      "✓ Planlar ve niyetler",
-      "✓ am/is/are + going to + verb",
-      "✓ Kanıta dayalı gelecek tahminleri",
-      "✓ Negative: am not/isn't/aren't + going to",
-      "✓ Question: Am/Is/Are + subject + going to?"
-    ],
-    examples: ["I'm going to visit Paris.", "It's going to rain.", "Are you going to study?"]
+  { 
+    u: "Unit 9-10", 
+    i: "📅", 
+    title: "Past Simple",
+    r: ["Geçmişte tamamlanmış eylemler.", "Düzenli fiiller -ed alır (play -> played).", "Düzensiz fiiller değişir (go -> went).", "Yardımcı fiil: did / didn't."], 
+    e: ["I watched a movie yesterday.", "She went to Paris last year.", "Did you see him?"],
+    note: "Yesterday, last week, in 2010 gibi geçmiş zaman ifadeleriyle kullanılır."
   }
 ];
 
-const PREPOSITION_EXERCISES: PrepositionExercise[] = [
-  { sentence: "I get up ___ 7 o'clock every morning.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Saatlerle 'at' kullanılır." },
-  { sentence: "My birthday is ___ July.", options: ["in", "on", "at", "to"], correct: 0, explanation: "Aylarla 'in' kullanılır." },
-  { sentence: "She was born ___ 1995.", options: ["in", "on", "at", "to"], correct: 0, explanation: "Yıllarla 'in' kullanılır." },
-  { sentence: "We have a meeting ___ Monday.", options: ["in", "on", "at", "to"], correct: 1, explanation: "Günlerle 'on' kullanılır." },
-  { sentence: "I don't work ___ the weekend.", options: ["in", "on", "at", "to"], correct: 2, explanation: "'At the weekend' (BE) sabit ifade." },
-  { sentence: "The book is ___ the table.", options: ["in", "on", "at", "to"], correct: 1, explanation: "Yüzey üzerinde 'on' kullanılır." },
-  { sentence: "I live ___ Istanbul.", options: ["in", "on", "at", "to"], correct: 0, explanation: "Şehirlerle 'in' kullanılır." },
-  { sentence: "She's waiting ___ the bus stop.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Belirli noktada 'at' kullanılır." },
-  { sentence: "I usually study ___ the evening.", options: ["in", "on", "at", "to"], correct: 0, explanation: "'In the evening' sabit ifade." },
-  { sentence: "Let's meet ___ 3:30 PM.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Saatlerle 'at' kullanılır." },
-  { sentence: "I'm going ___ school now.", options: ["in", "on", "at", "to"], correct: 3, explanation: "Hareket yönü için 'to' kullanılır." },
-  { sentence: "He works ___ a hospital.", options: ["in", "on", "at", "for"], correct: 0, explanation: "Bina içinde 'in' kullanılır." },
-  { sentence: "The movie starts ___ midnight.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Gece yarısı = at midnight (sabit ifade)." },
-  { sentence: "I'll see you ___ Christmas.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Bayramlarla 'at' kullanılır (at Christmas, at Easter)." },
-  { sentence: "She arrived ___ London yesterday.", options: ["in", "on", "at", "to"], correct: 0, explanation: "Ulaşma + şehir = in London." },
-];
-
-const QUESTION_BANK: Question[] = [
-  {id: 1, unit: "Unit 1-2", topic: "To Be", type: "multiple", question: "My name _____ John.", options: ["is", "are", "am", "be"], correct: 0, explanation: "'My name' tekil → is.", hint: "Tekil özne hangi formu alır?"},
-  {id: 2, unit: "Unit 1-2", topic: "To Be", type: "multiple", question: "_____ your sister a teacher?", options: ["Is", "Are", "Am", "Be"], correct: 0, explanation: "'Your sister' (she) → Is.", hint: "She/he/it ile hangi form?"},
-  {id: 3, unit: "Unit 1-2", topic: "To Be", type: "multiple", question: "We _____ from Spain.", options: ["isn't", "aren't", "am not", "not"], correct: 1, explanation: "'We' çoğul → aren't.", hint: "We/you/they ile olumsuz"},
-  {id: 4, unit: "Unit 3-4", topic: "Present Simple", type: "multiple", question: "She _____ to work by bus.", options: ["go", "goes", "going", "is going"], correct: 1, explanation: "She/He/It + verb+s → goes.", hint: "Tekil 3. şahıs ekini unutma"},
-  {id: 5, unit: "Unit 3-4", topic: "Present Simple", type: "multiple", question: "I _____ coffee.", options: ["don't drink", "doesn't drink", "am not drink", "not drink"], correct: 0, explanation: "I/You/We/They → don't + verb.", hint: "I ile olumsuz yapı"},
-  {id: 6, unit: "Unit 5", topic: "There is/are", type: "multiple", question: "_____ a library near here?", options: ["There is", "Is there", "There are", "Are there"], correct: 1, explanation: "Soru: Is there + tekil?", hint: "Soru yapısında yer değiştirme"},
-  {id: 7, unit: "Unit 6", topic: "Can", type: "multiple", question: "I _____ swim very well.", options: ["can", "could", "can't", "am"], correct: 0, explanation: "Yetenek: can + verb.", hint: "Şimdiki yetenek"},
-  {id: 8, unit: "Unit 7-8", topic: "Present Continuous", type: "multiple", question: "She _____ a book now.", options: ["reads", "is reading", "read", "reading"], correct: 1, explanation: "Şu anda: am/is/are + verb-ing.", hint: "'now' şimdiki zaman işareti"},
-  {id: 9, unit: "Unit 9-10", topic: "Past Simple", type: "multiple", question: "I _____ homework yesterday.", options: ["finish", "finished", "finishing", "finishes"], correct: 1, explanation: "Geçmiş: verb + -ed.", hint: "Yesterday = dün"},
-  {id: 10, unit: "Unit 11", topic: "Comparatives", type: "multiple", question: "This is _____ than that.", options: ["interesting", "more interesting", "most interesting", "interestinger"], correct: 1, explanation: "Uzun sıfat: more + adj + than.", hint: "2+ hece için 'more'"},
-  {id: 11, unit: "Unit 12", topic: "Prepositions", type: "multiple", question: "I wake up ___ 6 AM.", options: ["in", "on", "at", "to"], correct: 2, explanation: "Saatlerle 'at'.", hint: "Saat için hangi edat?"},
-  {id: 12, unit: "Unit 13-14", topic: "Going to", type: "multiple", question: "I _____ visit London.", options: ["will", "am going to", "going to", "go"], correct: 1, explanation: "Plan: be going to + verb.", hint: "Gelecek plan ifadesi"},
-  {id: 13, unit: "Vocabulary", topic: "Family", type: "multiple", question: "My mother's sister is my _____.", options: ["aunt", "uncle", "cousin", "niece"], correct: 0, explanation: "Anne'nin kız kardeşi = aunt.", hint: "Kadın akraba"},
-  {id: 14, unit: "Vocabulary", topic: "Daily Routines", type: "multiple", question: "I _____ my teeth before bed.", options: ["wash", "brush", "clean", "make"], correct: 1, explanation: "'Brush your teeth' sabit ifade.", hint: "Diş için özel fiil"},
-  {id: 15, unit: "Unit 3-4", topic: "Present Simple", type: "multiple", question: "_____ your brother play football?", options: ["Do", "Does", "Is", "Are"], correct: 1, explanation: "He/she/it → Does + verb?", hint: "Tekil 3. şahıs sorusu"},
-  {id: 16, unit: "Unit 7-8", topic: "Present Continuous", type: "multiple", question: "What _____ you _____ now?", options: ["do / do", "are / doing", "do / doing", "are / do"], correct: 1, explanation: "Soru: What are you doing?", hint: "Şu anki eylem sorusu"},
-  {id: 17, unit: "Unit 9-10", topic: "Past Simple", type: "multiple", question: "We _____ to Paris last year.", options: ["go", "went", "going", "goes"], correct: 1, explanation: "Go → went (düzensiz).", hint: "Go fiilinin 2. hali"},
-  {id: 18, unit: "Unit 11", topic: "Superlatives", type: "multiple", question: "This is _____ book.", options: ["good", "better", "the best", "best"], correct: 2, explanation: "Superlative: the best.", hint: "En iyi = the..."},
-  {id: 19, unit: "Vocabulary", topic: "Adjectives", type: "multiple", question: "Opposite of 'hot':", options: ["warm", "cool", "cold", "freezing"], correct: 2, explanation: "Hot ↔ Cold.", hint: "Sıcağın tam zıttı"},
-  {id: 20, unit: "Unit 12", topic: "Prepositions", type: "multiple", question: "My birthday is ___ July.", options: ["in", "on", "at", "to"], correct: 0, explanation: "Aylar için 'in'.", hint: "Ay isimleri için"},
-  {id: 21, unit: "Unit 6", topic: "Can", type: "multiple", question: "_____ you help me?", options: ["Can", "Do", "Are", "Is"], correct: 0, explanation: "İstek: Can you...?", hint: "Yardım isteme"},
-  {id: 22, unit: "Unit 9-10", topic: "Past Simple", type: "multiple", question: "She _____ go yesterday.", options: ["doesn't", "didn't", "wasn't", "isn't"], correct: 1, explanation: "Geçmiş olumsuz: didn't.", hint: "Did + not"},
-  {id: 23, unit: "Vocabulary", topic: "Food", type: "multiple", question: "I'd like a ___ of bread.", options: ["slice", "piece", "loaf", "bar"], correct: 2, explanation: "A loaf of bread = somun.", hint: "Somun ekmek"},
-  {id: 24, unit: "Unit 5", topic: "There is/are", type: "multiple", question: "_____ many students here.", options: ["There is", "There are", "There", "It is"], correct: 1, explanation: "Çoğul → There are.", hint: "Many = çoğul"},
-  {id: 25, unit: "Unit 13-14", topic: "Going to", type: "multiple", question: "It _____ rain soon.", options: ["will", "is going to", "going to", "goes"], correct: 1, explanation: "Kanıta dayalı tahmin.", hint: "Bulutlara bakıyoruz"},
-  {id: 26, unit: "Unit 3-4", topic: "Present Simple", type: "multiple", question: "Water _____ at 100°C.", options: ["boil", "boils", "boiling", "is boiling"], correct: 1, explanation: "Bilimsel gerçek + it → boils.", hint: "Genel gerçek"},
-  {id: 27, unit: "Unit 7-8", topic: "Present Continuous", type: "multiple", question: "Be quiet! The baby _____.", options: ["sleeps", "is sleeping", "sleep", "sleeping"], correct: 1, explanation: "Şu anda uyuyor.", hint: "Şimdiki durum"},
-  {id: 28, unit: "Vocabulary", topic: "Verbs", type: "multiple", question: "Opposite of 'buy':", options: ["sell", "purchase", "get", "take"], correct: 0, explanation: "Buy ↔ Sell.", hint: "Satın alma ↔ Satma"},
-  {id: 29, unit: "Unit 12", topic: "Prepositions", type: "multiple", question: "The book is ___ the table.", options: ["in", "on", "at", "to"], correct: 1, explanation: "Yüzey üzerinde: on.", hint: "Masa üstü"},
-  {id: 30, unit: "Unit 11", topic: "Comparatives", type: "multiple", question: "My car is _____ than yours.", options: ["fast", "faster", "fastest", "more fast"], correct: 1, explanation: "Kısa sıfat: -er.", hint: "1 heceli sıfat"},
-];
-
-const DEFAULT_USER_DATA: UserData = {
-  level: 1,
-  xp: 0,
-  xpTarget: 100,
-  streak: 0,
-  lastStudyDate: null,
-  totalExams: 0,
-  totalQuestions: 0,
-  correctAnswers: 0,
-  achievements: [],
-  stats: { flashcardsViewed: 0, prepPracticed: 0 }
-};
-
-const DEFAULT_SETTINGS: Settings = {
-  voiceAccent: 'en-GB',
-  speechSpeed: 1.0,
-  autoSpeak: false,
-  showHints: true,
-  darkMode: false
-};
-
-// --- ANA COMPONENT ---
-export default function EnglishPathLab() {
-  // --- STATE TANIMLAMALARI ---
-  const [activeTab, setActiveTab] = useState('dashboard');
-  const [userData, setUserData] = useState<UserData>(DEFAULT_USER_DATA);
-  const [settings, setSettings] = useState<Settings>(DEFAULT_SETTINGS);
+// ============ MAIN COMPONENT ============
+export default function EnglishPathPage() {
+  // State management
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'grammar' | 'flashcards' | 'prepositions' | 'exam' | 'results'>('dashboard');
+  const [userData, setUserData] = useState<UserData>({
+    level: 1,
+    xp: 0,
+    xpTarget: 100,
+    streak: 0,
+    lastStudyDate: null,
+    totalExams: 0,
+    totalQuestions: 0,
+    correctAnswers: 0,
+    achievements: [],
+    stats: { flashcardsViewed: 0, prepPracticed: 0 }
+  });
+  const [settings, setSettings] = useState<Settings>({
+    voiceAccent: 'en-GB',
+    showHints: true,
+    darkMode: false
+  });
   const [wrongAnswers, setWrongAnswers] = useState<Record<number, { count: number; lastSeen: number }>>({});
-  const [examHistory, setExamHistory] = useState<any[]>([]);
-  const [showSettings, setShowSettings] = useState(false);
-  const [notification, setNotification] = useState<string | null>(null);
-  
-  // Flashcards States
-  const [flashcardCategory, setFlashcardCategory] = useState('all');
-  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
-
-  // Prepositions States
+  const [examHistory, setExamHistory] = useState<Array<{ date: number; score: number; questions: Array<{ id: number; topic: string; isCorrect: boolean }> }>>([]);
+  const [currentExam, setCurrentExam] = useState<{ questions: Question[]; answers: Record<number, number>; startTime: number | null; active: boolean }>({
+    questions: [],
+    answers: {},
+    startTime: null,
+    active: false
+  });
+  const [examResults, setExamResults] = useState<ExamResults | null>(null);
+  const [prepAnswers, setPrepAnswers] = useState<Set<number>>(new Set());
   const [prepScore, setPrepScore] = useState({ correct: 0, total: 0 });
-  const [answeredPreps, setAnsweredPreps] = useState<Set<number>>(new Set());
-  const [prepFeedback, setPrepFeedback] = useState<Record<number, { correct: boolean; message: string }>>({});
+  const [prepFeedback, setPrepFeedback] = useState<Record<number, { correct: boolean; msg: string; sel: number }>>({});
+  const [flippedCards, setFlippedCards] = useState<Record<number, boolean>>({});
+  const [flashcardCategory, setFlashcardCategory] = useState<string>('all');
+  const [lastActivity, setLastActivity] = useState(Date.now());
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showTeacherModal, setShowTeacherModal] = useState(false);
+  const [notification, setNotification] = useState<string | null>(null);
+  const [inactivityWarning, setInactivityWarning] = useState<string | null>(null);
+  
+  // New State for Pop-up Hint
+  const [activeHint, setActiveHint] = useState<string | null>(null);
 
-  // Exam States
-  const [examActive, setExamActive] = useState(false);
-  const [currentExam, setCurrentExam] = useState<{ questions: Question[]; answers: Record<number, number>; startTime: number | null }>({ questions: [], answers: {}, startTime: null });
-  const [examTimer, setExamTimer] = useState('00:00');
-  const [examResults, setExamResults] = useState<any>(null);
+  const examTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const chartRef = useRef<ChartJS<"line"> | null>(null);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-
-  // --- INITIALIZATION ---
+  // Load state from localStorage on mount
   useEffect(() => {
-    // Load from local storage
     const saved = localStorage.getItem('englishpath');
     if (saved) {
       try {
         const data = JSON.parse(saved);
-        setUserData(data.userData || DEFAULT_USER_DATA);
-        setWrongAnswers(data.wrongAnswers || {});
-        setExamHistory(data.examHistory || []);
-        setSettings(data.settings || DEFAULT_SETTINGS);
-        if (data.settings?.darkMode) document.documentElement.classList.add('dark');
-      } catch (e) {
-        console.error('Error loading state:', e);
-      }
-    } else {
-        // İlk açılışta dark mode kontrolü (opsiyonel)
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setSettings(prev => ({...prev, darkMode: true}));
+        if (data.userData) setUserData(data.userData);
+        if (data.wrongAnswers) setWrongAnswers(data.wrongAnswers);
+        if (data.examHistory) setExamHistory(data.examHistory);
+        if (data.settings) {
+          setSettings(data.settings);
+          if (data.settings.darkMode) {
             document.documentElement.classList.add('dark');
+          }
         }
+      } catch (e) {
+        console.error('Failed to load state:', e);
+      }
     }
   }, []);
 
-  // Save to local storage on change
+  // Save state to localStorage
   useEffect(() => {
-    const data = { userData, wrongAnswers, examHistory, settings };
-    localStorage.setItem('englishpath', JSON.stringify(data));
+    localStorage.setItem('englishpath', JSON.stringify({
+      userData,
+      wrongAnswers,
+      examHistory,
+      settings
+    }));
   }, [userData, wrongAnswers, examHistory, settings]);
 
-  // --- HELPER FUNCTIONS ---
-  const showNotif = (msg: string) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(null), 3000);
-  };
-
-  const addXP = (amount: number) => {
-    setUserData(prev => {
-      let newXP = prev.xp + amount;
-      let newLevel = prev.level;
-      let newTarget = prev.xpTarget;
-      
-      while (newXP >= newTarget) {
-        newXP -= newTarget;
-        newLevel++;
-        newTarget = Math.floor(newTarget * 1.5);
-        showNotif(`🎉 Level Up! Level ${newLevel}`);
-      }
-      
-      return { ...prev, xp: newXP, level: newLevel, xpTarget: newTarget };
+  // Inactivity monitor
+  useEffect(() => {
+    const handleActivity = () => setLastActivity(Date.now());
+    
+    ['mousemove', 'keydown', 'click'].forEach(event => {
+      window.addEventListener(event, handleActivity);
     });
-  };
 
-  const speakText = (text: string) => {
-    const utterance = new SpeechSynthesisUtterance(text);
-    const voices = window.speechSynthesis.getVoices();
-    const voice = voices.find(v => v.lang === settings.voiceAccent) || voices.find(v => v.lang.startsWith('en'));
-    if (voice) utterance.voice = voice;
-    utterance.rate = settings.speechSpeed;
-    window.speechSynthesis.speak(utterance);
-  };
-
-  const updateStreak = () => {
-    const today = new Date().toDateString();
-    setUserData(prev => {
-        if (prev.lastStudyDate === today) return prev;
-        
-        const yesterday = new Date();
-        yesterday.setDate(yesterday.getDate() - 1);
-        
-        let newStreak = prev.streak;
-        if (prev.lastStudyDate === yesterday.toDateString()) {
-            newStreak++;
-        } else {
-            newStreak = 1;
+    inactivityTimerRef.current = setInterval(() => {
+      if (currentExam.active) {
+        const inactive = (Date.now() - lastActivity) / 1000;
+        if (inactive > 600) { // 10 minutes
+          // Use notification instead of harsh alert
+          setInactivityWarning('⚠️ 10 dakika hareketsizlik. Sınav güvenlik gereği sonlandırıldı.');
+          setTimeout(() => setInactivityWarning(null), 5000);
+          submitExam();
         }
-        return { ...prev, streak: newStreak, lastStudyDate: today };
-    });
-  };
+      }
+    }, 30000); // Check every 30s
 
-  // --- FLASHCARD LOGIC ---
-  const getFilteredFlashcards = () => {
-    if (flashcardCategory === 'all') {
-      return Object.values(FLASHCARD_DATA).flat();
+    return () => {
+      ['mousemove', 'keydown', 'click'].forEach(event => {
+        window.removeEventListener(event, handleActivity);
+      });
+      if (inactivityTimerRef.current) clearInterval(inactivityTimerRef.current);
+    };
+  }, [currentExam.active, lastActivity]);
+
+  // Tab change monitor
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.hidden && currentExam.active) {
+        setInactivityWarning('⚠️ Sekme değişikliği tespit edildi! Lütfen sınava odaklanın.');
+        setTimeout(() => setInactivityWarning(null), 5000);
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [currentExam.active]);
+
+  // Notification handler
+  useEffect(() => {
+    if (notification) {
+      const timer = setTimeout(() => setNotification(null), 3000);
+      return () => clearTimeout(timer);
     }
-    return FLASHCARD_DATA[flashcardCategory] || [];
-  };
+  }, [notification]);
 
-  const handleFlipCard = (index: number) => {
+  // Helper functions
+  const addXP = useCallback((amount: number) => {
+    setUserData(prev => {
+      let newXp = prev.xp + amount;
+      let newLevel = prev.level;
+      let newXpTarget = prev.xpTarget;
+
+      while (newXp >= newXpTarget) {
+        newXp -= newXpTarget;
+        newLevel++;
+        newXpTarget = Math.floor(newXpTarget * 1.5);
+        setNotification(`🎉 Tebrikler! Seviye ${newLevel} oldun!`);
+      }
+
+      return { ...prev, xp: newXp, level: newLevel, xpTarget: newXpTarget };
+    });
+  }, []);
+
+  const speakText = useCallback((text: string) => {
+    if (window.speechSynthesis) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      const voices = window.speechSynthesis.getVoices();
+      const voice = voices.find(v => v.lang === settings.voiceAccent) || voices.find(v => v.lang.startsWith('en'));
+      if (voice) utterance.voice = voice;
+      window.speechSynthesis.speak(utterance);
+    }
+  }, [settings.voiceAccent]);
+
+  const toggleDarkMode = useCallback(() => {
+    setSettings(prev => {
+      const newDarkMode = !prev.darkMode;
+      if (newDarkMode) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      return { ...prev, darkMode: newDarkMode };
+    });
+  }, []);
+
+  const resetAllProgress = useCallback(() => {
+    if (confirm('⚠️ Tüm verileri silmek istediğinize emin misiniz?')) {
+      localStorage.removeItem('englishpath');
+      window.location.reload();
+    }
+  }, []);
+
+  // Flashcards handlers
+  const flipCard = useCallback((index: number) => {
     setFlippedCards(prev => ({ ...prev, [index]: !prev[index] }));
     setUserData(prev => ({
       ...prev,
       stats: { ...prev.stats, flashcardsViewed: prev.stats.flashcardsViewed + 1 }
     }));
-  };
+  }, []);
 
-  // --- PREPOSITIONS LOGIC ---
-  const checkPreposition = (exIdx: number, optIdx: number) => {
-    if (answeredPreps.has(exIdx)) return;
+  const displayedFlashcards = useMemo(() => {
+    if (flashcardCategory === 'all') {
+      return Object.values(FLASHCARDS).flat();
+    }
+    return FLASHCARDS[flashcardCategory] || [];
+  }, [flashcardCategory]);
 
-    const ex = PREPOSITION_EXERCISES[exIdx];
-    const isCorrect = optIdx === ex.correct;
+  // Prepositions handlers
+  const checkPrep = useCallback((index: number, optionIndex: number) => {
+    if (prepAnswers.has(index)) return;
 
-    setAnsweredPreps(prev => new Set(prev).add(exIdx));
-    setPrepScore(prev => ({ ...prev, total: prev.total + 1, correct: isCorrect ? prev.correct + 1 : prev.correct }));
+    const prep = PREPOSITIONS[index];
+    const correct = optionIndex === prep.c;
+
+    setPrepAnswers(prev => new Set(prev).add(index));
+    setPrepScore(prev => ({
+      correct: prev.correct + (correct ? 1 : 0),
+      total: prev.total + 1
+    }));
     setPrepFeedback(prev => ({
       ...prev,
-      [exIdx]: {
-        correct: isCorrect,
-        message: isCorrect ? `✅ Doğru! ${ex.explanation}` : `❌ Yanlış. Doğru: ${ex.options[ex.correct]}. ${ex.explanation}`
+      [index]: {
+        correct,
+        msg: correct ? `✅ Doğru! ${prep.e}` : `❌ Yanlış. Doğru: "${prep.o[prep.c]}". ${prep.e}`,
+        sel: optionIndex
       }
     }));
 
-    if (isCorrect) addXP(5);
+    if (correct) addXP(5);
     setUserData(prev => ({
       ...prev,
       stats: { ...prev.stats, prepPracticed: prev.stats.prepPracticed + 1 }
     }));
-  };
+  }, [prepAnswers, addXP]);
 
-  const resetPrepositions = () => {
+  const resetPreps = useCallback(() => {
+    setPrepAnswers(new Set());
     setPrepScore({ correct: 0, total: 0 });
-    setAnsweredPreps(new Set());
     setPrepFeedback({});
-  };
+  }, []);
 
-  // --- EXAM LOGIC ---
-  const startExam = () => {
+  // Exam handlers
+  const startExam = useCallback(() => {
     const wrongIds = Object.keys(wrongAnswers).map(Number);
     const wrongCount = Math.min(Math.floor(wrongIds.length * 0.3), 9);
-    
     let selected: Question[] = [];
+
     if (wrongIds.length > 0) {
-        const shuffledWrong = wrongIds.sort(() => 0.5 - Math.random()).slice(0, wrongCount);
-        shuffledWrong.forEach(id => {
-            const q = QUESTION_BANK.find(q => q.id === id);
-            if (q) selected.push(q);
-        });
+      const shuffled = wrongIds.sort(() => 0.5 - Math.random()).slice(0, wrongCount);
+      shuffled.forEach(id => {
+        const q = QUESTIONS.find(q => q.id === id);
+        if (q) selected.push(q);
+      });
     }
 
-    const remaining = 30 - selected.length;
-    const available = QUESTION_BANK.filter(q => !selected.includes(q));
+    const remaining = 15 - selected.length;
+    const available = QUESTIONS.filter(q => !selected.includes(q));
     selected.push(...available.sort(() => 0.5 - Math.random()).slice(0, remaining));
 
     setCurrentExam({
-        questions: selected.slice(0, 30),
-        answers: {},
-        startTime: Date.now()
+      questions: selected.slice(0, 15),
+      answers: {},
+      startTime: Date.now(),
+      active: true
     });
-    setExamActive(true);
-    setExamResults(null);
+    setLastActivity(Date.now());
     setActiveTab('exam');
-    
-    // Timer
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-        if (currentExam.startTime) {
-             const elapsed = Math.floor((Date.now() - currentExam.startTime) / 1000);
-             // currentExam.startTime state içinde güncellenmediği için burada Date.now() farkı alıyoruz ama 
-             // startExam içinde set ettiğimiz için state'in oturmasını beklememiz lazım.
-             // Basit çözüm: timer state'ini güncellemek.
-             // Ancak closure sorunu yaşamamak için functional update kullanalım veya startTime'ı ref yapalım.
-             // Burada basitleştirilmiş bir timer görseli yapalım:
-             setExamTimer(prev => {
-                 // Gerçek süreyi hesaplamak daha sağlıklı ama UI için basit artış:
-                 // (Not: Bu basit artış, duraklatma/resume yoksa çalışır)
-                 // Daha doğru yöntem start time'ı ref'e atmaktır.
-                 return prev; 
-             });
-        }
+    setActiveHint(null); // Clear hints on new exam
+
+    // Start timer
+    examTimerRef.current = setInterval(() => {
+      // Timer updates will be handled in the render
     }, 1000);
-  };
-  
-  // Timer Effect
-  useEffect(() => {
-      let interval: NodeJS.Timeout;
-      if (examActive && currentExam.startTime) {
-          const start = currentExam.startTime;
-          interval = setInterval(() => {
-              const elapsed = Math.floor((Date.now() - start) / 1000);
-              const minutes = Math.floor(elapsed / 60);
-              const seconds = elapsed % 60;
-              setExamTimer(`⏱️ ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
-          }, 1000);
-      }
-      return () => clearInterval(interval);
-  }, [examActive, currentExam.startTime]);
+  }, [wrongAnswers]);
 
-  const submitExam = () => {
-    setExamActive(false);
-    if (currentExam.startTime === null) return;
+  const selectAnswer = useCallback((questionId: number, optionIndex: number) => {
+    setCurrentExam(prev => ({
+      ...prev,
+      answers: { ...prev.answers, [questionId]: optionIndex }
+    }));
+    setLastActivity(Date.now());
+  }, []);
 
-    const results = {
-        questions: [] as any[],
-        correct: 0,
-        total: currentExam.questions.length,
-        timeSpent: Math.floor((Date.now() - currentExam.startTime) / 1000),
-        units: {} as Record<string, { correct: number; total: number }>,
-        score: 0
+  const submitExam = useCallback(() => {
+    if (!currentExam.active) return;
+
+    setCurrentExam(prev => ({ ...prev, active: false }));
+    if (examTimerRef.current) clearInterval(examTimerRef.current);
+
+    const results: ExamResults = {
+      questions: [],
+      correct: 0,
+      total: currentExam.questions.length,
+      timeSpent: Math.floor((Date.now() - (currentExam.startTime || Date.now())) / 1000),
+      units: {},
+      score: 0
     };
 
+    const newWrongAnswers = { ...wrongAnswers };
+
     currentExam.questions.forEach(q => {
-        const userAnswer = currentExam.answers[q.id] ?? -1;
-        const isCorrect = userAnswer === q.correct;
+      const userAnswer = currentExam.answers[q.id] ?? -1;
+      const isCorrect = userAnswer === q.c;
 
-        if (isCorrect) {
-            results.correct++;
-            // Remove from wrong answers
-            setWrongAnswers(prev => {
-                const copy = { ...prev };
-                delete copy[q.id];
-                return copy;
-            });
-        } else {
-            // Add to wrong answers
-            setWrongAnswers(prev => ({
-                ...prev,
-                [q.id]: { count: (prev[q.id]?.count || 0) + 1, lastSeen: Date.now() }
-            }));
-        }
+      if (isCorrect) {
+        results.correct++;
+        delete newWrongAnswers[q.id];
+      } else {
+        newWrongAnswers[q.id] = {
+          count: (newWrongAnswers[q.id]?.count || 0) + 1,
+          lastSeen: Date.now()
+        };
+      }
 
-        results.questions.push({ ...q, userAnswer, isCorrect });
+      results.questions.push({ ...q, userAnswer, isCorrect });
 
-        if (!results.units[q.unit]) results.units[q.unit] = { correct: 0, total: 0 };
-        results.units[q.unit].total++;
-        if (isCorrect) results.units[q.unit].correct++;
+      if (!results.units[q.u]) results.units[q.u] = { correct: 0, total: 0 };
+      results.units[q.u].total++;
+      if (isCorrect) results.units[q.u].correct++;
     });
 
     results.score = parseFloat(((results.correct / results.total) * 100).toFixed(1));
 
     setExamResults(results);
+    setWrongAnswers(newWrongAnswers);
     setExamHistory(prev => [...prev, {
-        date: Date.now(),
-        score: results.score,
-        questions: results.questions.map(q => ({ id: q.id, topic: q.topic, isCorrect: q.isCorrect }))
+      date: Date.now(),
+      score: results.score,
+      questions: results.questions.map(q => ({ id: q.id, topic: q.t, isCorrect: q.isCorrect }))
     }]);
 
-    setUserData(prev => ({
+    setUserData(prev => {
+      const today = new Date().toDateString();
+      let newStreak = prev.streak;
+
+      if (prev.lastStudyDate !== today) {
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (prev.lastStudyDate === yesterday.toDateString()) {
+          newStreak++;
+        } else {
+          newStreak = 1;
+        }
+      }
+
+      return {
         ...prev,
         totalExams: prev.totalExams + 1,
         totalQuestions: prev.totalQuestions + results.total,
-        correctAnswers: prev.correctAnswers + results.correct
-    }));
+        correctAnswers: prev.correctAnswers + results.correct,
+        streak: newStreak,
+        lastStudyDate: today
+      };
+    });
 
     addXP(results.correct * 10);
-    updateStreak();
     setActiveTab('results');
+  }, [currentExam, wrongAnswers, addXP]);
+
+  const resetExam = useCallback(() => {
+    setCurrentExam({ questions: [], answers: {}, startTime: null, active: false });
+    setExamResults(null);
+    if (examTimerRef.current) clearInterval(examTimerRef.current);
+    setActiveTab('exam');
+  }, []);
+
+  // Chart data
+  const chartData = useMemo(() => {
+    const last10 = examHistory.slice(-10);
+    return {
+      labels: last10.map((_, i) => `S${i + 1}`),
+      datasets: [{
+        label: 'Başarı %',
+        data: last10.map(e => e.score),
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+        fill: true
+      }]
+    };
+  }, [examHistory]);
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        max: 100,
+        grid: {
+          color: settings.darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+        },
+        ticks: {
+          color: settings.darkMode ? '#9ca3af' : '#4b5563'
+        }
+      },
+      x: {
+        grid: {
+          color: settings.darkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'
+        },
+        ticks: {
+          color: settings.darkMode ? '#9ca3af' : '#4b5563'
+        }
+      }
+    }
   };
 
-  // --- RENDER HELPERS ---
-  const achievementsList = [
-      { id: 'first', name: '🎯 İlk Sınav', unlocked: userData.totalExams >= 1 },
-      { id: 'streak3', name: '🔥 3 Gün', unlocked: userData.streak >= 3 },
-      { id: 'exam5', name: '💪 5 Sınav', unlocked: userData.totalExams >= 5 },
-      { id: 'level5', name: '⭐ Level 5', unlocked: userData.level >= 5 },
-      { id: 'flash50', name: '🃏 50 Kart', unlocked: userData.stats.flashcardsViewed >= 50 },
-      { id: 'prep20', name: '🎯 20 Edat', unlocked: userData.stats.prepPracticed >= 20 },
-      { id: 'perfect', name: '💯 Mükemmel', unlocked: examHistory.some(e => e.score == 100) },
-      { id: 'master', name: '👑 Usta', unlocked: userData.totalExams >= 20 }
-  ];
+  // Achievements
+  const achievements = useMemo(() => [
+    { id: 'first', n: '🎯 İlk Sınav', d: 'İlk sınavını tamamladın', u: userData.totalExams >= 1 },
+    { id: 'streak3', n: '🔥 3 Gün', d: '3 gün üst üste', u: userData.streak >= 3 },
+    { id: 'exam5', n: '💪 5 Sınav', d: '5 sınav tamamladın', u: userData.totalExams >= 5 },
+    { id: 'level5', n: '⭐ Level 5', d: "Level 5'e ulaştın", u: userData.level >= 5 },
+    { id: 'flash50', n: '🃏 50 Kart', d: '50 kart inceledi', u: userData.stats.flashcardsViewed >= 50 },
+    { id: 'prep20', n: '🎯 20 Edat', d: '20 edat pratiği', u: userData.stats.prepPracticed >= 20 },
+    { id: 'perfect', n: '💯 Mükemmel', d: '100% aldın', u: examHistory.some(e => e.score === 100) },
+    { id: 'master', n: '👑 Usta', d: '20 sınav', u: userData.totalExams >= 20 }
+  ], [userData, examHistory]);
 
-  const getChartData = () => {
-      const last10 = examHistory.slice(-10);
-      return {
-          labels: last10.map((_, i) => `Sınav ${i + 1}`),
-          datasets: [{
-              label: 'Başarı %',
-              data: last10.map(e => e.score),
-              borderColor: 'rgb(59, 130, 246)',
-              backgroundColor: 'rgba(59, 130, 246, 0.1)',
-              tension: 0.4,
-              fill: true
-          }]
-      };
-  };
+  const avgScore = userData.totalQuestions > 0
+    ? ((userData.correctAnswers / userData.totalQuestions) * 100).toFixed(1)
+    : 0;
+
+  // Timer display
+  const examTimer = useMemo(() => {
+    if (!currentExam.active || !currentExam.startTime) return '⏱️ 00:00';
+    const elapsed = Math.floor((Date.now() - currentExam.startTime) / 1000);
+    const m = Math.floor(elapsed / 60);
+    const s = elapsed % 60;
+    return `⏱️ ${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }, [currentExam]);
+
+  // Re-render timer every second when exam is active
+  useEffect(() => {
+    if (currentExam.active) {
+      const interval = setInterval(() => {
+        // Force re-render to update timer
+        setCurrentExam(prev => ({ ...prev }));
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [currentExam.active]);
 
   return (
-    <div className={`min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 ${settings.darkMode ? 'dark' : ''} pb-20`}>
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+      <style jsx global>{`
+        * { font-family: 'Poppins', sans-serif; }
         
-        {/* HEADER */}
-        <header className="bg-white dark:bg-gray-800 shadow-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-                            E
-                        </div>
-                        <div>
-                            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">EnglishPath</h1>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">Your Journey to Fluency</p>
-                        </div>
-                    </div>
+        .flashcard {
+          perspective: 1000px;
+          cursor: pointer;
+        }
+        .flashcard-inner {
+          position: relative;
+          width: 100%;
+          min-height: 200px;
+          transition: transform 0.6s;
+          transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner {
+          transform: rotateY(180deg);
+        }
+        .flashcard-front, .flashcard-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          border-radius: 1rem;
+          padding: 1.5rem;
+          min-height: 200px;
+        }
+        .flashcard-front {
+          background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+          color: white;
+        }
+        .flashcard-back {
+          background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+          color: white;
+          transform: rotateY(180deg);
+        }
+        
+        .fade-in {
+          animation: fadeIn 0.4s ease-in;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(15px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .xp-bar {
+          height: 8px;
+          background: linear-gradient(90deg, #ec4899 0%, #f43f5e 100%);
+          transition: width 0.5s ease;
+          border-radius: 9999px;
+        }
+        
+        .achievement-glow {
+          animation: glowPulse 2s infinite;
+        }
+        @keyframes glowPulse {
+          0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.5); }
+          50% { box-shadow: 0 0 20px rgba(251, 191, 36, 0.8), 0 0 30px rgba(251, 191, 36, 0.6); }
+        }
 
-                    <div className="flex items-center gap-4">
-                        <div className="hidden md:flex items-center gap-3">
-                            {/* LEVEL */}
-                            <div className="flex items-center gap-2 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1.5 rounded-full shadow-md">
-                                <span className="text-lg">⭐</span>
-                                <span className="font-bold text-sm">{userData.level}</span>
-                            </div>
-                            
-                            {/* XP BAR */}
-                            <div className="flex flex-col gap-1 min-w-[100px]">
-                                <div className="flex justify-between text-xs text-gray-600 dark:text-gray-300">
-                                    <span>{userData.xp}</span>
-                                    <span>{userData.xpTarget}</span>
-                                </div>
-                                <div className="bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden">
-                                    <div className="bg-gradient-to-r from-purple-400 to-pink-500 h-full transition-all duration-500" style={{ width: `${(userData.xp / userData.xpTarget) * 100}%` }}></div>
-                                </div>
-                            </div>
+        .pop-up-hint {
+           animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        @keyframes popIn {
+           0% { opacity: 0; transform: scale(0.8); }
+           100% { opacity: 1; transform: scale(1); }
+        }
+        
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .dark ::-webkit-scrollbar-thumb { background: #475569; }
+      `}</style>
 
-                            {/* STREAK */}
-                            <div className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-500 text-white px-3 py-1.5 rounded-full shadow-md">
-                                <span className="text-lg">🔥</span>
-                                <span className="font-bold text-sm">{userData.streak}</span>
-                            </div>
-                        </div>
-
-                        {/* SETTINGS BTN */}
-                        <button onClick={() => setShowSettings(true)} className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                            ⚙️
-                        </button>
-                    </div>
-                </div>
+      {/* HEADER */}
+      <header className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-violet-600 rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/20">E</div>
+              <div>
+                <h1 className="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600">EnglishPath</h1>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-medium tracking-wide">BEGINNER LEVEL</p>
+              </div>
             </div>
-        </header>
 
-        {/* SETTINGS MODAL */}
-        {showSettings && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
-                    <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-2xl font-bold text-gray-800 dark:text-white">⚙️ Ayarlar</h2>
-                        <button onClick={() => setShowSettings(false)} className="text-gray-500 hover:text-gray-700">✕</button>
+            <div className="flex items-center gap-3">
+              <div className="hidden md:flex items-center gap-2">
+                <div className="flex items-center gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">
+                  ⭐ <span>{userData.level}</span>
+                </div>
+                <div className="flex flex-col gap-1 w-24">
+                  <div className="flex justify-between text-[10px] font-semibold text-slate-600 dark:text-slate-400">
+                    <span>{userData.xp} XP</span>
+                    <span>{userData.xpTarget}</span>
+                  </div>
+                  <div className="bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                    <div className="xp-bar" style={{ width: `${(userData.xp / userData.xpTarget * 100)}%` }}></div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1 bg-gradient-to-r from-rose-500 to-pink-600 text-white px-2.5 py-1 rounded-full text-xs font-bold shadow-sm">
+                  🔥 <span>{userData.streak}</span>
+                </div>
+              </div>
+
+              <button onClick={() => setShowTeacherModal(true)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-lg text-blue-600 dark:text-blue-400 transition-colors" title="Öğretmen Görünümü">👨‍🏫</button>
+              <button onClick={() => setShowSettingsModal(true)} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-lg transition-colors">⚙️</button>
+              <button onClick={toggleDarkMode} className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg text-lg transition-colors">
+                <span className="dark:hidden">🌙</span>
+                <span className="hidden dark:inline">☀️</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      {/* POP-UP HINT MODAL */}
+      {activeHint && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm" onClick={() => setActiveHint(null)}>
+           <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-2xl max-w-sm w-full pop-up-hint border border-amber-200 dark:border-amber-900/50 relative overflow-hidden" onClick={e => e.stopPropagation()}>
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                 <div className="text-9xl transform rotate-12">💡</div>
+              </div>
+              <div className="relative z-10">
+                 <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-full flex items-center justify-center text-2xl mb-4 text-amber-500 border border-amber-200 dark:border-amber-800">
+                    💡
+                 </div>
+                 <h3 className="text-lg font-bold text-slate-800 dark:text-white mb-2">İpucu</h3>
+                 <p className="text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
+                    {activeHint}
+                 </p>
+                 <button 
+                   onClick={() => setActiveHint(null)}
+                   className="w-full py-2.5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-xl hover:opacity-90 transition"
+                 >
+                    Tamamdır, anladım!
+                 </button>
+              </div>
+           </div>
+        </div>
+      )}
+
+      {/* MODALS */}
+      {showSettingsModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl max-w-md w-full p-6 fade-in border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between mb-6">
+              <h2 className="text-xl font-bold dark:text-white flex items-center gap-2">⚙️ Ayarlar</h2>
+              <button onClick={() => setShowSettingsModal(false)} className="text-2xl leading-none text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">&times;</button>
+            </div>
+            <div className="space-y-5">
+              <div>
+                <label className="text-sm font-semibold dark:text-white mb-2 block">🎤 Ses Aksanı</label>
+                <select
+                  value={settings.voiceAccent}
+                  onChange={(e) => setSettings(prev => ({ ...prev, voiceAccent: e.target.value as 'en-GB' | 'en-US' }))}
+                  className="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none"
+                >
+                  <option value="en-GB">🇬🇧 British (İngiliz)</option>
+                  <option value="en-US">🇺🇸 American (Amerikan)</option>
+                </select>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                <span className="text-sm font-semibold dark:text-white">💡 İpuçlarını Göster</span>
+                <div className="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input 
+                      type="checkbox" 
+                      name="toggle" 
+                      id="toggle" 
+                      checked={settings.showHints}
+                      onChange={(e) => setSettings(prev => ({ ...prev, showHints: e.target.checked }))}
+                      className="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+                      style={{ right: settings.showHints ? '0' : 'auto', left: settings.showHints ? 'auto' : '0', borderColor: settings.showHints ? '#3b82f6' : '#cbd5e1' }}
+                    />
+                    <label htmlFor="toggle" className={`toggle-label block overflow-hidden h-6 rounded-full cursor-pointer ${settings.showHints ? 'bg-blue-500' : 'bg-slate-300'}`}></label>
+                </div>
+              </div>
+              <button onClick={resetAllProgress} className="w-full mt-4 px-4 py-3 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 border border-red-200 dark:border-red-800 font-semibold rounded-xl transition-colors">
+                🗑️ İlerlemeyi Sıfırla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showTeacherModal && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-4xl w-full p-8 my-8 fade-in border border-slate-200 dark:border-slate-700">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                 <h2 className="text-2xl font-bold dark:text-white flex items-center gap-2">👨‍🏫 Öğretmen Paneli</h2>
+                 <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">ZIP dosyasından çıkarılan ham veriler</p>
+              </div>
+              <button onClick={() => setShowTeacherModal(false)} className="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-500">&times;</button>
+            </div>
+            
+            <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
+              {ZIP_QUESTIONS.map((q, i) => (
+                <div key={i} className="bg-blue-50 dark:bg-slate-700/50 p-4 rounded-xl border-l-4 border-blue-500 flex gap-4">
+                  <span className="font-mono text-blue-500 font-bold">{i+1}</span>
+                  <p className="text-sm font-medium dark:text-slate-200">{q}</p>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-700 text-center text-sm text-slate-500">
+              <div className="inline-flex gap-6">
+                 <span className="flex items-center gap-1.5"><span className="text-green-500">●</span> {ZIP_QUESTIONS.length} soru aktarıldı</span>
+                 <span className="flex items-center gap-1.5"><span className="text-green-500">●</span> Etkileşimli mod aktif</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {notification && (
+        <div className="fixed top-24 right-6 z-50 bg-slate-800 dark:bg-white text-white dark:text-slate-900 px-6 py-4 rounded-2xl shadow-2xl animate-bounce flex items-center gap-3 font-bold border border-slate-700 dark:border-slate-200">
+          <span>🎉</span> {notification}
+        </div>
+      )}
+
+      {inactivityWarning && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-red-500 text-white px-8 py-4 rounded-2xl shadow-2xl fade-in font-bold flex items-center gap-3">
+          <span className="text-2xl">⚠️</span> {inactivityWarning}
+        </div>
+      )}
+
+      {/* MAIN */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* TABS */}
+        <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm mb-8 p-1.5 border border-slate-200 dark:border-slate-700 overflow-x-auto">
+          <div className="flex md:grid md:grid-cols-6 gap-1 min-w-max md:min-w-0">
+            {(['dashboard', 'grammar', 'flashcards', 'prepositions', 'exam', 'results'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`px-4 py-2.5 rounded-xl font-bold text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                  activeTab === tab
+                    ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-md transform scale-[1.02]'
+                    : 'text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700'
+                }`}
+              >
+                {tab === 'dashboard' && '📊 Panel'}
+                {tab === 'grammar' && '📖 Kurallar'}
+                {tab === 'flashcards' && '🃏 Kelimeler'}
+                {tab === 'prepositions' && '🎯 Edatlar'}
+                {tab === 'exam' && '📝 Sınav'}
+                {tab === 'results' && '🏆 Sonuçlar'}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* DASHBOARD */}
+        {activeTab === 'dashboard' && (
+          <div className="space-y-6 fade-in">
+            <div className="grid lg:grid-cols-3 gap-6">
+              <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-bold dark:text-white mb-6 flex items-center gap-2">
+                   <span className="bg-blue-100 dark:bg-blue-900/30 text-blue-600 p-2 rounded-lg">📈</span> 
+                   İstatistikler
+                </h3>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <span className="text-slate-600 dark:text-slate-400 font-medium">Toplam Sınav</span>
+                    <span className="font-bold text-slate-900 dark:text-white text-lg">{userData.totalExams}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <span className="text-slate-600 dark:text-slate-400 font-medium">Doğru Cevap</span>
+                    <span className="font-bold text-green-600 text-lg">{userData.correctAnswers}</span>
+                  </div>
+                  <div className="flex justify-between items-center p-3 bg-slate-50 dark:bg-slate-700/50 rounded-xl">
+                    <span className="text-slate-600 dark:text-slate-400 font-medium">Başarı Oranı</span>
+                    <span className="font-bold text-purple-600 text-lg">{avgScore}%</span>
+                  </div>
+                </div>
+              </div>
+              <div className="lg:col-span-2 bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-6 border border-slate-200 dark:border-slate-700">
+                <h3 className="text-lg font-bold dark:text-white mb-6 flex items-center gap-2">
+                   <span className="bg-violet-100 dark:bg-violet-900/30 text-violet-600 p-2 rounded-lg">📊</span>
+                   Gelişim Grafiği
+                </h3>
+                <div style={{ height: '220px' }} className="w-full">
+                  {examHistory.length > 0 ? (
+                    <Line ref={chartRef} data={chartData} options={chartOptions} />
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-slate-400 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl">
+                      <div className="text-4xl mb-2">📉</div>
+                      Henüz sınav verisi yok
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-4 gap-4">
+              <button onClick={() => setActiveTab('grammar')} className="group bg-gradient-to-br from-blue-500 to-blue-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden">
+                <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">📖</div>
+                <div className="relative z-10">
+                   <div className="text-3xl mb-2">Grammar</div>
+                   <div className="text-blue-100 text-sm font-medium">Kuralları Öğren →</div>
+                </div>
+              </button>
+              <button onClick={() => setActiveTab('flashcards')} className="group bg-gradient-to-br from-purple-500 to-purple-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">🃏</div>
+                <div className="relative z-10">
+                   <div className="text-3xl mb-2">Kelimeler</div>
+                   <div className="text-purple-100 text-sm font-medium">Kelime Ezberle →</div>
+                </div>
+              </button>
+              <button onClick={() => setActiveTab('prepositions')} className="group bg-gradient-to-br from-rose-500 to-pink-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">🎯</div>
+                <div className="relative z-10">
+                   <div className="text-3xl mb-2">Edatlar</div>
+                   <div className="text-rose-100 text-sm font-medium">Pratik Yap →</div>
+                </div>
+              </button>
+              <button onClick={startExam} className="group bg-gradient-to-br from-emerald-500 to-teal-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1 relative overflow-hidden">
+                 <div className="absolute top-0 right-0 p-4 opacity-10 text-6xl group-hover:scale-110 transition-transform">🚀</div>
+                <div className="relative z-10">
+                   <div className="text-3xl mb-2">Sınav</div>
+                   <div className="text-emerald-100 text-sm font-medium">Kendini Dene →</div>
+                </div>
+              </button>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-sm p-8 border border-slate-200 dark:border-slate-700">
+              <h3 className="text-lg font-bold dark:text-white mb-6 flex items-center gap-2">
+                 <span className="bg-amber-100 dark:bg-amber-900/30 text-amber-600 p-2 rounded-lg">🏅</span>
+                 Başarılar
+              </h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {achievements.map(a => (
+                  <div
+                    key={a.id}
+                    className={`${
+                      a.u
+                        ? 'achievement-glow bg-amber-50 dark:bg-amber-900/10 border-2 border-amber-300 dark:border-amber-700'
+                        : 'bg-slate-100 dark:bg-slate-800 opacity-60 grayscale border border-transparent'
+                    } p-4 rounded-2xl text-center transition hover:scale-105 cursor-pointer flex flex-col items-center justify-center min-h-[140px]`}
+                    title={a.d}
+                  >
+                    <div className="text-4xl mb-3">{a.n.split(' ')[0]}</div>
+                    <div className="text-sm font-bold text-slate-800 dark:text-slate-200 mb-1">{a.n.split(' ').slice(1).join(' ')}</div>
+                    {a.u && <div className="text-[10px] uppercase tracking-wide text-amber-600 dark:text-amber-400 font-bold bg-amber-100 dark:bg-amber-900/30 px-2 py-0.5 rounded-full">{a.d}</div>}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* GRAMMAR - YENİ TASARIM */}
+        {activeTab === 'grammar' && (
+          <div className="space-y-6 fade-in max-w-5xl mx-auto">
+            <div className="text-center mb-8">
+               <h2 className="text-3xl font-bold dark:text-white">Dilbilgisi Kuralları</h2>
+               <p className="text-slate-500 dark:text-slate-400">Headway Beginner konularına uygun özetler.</p>
+            </div>
+            
+            <div className="grid gap-6">
+              {GRAMMAR.map((g, i) => (
+                <div key={i} className="bg-white dark:bg-slate-800 rounded-3xl p-0 shadow-sm hover:shadow-md transition border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col md:flex-row">
+                   {/* Sol Taraf: Başlık ve İkon */}
+                   <div className="bg-slate-50 dark:bg-slate-700/30 p-6 md:w-1/3 flex flex-col justify-center items-center text-center border-b md:border-b-0 md:border-r border-slate-200 dark:border-slate-700">
+                      <div className="text-5xl mb-4 bg-white dark:bg-slate-800 w-20 h-20 rounded-full flex items-center justify-center shadow-sm">{g.i}</div>
+                      <h3 className="font-bold text-xl dark:text-white mb-1">{g.title}</h3>
+                      <span className="text-xs font-mono text-slate-400 uppercase tracking-widest">{g.u}</span>
+                   </div>
+
+                   {/* Sağ Taraf: İçerik */}
+                   <div className="p-6 md:w-2/3 space-y-6">
+                      <div>
+                         <h4 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-blue-500"></span> Kurallar
+                         </h4>
+                         <ul className="space-y-2">
+                           {g.r.map((r, j) => (
+                             <li key={j} className="text-slate-700 dark:text-slate-300 text-sm flex items-start gap-2">
+                                <span className="text-blue-500 mt-0.5">•</span> {r}
+                             </li>
+                           ))}
+                         </ul>
+                      </div>
+                      
+                      <div className="bg-amber-50 dark:bg-slate-900/50 rounded-xl p-4 border border-amber-100 dark:border-slate-700">
+                         <h4 className="text-xs font-bold text-amber-600 dark:text-amber-500 uppercase tracking-wider mb-2">Örnekler</h4>
+                         {g.e.map((ex, j) => (
+                           <div key={j} className="text-sm text-slate-600 dark:text-slate-400 font-medium italic mb-1 last:mb-0">"{ex}"</div>
+                         ))}
+                      </div>
+
+                      {g.note && (
+                         <div className="text-xs text-slate-400 flex gap-1.5 items-center">
+                            <span className="text-base">💡</span> <span className="italic">{g.note}</span>
+                         </div>
+                      )}
+                   </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* FLASHCARDS */}
+        {activeTab === 'flashcards' && (
+          <div className="fade-in">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+               <div>
+                  <h2 className="text-2xl font-bold dark:text-white">Kelime Kartları</h2>
+                  <p className="text-sm text-slate-500">Karta tıkla, anlamını gör.</p>
+               </div>
+               <div className="flex flex-wrap gap-2">
+                 <button
+                   onClick={() => setFlashcardCategory('all')}
+                   className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${
+                     flashcardCategory === 'all' ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300'
+                   }`}
+                 >
+                   Tümü
+                 </button>
+                 {Object.keys(FLASHCARDS).map(cat => (
+                   <button
+                     key={cat}
+                     onClick={() => setFlashcardCategory(cat)}
+                     className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-colors ${
+                       flashcardCategory === cat ? 'bg-slate-900 text-white dark:bg-white dark:text-slate-900' : 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300'
+                     }`}
+                   >
+                     {cat}
+                   </button>
+                 ))}
+               </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {displayedFlashcards.map((card, i) => (
+                <div
+                  key={i}
+                  className={`flashcard ${flippedCards[i] ? 'flipped' : ''}`}
+                  onClick={() => flipCard(i)}
+                >
+                  <div className="flashcard-inner shadow-lg rounded-2xl">
+                    <div className="flashcard-front border border-white/20">
+                      <div className="text-3xl font-bold mb-2 text-center">{card.f}</div>
+                      <div className="text-sm opacity-80 font-mono bg-white/20 px-2 py-1 rounded">{card.p}</div>
+                      <div className="absolute bottom-4 text-[10px] uppercase tracking-widest opacity-60">Çevirmek için Tıkla</div>
+                    </div>
+                    <div className="flashcard-back">
+                      <div className="text-3xl font-bold mb-4 text-center">{card.b}</div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          speakText(card.f);
+                        }}
+                        className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2 transition-colors"
+                      >
+                        🔊 Telaffuz
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* PREPOSITIONS */}
+        {activeTab === 'prepositions' && (
+          <div className="fade-in space-y-6 max-w-4xl mx-auto">
+            <div className="flex justify-between items-center bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800 p-6 rounded-3xl border border-blue-100 dark:border-slate-700">
+              <div>
+                <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Performans</span>
+                <div className="flex items-baseline gap-2 mt-1">
+                   <div className="text-4xl font-black text-slate-900 dark:text-white">
+                     {prepScore.correct} <span className="text-xl text-slate-400 font-medium">/ {prepScore.total}</span>
+                   </div>
+                   {prepScore.total > 0 && (
+                     <div className={`text-sm font-bold px-2 py-0.5 rounded ${((prepScore.correct / prepScore.total) * 100) > 70 ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'}`}>
+                       {((prepScore.correct / prepScore.total) * 100).toFixed(0)}%
+                     </div>
+                   )}
+                </div>
+              </div>
+              <button onClick={resetPreps} className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold shadow-lg shadow-blue-500/30 transition-all active:scale-95">
+                🔄 Sıfırla
+              </button>
+            </div>
+
+            <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/50 rounded-2xl p-5">
+              <h4 className="font-bold text-amber-800 dark:text-amber-500 mb-3 flex items-center gap-2">
+                 <span className="text-xl">💡</span> Hızlı İpuçları
+              </h4>
+              <div className="grid md:grid-cols-2 gap-x-8 gap-y-2 text-sm text-amber-900/80 dark:text-amber-200/80">
+                 <li className="list-none">🕐 <strong>AT:</strong> Saatler (at 7 AM), kesin noktalar</li>
+                 <li className="list-none">📅 <strong>ON:</strong> Günler (on Monday), yüzeyler</li>
+                 <li className="list-none">📆 <strong>IN:</strong> Aylar, Yıllar, Şehirler</li>
+                 <li className="list-none">➡️ <strong>TO:</strong> Hareket yönü (go to...)</li>
+                 <li className="list-none">🤝 <strong>WITH:</strong> Birlikte (with friends)</li>
+                 <li className="list-none">🚌 <strong>BY:</strong> Araç ile (by bus)</li>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              {PREPOSITIONS.map((prep, i) => {
+                const answered = prepAnswers.has(i);
+                const feedback = prepFeedback[i];
+
+                return (
+                  <div key={i} className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-200 dark:border-slate-700 transition hover:border-blue-300 dark:hover:border-slate-500">
+                    <div className="flex items-start gap-3 mb-4">
+                      <div
+                        className={`px-2.5 py-1 rounded-md text-[10px] uppercase font-bold tracking-wider ${
+                          prep.d === 'easy'
+                            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                            : prep.d === 'medium'
+                            ? 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                            : 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400'
+                        }`}
+                      >
+                        {prep.d}
+                      </div>
+                      <div className="text-[10px] px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-bold uppercase tracking-wider">
+                        {prep.cat}
+                      </div>
                     </div>
                     
-                    <div className="space-y-4">
-                         <div>
-                            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">🎤 Aksan</label>
-                            <select 
-                                value={settings.voiceAccent} 
-                                onChange={(e) => setSettings({...settings, voiceAccent: e.target.value})}
-                                className="w-full px-4 py-2 rounded-lg border dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                            >
-                                <option value="en-GB">🇬🇧 British</option>
-                                <option value="en-US">🇺🇸 American</option>
-                            </select>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                            <label className="text-sm font-semibold dark:text-white">🌙 Dark Mode</label>
-                            <input 
-                                type="checkbox" 
-                                checked={settings.darkMode} 
-                                onChange={(e) => {
-                                    setSettings({...settings, darkMode: e.target.checked});
-                                    if(e.target.checked) document.documentElement.classList.add('dark');
-                                    else document.documentElement.classList.remove('dark');
-                                }} 
-                                className="w-5 h-5"
-                            />
-                        </div>
+                    <p className="text-xl font-medium dark:text-white mb-6 leading-relaxed">
+                      {prep.s.split('___')[0]}
+                      <span className="inline-block w-16 border-b-2 border-dashed border-slate-400 mx-2"></span>
+                      {prep.s.split('___')[1]}
+                    </p>
+                    
+                    <div className="grid grid-cols-4 gap-3">
+                      {prep.o.map((opt, j) => {
+                        let btnClass = 'bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600';
+                        if (answered) {
+                          if (j === prep.c) {
+                            btnClass = 'bg-emerald-500 text-white border-emerald-600 shadow-md shadow-emerald-500/30';
+                          } else if (feedback && feedback.sel === j) {
+                            btnClass = 'bg-rose-500 text-white border-rose-600 opacity-50';
+                          } else {
+                             btnClass += ' opacity-40';
+                          }
+                        }
 
-                        <button 
-                            onClick={() => {
-                                if(confirm('Sıfırlamak istediğine emin misin?')) {
-                                    localStorage.removeItem('englishpath');
-                                    window.location.reload();
-                                }
-                            }} 
-                            className="w-full mt-6 px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-xl transition"
-                        >
-                            🗑️ Tüm İlerlemeyi Sıfırla
-                        </button>
+                        return (
+                          <button
+                            key={j}
+                            disabled={answered}
+                            onClick={() => checkPrep(i, j)}
+                            className={`${btnClass} py-3 rounded-xl font-bold transition-all active:scale-95 disabled:cursor-not-allowed`}
+                          >
+                            {opt}
+                          </button>
+                        );
+                      })}
                     </div>
-                </div>
+                    
+                    {answered && feedback && (
+                      <div className={`mt-4 text-sm p-4 rounded-xl flex items-center gap-3 font-medium ${
+                        feedback.correct
+                          ? 'bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400'
+                          : 'bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-400'
+                      }`}>
+                        <div className="text-xl">{feedback.correct ? '🎉' : '⚠️'}</div>
+                        {feedback.msg}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
+          </div>
         )}
 
-        {/* ACHIEVEMENT NOTIFICATION */}
-        {notification && (
-             <div className="fixed top-24 right-4 z-50 bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-6 py-4 rounded-xl shadow-2xl animate-bounce">
-                {notification}
-            </div>
-        )}
+        {/* EXAM */}
+        {activeTab === 'exam' && (
+          <div className="max-w-3xl mx-auto">
+            {!currentExam.active ? (
+              <div className="text-center py-16 bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-700 fade-in">
+                <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 text-5xl shadow-xl shadow-blue-500/30">
+                   📝
+                </div>
+                <h2 className="text-4xl font-black dark:text-white mb-4 tracking-tight">Sınava Hazır mısın?</h2>
+                <div className="max-w-md mx-auto mb-10 text-slate-500 dark:text-slate-400">
+                   <p className="mb-2">15 soru ile kendini dene.</p>
+                   <p className="text-sm bg-slate-100 dark:bg-slate-700/50 py-2 rounded-lg">🧠 Akıllı Algoritma: Yanlış yaptığın konular daha sık karşına çıkar.</p>
+                </div>
+                <button
+                  onClick={startExam}
+                  className="px-12 py-5 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-xl font-bold rounded-2xl shadow-xl hover:scale-105 transition-transform"
+                >
+                  🚀 Başla
+                </button>
+              </div>
+            ) : (
+              <div className="fade-in space-y-8">
+                <div className="sticky top-20 bg-slate-900/90 dark:bg-white/90 backdrop-blur-md text-white dark:text-slate-900 rounded-2xl shadow-2xl p-4 z-40 flex justify-between items-center border border-white/10">
+                  <div className="flex items-center gap-3">
+                     <span className="text-xs font-bold uppercase tracking-widest opacity-60">İlerleme</span>
+                     <span className="font-mono font-bold text-lg">{Object.keys(currentExam.answers).length} / {currentExam.questions.length}</span>
+                  </div>
+                  <div className="font-mono font-bold text-xl tracking-widest bg-white/10 dark:bg-slate-900/10 px-3 py-1 rounded-lg">{examTimer}</div>
+                  <button onClick={submitExam} className="px-5 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl text-sm transition-colors shadow-lg shadow-green-500/20">
+                    Bitir
+                  </button>
+                </div>
 
-        {/* MAIN CONTENT */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            
-            {/* TABS */}
-            <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm mb-6 p-2 border border-gray-200 dark:border-gray-700 overflow-x-auto">
-                <div className="flex md:grid md:grid-cols-6 gap-2 min-w-max md:min-w-0">
-                    {[
-                        {id: 'dashboard', icon: '📊', label: 'Dashboard'},
-                        {id: 'grammar', icon: '📖', label: 'Kurallar'},
-                        {id: 'flashcards', icon: '🃏', label: 'Kelimeler'},
-                        {id: 'prepositions', icon: '🎯', label: 'Preps'},
-                        {id: 'exam', icon: '📝', label: 'Sınav'},
-                        {id: 'results', icon: '🏆', label: 'Sonuçlar'},
-                    ].map(tab => (
-                        <button
-                            key={tab.id}
-                            onClick={() => setActiveTab(tab.id)}
-                            className={`px-3 py-2.5 rounded-xl font-semibold transition text-sm flex items-center justify-center gap-2 ${
-                                activeTab === tab.id 
-                                ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white' 
-                                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'
-                            }`}
+                {currentExam.questions.map((q, i) => (
+                  <div key={q.id} className="bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-sm border border-slate-200 dark:border-slate-700 relative overflow-hidden group">
+                    {/* Question Source Badge */}
+                    <div className="absolute top-0 right-0 p-4">
+                       <span className={`text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wide ${
+                          q.src === 'zip' ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300' :
+                          q.src === 'headway' ? 'bg-sky-100 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300' :
+                          'bg-slate-100 text-slate-700 dark:bg-slate-700 dark:text-slate-300'
+                       }`}>
+                          {q.src === 'zip' ? 'ZIP' : q.src === 'headway' ? 'BOOK' : 'AI'}
+                       </span>
+                    </div>
+
+                    <div className="mb-6">
+                       <span className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 block">{q.u}</span>
+                       <div className="flex gap-4 items-start">
+                          <span className="flex-shrink-0 w-8 h-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-500 text-sm mt-1">{i + 1}</span>
+                          <h3 className="text-xl font-medium dark:text-white leading-relaxed">{q.q}</h3>
+                       </div>
+                    </div>
+                    
+                    {/* Actions */}
+                    <div className="flex gap-2 mb-6 ml-12">
+                       <button onClick={() => speakText(q.q)} className="w-8 h-8 rounded-full flex items-center justify-center bg-slate-50 dark:bg-slate-700/50 hover:bg-blue-100 text-slate-400 hover:text-blue-600 transition-colors" title="Dinle">🔊</button>
+                       {settings.showHints && q.h && (
+                          <button 
+                             onClick={() => setActiveHint(q.h)} 
+                             className="w-8 h-8 rounded-full flex items-center justify-center bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 text-amber-400 hover:text-amber-600 transition-colors animate-pulse" 
+                             title="İpucu"
+                          >
+                             💡
+                          </button>
+                       )}
+                    </div>
+
+                    <div className="space-y-3 ml-12">
+                      {q.o.map((opt, j) => (
+                        <label
+                          key={j}
+                          className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all duration-200 group-hover:border-slate-300 dark:group-hover:border-slate-600 ${
+                            currentExam.answers[q.id] === j
+                              ? 'border-blue-500 bg-blue-50/50 dark:bg-blue-900/20 ring-1 ring-blue-500 !border-blue-500'
+                              : 'border-slate-100 dark:border-slate-700 hover:border-blue-300 dark:hover:border-slate-500 hover:bg-slate-50 dark:hover:bg-slate-700/30'
+                          }`}
                         >
-                            <span>{tab.icon}</span> {tab.label}
-                        </button>
-                    ))}
+                          <div className={`w-5 h-5 rounded-full border-2 mr-4 flex items-center justify-center ${
+                             currentExam.answers[q.id] === j ? 'border-blue-500' : 'border-slate-300 dark:border-slate-500'
+                          }`}>
+                             {currentExam.answers[q.id] === j && <div className="w-2.5 h-2.5 rounded-full bg-blue-500"></div>}
+                          </div>
+                          <input
+                            type="radio"
+                            name={`q${q.id}`}
+                            className="hidden"
+                            checked={currentExam.answers[q.id] === j}
+                            onChange={() => selectAnswer(q.id, j)}
+                          />
+                          <span className={`font-medium ${currentExam.answers[q.id] === j ? 'text-blue-900 dark:text-blue-100' : 'text-slate-600 dark:text-slate-300'}`}>{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+
+                <div className="h-32 flex items-center justify-center">
+                  <button
+                    onClick={submitExam}
+                    className="px-16 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-lg font-bold rounded-2xl shadow-2xl hover:scale-105 transition-transform"
+                  >
+                    Sınavı Tamamla
+                  </button>
                 </div>
-            </div>
-
-            {/* DASHBOARD TAB */}
-            {activeTab === 'dashboard' && (
-                <div className="animate-in fade-in duration-300">
-                    <div className="grid lg:grid-cols-3 gap-6 mb-6">
-                        {/* Stats Card */}
-                        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                                <span className="text-2xl mr-2">📈</span> İstatistikler
-                            </h3>
-                            <div className="space-y-3">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600 dark:text-gray-400">Toplam Sınav:</span>
-                                    <span className="font-bold text-blue-600">{userData.totalExams}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600 dark:text-gray-400">Doğru:</span>
-                                    <span className="font-bold text-green-600">{userData.correctAnswers}</span>
-                                </div>
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600 dark:text-gray-400">Ortalama:</span>
-                                    <span className="font-bold text-purple-600">
-                                        {userData.totalQuestions > 0 ? ((userData.correctAnswers / userData.totalQuestions) * 100).toFixed(1) : 0}%
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Chart Card */}
-                        <div className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                             <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4 flex items-center">
-                                <span className="text-2xl mr-2">📊</span> İlerleme Grafiği
-                            </h3>
-                            <div className="h-64">
-                                {examHistory.length > 0 ? (
-                                    <Line options={{ responsive: true, maintainAspectRatio: false }} data={getChartData()} />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full text-gray-400">Henüz sınav verisi yok</div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Quick Actions */}
-                    <div className="grid md:grid-cols-4 gap-4 mb-6">
-                        <button onClick={() => setActiveTab('grammar')} className="bg-gradient-to-br from-blue-500 to-blue-600 text-white p-4 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-left">
-                            <div className="text-3xl mb-2">📖</div>
-                            <div className="font-bold">Grammar</div>
-                        </button>
-                        <button onClick={() => setActiveTab('flashcards')} className="bg-gradient-to-br from-purple-500 to-purple-600 text-white p-4 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-left">
-                            <div className="text-3xl mb-2">🃏</div>
-                            <div className="font-bold">Flashcards</div>
-                        </button>
-                        <button onClick={() => { setActiveTab('exam'); startExam(); }} className="bg-gradient-to-br from-green-500 to-emerald-600 text-white p-4 rounded-xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 text-left">
-                            <div className="text-3xl mb-2">🚀</div>
-                            <div className="font-bold">Hızlı Sınav</div>
-                        </button>
-                    </div>
-
-                    {/* Achievements */}
-                    <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm p-6 border border-gray-200 dark:border-gray-700">
-                        <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">🏅 Başarılar</h3>
-                        <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
-                            {achievementsList.map(ach => (
-                                <div key={ach.id} className={`text-center p-2 rounded-lg transition ${ach.unlocked ? 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-200 scale-105' : 'bg-gray-100 dark:bg-gray-700 opacity-50 grayscale'}`}>
-                                    <div className="text-2xl mb-1">{ach.name.split(' ')[0]}</div>
-                                    <div className="text-xs font-semibold">{ach.name.split(' ').slice(1).join(' ')}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+              </div>
             )}
+          </div>
+        )}
 
-            {/* GRAMMAR TAB */}
-            {activeTab === 'grammar' && (
-                <div className="space-y-6 animate-in fade-in duration-300">
-                    <div className="grid md:grid-cols-2 gap-4">
-                        {GRAMMAR_RULES.map((rule, idx) => (
-                             <div key={idx} className={`bg-white dark:bg-gray-800 border-l-4 border-${rule.color}-500 rounded-xl p-5 shadow-sm hover:shadow-md transition`}>
-                                <div className="flex items-center gap-2 mb-3">
-                                    <span className="text-2xl">{rule.icon}</span>
-                                    <h3 className="font-bold text-gray-800 dark:text-white">{rule.unit}</h3>
+        {/* RESULTS */}
+        {activeTab === 'results' && (
+          <div className="max-w-4xl mx-auto">
+            {!examResults ? (
+              <div className="text-center py-24 fade-in">
+                <div className="text-6xl mb-6 opacity-20">📊</div>
+                <h2 className="text-2xl font-bold dark:text-white mb-4">Henüz Sonuç Yok</h2>
+                <button onClick={() => setActiveTab('exam')} className="text-blue-500 hover:underline font-semibold bg-blue-50 dark:bg-blue-900/20 px-6 py-3 rounded-xl">
+                  Sınava git →
+                </button>
+              </div>
+            ) : (
+              <div className="space-y-8 fade-in">
+                <div
+                  className={`text-center p-10 rounded-3xl text-white shadow-2xl bg-gradient-to-br ${
+                    examResults.score >= 90
+                      ? 'from-emerald-500 to-teal-600'
+                      : examResults.score >= 70
+                      ? 'from-blue-500 to-indigo-600'
+                      : examResults.score >= 50
+                      ? 'from-amber-400 to-orange-500'
+                      : 'from-rose-500 to-pink-600'
+                  }`}
+                >
+                  <div className="text-[8rem] font-black leading-none mb-2 tracking-tighter opacity-90">{examResults.score}%</div>
+                  <div className="text-3xl font-bold mb-6 flex items-center justify-center gap-2">
+                    {examResults.score >= 90 ? '🏆 Mükemmel!' : examResults.score >= 70 ? '👏 Çok İyi!' : examResults.score >= 50 ? '📚 İyi!' : '💪 Pes Etme!'}
+                  </div>
+                  <div className="flex justify-center gap-4">
+                     <div className="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl font-medium">
+                        ✅ {examResults.correct} Doğru
+                     </div>
+                     <div className="bg-white/20 backdrop-blur-md px-6 py-2 rounded-xl font-medium">
+                        ⏱️ {Math.floor(examResults.timeSpent / 60)}dk {examResults.timeSpent % 60}sn
+                     </div>
+                  </div>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-4">
+                  {Object.entries(examResults.units).map(([unit, data]) => {
+                    const pct = ((data.correct / data.total) * 100).toFixed(0);
+                    return (
+                      <div key={unit} className="bg-white dark:bg-slate-800 rounded-2xl p-5 border border-slate-100 dark:border-slate-700 shadow-sm">
+                        <div className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">{unit}</div>
+                        <div className="flex justify-between items-end mb-2">
+                           <div className={`text-2xl font-black ${Number(pct) >= 70 ? 'text-green-500' : 'text-slate-700 dark:text-slate-300'}`}>{pct}%</div>
+                           <div className="text-sm text-slate-400">{data.correct}/{data.total}</div>
+                        </div>
+                        <div className="bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                          <div className={`${Number(pct) >= 70 ? 'bg-green-500' : 'bg-rose-500'} h-full rounded-full`} style={{ width: `${pct}%` }}></div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-2xl font-bold dark:text-white px-2">Detaylı Analiz</h3>
+                  {examResults.questions.map((q, i) => (
+                    <div
+                      key={q.id}
+                      className={`bg-white dark:bg-slate-800 p-6 rounded-2xl border-l-[6px] shadow-sm ${
+                        q.isCorrect ? 'border-green-500' : 'border-rose-500'
+                      }`}
+                    >
+                      <div className="flex gap-4">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-xl ${
+                           q.isCorrect ? 'bg-green-100 text-green-600 dark:bg-green-900/30' : 'bg-rose-100 text-rose-600 dark:bg-rose-900/30'
+                        }`}>
+                           {q.isCorrect ? '✓' : '✕'}
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex justify-between items-start mb-2">
+                            <p className="font-bold text-lg dark:text-white leading-relaxed">
+                              {q.q}
+                            </p>
+                          </div>
+                          
+                          <div className="grid md:grid-cols-2 gap-4 mt-4">
+                             {!q.isCorrect && (
+                                <div className="bg-rose-50 dark:bg-rose-900/10 p-3 rounded-xl border border-rose-100 dark:border-rose-900/30">
+                                   <div className="text-xs font-bold text-rose-700 dark:text-rose-400 uppercase mb-1">Senin Cevabın</div>
+                                   <div className="font-medium text-rose-900 dark:text-rose-200">{q.userAnswer === -1 ? 'Boş' : q.o[q.userAnswer]}</div>
                                 </div>
-                                <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 mb-3">
-                                    {rule.rules.map((r, i) => <li key={i}>{r}</li>)}
-                                </ul>
-                                <div className="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
-                                    <div className="text-xs font-semibold mb-1 opacity-70">Örnekler:</div>
-                                    {rule.examples.map((ex, i) => <div key={i} className="text-xs text-gray-600 dark:text-gray-400">• {ex}</div>)}
-                                </div>
+                             )}
+                             <div className="bg-green-50 dark:bg-green-900/10 p-3 rounded-xl border border-green-100 dark:border-green-900/30">
+                                <div className="text-xs font-bold text-green-700 dark:text-green-400 uppercase mb-1">Doğru Cevap</div>
+                                <div className="font-medium text-green-900 dark:text-green-200">{q.o[q.c]}</div>
                              </div>
-                        ))}
+                          </div>
+
+                          <div className="mt-4 bg-slate-50 dark:bg-slate-700/30 rounded-xl p-4 text-sm space-y-3">
+                             <div>
+                                <span className="font-bold text-slate-700 dark:text-slate-300">💡 Açıklama:</span>
+                                <p className="text-slate-600 dark:text-slate-400 mt-1">{q.e}</p>
+                             </div>
+                             {q.de && (
+                                <div className="pt-2 border-t border-slate-200 dark:border-slate-600">
+                                   <span className="font-bold text-slate-700 dark:text-slate-300">📖 Detay:</span>
+                                   <p className="text-slate-600 dark:text-slate-400 mt-1">{q.de}</p>
+                                </div>
+                             )}
+                          </div>
+                        </div>
+                      </div>
                     </div>
+                  ))}
                 </div>
-            )}
-
-            {/* FLASHCARDS TAB */}
-            {activeTab === 'flashcards' && (
-                <div className="animate-in fade-in duration-300">
-                    {/* Filters */}
-                    <div className="mb-6 flex flex-wrap gap-2">
-                        {['all', 'family', 'food', 'daily', 'adjectives', 'verbs', 'places'].map(cat => (
-                            <button 
-                                key={cat}
-                                onClick={() => setFlashcardCategory(cat)}
-                                className={`px-4 py-2 rounded-lg text-sm font-semibold capitalize transition ${
-                                    flashcardCategory === cat 
-                                    ? 'bg-blue-500 text-white' 
-                                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300'
-                                }`}
-                            >
-                                {cat}
-                            </button>
-                        ))}
-                    </div>
-
-                    {/* Cards Grid */}
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-                        {getFilteredFlashcards().map((card, idx) => (
-                            <div 
-                                key={idx} 
-                                onClick={() => handleFlipCard(idx)}
-                                className={`relative h-52 cursor-pointer perspective-1000 group`}
-                            >
-                                <div className={`relative w-full h-full transition-transform duration-500 transform-style-3d shadow-xl rounded-xl ${flippedCards[idx] ? 'rotate-y-180' : ''}`}>
-                                    {/* Front */}
-                                    <div className="absolute w-full h-full backface-hidden bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 flex flex-col items-center justify-center">
-                                        <div className="text-3xl font-bold mb-2">{card.front}</div>
-                                        <div className="text-sm opacity-80">{card.pronunciation}</div>
-                                        <div className="absolute bottom-4 text-xs opacity-50">Çevir</div>
-                                    </div>
-                                    {/* Back */}
-                                    <div className="absolute w-full h-full backface-hidden rotate-y-180 bg-gradient-to-br from-purple-500 to-pink-500 text-white rounded-xl p-6 flex flex-col items-center justify-center">
-                                        <div className="text-3xl font-bold mb-4">{card.back}</div>
-                                        <button 
-                                            onClick={(e) => { e.stopPropagation(); speakText(card.front); }}
-                                            className="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-lg transition flex items-center gap-2"
-                                        >
-                                            🔊 Dinle
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                
+                <div className="h-24 flex items-center justify-center">
+                   <button onClick={resetExam} className="px-8 py-4 bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold rounded-2xl shadow-xl hover:scale-105 transition-transform flex items-center gap-2">
+                      <span>🔄</span> Yeni Sınav Başlat
+                   </button>
                 </div>
+              </div>
             )}
+          </div>
+        )}
+      </main>
 
-            {/* PREPOSITIONS TAB */}
-            {activeTab === 'prepositions' && (
-                <div className="animate-in fade-in duration-300 space-y-4">
-                    <div className="flex justify-between items-center bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
-                        <div>
-                            <span className="text-sm text-gray-500">Skor</span>
-                            <div className="text-2xl font-bold text-blue-600">{prepScore.correct} / {prepScore.total}</div>
-                        </div>
-                        <button onClick={resetPrepositions} className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">Yenile</button>
-                    </div>
-
-                    {PREPOSITION_EXERCISES.map((ex, exIdx) => (
-                        <div key={exIdx} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                            <p className="text-lg font-medium text-gray-800 dark:text-white mb-4">
-                                {ex.sentence.replace('___', '_____')}
-                            </p>
-                            <div className="grid grid-cols-4 gap-2 mb-4">
-                                {ex.options.map((opt, optIdx) => {
-                                    const isAnswered = answeredPreps.has(exIdx);
-                                    let btnClass = "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600";
-                                    
-                                    if (isAnswered) {
-                                        if (optIdx === ex.correct) btnClass = "bg-green-500 text-white";
-                                        else if (prepFeedback[exIdx] && !prepFeedback[exIdx].correct && ex.options.indexOf(opt) === -1) btnClass = "bg-red-500 text-white"; // Logic simplification for rendering
-                                    }
-
-                                    return (
-                                        <button 
-                                            key={optIdx}
-                                            disabled={isAnswered}
-                                            onClick={() => checkPreposition(exIdx, optIdx)}
-                                            className={`px-4 py-2 rounded-lg font-semibold transition ${btnClass}`}
-                                        >
-                                            {opt}
-                                        </button>
-                                    );
-                                })}
-                            </div>
-                            {answeredPreps.has(exIdx) && (
-                                <div className={`text-sm ${prepFeedback[exIdx].correct ? 'text-green-600' : 'text-red-600'}`}>
-                                    {prepFeedback[exIdx].message}
-                                </div>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {/* EXAM TAB */}
-            {activeTab === 'exam' && (
-                <div className="animate-in fade-in duration-300">
-                    {!examActive ? (
-                        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
-                            <div className="text-6xl mb-4">📝</div>
-                            <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Sınava Hazır mısın?</h2>
-                            <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md mx-auto">
-                                30 rastgele soru. Yanlış yaptıkların tekrar karşına çıkabilir. Hazırsan başlayalım!
-                            </p>
-                            <button 
-                                onClick={startExam}
-                                className="px-12 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-xl font-bold rounded-xl shadow-lg transition transform hover:scale-105"
-                            >
-                                🚀 Başla
-                            </button>
-                        </div>
-                    ) : (
-                        <div className="space-y-6">
-                            {/* Exam Header */}
-                            <div className="sticky top-20 bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 z-40 border border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                                <div className="text-sm font-bold text-gray-600 dark:text-gray-300">
-                                    Soru: {Object.keys(currentExam.answers).length} / 30
-                                </div>
-                                <div className="font-mono font-bold text-blue-600 dark:text-blue-400">
-                                    {examTimer}
-                                </div>
-                                <button 
-                                    onClick={submitExam}
-                                    className="px-6 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition"
-                                >
-                                    Bitir
-                                </button>
-                            </div>
-
-                            {/* Questions */}
-                            <div className="space-y-6">
-                                {currentExam.questions.map((q, idx) => (
-                                    <div key={q.id} className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm border border-gray-200 dark:border-gray-700">
-                                        <div className="flex gap-4">
-                                            <div className="w-8 h-8 flex-shrink-0 bg-blue-100 dark:bg-blue-900/50 text-blue-600 rounded-full flex items-center justify-center font-bold">
-                                                {idx + 1}
-                                            </div>
-                                            <div className="flex-1">
-                                                <div className="flex justify-between items-start mb-2">
-                                                    <span className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded text-gray-500">{q.unit}</span>
-                                                    <div className="flex gap-2">
-                                                         <button onClick={() => speakText(q.question)} className="text-gray-400 hover:text-blue-500">🔊</button>
-                                                         {settings.showHints && q.hint && (
-                                                             <button onClick={() => alert(q.hint)} className="text-gray-400 hover:text-yellow-500">💡</button>
-                                                         )}
-                                                    </div>
-                                                </div>
-                                                <p className="text-lg font-medium text-gray-800 dark:text-white mb-4">{q.question}</p>
-                                                
-                                                <div className="space-y-2">
-                                                    {q.options.map((opt, optIdx) => (
-                                                        <label key={optIdx} className={`block p-3 rounded-lg border-2 cursor-pointer transition ${
-                                                            currentExam.answers[q.id] === optIdx 
-                                                            ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20' 
-                                                            : 'border-gray-200 dark:border-gray-700 hover:border-gray-300'
-                                                        }`}>
-                                                            <input 
-                                                                type="radio" 
-                                                                name={`q-${q.id}`} 
-                                                                className="hidden"
-                                                                checked={currentExam.answers[q.id] === optIdx}
-                                                                onChange={() => setCurrentExam(prev => ({ ...prev, answers: { ...prev.answers, [q.id]: optIdx } }))}
-                                                            />
-                                                            <span className="font-bold mr-2 text-gray-500">{String.fromCharCode(65 + optIdx)})</span>
-                                                            <span className="text-gray-700 dark:text-gray-300">{opt}</span>
-                                                        </label>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            
-                            <div className="text-center pt-6">
-                                <button 
-                                    onClick={submitExam}
-                                    className="px-12 py-4 bg-green-600 hover:bg-green-700 text-white text-xl font-bold rounded-xl shadow-lg transition"
-                                >
-                                    ✅ Sınavı Tamamla
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* RESULTS TAB */}
-            {activeTab === 'results' && (
-                <div className="animate-in fade-in duration-300">
-                    {examResults ? (
-                        <div className="max-w-3xl mx-auto">
-                            <div className={`text-center p-8 rounded-2xl text-white mb-8 shadow-xl bg-gradient-to-r ${
-                                examResults.score >= 80 ? 'from-green-500 to-emerald-600' :
-                                examResults.score >= 60 ? 'from-blue-500 to-cyan-600' :
-                                'from-red-500 to-orange-600'
-                            }`}>
-                                <div className="text-6xl font-black mb-2">{examResults.score}%</div>
-                                <div className="text-2xl font-bold opacity-90">
-                                    {examResults.score >= 80 ? 'Mükemmel! 🎉' : examResults.score >= 60 ? 'Güzel İş! 👍' : 'Tekrar Etmelisin 📚'}
-                                </div>
-                                <div className="mt-4 text-lg bg-white/20 inline-block px-4 py-1 rounded-full">
-                                    {examResults.correct} / {examResults.total} Doğru
-                                </div>
-                            </div>
-
-                            <div className="space-y-4">
-                                {examResults.questions.map((q: any, idx: number) => (
-                                    <div key={idx} className={`bg-white dark:bg-gray-800 p-6 rounded-xl border-l-4 shadow-sm ${
-                                        q.isCorrect ? 'border-green-500' : 'border-red-500'
-                                    }`}>
-                                        <div className="flex gap-4">
-                                            <div className="text-2xl">{q.isCorrect ? '✅' : '❌'}</div>
-                                            <div className="flex-1">
-                                                <p className="font-bold text-gray-800 dark:text-white mb-2">{q.question}</p>
-                                                {!q.isCorrect && (
-                                                    <div className="mb-3 text-sm">
-                                                        <div className="text-red-600">Senin Cevabın: {q.options[q.userAnswer] || 'Boş'}</div>
-                                                        <div className="text-green-600">Doğru Cevap: {q.options[q.correct]}</div>
-                                                    </div>
-                                                )}
-                                                <div className="bg-gray-50 dark:bg-gray-700/50 p-3 rounded-lg text-sm text-gray-600 dark:text-gray-300">
-                                                    <strong>Açıklama:</strong> {q.explanation}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                            
-                            <div className="text-center mt-8">
-                                <button 
-                                    onClick={() => { setActiveTab('exam'); setExamActive(false); }}
-                                    className="px-8 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition"
-                                >
-                                    🔄 Yeni Sınav
-                                </button>
-                            </div>
-                        </div>
-                    ) : (
-                         <div className="text-center py-20 text-gray-500">
-                             <div className="text-6xl mb-4">📊</div>
-                             <h2 className="text-2xl font-bold mb-4">Henüz Sonuç Yok</h2>
-                             <button onClick={() => setActiveTab('exam')} className="text-blue-500 hover:underline">Sınava Git</button>
-                         </div>
-                    )}
-                </div>
-            )}
-
-        </main>
+      <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-12 py-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-sm font-medium text-slate-600 dark:text-slate-400">
+            © 2026 <span className="font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-violet-600">EnglishPath</span>
+          </p>
+          <p className="text-xs text-slate-400 mt-2">Headway Beginner Uyumlu • ZIP Questions Integrated</p>
+        </div>
+      </footer>
     </div>
   );
 }
