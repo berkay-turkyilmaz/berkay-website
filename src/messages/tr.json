@@ -149,7 +149,7 @@
     "subtitle": "Kurumsal ölçekli projeler, mimari danışmanlık veya teknoloji odaklı işbirlikleri için mesaj bırakabilirsiniz.",
     "inputs": {
       "name": "İsim Soyisim",
-      "email": "Kurumsal E-posta",
+      "email": "E-posta",
       "message": "Projenizin teknik detaylarından veya işbirliği modelinden bahsedin...",
       "errors": {
         "required": "Sistem gereksinimi: Bu alan boş bırakılamaz.",
@@ -157,7 +157,7 @@
       }
     },
     "button": {
-      "default": "Veriyi İlet",
+      "default": "Bağlantı Kur",
       "sending": "Sunucuya İletiliyor..."
     },
     "success": {
