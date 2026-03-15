@@ -1,15 +1,18 @@
 {
+  "Metadata": {
+    "description": "Software-Ingenieur, der moderne Webtechnologien, skalierbare Schnittstellen und KI-gesteuerte autonome Systeme entwickelt."
+  },
   "Navigation": {
     "home": "Startseite",
-    "projects": "Arbeiten",
-    "blog": "Artikel",
+    "projects": "Projekte",
+    "blog": "Blog",
     "lab": "AI Lab",
     "contact": "Kontakt"
   },
   "HomePage": {
-    "badge": "System Online & Offen für Möglichkeiten",
-    "title": "Technologieorientierte digitale Erlebnisse",
-    "description": "Ich entwickle skalierbare Benutzeroberflächen und KI-gesteuerte autonome Workflows (n8n) unter Verwendung moderner Webarchitekturen wie Next.js.",
+    "badge": "System Betriebsbereit & Offen für Möglichkeiten",
+    "title": "Engineering-getriebene digitale Erlebnisse",
+    "description": "Ich konzipiere skalierbare Benutzeroberflächen und KI-gesteuerte autonome Workflows (n8n) unter Verwendung moderner Webarchitekturen wie Next.js.",
     "cta_projects": "Projekte erkunden",
     "cta_lab": "AI Lab entdecken",
     "hero": {
@@ -23,8 +26,8 @@
     },
     "projects": {
       "saas_card": {
-        "title": "Enterprise SaaS Architektur",
-        "subtitle": "Next.js 15 & Supabase Infrastruktur"
+        "title": "Enterprise SaaS-Architektur",
+        "subtitle": "Next.js 15 & Supabase-Infrastruktur"
       },
       "code_card": {
         "comment": "// Initialisierung von Innovation und Skalierbarkeit...",
@@ -36,7 +39,7 @@
     },
     "ai_lab": {
       "tag": "F&E-Phase",
-      "title": "AI & Automatisierungslabor",
+      "title": "KI- & Automatisierungslabor",
       "description": "Testumgebung für intelligente Datenverarbeitung und autonome Systeme, basierend auf lokalen LLMs und Webhook-Integrationen."
     },
     "blog": {
@@ -45,12 +48,12 @@
       "view_all": "Alles lesen",
       "posts": {
         "1": {
-          "title": "Next.js 15 und Mikro-Frontend Architektur",
+          "title": "Next.js 15 und Mikro-Frontend-Architektur",
           "excerpt": "Entwurf einer Enterprise-Webarchitektur mit Server Actions und React Server Components.",
           "category": "Architektur"
         },
         "2": {
-          "title": "LLM und n8n Automatisierung in Geschäftsprozessen",
+          "title": "LLM- und n8n-Automatisierung in Geschäftsprozessen",
           "excerpt": "Ein Leitfaden zur Umwandlung manueller Datenflüsse in autonome Systeme via Webhooks.",
           "category": "Engineering"
         }
@@ -63,29 +66,96 @@
     }
   },
   "AiLabPage": {
-    "welcome": "System bereit. Welche Daten möchten Sie analysieren?",
+    "welcome": "System bereit. Was möchten Sie analysieren?",
     "sidebar": {
       "categories": {
-        "tools": "ENGINEERING-WERKZEUGE",
-        "apps": "SYSTEMINTEGRATIONEN"
+        "tools": "WERKZEUGE",
+        "projects": "PROJEKTE"
       },
       "items": {
-        "chat": "LLM Terminal",
-        "pdf": "Dokumentenanalyse",
-        "prompt": "System-Engineer",
-        "youtube": "Datenextraktion",
-        "scheduler": "Termin-Automatisierung"
+        "terminal": "LLM Terminal",
+        "terminal_desc": "KI-Assistent",
+        "pdf": "Dokument-Analyse",
+        "pdf_desc": "RAG · PDF",
+        "engineer": "System-Ingenieur",
+        "engineer_desc": "Architektur",
+        "english": "EnglishPath",
+        "english_desc": "KI EdTech",
+        "booking": "Booking SaaS",
+        "booking_desc": "Terminsystem"
       },
-      "new_chat": "Neue Sitzung",
-      "user_status": "Autorisierter Benutzer"
+      "new_chat": "Neuer Chat",
+      "settings": "Einstellungen",
+      "user_status": "Autorisierter Nutzer",
+      "soon": "Bald"
     },
-    "input": {
-      "placeholders": {
-        "chat": "Konsultieren Sie zu Systemarchitektur, Code-Analyse oder Integrationsszenarien...",
-        "pdf": "Fordern Sie Datenstrukturen oder Zusammenfassungen aus dem Dokument an...",
-        "prompt": "Spezifizieren Sie Ihre Anforderungen zur Generierung eines optimierten Prompts..."
-      },
-      "warning": "Dieses System nutzt lokale LLMs für F&E-Zwecke. Bitte überprüfen Sie die Ausgaben vor kritischen Operationen."
+    "chat": {
+      "terminal_empty_title": "BEX bereit.",
+      "terminal_empty_desc": "Fragen Sie alles über Next.js, Supabase, n8n-Integrationen oder Berkays Projekte.",
+      "pdf_empty_title": "Dokument hochladen, analysieren.",
+      "pdf_empty_desc": "PDF, TXT oder MD hochladen — BEX liest den Inhalt und beantwortet Ihre Fragen.",
+      "engineer_empty_title": "Architekturberater aktiv.",
+      "engineer_empty_desc": "Systemdesign, Infrastrukturentscheidungen und Trade-off-Analysen.",
+      "thinking": "denkt nach",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "stop": "Stopp",
+      "send": "Senden",
+      "placeholder_terminal": "Etwas fragen oder Code schreiben...",
+      "placeholder_pdf_loaded": "fragen über...",
+      "placeholder_pdf_empty": "Zuerst eine Datei hochladen...",
+      "placeholder_engineer": "Architektur- oder DevOps-Frage stellen...",
+      "upload_drag": "Datei ziehen oder klicken",
+      "upload_formats": "PDF · TXT · MD — Max 20 MB",
+      "upload_reading": "PDF wird gelesen...",
+      "uploaded_label": "Hochgeladen · Fragen stellen",
+      "footer_warning": "BEX · F&E-System — Ausgaben überprüfen",
+      "error_network": "Verbindungsfehler. Internet überprüfen.",
+      "error_stream": "Fehler beim Empfangen der Antwort. Erneut versuchen.",
+      "suggested_terminal_1": "Wie schreibt man Supabase RLS-Richtlinien?",
+      "suggested_terminal_2": "Wie erstellt man eine Streaming API Route in Next.js 15?",
+      "suggested_terminal_3": "Wie richtet man einen Telegram-Bot mit n8n ein?",
+      "suggested_terminal_4": "Wie implementiert man semantische Suche mit pgvector?",
+      "suggested_pdf_1": "Dieses Dokument zusammenfassen",
+      "suggested_pdf_2": "Hauptthemen auflisten",
+      "suggested_pdf_3": "Was sind die wichtigsten Datenpunkte?",
+      "suggested_pdf_4": "Was ist das Hauptargument des Autors?",
+      "suggested_engineer_1": "Monolith vs. Microservices — Trade-offs erklären",
+      "suggested_engineer_2": "Wie integriert man n8n mit Supabase?",
+      "suggested_engineer_3": "Vercel Edge vs. Node.js Runtime Unterschiede?",
+      "suggested_engineer_4": "Wie konfiguriert man PostgreSQL Connection Pooling?"
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "subtitle": "BEX Workspace Konfiguration",
+      "display_name": "Anzeigename",
+      "display_name_placeholder": "Ihr Name...",
+      "save": "Speichern",
+      "model": "KI-Modell",
+      "response_length": "Antwortlänge",
+      "length_short": "Kurz",
+      "length_short_desc": "Zusammenfassung",
+      "length_medium": "Mittel",
+      "length_medium_desc": "Ausgewogen",
+      "length_detailed": "Detailliert",
+      "length_detailed_desc": "Umfassend",
+      "creativity": "Kreativität",
+      "creativity_precise": "Präzise",
+      "creativity_creative": "Kreativ",
+      "language": "Antwortsprache",
+      "danger_zone": "Gefahrenzone",
+      "clear_chat": "Aktiven Chat löschen",
+      "cleared": "Chat gelöscht",
+      "close": "Schließen",
+      "version": "BEX · AI Lab v2.0",
+      "theme": "Design",
+      "theme_dark": "Dunkel",
+      "theme_light": "Hell",
+      "theme_system": "System"
+    },
+    "header": {
+      "new_chat": "Neuer Chat",
+      "model_label": "Modell"
     }
   },
   "ProjectsPage": {
@@ -94,6 +164,7 @@
     "description": "End-to-End konzipierte digitale Produkte, von Full-Stack-Entwicklung bis hin zu Datenautomatisierungslösungen."
   },
   "ProjectsSection": {
+    "badge": "Portfolio-Archiv",
     "title": "Systemkatalog",
     "description": "Ein dynamisches Portfolio-Interface, das in Echtzeit über n8n-Webhooks und serverlose Architekturen verwaltet wird.",
     "tech_stack_title": "TECH-STACK",
@@ -127,11 +198,29 @@
     "description": "Technische Notizen zu moderner Webarchitektur, Skalierbarkeit, KI-Integrationen und DevOps-Prozessen.",
     "search_placeholder": "Artikel, Tags oder Technologien suchen...",
     "no_results": "Keine technischen Artikel gefunden, die diesen Kriterien entsprechen.",
+    "empty_title": "Keine Ergebnisse",
+    "clear_filters": "Filter zurücksetzen",
+    "audio_article": "Audio-Artikel",
+    "audio_label": "Audio",
     "categories": {
       "all": "Alle",
       "architecture": "Systemarchitektur",
       "ai": "Künstliche Intelligenz",
       "automation": "Automatisierung"
+    },
+    "posts": {
+      "1": {
+        "title": "Next.js 15 & Moderne Portfolio-Architektur",
+        "excerpt": "Wie erstellt man ein Software-Portfolio nach globalen Standards mit Tailwind v4, i18n und Server Actions?",
+        "date": "31 Jan 2026",
+        "read_time": "8 Min"
+      },
+      "2": {
+        "title": "KI-gesteuerte Automatisierungen",
+        "excerpt": "Wie können Geschäftsprozesse mit n8n und Google Gemini automatisiert werden?",
+        "date": "28 Jan 2026",
+        "read_time": "5 Min"
+      }
     }
   },
   "BlogDetail": {
@@ -148,7 +237,7 @@
     "title": "Kontakt aufnehmen",
     "subtitle": "Hinterlassen Sie eine Nachricht für Enterprise-Projekte, Architekturberatung oder technologiegetriebene Kooperationen.",
     "inputs": {
-      "name": "Vor- und Nachname",
+      "name": "Vollständiger Name",
       "email": "Geschäftliche E-Mail",
       "message": "Erzählen Sie mir von den technischen Details oder dem Kooperationsmodell Ihres Projekts...",
       "errors": {

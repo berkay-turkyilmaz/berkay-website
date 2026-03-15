@@ -1,4 +1,7 @@
 {
+  "Metadata": {
+    "description": "Ingeniero de software arquitecto de tecnologías web modernas, interfaces escalables y sistemas autónomos impulsados por IA."
+  },
   "Navigation": {
     "home": "Inicio",
     "projects": "Proyectos",
@@ -7,151 +10,208 @@
     "contact": "Contacto"
   },
   "HomePage": {
-    "badge": "Una nueva visión desde cero",
-    "title": "Diseño el<br />futuro digital",
-    "description": "Con la potencia de un portátil Monster, combino tecnologías web modernas con automatización mediante IA para crear sistemas escalables.",
-    "cta_projects": "Ver proyectos",
-    "cta_lab": "AI Lab",
+    "badge": "Sistema Operativo & Abierto a Oportunidades",
+    "title": "Experiencias Digitales<br />Impulsadas por la Ingeniería",
+    "description": "Diseño interfaces escalables y flujos de trabajo autónomos impulsados por IA (n8n) utilizando arquitecturas web modernas como Next.js.",
+    "cta_projects": "Explorar Proyectos",
+    "cta_lab": "Descubrir AI Lab",
     "hero": {
       "name": "BERKAY",
-      "portfolio": "PORTFOLIO"
+      "portfolio": "WORKSPACE"
     },
     "sections": {
-      "projects_preview_title": "Proyectos destacados",
-      "projects_preview_desc": "Aplicaciones web modernas desarrolladas de principio a fin, desde la idea hasta producción.",
-      "view_all_work": "Ver todo"
+      "projects_preview_title": "Trabajos Seleccionados",
+      "projects_preview_desc": "Arquitecturas de productos digitales orientadas al rendimiento y escalables que cumplen con requisitos empresariales complejos.",
+      "view_all_work": "Ver Todos los Trabajos"
     },
     "projects": {
       "saas_card": {
-        "title": "Kit de inicio SaaS",
-        "subtitle": "Next.js 15 & Supabase"
+        "title": "Arquitectura Enterprise SaaS",
+        "subtitle": "Infraestructura Next.js 15 & Supabase"
       },
       "code_card": {
-        "comment": "// Construyendo el futuro...",
-        "wip": "En desarrollo"
+        "comment": "// Inicializando innovación y escalabilidad...",
+        "wip": "Preparando para Producción"
       }
     },
     "automation": {
-      "system_active": "Sistema: Activo"
+      "system_active": "Sistema: Activo & En Línea"
     },
     "ai_lab": {
-      "tag": "Experimental",
-      "title": "Laboratorio de Innovación en IA",
-      "description": "Proyectos experimentales y arquitecturas RAG que funcionan con modelos de IA locales."
+      "tag": "Fase de I+D",
+      "title": "Laboratorio de IA & Automatización",
+      "description": "Entorno de prueba para procesamiento inteligente de datos y sistemas autónomos, construido con LLMs locales e integraciones de webhooks."
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Artículos y reflexiones",
-      "view_all": "Ver todo",
+      "subtitle": "Artículos Técnicos y Notas de Arquitectura",
+      "view_all": "Leer Todo",
       "posts": {
         "1": {
-          "title": "Arquitectura de Next.js 15 y Server Actions",
-          "excerpt": "Estándares de rendimiento en aplicaciones web modernas.",
+          "title": "Arquitectura Micro-Frontend y Next.js 15",
+          "excerpt": "Diseño de arquitectura web empresarial con Server Actions y React Server Components.",
           "category": "Arquitectura"
         },
         "2": {
-          "title": "LLM locales y automatización",
-          "excerpt": "Construir asistentes de IA enfocados en la privacidad.",
+          "title": "Automatización con LLM y n8n en Flujos Empresariales",
+          "excerpt": "Una guía para transformar flujos de datos manuales en sistemas autónomos a través de webhooks.",
           "category": "Ingeniería"
         }
       }
+    },
+    "blog_preview": {
+      "title": "Publicaciones Técnicas",
+      "description": "Análisis en profundidad sobre arquitectura de software y tecnologías web modernas.",
+      "view_all": "Leer Todo"
     }
   },
   "AiLabPage": {
-    "welcome": "¿En qué puedo ayudarte?",
+    "welcome": "Sistema listo. ¿Qué datos te gustaría analizar?",
     "sidebar": {
       "categories": {
-        "tools": "HERRAMIENTAS",
-        "apps": "APLICACIONES"
+        "tools": "HERRAMIENTAS DE INGENIERÍA",
+        "apps": "INTEGRACIONES DE SISTEMA"
       },
       "items": {
-        "chat": "Chat general",
-        "pdf": "Análisis de PDF",
-        "prompt": "Ingeniero de Prompts",
-        "youtube": "Análisis de video",
-        "scheduler": "Asistente inteligente"
+        "chat": "Terminal LLM",
+        "pdf": "Análisis de Documentos",
+        "prompt": "Ingeniero de Sistemas",
+        "youtube": "Extracción de Datos",
+        "scheduler": "Automatización de Citas"
       },
-      "new_chat": "Nueva sesión",
-      "user_status": "Administrador"
+      "new_chat": "Nueva Sesión",
+      "user_status": "Usuario Autorizado"
     },
     "input": {
       "placeholders": {
-        "chat": "Pregunta algo o solicita código...",
-        "pdf": "Pregunta sobre el PDF que subiste...",
-        "prompt": "Escribe tu idea y la convertiré en un prompt profesional..."
+        "chat": "Consulta sobre arquitectura de sistemas, análisis de código o escenarios de integración...",
+        "pdf": "Solicita estructuras de datos o resúmenes del documento subido...",
+        "prompt": "Indica tu requerimiento y lo compilaré en un prompt optimizado..."
       },
-      "warning": "AI Lab utiliza modelos locales. Puede cometer errores."
+      "warning": "Este sistema utiliza LLMs locales para propósitos de I+D. Por favor, verifica las salidas antes de operaciones críticas."
     }
   },
   "ProjectsPage": {
-    "badge": "PORTFOLIO",
-    "title": "Trabajos",
-    "description": "Detalles técnicos de los proyectos que he construido, desde desarrollo full-stack hasta soluciones de automatización."
+    "badge": "PORTFOLIO & ARQUITECTURA",
+    "title": "Sistemas & Productos",
+    "description": "Productos digitales diseñados de extremo a extremo, desde desarrollo full-stack hasta soluciones de automatización de datos."
   },
   "ProjectsSection": {
-    "title": "Proyectos destacados",
-    "description": "Portafolio de proyectos en vivo gestionado dinámicamente con Google Sheets y automatizaciones n8n.",
-    "tech_stack_title": "TECNOLOGÍAS UTILIZADAS",
+    "badge": "Archivo del Portfolio",
+    "title": "Catálogo del Sistema",
+    "description": "Una interfaz de portfolio dinámica gestionada en tiempo real utilizando webhooks de n8n y arquitecturas serverless.",
+    "tech_stack_title": "TECH STACK",
     "buttons": {
-      "view_project": "Ver proyecto",
-      "load_more": "Mostrar más",
-      "retry": "Reintentar"
+      "view_project": "Vista en Vivo",
+      "load_more": "Expandir Catálogo",
+      "retry": "Actualizar Conexión"
     },
     "states": {
-      "empty": "Aún no hay proyectos para mostrar.",
-      "error_title": "Error de conexión",
-      "error_desc": "Ocurrió un problema al cargar los proyectos desde el servidor."
+      "empty": "No hay productos activos disponibles para mostrar en este momento.",
+      "error_title": "Error de Base de Datos",
+      "error_desc": "Se agotó el tiempo de espera al obtener los proyectos a través de la API."
+    },
+    "mock_projects": {
+      "1": {
+        "title": "Automatización de Citas Empresariales",
+        "description": "Sistema de reservas autónomo sincronizado con Google Calendar y webhooks de SMS, diseñado a través de n8n y arquitectura serverless."
+      },
+      "2": {
+        "title": "Arquitectura Web Moderna v1",
+        "description": "Ecosistema digital de alto rendimiento desarrollado con Next.js 15, React Server Components e infraestructura i18n."
+      },
+      "3": {
+        "title": "Bot de Procesamiento y Reporte de Datos Financieros",
+        "description": "Sistema de automatización de datos diseñado con n8n e integraciones API para extraer, analizar y reportar métricas financieras de fuentes externas de forma autónoma."
+      }
     }
   },
   "BlogHub": {
-    "title": "Blog y notas",
-    "description": "Mis pensamientos sobre software, IA y tecnología.",
-    "search_placeholder": "Buscar en los artículos...",
+    "title": "Artículos & Análisis",
+    "description": "Notas técnicas sobre arquitectura web moderna, escalabilidad, integraciones de IA y procesos DevOps.",
+    "search_placeholder": "Buscar artículos, etiquetas o tecnologías...",
+    "no_results": "No se encontraron artículos técnicos que coincidan con estos criterios.",
+    "empty_title": "No se encontraron resultados",
+    "clear_filters": "Limpiar Filtros",
+    "audio_article": "Artículo en Audio",
+    "audio_label": "Audio",
     "categories": {
       "all": "Todos",
-      "architecture": "Arquitectura",
+      "architecture": "Arquitectura de Sistemas",
       "ai": "Inteligencia Artificial",
       "automation": "Automatización"
     },
-    "no_results": "No se encontraron artículos que coincidan con tu búsqueda."
+    "posts": {
+      "1": {
+        "title": "Next.js 15 & Arquitectura Moderna de Portfolios",
+        "excerpt": "¿Cómo construir un portfolio de software con estándares globales usando Tailwind v4, i18n y Server Actions?",
+        "date": "31 Ene 2026",
+        "read_time": "8 min"
+      },
+      "2": {
+        "title": "Automatizaciones Impulsadas por IA",
+        "excerpt": "¿Cómo automatizar procesos empresariales usando n8n y Google Gemini?",
+        "date": "28 Ene 2026",
+        "read_time": "5 min"
+      }
+    }
+  },
+  "BlogDetail": {
+    "enjoyed_article": "¿Te resultó útil este análisis técnico?",
+    "read_more_articles": "Artículos Relacionados",
+    "back_to_blog": "Volver a los Artículos",
+    "read_time": "min de lectura",
+    "share": "Compartir en la Red",
+    "next_post": "Siguiente Artículo",
+    "toc_title": "Tabla de Contenidos"
   },
   "ContactForm": {
-    "tag": "Contacto",
-    "title": "Contáctame",
-    "subtitle": "¿Tienes una nueva idea de proyecto o solo quieres decir hola?",
+    "tag": "Establecer Conexión",
+    "title": "Ponerse en Contacto",
+    "subtitle": "Deja un mensaje para proyectos a escala empresarial, consultoría arquitectónica o colaboraciones tecnológicas.",
     "inputs": {
-      "name": "Nombre completo",
-      "email": "Correo electrónico",
-      "message": "Cuéntame sobre tu proyecto...",
+      "name": "Nombre Completo",
+      "email": "Correo Corporativo",
+      "message": "Cuéntame sobre los detalles técnicos o el modelo de colaboración de tu proyecto...",
       "errors": {
-        "required": "Este campo es obligatorio.",
-        "invalid_email": "Formato de correo electrónico no válido."
+        "required": "Requisito del sistema: Este campo no puede estar vacío.",
+        "invalid_email": "Por favor, introduce un formato de correo electrónico válido."
       }
     },
     "button": {
-      "default": "Enviar mensaje",
-      "sending": "Enviando..."
+      "default": "Transmitir Datos",
+      "sending": "Transmitiendo al Servidor..."
     },
     "success": {
-      "title": "¡Mensaje enviado!",
-      "description": "Tu mensaje fue recibido. Me pondré en contacto pronto.",
-      "reset": "Enviar nuevo mensaje"
+      "title": "Solicitud de Contacto Recibida",
+      "description": "Tu mensaje ha sido registrado de forma segura en el sistema. Recibirás una respuesta en breve.",
+      "reset": "Crear Nueva Solicitud"
     },
     "error": {
-      "title": "Ocurrió un error",
-      "description": "No se pudo establecer la conexión. Por favor envía un correo electrónico."
+      "title": "Conexión Rechazada",
+      "description": "No se pudo comunicar con la API. Por favor, contacta directamente por correo electrónico."
     }
   },
   "Footer": {
-    "description": "Diseño sistemas autónomos y experiencias web modernas que dejan huella en el mundo digital. Creo valor más allá del código.",
-    "system_status": "Sistemas: Activos",
-    "explore": "Explorar",
-    "stay_connected": "Mantente conectado",
-    "project_idea": "¿Tienes una nueva idea de proyecto?",
-    "write_me": "escríbeme a",
-    "powered_by": "INFRAESTRUCTURA"
+    "description": "Soluciones digitales construidas sobre estándares web modernos y sistemas autónomos, enfocadas en el rendimiento y la escalabilidad.",
+    "system_status": "Todos los Sistemas: En Línea & Estables",
+    "explore": "Mapa del Sistema",
+    "stay_connected": "Redes de Comunicación",
+    "project_idea": "¿Buscas resolver un problema complejo con software?",
+    "write_me": "contáctame a través de",
+    "powered_by": "INFRAESTRUCTURA ARQUITECTÓNICA"
   },
   "LanguageSwitcher": {
-    "label": "Seleccionar idioma"
+    "label": "Cambiar Modelo de Lenguaje"
+  },
+  "ContactPage": {
+    "status_badge": "Abierto a Nuevas Oportunidades B2B & Profesionales",
+    "title_line1": "Transformemos sistemas complejos en",
+    "title_highlight": "productos escalables.",
+    "description": "Ponte en contacto para superar desafíos de ingeniería, obtener consultoría técnica o construir una infraestructura digital moderna.",
+    "email_label": "Comunicación Directa",
+    "response_time": "SLA: Generalmente responde en 24 horas",
+    "location_label": "Centro de Desarrollo",
+    "social_label": "Redes & Repositorio"
   }
 }

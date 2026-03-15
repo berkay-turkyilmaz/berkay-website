@@ -95,7 +95,7 @@ export function ProjectsSection() {
         <div className="space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-primary font-mono text-[10px] font-bold tracking-widest uppercase">
             <Layers className="w-3.5 h-3.5" />
-            <span>Portfolio Architecture</span>
+            <span>{t("badge")}</span>
           </div>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground text-balance">
             {t("title")}

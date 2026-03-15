@@ -1,4 +1,7 @@
 {
+  "Metadata": {
+    "description": "Ingénieur logiciel concevant des technologies web modernes, des interfaces évolutives et des systèmes autonomes pilotés par l'IA."
+  },
   "Navigation": {
     "home": "Accueil",
     "projects": "Projets",
@@ -7,151 +10,208 @@
     "contact": "Contact"
   },
   "HomePage": {
-    "badge": "Une nouvelle vision à partir de zéro",
-    "title": "Je conçois<br />le futur numérique",
-    "description": "Grâce à la puissance d’un ordinateur Monster, je combine les technologies web modernes et l’automatisation par l’IA pour créer des systèmes évolutifs.",
-    "cta_projects": "Voir les projets",
-    "cta_lab": "AI Lab",
+    "badge": "Système Opérationnel & Ouvert aux Opportunités",
+    "title": "Expériences Numériques<br />Axées sur l'Ingénierie",
+    "description": "Je conçois des interfaces évolutives et des flux de travail autonomes pilotés par l'IA (n8n) en utilisant des architectures web modernes comme Next.js.",
+    "cta_projects": "Explorer les Projets",
+    "cta_lab": "Découvrir AI Lab",
     "hero": {
       "name": "BERKAY",
-      "portfolio": "PORTFOLIO"
+      "portfolio": "WORKSPACE"
     },
     "sections": {
-      "projects_preview_title": "Projets sélectionnés",
-      "projects_preview_desc": "Applications web modernes développées de bout en bout, de l’idée à la mise en production.",
-      "view_all_work": "Tout voir"
+      "projects_preview_title": "Travaux Sélectionnés",
+      "projects_preview_desc": "Architectures de produits numériques axées sur les performances et évolutives, répondant à des exigences commerciales complexes.",
+      "view_all_work": "Voir Tous les Travaux"
     },
     "projects": {
       "saas_card": {
-        "title": "Kit de démarrage SaaS",
-        "subtitle": "Next.js 15 & Supabase"
+        "title": "Architecture Enterprise SaaS",
+        "subtitle": "Infrastructure Next.js 15 & Supabase"
       },
       "code_card": {
-        "comment": "// Construction du futur...",
-        "wip": "En cours de développement"
+        "comment": "// Initialisation de l'innovation et de l'évolutivité...",
+        "wip": "Préparation pour la Production"
       }
     },
     "automation": {
-      "system_active": "Système : Actif"
+      "system_active": "Système : Actif & En Ligne"
     },
     "ai_lab": {
-      "tag": "Expérimental",
-      "title": "Laboratoire d’innovation IA",
-      "description": "Projets expérimentaux et architectures RAG utilisant des modèles d’IA locaux."
+      "tag": "Phase de R&D",
+      "title": "Laboratoire d'IA & Automatisation",
+      "description": "Environnement de test pour le traitement intelligent des données et les systèmes autonomes, construit avec des LLM locaux et des intégrations de webhooks."
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Articles & réflexions",
-      "view_all": "Tout voir",
+      "subtitle": "Articles Techniques & Notes d'Architecture",
+      "view_all": "Tout Lire",
       "posts": {
         "1": {
-          "title": "Architecture Next.js 15 et Server Actions",
-          "excerpt": "Standards de performance des applications web modernes.",
+          "title": "Next.js 15 et Architecture Micro-Frontend",
+          "excerpt": "Conception d'architecture web d'entreprise avec Server Actions et React Server Components.",
           "category": "Architecture"
         },
         "2": {
-          "title": "LLM locaux et automatisation",
-          "excerpt": "Construire des assistants IA orientés confidentialité.",
+          "title": "Automatisation LLM et n8n dans les Flux Métiers",
+          "excerpt": "Un guide pour transformer les flux de données manuels en systèmes autonomes via des webhooks.",
           "category": "Ingénierie"
         }
       }
+    },
+    "blog_preview": {
+      "title": "Publications Techniques",
+      "description": "Analyses approfondies sur l'architecture logicielle et les technologies web modernes.",
+      "view_all": "Tout Lire"
     }
   },
   "AiLabPage": {
-    "welcome": "Comment puis-je vous aider ?",
+    "welcome": "Système prêt. Quelles données souhaitez-vous analyser ?",
     "sidebar": {
       "categories": {
-        "tools": "OUTILS",
-        "apps": "APPLICATIONS"
+        "tools": "OUTILS D'INGÉNIERIE",
+        "apps": "INTÉGRATIONS SYSTÈME"
       },
       "items": {
-        "chat": "Discussion générale",
-        "pdf": "Analyse PDF",
-        "prompt": "Ingénieur de prompts",
-        "youtube": "Analyse vidéo",
-        "scheduler": "Assistant intelligent"
+        "chat": "Terminal LLM",
+        "pdf": "Analyse de Documents",
+        "prompt": "Ingénieur Système",
+        "youtube": "Extraction de Données",
+        "scheduler": "Automatisation de Rendez-vous"
       },
-      "new_chat": "Nouvelle session",
-      "user_status": "Administrateur"
+      "new_chat": "Nouvelle Session",
+      "user_status": "Utilisateur Autorisé"
     },
     "input": {
       "placeholders": {
-        "chat": "Posez une question ou demandez du code...",
-        "pdf": "Posez une question sur le PDF téléchargé...",
-        "prompt": "Écrivez votre idée, je la transformerai en prompt professionnel..."
+        "chat": "Consultez sur l'architecture système, l'analyse de code ou les scénarios d'intégration...",
+        "pdf": "Demandez des structures de données ou des résumés du document téléchargé...",
+        "prompt": "Indiquez votre besoin, je le compilerai en un prompt optimisé..."
       },
-      "warning": "AI Lab utilise des modèles locaux. Des erreurs peuvent survenir."
+      "warning": "Ce système utilise des LLM locaux à des fins de R&D. Veuillez vérifier les sorties avant toute opération critique."
     }
   },
   "ProjectsPage": {
-    "badge": "PORTFOLIO",
-    "title": "Réalisations",
-    "description": "Détails techniques des projets que j’ai réalisés, du développement full-stack aux solutions d’automatisation."
+    "badge": "PORTFOLIO & ARCHITECTURE",
+    "title": "Systèmes & Produits",
+    "description": "Produits numériques conçus de bout en bout, du développement full-stack aux solutions d'automatisation des données."
   },
   "ProjectsSection": {
-    "title": "Projets sélectionnés",
-    "description": "Portfolio de projets en ligne géré dynamiquement via Google Sheets et les automatisations n8n.",
-    "tech_stack_title": "TECHNOLOGIES UTILISÉES",
+    "badge": "Archive du Portfolio",
+    "title": "Catalogue du Système",
+    "description": "Une interface de portfolio dynamique gérée en temps réel via des webhooks n8n et des architectures serverless.",
+    "tech_stack_title": "TECH STACK",
     "buttons": {
-      "view_project": "Voir le projet",
-      "load_more": "Afficher plus",
-      "retry": "Réessayer"
+      "view_project": "Aperçu en Direct",
+      "load_more": "Étendre le Catalogue",
+      "retry": "Actualiser la Connexion"
     },
     "states": {
-      "empty": "Aucun projet à afficher pour le moment.",
-      "error_title": "Erreur de connexion",
-      "error_desc": "Une erreur est survenue lors du chargement des projets depuis le serveur."
+      "empty": "Aucun produit actif disponible pour le moment.",
+      "error_title": "Erreur de Base de Données",
+      "error_desc": "Un délai d'attente s'est produit lors de la récupération des projets via l'API."
+    },
+    "mock_projects": {
+      "1": {
+        "title": "Automatisation de Rendez-vous d'Entreprise",
+        "description": "Système de réservation autonome synchronisé avec Google Calendar et les webhooks SMS, conçu via n8n et une architecture serverless."
+      },
+      "2": {
+        "title": "Architecture Web Moderne v1",
+        "description": "Écosystème numérique haute performance développé avec Next.js 15, React Server Components et infrastructure i18n."
+      },
+      "3": {
+        "title": "Bot de Traitement et de Reporting de Données Financières",
+        "description": "Système d'automatisation des données conçu avec n8n et des intégrations API pour extraire, analyser et rapporter de manière autonome des mesures financières à partir de sources externes."
+      }
     }
   },
   "BlogHub": {
-    "title": "Blog & notes",
-    "description": "Mes réflexions sur le logiciel, l’IA et la technologie.",
-    "search_placeholder": "Rechercher dans les articles...",
+    "title": "Articles & Analyses",
+    "description": "Notes techniques sur l'architecture web moderne, l'évolutivité, les intégrations d'IA et les processus DevOps.",
+    "search_placeholder": "Rechercher des articles, des tags ou des technologies...",
+    "no_results": "Aucun article technique trouvé correspondant à ces critères.",
+    "empty_title": "Aucun Résultat Trouvé",
+    "clear_filters": "Effacer les Filtres",
+    "audio_article": "Article Audio",
+    "audio_label": "Audio",
     "categories": {
       "all": "Tous",
-      "architecture": "Architecture",
+      "architecture": "Architecture Système",
       "ai": "Intelligence Artificielle",
       "automation": "Automatisation"
     },
-    "no_results": "Aucun article ne correspond à vos critères."
+    "posts": {
+      "1": {
+        "title": "Next.js 15 & Architecture Moderne de Portfolio",
+        "excerpt": "Comment construire un portfolio logiciel aux normes mondiales en utilisant Tailwind v4, i18n et Server Actions ?",
+        "date": "31 Jan 2026",
+        "read_time": "8 min"
+      },
+      "2": {
+        "title": "Automatisations Propulsées par l'IA",
+        "excerpt": "Comment automatiser les processus métier en utilisant n8n et Google Gemini ?",
+        "date": "28 Jan 2026",
+        "read_time": "5 min"
+      }
+    }
+  },
+  "BlogDetail": {
+    "enjoyed_article": "Avez-vous trouvé cette analyse technique utile ?",
+    "read_more_articles": "Articles Connexes",
+    "back_to_blog": "Retour aux Articles",
+    "read_time": "min de lecture",
+    "share": "Partager sur le Réseau",
+    "next_post": "Article Suivant",
+    "toc_title": "Table des Matières"
   },
   "ContactForm": {
-    "tag": "Contact",
-    "title": "Me contacter",
-    "subtitle": "Vous avez une idée de projet ou souhaitez simplement dire bonjour ?",
+    "tag": "Établir une Connexion",
+    "title": "Entrer en Contact",
+    "subtitle": "Laissez un message pour des projets d'entreprise, des conseils en architecture ou des collaborations technologiques.",
     "inputs": {
-      "name": "Nom et prénom",
-      "email": "Adresse e-mail",
-      "message": "Parlez-moi de votre projet...",
+      "name": "Nom Complet",
+      "email": "E-mail Professionnel",
+      "message": "Parlez-moi des détails techniques ou du modèle de collaboration de votre projet...",
       "errors": {
-        "required": "Ce champ est requis.",
-        "invalid_email": "Format d’e-mail invalide."
+        "required": "Exigence du système : Ce champ ne peut pas être vide.",
+        "invalid_email": "Veuillez entrer un format d'e-mail valide."
       }
     },
     "button": {
-      "default": "Envoyer le message",
-      "sending": "Envoi en cours..."
+      "default": "Transmettre les Données",
+      "sending": "Transmission au Serveur..."
     },
     "success": {
-      "title": "Message envoyé !",
-      "description": "Votre message a bien été reçu. Je vous répondrai rapidement.",
-      "reset": "Envoyer un nouveau message"
+      "title": "Demande de Contact Reçue",
+      "description": "Votre message a été enregistré en toute sécurité dans le système. Vous recevrez une réponse sous peu.",
+      "reset": "Créer une Nouvelle Demande"
     },
     "error": {
-      "title": "Une erreur est survenue",
-      "description": "Impossible d’établir la connexion. Veuillez envoyer un e-mail."
+      "title": "Connexion Refusée",
+      "description": "Échec de la communication avec l'API. Veuillez nous contacter directement par e-mail."
     }
   },
   "Footer": {
-    "description": "Je conçois des systèmes autonomes et des expériences web modernes qui laissent une empreinte dans le monde numérique. Je crée de la valeur au-delà du code.",
-    "system_status": "Systèmes : Actifs",
-    "explore": "Explorer",
-    "stay_connected": "Rester connecté",
-    "project_idea": "Vous avez une nouvelle idée de projet ?",
-    "write_me": "écrivez-moi à",
-    "powered_by": "INFRASTRUCTURE"
+    "description": "Solutions numériques basées sur des standards web modernes et des systèmes autonomes, axées sur les performances et l'évolutivité.",
+    "system_status": "Tous les Systèmes : En Ligne & Stables",
+    "explore": "Carte du Système",
+    "stay_connected": "Réseaux de Communication",
+    "project_idea": "Vous cherchez à résoudre un problème complexe avec des logiciels ?",
+    "write_me": "contactez-moi via",
+    "powered_by": "INFRASTRUCTURE D'ARCHITECTURE"
   },
   "LanguageSwitcher": {
-    "label": "Choisir la langue"
+    "label": "Changer de Modèle de Langage"
+  },
+  "ContactPage": {
+    "status_badge": "Ouvert aux Nouvelles Opportunités B2B & Carrière",
+    "title_line1": "Transformons les systèmes complexes en",
+    "title_highlight": "produits évolutifs.",
+    "description": "Contactez-moi pour surmonter des défis d'ingénierie, obtenir des conseils techniques ou construire une infrastructure numérique moderne.",
+    "email_label": "Communication Directe",
+    "response_time": "SLA : Répond généralement dans les 24 heures",
+    "location_label": "Centre de Développement",
+    "social_label": "Réseaux & Dépôt"
   }
 }

@@ -1,12 +1,13 @@
+import { Geist, Geist_Mono } from "next/font/google";
+import { getMessages, getTranslations } from "next-intl/server";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Permanent_Marker } from "next/font/google";
-import "./globals.css"; // CSS dosyanın [locale] klasörü içinde olduğunu varsayıyoruz
+
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from "next-intl";
+import "./globals.css";
 
-// ✅ Font Tanımları
+// --- FONT CONFIGURATION ---
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,37 +18,54 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-const markerFont = Permanent_Marker({ 
-  weight: '400',
-  subsets: ['latin'],
-  variable: "--font-marker",
-});
+// --- DYNAMIC METADATA (i18n SEO) ---
+export async function generateMetadata({ 
+  params 
+}: { 
+  params: Promise<{ locale: string }> 
+}): Promise<Metadata> {
+  const { locale } = await params;
+  
+  // Çeviri dosyasından Metadata isim alanını çekiyoruz
+  const t = await getTranslations({ locale, namespace: "Metadata" });
 
-// ✅ Metadata (Şimdilik sabit kalabilir, ileride bunu da çevirebiliriz)
-export const metadata: Metadata = {
-  title: {
-    default: "Berkay | Full-stack Developer & AI Architect",
-    template: "%s | Berkay Portfolio"
-  },
-  description: "Modern web teknolojileri, otonom sistemler ve yapay zeka çözümleri üreten yazılım geliştiricisi.",
-  keywords: ["Next.js", "AI", "n8n", "React", "Developer", "Portfolio"],
-  authors: [{ name: "Berkay" }],
-  openGraph: {
-    type: "website",
-    locale: "tr_TR",
-    url: "https://berkay-dev.vercel.app/",
-    siteName: "Berkay Portfolio",
-    images: [
-      {
-        url: "/og-image.jpg", // public klasörüne havalı bir görsel atarsın
-        width: 1200,
-        height: 630,
-        alt: "Berkay Portfolio",
-      },
-    ],
-  },
-};
+  return {
+    title: {
+      default: "Berkay Türkyılmaz | Software Engineer & AI Architect",
+      template: "%s | Berkay Türkyılmaz"
+    },
+    description: t("description"),
+    keywords: ["Next.js", "AI Architecture", "n8n", "React", "Frontend", "Enterprise Web"],
+    authors: [{ name: "Berkay Türkyılmaz" }],
+    // 🎯 FAVICON VE APPLE IKON TANIMLAMALARI BURADA
+    icons: {
+      icon: [
+        { url: "/favicon.ico", sizes: "any" },
+        { url: "/icon.svg", type: "image/svg+xml" } // SVG logo kullanırsan çok daha keskin durur
+      ],
+      apple: [
+        { url: "/apple-touch-icon.png", sizes: "180x180" }
+      ]
+    },
+    openGraph: {
+      type: "website",
+      // Dile göre dinamik OpenGraph locale ayarı
+      locale: locale === "tr" ? "tr_TR" : locale === "de" ? "de_DE" : "en_US",
+      url: "https://berkay-dev.vercel.app/",
+      siteName: "Berkay Türkyılmaz Workspace",
+      images: [
+        {
+          url: "/og-image.jpg",
+          width: 1200,
+          height: 630,
+          alt: "Berkay Türkyılmaz Portfolio Architecture",
+        },
+      ],
+    },
+  };
+}
 
+// --- ROOT LAYOUT ---
 export default async function LocaleLayout({
   children,
   params
@@ -55,22 +73,24 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
 }) {
-  // Next.js 15+ için params promise olarak gelir, await ile çözeriz
   const { locale } = await params;
-  
-  // Dil mesajlarını sunucudan çekiyoruz
   const messages = await getMessages();
 
   return (
-    // 🌍 Dil (lang) artık dinamik: tr veya en
     <html lang={locale} suppressHydrationWarning>
       <body 
-        className={`${geistSans.variable} ${geistMono.variable} ${markerFont.variable} antialiased`}
+        className={`
+          ${geistSans.variable} 
+          ${geistMono.variable} 
+          antialiased 
+          min-h-screen 
+          bg-background 
+          text-foreground 
+          selection:bg-primary/20 
+          selection:text-primary
+        `}
       >
-        {/* 🌍 Çeviri Sağlayıcısı */}
         <NextIntlClientProvider messages={messages}>
-          
-          {/* 🎨 Tema Sağlayıcısı */}
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -79,12 +99,13 @@ export default async function LocaleLayout({
           >
             {children}
             
-            {/* 🔔 Bildirimler */}
+            {/* Premium Toast Bildirimleri */}
             <Toaster 
-              position="top-right" 
+              position="bottom-right" 
               richColors 
               closeButton 
-              duration={3000} 
+              duration={4000} 
+              theme="system"
             /> 
           </ThemeProvider>
         </NextIntlClientProvider>

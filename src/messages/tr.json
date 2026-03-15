@@ -1,8 +1,11 @@
 {
+  "Metadata": {
+    "description": "Modern web teknolojileri, ölçeklenebilir arayüzler ve yapay zeka destekli otonom sistemler üreten yazılım mühendisi."
+  },
   "Navigation": {
     "home": "Ana Sayfa",
-    "projects": "Çalışmalar",
-    "blog": "Projeler",
+    "projects": "Projeler",
+    "blog": "Blog",
     "lab": "AI Lab",
     "contact": "İletişim"
   },
@@ -41,7 +44,7 @@
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Teknik Makaleler & Mimari Notlar",
+      "subtitle": "Blog",
       "view_all": "Tümünü Oku",
       "posts": {
         "1": {
@@ -66,34 +69,104 @@
     "welcome": "Sistem hazır. Hangi veriyi analiz etmek istersiniz?",
     "sidebar": {
       "categories": {
-        "tools": "MÜHENDİSLİK ARAÇLARI",
-        "apps": "SİSTEM ENTEGRASYONLARI"
+        "tools": "ARAÇLAR",
+        "projects": "PROJELER"
       },
       "items": {
-        "chat": "LLM Terminali",
+        "terminal": "LLM Terminali",
+        "terminal_desc": "AI asistan",
         "pdf": "Döküman Analizi",
-        "prompt": "Sistem Mühendisi",
-        "youtube": "Veri Çıkarımı",
-        "scheduler": "Randevu Otomasyonu"
+        "pdf_desc": "RAG · PDF",
+        "engineer": "Sistem Mühendisi",
+        "engineer_desc": "Mimari",
+        "english": "EnglishPath",
+        "english_desc": "AI EdTech",
+        "booking": "Booking SaaS",
+        "booking_desc": "Randevu sistemi"
       },
-      "new_chat": "Yeni Oturum",
-      "user_status": "Yetkili Kullanıcı"
+      "new_chat": "Yeni Sohbet",
+      "settings": "Ayarlar",
+      "user_status": "Yetkili Kullanıcı",
+      "soon": "Yakında"
     },
-    "input": {
-      "placeholders": {
-        "chat": "Sistem mimarisi, kod analizi veya entegrasyon senaryoları hakkında danışın...",
-        "pdf": "Yüklenen dökümandan veri yapıları veya özetler talep edin...",
-        "prompt": "İhtiyacınızı belirtin, optimize edilmiş bir komut dizisine dönüştüreyim..."
-      },
-      "warning": "Bu sistem Ar-Ge amaçlı yerel LLM modelleri kullanmaktadır. Kritik operasyonlar öncesi çıktıları doğrulayınız."
+    "chat": {
+      "terminal_empty_title": "BEX hazır.",
+      "terminal_empty_desc": "Next.js, Supabase, n8n entegrasyonu veya Berkay'ın projeleri hakkında her şeyi sorabilirsin.",
+      "pdf_empty_title": "Döküman yükle, analiz et.",
+      "pdf_empty_desc": "PDF, TXT veya MD dosyası yükle — BEX içeriği okuyup sorularını yanıtlar.",
+      "engineer_empty_title": "Mimari danışman aktif.",
+      "engineer_empty_desc": "Sistem tasarımı, infrastructure kararları ve trade-off analizleri için buradayım.",
+      "thinking": "düşünüyor",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "stop": "Durdur",
+      "send": "Gönder",
+      "placeholder_terminal": "Bir şeyler sor veya kod yaz...",
+      "placeholder_pdf_loaded": "hakkında sor...",
+      "placeholder_pdf_empty": "Önce bir dosya yükle...",
+      "placeholder_engineer": "Mimari veya DevOps sorusu sor...",
+      "upload_drag": "Dosya sürükle veya tıkla",
+      "upload_formats": "PDF · TXT · MD — Maks 20 MB",
+      "upload_reading": "PDF okunuyor...",
+      "uploaded_label": "Yüklendi · Soru sorabilirsin",
+      "footer_warning": "BEX · AR-GE sistemi — çıktıları doğrulayın",
+      "error_network": "Bağlantı hatası. İnternet bağlantını kontrol et.",
+      "error_stream": "Yanıt alınırken sorun oluştu. Tekrar dene.",
+      "suggested_terminal_1": "Supabase RLS politikası nasıl yazılır?",
+      "suggested_terminal_2": "Next.js 15'te streaming API route nasıl yapılır?",
+      "suggested_terminal_3": "n8n ile Telegram bot nasıl kurulur?",
+      "suggested_terminal_4": "pgvector ile semantic search nasıl implement edilir?",
+      "suggested_pdf_1": "Bu dökümanı özetle",
+      "suggested_pdf_2": "Ana başlıkları listele",
+      "suggested_pdf_3": "En önemli veri noktaları neler?",
+      "suggested_pdf_4": "Yazarın ana argümanı nedir?",
+      "suggested_engineer_1": "Monolith mu, microservices mi? Trade-off'ları açıkla",
+      "suggested_engineer_2": "n8n ile Supabase nasıl entegre edilir?",
+      "suggested_engineer_3": "Vercel Edge vs Node.js runtime farkı nedir?",
+      "suggested_engineer_4": "PostgreSQL connection pooling nasıl yapılandırılır?"
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "subtitle": "BEX Workspace Yapılandırması",
+      "display_name": "Görünen İsim",
+      "display_name_placeholder": "Adınız...",
+      "save": "Kaydet",
+      "model": "AI Modeli",
+      "response_length": "Yanıt Uzunluğu",
+      "length_short": "Kısa",
+      "length_short_desc": "Özet",
+      "length_medium": "Orta",
+      "length_medium_desc": "Dengeli",
+      "length_detailed": "Detaylı",
+      "length_detailed_desc": "Kapsamlı",
+      "creativity": "Yaratıcılık",
+      "creativity_precise": "Kesin",
+      "creativity_creative": "Yaratıcı",
+      "language": "Yanıt Dili",
+      "streaming": "Streaming Modu",
+      "streaming_desc": "Yanıtı gerçek zamanlı göster",
+      "danger_zone": "Tehlikeli Alan",
+      "clear_chat": "Aktif sohbeti temizle",
+      "cleared": "Sohbet temizlendi",
+      "close": "Kapat",
+      "version": "BEX · AI Lab v2.0",
+      "theme": "Tema",
+      "theme_dark": "Koyu",
+      "theme_light": "Açık",
+      "theme_system": "Sistem"
+    },
+    "header": {
+      "new_chat": "Yeni Sohbet",
+      "model_label": "Model"
     }
   },
   "ProjectsPage": {
     "badge": "PORTFOLYO & MİMARİ",
-    "title": "Sistemler ve Ürünler",
+    "title": "Projeler",
     "description": "Full-stack geliştirmeden veri otomasyon çözümlerine kadar uçtan uca mimarisini kurduğum dijital ürünler."
   },
   "ProjectsSection": {
+    "badge": "Portfolyo Arşivi",
     "title": "Sistem Kataloğu",
     "description": "n8n webhook'ları ve serverless mimariler kullanılarak gerçek zamanlı yönetilen, dinamik portfolyo arayüzü.",
     "tech_stack_title": "TEKNOLOJİ YIĞINI (TECH STACK)",
@@ -123,15 +196,33 @@
     }
   },
   "BlogHub": {
-    "title": "Makaleler & Analizler",
+    "title": "Blog Yazıları",
     "description": "Modern web mimarisi, ölçeklenebilirlik, yapay zeka entegrasyonları ve DevOps süreçleri üzerine teknik notlar.",
     "search_placeholder": "Makale, etiket veya teknoloji ara...",
     "no_results": "Bu kriterlere uygun bir teknik makale bulunamadı.",
+    "empty_title": "Sonuç Bulunamadı",
+    "clear_filters": "Filtreleri Temizle",
+    "audio_article": "Sesli Makale",
+    "audio_label": "Sesli",
     "categories": {
       "all": "Tümü",
       "architecture": "Sistem Mimarisi",
       "ai": "Yapay Zeka",
       "automation": "Otomasyon"
+    },
+    "posts": {
+      "1": {
+        "title": "Next.js 15 ve Modern Portfolyo Mimarisi",
+        "excerpt": "Tailwind v4, i18n ve Server Actions kullanarak global standartlarda bir yazılım portfolyosu nasıl hazırlanır?",
+        "date": "31 Oca 2026",
+        "read_time": "8 dk"
+      },
+      "2": {
+        "title": "Yapay Zeka Destekli Otomasyonlar",
+        "excerpt": "n8n ve Google Gemini kullanarak iş süreçlerini nasıl otomatize edebilirsiniz?",
+        "date": "28 Oca 2026",
+        "read_time": "5 dk"
+      }
     }
   },
   "BlogDetail": {
