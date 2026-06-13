@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Loader2, Send, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { WEBHOOKS } from "@/lib/config/webhooks";
 
 type FormData = {
   name: string;
@@ -32,7 +33,7 @@ export default function ContactForm() {
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
     try {
-      const response = await fetch("https://n8n.138.197.186.170.sslip.io/webhook/contact-form", {
+      const response = await fetch(WEBHOOKS.contact, {
         method: "POST",
         body: JSON.stringify({
           ...data,
@@ -74,9 +75,9 @@ export default function ContactForm() {
   const errorStyles = "border-red-500/30 focus:ring-red-500/10 focus:border-red-500/30 bg-red-500/5";
 
   return (
-    <div className="bg-card/30 backdrop-blur-md border border-border/40 rounded-[2rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+    <div className="relative overflow-hidden rounded-2xl border border-border/40 bg-card/30 p-6 shadow-lg backdrop-blur-md sm:p-8 md:p-10">
       {/* Dekoratif Işık (Daha soft) */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      <div className="pointer-events-none absolute top-0 right-0 h-48 w-48 rounded-full bg-primary/[0.03] blur-3xl" aria-hidden />
 
       <AnimatePresence mode="wait">
         {isSuccess ? (
@@ -149,7 +150,7 @@ export default function ContactForm() {
                       required: t("inputs.errors.required"), // Boşsa bu hata
                       pattern: {
                         value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, // Regex Kontrolü
-                        message: "Geçersiz e-posta adresi" // Format yanlışsa bu hata (Bunu JSON'dan çekebilirsin)
+                        message: t("inputs.errors.invalid_email"),
                       }
                     })}
                     type="email"

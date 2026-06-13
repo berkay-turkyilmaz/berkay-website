@@ -11,7 +11,7 @@ const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 export const maxDuration = 60;
 
 type ResponseLength = "short" | "medium" | "detailed";
-type Language = "tr" | "en";
+type Language = "tr" | "en" | "de";
 
 // ─── Native PDF text extractor with zlib decompression ───────────────────────
 
@@ -198,7 +198,12 @@ function buildSystemPrompt(
   responseLength: ResponseLength,
   language: Language
 ): string {
-  const langInstr = language === "en" ? "LANGUAGE: Respond in English." : "DİL: Türkçe yanıt ver.";
+  const langInstr =
+    language === "en"
+      ? "LANGUAGE: Respond in English."
+      : language === "de"
+        ? "SPRACHE: Antworte auf Deutsch."
+        : "DİL: Türkçe yanıt ver.";
   const docContext = relevantChunks.map((c, i) => `[Bölüm ${i + 1}]\n${c}`).join("\n\n---\n\n");
 
   return `Sen BEX'in Döküman Analiz modusundasın.
@@ -285,13 +290,16 @@ export async function POST(req: NextRequest) {
         language = "tr",
       } = await req.json();
 
+      const lang: Language =
+        language === "en" || language === "de" ? language : "tr";
+
       if (!chunks?.length) {
         return Response.json({ error: "Döküman içeriği boş. Önce dosya yükleyin." }, { status: 400 });
       }
 
       const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === "user");
       const relevant = retrieveTopChunks(chunks, lastUser?.content ?? "");
-      const system = buildSystemPrompt(relevant, chunks.length, fileName, responseLength, language);
+      const system = buildSystemPrompt(relevant, chunks.length, fileName, responseLength, lang);
 
       const result = streamText({ model: groq(model), system, messages, temperature });
 

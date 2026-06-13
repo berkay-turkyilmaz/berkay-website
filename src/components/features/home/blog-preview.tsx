@@ -3,43 +3,63 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, Tag, ChevronRight } from "lucide-react";
-
-const LATEST_POSTS = [
-  { id: 1, title: "Next.js 15 ve Mikro-Frontend Mimarisi", excerpt: "Server Actions, React Server Components ve Edge computing ile ölçeklenebilir kurumsal web mimarisi tasarımı.", date: "31 Oca 2026", readTime: "8 dk", slug: "nextjs-enterprise-architecture", category: "Architecture" },
-  { id: 2, title: "İş Süreçlerinde LLM ve n8n Otomasyonu", excerpt: "Yerel yapay zeka modelleri ve webhook'lar kullanarak manuel veri akışlarını otonom sistemlere dönüştürme rehberi.", date: "28 Oca 2026", readTime: "6 dk", slug: "autonomous-workflows-n8n", category: "Automation" }
-];
+import { ArrowRight, Clock } from "lucide-react";
+import { BLOG_POSTS } from "@/lib/blog/posts";
 
 export function BlogPreview() {
   const t = useTranslations("HomePage");
+  const tHub = useTranslations("BlogHub");
 
   return (
-    <section id="blog" className="scroll-mt-32">
-      <div className="flex items-end justify-between mb-10 pb-6 border-b border-border/40">
+    <section id="blog" className="scroll-mt-28">
+      <div className="mb-8 flex flex-col gap-4 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2">
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">{t("blog_preview.title") || "Teknik Makaleler"}</h2>
-          <p className="text-muted-foreground/80 font-medium">{t("blog_preview.description")}</p>
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+            {t("sections.blog_label")}
+          </p>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-4xl">
+            {t("blog_preview.title")}
+          </h2>
+          <p className="text-sm text-muted-foreground sm:text-base">
+            {t("blog_preview.description")}
+          </p>
         </div>
-        <Link href="/blog" className="hidden sm:flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors group pb-1">
-          {t("blog_preview.view_all") || "Tümünü Oku"} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+        <Link
+          href="/blog"
+          className="group inline-flex items-center gap-2 self-start text-sm font-bold text-muted-foreground transition-colors hover:text-foreground sm:self-auto"
+        >
+          {t("blog_preview.view_all")}
+          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
         </Link>
       </div>
 
-      <div className="space-y-3">
-        {LATEST_POSTS.map((post, index) => (
-          <motion.div key={post.id} initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ duration: 0.4, delay: index * 0.1 }}>
-            <Link href={`/blog/${post.slug}`} className="group block">
-              <article className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-6 p-5 sm:p-6 -mx-5 sm:-mx-6 rounded-2xl hover:bg-secondary/50 border border-transparent hover:border-border transition-all duration-300">
-                <div className="flex-1 space-y-2.5">
-                  <h3 className="text-lg md:text-xl font-bold text-foreground group-hover:text-primary transition-colors leading-snug">{post.title}</h3>
-                  <p className="text-sm text-muted-foreground/80 line-clamp-1 sm:line-clamp-none max-w-2xl">{post.excerpt}</p>
-                  <div className="flex items-center gap-4 text-xs font-semibold text-muted-foreground pt-1">
-                    <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md bg-secondary"><Tag className="w-3 h-3 text-primary" />{post.category}</span>
-                    <span className="inline-flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{post.readTime}</span>
-                    <span className="opacity-40">•</span><span>{post.date}</span>
-                  </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {BLOG_POSTS.map((post, index) => (
+          <motion.div
+            key={post.id}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-40px" }}
+            transition={{ delay: index * 0.1, duration: 0.4 }}
+          >
+            <Link href={`/blog/${post.slug}`} className="group block h-full">
+              <article className="flex h-full flex-col rounded-xl border border-border/50 bg-card p-5 transition-all duration-300 hover:border-primary/20 hover:shadow-md sm:p-6">
+                <span className="mb-3 inline-flex w-fit rounded-md bg-secondary px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                  {tHub(`categories.${post.category}`)}
+                </span>
+                <h3 className="text-lg font-bold leading-snug text-foreground transition-colors group-hover:text-primary">
+                  {tHub(`posts.${post.id}.title`)}
+                </h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground line-clamp-3">
+                  {tHub(`posts.${post.id}.excerpt`)}
+                </p>
+                <div className="mt-4 flex items-center justify-between gap-2 border-t border-border/40 pt-4 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    {tHub(`posts.${post.id}.read_time`)}
+                  </span>
+                  <span>{tHub(`posts.${post.id}.date`)}</span>
                 </div>
-                <ChevronRight className="hidden sm:block w-5 h-5 text-muted-foreground/30 group-hover:text-foreground group-hover:translate-x-1 transition-all flex-shrink-0" />
               </article>
             </Link>
           </motion.div>

@@ -9,33 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Link } from "@/i18n/routing";
 import { Search, Calendar, Clock, ArrowRight, Filter, Headphones } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BLOG_POSTS } from "@/lib/blog/posts";
 
-// Bileşen ismi BlogHub'dan Blog'a çevrildi
 export default function Blog() {
-  // useTranslations namespacesi "Blog" olarak güncellendi!
   const t = useTranslations("BlogHub");
 
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Artık tarih (date) ve dakika (readTime) json'dan geliyor.
-  // Burada sadece ID, slug, kategori gibi meta veriler kaldı.
-  const ALL_POSTS = [
-    {
-      id: "1",
-      slug: "nextjs-portfolio-guide",
-      category: "architecture",
-      hasAudio: true
-    },
-    {
-      id: "2",
-      slug: "ai-automation-guide",
-      category: "ai",
-      hasAudio: false
-    },
-  ];
-
-  const filteredPosts = ALL_POSTS.filter((post) => {
+  const filteredPosts = BLOG_POSTS.filter((post) => {
     const title = t(`posts.${post.id}.title`).toLowerCase();
     const excerpt = t(`posts.${post.id}.excerpt`).toLowerCase();
     const query = searchQuery.toLowerCase();

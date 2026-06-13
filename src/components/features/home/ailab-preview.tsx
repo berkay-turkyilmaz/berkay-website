@@ -1,50 +1,68 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight } from "lucide-react";
 import N8NCanvas from "@/components/features/home/n8n-canvas";
 
 export function AiLabPreview() {
+  const t = useTranslations("HomePage");
+
   return (
-    <section className="space-y-6">
-      
-      {/* N8N Canvas Area - Görünür Kutu */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} className="relative rounded-[2rem] bg-secondary/10 shadow-sm border border-border/50 p-4 sm:p-6 overflow-hidden">
-        <div className="absolute top-8 left-8 z-10 flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-background/90 backdrop-blur-md shadow-sm border border-border/50">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-          </span>
-          <span className="text-[10px] font-mono font-bold text-foreground/80 uppercase tracking-widest">System Operational</span>
+    <section className="space-y-8">
+      <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="max-w-2xl space-y-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+            {t("sections.lab_label")}
+          </p>
+          <h2 className="text-2xl font-extrabold tracking-tight text-foreground sm:text-3xl md:text-[2rem] md:leading-tight">
+            {t("ai_lab.title")}
+          </h2>
+          <p className="text-sm leading-relaxed text-muted-foreground sm:text-[15px] sm:leading-relaxed">
+            {t("ai_lab.description")}
+          </p>
+          <p className="text-xs font-medium tracking-wide text-muted-foreground/70">
+            {t("ai_lab.subline")}
+          </p>
         </div>
-        <div className="h-[450px] sm:h-[500px] w-full bg-card rounded-2xl overflow-hidden border border-border/40 shadow-inner">
+        <Link
+          href="/ai-lab"
+          className="group inline-flex items-center gap-2.5 self-start rounded-full border border-border/60 bg-background px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:border-primary/25 hover:bg-secondary/40 md:self-auto"
+        >
+          {t("cta_lab")}
+          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </Link>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-48px" }}
+        transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+        className="overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-b from-secondary/20 to-background shadow-lg shadow-black/5 ring-1 ring-border/30"
+      >
+        <div className="flex items-center justify-between gap-4 border-b border-border/40 bg-secondary/20 px-4 py-3 sm:px-5">
+          <div className="flex items-center gap-2.5">
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/60 opacity-75 motion-reduce:animate-none" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+            </span>
+            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
+              {t("automation.system_active")}
+            </span>
+          </div>
+          <span className="rounded-full border border-border/40 bg-background/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+            {t("ai_lab.tag")}
+          </span>
+        </div>
+        <div className="relative h-[340px] w-full overflow-hidden bg-[#030712] sm:h-[420px] md:h-[480px]">
+          <div
+            className="pointer-events-none absolute inset-0 z-10 bg-[linear-gradient(to_bottom,transparent_0%,transparent_85%,rgba(3,7,18,0.4)_100%)]"
+            aria-hidden
+          />
           <N8NCanvas />
         </div>
-      </motion.div>
-
-      {/* AI Lab CTA - Görünür ve Estetik Kart */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.1 }}>
-        <Link href="/ai-lab" className="group block relative overflow-hidden rounded-[2rem] bg-card p-8 sm:p-12 shadow-md border border-border/50 hover:border-primary/40 hover:shadow-xl transition-all duration-500">
-          
-          <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" aria-hidden="true" />
-          
-          <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-8">
-            <div className="space-y-5 max-w-xl">
-              <Badge variant="outline" className="text-[10px] uppercase tracking-widest font-bold bg-secondary/50 border-border/50 shadow-sm">
-                <Sparkles className="w-3 h-3 mr-1.5 text-primary" /> R&D Phase
-              </Badge>
-              <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground">AI & Automation Lab</h3>
-              <p className="text-muted-foreground font-medium leading-relaxed text-balance">Yerel LLM modelleri ve n8n ile kurgulanmış akıllı iş akışları, veri işleme botları ve otonom asistanların test ortamı.</p>
-            </div>
-            <div className="flex-shrink-0">
-              <div className="h-14 w-14 rounded-full bg-secondary border border-border/50 group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary flex items-center justify-center transition-all duration-300 group-hover:scale-110 shadow-sm">
-                <ArrowRight className="w-5 h-5" />
-              </div>
-            </div>
-          </div>
-        </Link>
       </motion.div>
     </section>
   );

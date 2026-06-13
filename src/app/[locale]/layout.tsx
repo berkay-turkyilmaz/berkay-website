@@ -31,28 +31,24 @@ export async function generateMetadata({
 
   return {
     title: {
-      default: "Berkay Türkyılmaz | Software Engineer & AI Architect",
-      template: "%s | Berkay Türkyılmaz"
+      default: "BERKAY | Software Engineer & AI Architect",
+      template: "%s | BERKAY"
     },
     description: t("description"),
     keywords: ["Next.js", "AI Architecture", "n8n", "React", "Frontend", "Enterprise Web"],
     authors: [{ name: "Berkay Türkyılmaz" }],
-    // 🎯 FAVICON VE APPLE IKON TANIMLAMALARI BURADA
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
-        { url: "/icon.svg", type: "image/svg+xml" } // SVG logo kullanırsan çok daha keskin durur
+        { url: "/icon.svg", type: "image/svg+xml" },
       ],
-      apple: [
-        { url: "/apple-touch-icon.png", sizes: "180x180" }
-      ]
+      apple: [{ url: "/apple-icon", sizes: "180x180" }],
     },
     openGraph: {
       type: "website",
-      // Dile göre dinamik OpenGraph locale ayarı
       locale: locale === "tr" ? "tr_TR" : locale === "de" ? "de_DE" : "en_US",
       url: "https://berkay-dev.vercel.app/",
-      siteName: "Berkay Türkyılmaz Workspace",
+      siteName: "BERKAY",
       images: [
         {
           url: "/og-image.jpg",

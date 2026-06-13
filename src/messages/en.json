@@ -10,19 +10,40 @@
       "contact": "Contact"
     },
     "HomePage": {
-      "badge": "System Operational & Open for Opportunities",
-      "title": "Engineering-Driven Digital Experiences",
-      "description": "I architect scalable interfaces and AI-driven autonomous workflows (n8n) utilizing modern web architectures like Next.js.",
-      "cta_projects": "Explore Projects",
-      "cta_lab": "Discover AI Lab",
+      "badge": "Open for new opportunities",
+      "title": "I build products that scale.",
+      "description": "Full-stack engineer shipping Next.js apps, Supabase backends, and AI automations with n8n.",
+      "cta_projects": "View projects",
+      "cta_lab": "Open AI Lab",
       "hero": {
-        "name": "BERKAY",
-        "portfolio": "WORKSPACE"
+        "scroll_down": "Scroll to content",
+        "scroll_hint": "Explore"
       },
       "sections": {
+        "projects_label": "01 — Portfolio",
+        "lab_label": "02 — Laboratory",
+        "blog_label": "03 — Publications",
         "projects_preview_title": "Selected Works",
         "projects_preview_desc": "Performance-oriented and scalable digital product architectures meeting complex business requirements.",
         "view_all_work": "View All Works"
+      },
+      "featured": {
+        "explore": "Explore",
+        "1": {
+          "title": "Enterprise Web Architecture",
+          "description": "High-performance digital ecosystem built with Next.js 15, React Server Components, and i18n.",
+          "stack": "Next.js · TypeScript · Supabase"
+        },
+        "2": {
+          "title": "Autonomous Booking & CRM",
+          "description": "Appointment automation syncing Google Calendar and SMS webhooks via n8n and serverless architecture.",
+          "stack": "n8n · Webhooks · Serverless"
+        },
+        "3": {
+          "title": "AI & Automation Laboratory",
+          "description": "Live sandbox for Groq LLM, document analysis, and terminal-based agent experiments.",
+          "stack": "Groq · Next.js · AI Agents"
+        }
       },
       "projects": {
         "saas_card": {
@@ -31,16 +52,20 @@
         },
         "code_card": {
           "comment": "// Initializing innovation and scalability...",
+          "filename": "~/system/architecture.ts",
+          "badge": "Production ready",
           "wip": "Preparing for Production"
         }
       },
       "automation": {
-        "system_active": "System: Active & Online"
+        "system_active": "System online",
+        "mobile_pipeline": "Workflow"
       },
       "ai_lab": {
-        "tag": "R&D Phase",
-        "title": "AI & Automation Laboratory",
-        "description": "Smart data processing and autonomous system test environment built with local LLMs and webhook integrations."
+        "tag": "Live prototype",
+        "title": "AI & Automation Studio",
+        "description": "Groq agents, document analysis, and n8n workflows — production-grade live experiments.",
+        "subline": "BEX assistant · Deep analysis · Automation layer"
       },
       "blog": {
         "title": "Blog",
@@ -69,10 +94,30 @@
     "welcome": "System ready. What would you like to analyze?",
     "sidebar": {
       "categories": {
+        "chat": "CHAT",
         "tools": "TOOLS",
+        "portfolio": "PROJECTS",
+        "laboratory": "LABORATORY",
+        "tools_legacy": "TOOLS",
         "projects": "PROJECTS"
       },
       "items": {
+        "bex_assistant": "BEX Assistant",
+        "bex_assistant_desc": "Technical Q&A and portfolio",
+        "document_rag": "Document Analysis",
+        "document_rag_desc": "PDF · TXT · RAG",
+        "deep_analyzer": "Context Analysis",
+        "deep_analyzer_desc": "Text and token visualization",
+        "chain_terminal": "Chain-of-thought",
+        "chain_terminal_desc": "Multi-step reasoning",
+        "agent_console": "BEX Assistant",
+        "agent_console_desc": "Technical Q&A and portfolio",
+        "prompt_sandbox": "Document Analysis",
+        "prompt_sandbox_desc": "PDF · TXT · RAG",
+        "nav_settings": "Settings",
+        "nav_settings_desc": "Model and workspace",
+        "nav_api": "API configuration",
+        "nav_api_desc": "Keys and usage",
         "terminal": "LLM Terminal",
         "terminal_desc": "AI assistant",
         "pdf": "Document Analysis",
@@ -85,17 +130,23 @@
         "booking_desc": "Appointment system"
       },
       "new_chat": "New Chat",
+      "expand": "Expand menu",
+      "history": "History",
+      "history_search": "Search...",
       "settings": "Settings",
-      "user_status": "Authorized User",
-      "soon": "Soon"
+      "user_status": "Workspace",
+      "soon": "Soon",
+      "back_home": "Back to site",
+      "ui_language": "Interface language",
+      "guest_user": "Guest"
     },
     "chat": {
       "terminal_empty_title": "BEX ready.",
       "terminal_empty_desc": "Ask anything about Next.js, Supabase, n8n integrations, or Berkay's projects.",
       "pdf_empty_title": "Upload a document, analyze it.",
       "pdf_empty_desc": "Upload a PDF, TXT or MD file — BEX reads the content and answers your questions.",
-      "engineer_empty_title": "Architecture advisor active.",
-      "engineer_empty_desc": "System design, infrastructure decisions, and trade-off analysis — I'm here.",
+      "engineer_empty_title": "Hi, I'm BEX.",
+      "engineer_empty_desc": "Ask about Next.js, Supabase, AI architecture, or Berkay's projects.",
       "thinking": "thinking",
       "copy": "Copy",
       "copied": "Copied",
@@ -104,14 +155,28 @@
       "placeholder_terminal": "Ask something or write code...",
       "placeholder_pdf_loaded": "Ask about...",
       "placeholder_pdf_empty": "Upload a file first...",
-      "placeholder_engineer": "Ask an architecture or DevOps question...",
+      "placeholder_engineer": "Ask a question or paste code...",
       "upload_drag": "Drag file or click",
       "upload_formats": "PDF · TXT · MD — Max 20 MB",
       "upload_reading": "Reading PDF...",
       "uploaded_label": "Uploaded · You can ask questions",
+      "workflow_panel_title": "Reasoning trace",
+      "workflow_step_context": "Analyzing context…",
+      "workflow_step_scan": "Scanning data sources…",
+      "workflow_step_synthesize": "Synthesizing response…",
       "footer_warning": "BEX · R&D system — verify outputs",
       "error_network": "Connection error. Check your internet.",
       "error_stream": "Error receiving response. Please retry.",
+      "error_file_too_large": "File too large. Maximum 20 MB.",
+      "error_file_process": "Could not process the file.",
+      "error_server_connect": "Could not reach the server. Try again.",
+      "error_api_key": "AI service is not configured on the server.",
+      "role_user": "You",
+      "role_assistant": "Assistant",
+      "time_just_now": "just now",
+      "time_mins": "{n}m",
+      "time_hours": "{n}h",
+      "time_days": "{n}d",
       "suggested_terminal_1": "How to write Supabase RLS policies?",
       "suggested_terminal_2": "How to create a streaming API route in Next.js 15?",
       "suggested_terminal_3": "How to set up a Telegram bot with n8n?",
@@ -123,11 +188,29 @@
       "suggested_engineer_1": "Monolith vs microservices — explain the trade-offs",
       "suggested_engineer_2": "How to integrate n8n with Supabase?",
       "suggested_engineer_3": "Vercel Edge vs Node.js runtime differences?",
-      "suggested_engineer_4": "How to configure PostgreSQL connection pooling?"
+      "suggested_engineer_4": "How to configure PostgreSQL connection pooling?",
+      "engineer_prompt_chip_1": "Who is Berkay and what does he build?",
+      "engineer_prompt_chip_2": "Summarize Berkay's web development experience",
+      "engineer_prompt_chip_3": "How do you scale a product with Next.js and Supabase?",
+      "engineer_prompt_chip_4": "Give a short overview of Berkay's portfolio projects"
     },
     "settings": {
       "title": "Settings",
       "subtitle": "BEX Workspace Configuration",
+      "subtitle_short": "Workspace",
+      "nav_label": "Settings sections",
+      "section_profile": "Profile",
+      "section_response": "Response",
+      "lang_auto": "Auto",
+      "hint_general": "Generation settings for the Groq-powered assistant.",
+      "hint_data": "Session chat stored locally in your browser.",
+      "ui_dark_note": "AI Lab is designed for a dark palette. Site-wide light/dark is controlled from the main layout, not here.",
+      "language_bex_hint": "Language BEX uses to answer (independent of the page locale).",
+      "lang_auto_desc": "Match page language",
+      "lang_tr_desc": "Always Turkish",
+      "lang_en_desc": "Always English",
+      "lang_de_desc": "Always German",
+      "danger_clear_hint": "Deletes the active chat on this device only.",
       "display_name": "Display Name",
       "display_name_placeholder": "Your name...",
       "save": "Save",
@@ -153,14 +236,77 @@
       "theme": "Theme",
       "theme_dark": "Dark",
       "theme_light": "Light",
-      "theme_system": "System"
+      "theme_system": "System",
+      "models": {
+        "llama_8b_label": "Llama 3.1 8B",
+        "llama_8b_desc": "Fast replies — daily use",
+        "llama_8b_speed": "~200 t/s",
+        "llama_70b_label": "Llama 3.3 70B",
+        "llama_70b_desc": "Deeper analysis for complex questions",
+        "llama_70b_speed": "~80 t/s"
+      }
     },
     "header": {
       "new_chat": "New Chat",
       "model_label": "Model"
+    },
+    "deepAnalyzer": {
+      "title": "Deep Analyzer",
+      "subtitle": "Context window · Groq Llama",
+      "view_heatmap": "Heatmap",
+      "view_split": "Split",
+      "view_graph": "Graph",
+      "upload_title": "Drag & drop or click to select",
+      "upload_hint": "PDF · TXT · MD — imported into the analysis field (max 20 MB)",
+      "placeholder": "Paste text to analyze here...",
+      "token_estimate": "~{n} tokens",
+      "analyze": "Analyze",
+      "analyzing": "Analyzing...",
+      "or": "or",
+      "sample_technical": "Technical excerpt",
+      "sample_academic": "Academic text",
+      "sample_blog": "Blog post",
+      "context_window": "Context Window",
+      "context_fill": "{pct}% full · Llama 3.1 8192 token limit",
+      "compression_title": "Compression opportunity",
+      "compression_body": "Text could be written {pct}% more efficiently.",
+      "copy_optimized": "Copy optimized",
+      "copied": "Copied!",
+      "chunk_roles": "Chunk roles",
+      "role_subject": "Subject / main idea",
+      "role_predicate": "Predicate / action",
+      "role_context": "Context",
+      "role_evidence": "Evidence / support",
+      "role_connector": "Connector",
+      "role_conclusion": "Conclusion",
+      "scanning": "Scanning text...",
+      "scan_parsed": "✓ Sentences parsed",
+      "scan_tokens": "✓ Token count complete",
+      "scan_semantic": "→ Groq Llama 3.1 running semantic analysis...",
+      "heatmap_title": "Semantic heatmap",
+      "heatmap_hint": "Hover → detail panel",
+      "graph_title": "Semantic connection graph",
+      "graph_hint": "Scroll → zoom · Drag → pan",
+      "chunk_label": "Chunk #{n}",
+      "weight": "Weight",
+      "related": "Related:",
+      "table_title": "Full analysis table",
+      "col_num": "#",
+      "col_text": "Text",
+      "col_role": "Role",
+      "col_weight": "Weight",
+      "col_token": "Tokens",
+      "col_redundancy": "Redundancy",
+      "col_reason": "Reason",
+      "error_file_too_large": "File too large. Maximum 20 MB.",
+      "error_pdf_process": "Could not process PDF.",
+      "error_file_read": "Could not read file.",
+      "error_unsupported": "Supported formats: PDF, TXT, MD.",
+      "error_analysis": "Analysis failed",
+      "error_unknown": "Unknown error"
     }
   },
-    "ProjectsPage": {
+  "ProjectsPage": {
       "badge": "PORTFOLIO & ARCHITECTURE",
       "title": "Systems & Products",
       "description": "End-to-end architected digital products, from full-stack development to data automation solutions."
@@ -273,7 +419,331 @@
     "LanguageSwitcher": {
       "label": "Change Language Model"
     },
-    "ContactPage": {
+    "NotFound": {
+    "title": "Page Not Found",
+    "description": "The autonomous system you are looking for could not be located at these coordinates.",
+    "back": "Return to Base"
+  },
+  "EnglishPath": {
+    "title": "EnglishPath",
+    "subtitle": "Classroom games & everyday English",
+    "back_lab": "Back to AI Lab",
+    "go_panel": "Back to dashboard",
+    "tabs": {
+      "dashboard": "Dashboard",
+      "grammar": "Grammar",
+      "flashcards": "Vocabulary",
+      "prepositions": "Prepositions",
+      "taboo": "Taboo",
+      "heads_up": "Heads Up",
+      "charades": "Charades",
+      "emoji_clues": "Emoji Clues",
+      "games": "Games",
+      "learn": "Learn",
+      "all_games": "All games",
+      "exam": "Exam",
+      "results": "Results",
+      "more": "More"
+    },
+    "header": {
+      "level": "Level",
+      "days": "Days"
+    },
+    "dashboard": {
+      "progress_title": "Progress",
+      "xp_label": "XP",
+      "total_exams": "Total Exams",
+      "taboo_games": "Taboo",
+      "heads_up_games": "Heads Up",
+      "words_guessed": "Guessed",
+      "start_exam": "Test Yourself",
+      "recent_exam": "Latest Exam",
+      "cards": "cards",
+      "play_together": "Play together in class",
+      "learn_section": "Learn & practice",
+      "level_label": "Level",
+      "modules": {
+        "flashcards": { "title": "Flashcards", "desc": "Everyday English words with real example sentences." },
+        "grammar": { "title": "Grammar", "desc": "Core rules with daily-life examples." },
+        "prepositions": { "title": "Preposition Drills", "desc": "Real sentences, not tech jargon." },
+        "taboo": { "title": "Taboo Game", "desc": "Simple everyday words · describe without forbidden words!" },
+        "heads_up": { "title": "Heads Up", "desc": "Hold the phone — friends describe, you guess." },
+        "charades": { "title": "Charades", "desc": "Act without speaking — your team guesses!" },
+        "emoji_clues": { "title": "Emoji Clues", "desc": "Guess the Emoji style — combine emojis, find the English word!" }
+      }
+    },
+    "games_hub": {
+      "play": "Play",
+      "tip": "The most fun way to learn with friends!",
+      "deck_why": "Each game has a different word count because the rules differ: Taboo needs forbidden-word lists, Charades needs mime-friendly words, Emoji Clues needs visual hints.",
+      "deck_notes": {
+        "taboo": "Word + 5 forbidden words you cannot say.",
+        "heads_up": "Single word — friends read from the screen and describe.",
+        "charades": "Mime-friendly verbs and objects — no speaking.",
+        "emoji_clues": "40 puzzles · 3 modes · 10 questions, 3 lives — classic emoji quiz."
+      },
+      "title": "Classroom Games",
+      "subtitle": "Four word games to play with friends. Pick one and start!",
+      "cards": "cards",
+      "taboo": { "title": "Taboo", "desc": "Describe in English without forbidden words." },
+      "heads_up": { "title": "Heads Up", "desc": "Friends describe, you guess." },
+      "charades": { "title": "Charades", "desc": "Mime silently, team guesses." },
+      "emoji_clues": { "title": "Emoji Clues", "desc": "Combine emojis left to right — find one English word." }
+    },
+    "flashcards": {
+      "all": "All",
+      "mastered": "mastered",
+      "tap_flip": "Tap to flip",
+      "speak": "Speak",
+      "mark_mastered": "Mark learned",
+      "already_mastered": "Learned ✓"
+    },
+    "grammar": {
+      "intro": "Read each rule and mark complete to earn XP.",
+      "mark_complete": "Mark as complete"
+    },
+    "prepositions": {
+      "correct": "correct",
+      "restart": "Restart",
+      "next": "Next"
+    },
+    "exam": {
+      "title": "Level Exam",
+      "intro": "Pick a mode and start a {count}-question exam. Each mode uses different question styles.",
+      "pick_mode": "Exam type",
+      "pool": "questions",
+      "start": "Start Exam",
+      "correct_label": "correct",
+      "retry": "Try Again",
+      "view_results": "View Results",
+      "show_review": "Review Answers",
+      "hide_review": "Hide Review",
+      "review_title": "Answer review",
+      "your_answer": "Your answer",
+      "correct_answer": "Correct answer",
+      "next": "Next",
+      "finish": "Finish",
+      "exit_exam": "Exit exam",
+      "exit_confirm": "Leave the exam? Your progress will not be saved.",
+      "input_placeholder": "Type your answer...",
+      "modes": {
+        "mixed": "Mixed",
+        "multiple": "Multiple Choice",
+        "true_false": "True / False",
+        "tap": "Quick Tap",
+        "fill": "Fill in the Blank",
+        "translate": "Translation"
+      },
+      "mode_desc": {
+        "mixed": "A mix of all question types.",
+        "multiple": "Classic four-option multiple choice.",
+        "true_false": "Mark each statement true or false.",
+        "tap": "Quickly tap the correct option from two choices.",
+        "fill": "Type the missing word in the sentence.",
+        "translate": "Translate the Turkish sentence into English."
+      },
+      "types": {
+        "multiple": "Multiple Choice",
+        "fill": "Fill in the Blank",
+        "translate": "Translation",
+        "true_false": "True / False",
+        "tap": "Quick Tap"
+      }
+    },
+    "results": {
+      "title": "Exam History",
+      "empty": "No exam results yet.",
+      "take_exam": "Take Exam",
+      "clear": "Clear",
+      "exam_modes": {
+        "mixed": "Mixed",
+        "multiple": "Multiple Choice",
+        "true_false": "True / False",
+        "tap": "Quick Tap",
+        "fill": "Fill in the Blank",
+        "translate": "Translation"
+      }
+    },
+    "taboo": {
+      "title": "Taboo Game",
+      "subtitle": "Everyday words everyone knows. Describe in English without forbidden words — perfect for classroom team play!",
+      "modes": {
+        "practice": "Practice",
+        "practice_desc": "No timer, hints and pronunciation support.",
+        "timed": "Timed",
+        "timed_desc": "Countdown per card — think fast!",
+        "party": "Teams",
+        "party_desc": "Two teams take turns with a live scoreboard."
+      },
+      "pick_mode": "Pick a mode",
+      "category": "Category",
+      "difficulty": "Difficulty",
+      "all": "All",
+      "diff": { "easy": "Easy", "medium": "Medium", "hard": "Hard" },
+      "round_size": "Cards per round",
+      "show_meaning": "Show Turkish meaning",
+      "hide_meaning": "Hide Turkish meaning",
+      "cards_available": "cards available",
+      "no_cards_filter": "No cards match this filter. Try a different category or difficulty.",
+      "difficulty_counts": "Easy {easy} · Medium {medium} · Hard {hard}",
+      "rules_btn": "Rules",
+      "start_game": "Start Game",
+      "stats": {
+        "games": "Games",
+        "guessed": "Guessed",
+        "best": "Best",
+        "party": "Team A-B"
+      },
+      "round_complete": "Round Complete!",
+      "correct": "Correct",
+      "skipped": "Skip",
+      "fouls": "Taboo",
+      "party_score": "Team Score",
+      "back_setup": "Setup",
+      "play_again": "Play Again",
+      "team_a": "Team A",
+      "team_b": "Team B",
+      "current_turn": "Turn",
+      "forbidden": "Forbidden Words",
+      "foul_btn": "Taboo!",
+      "skip": "Skip",
+      "correct_btn": "Got it!",
+      "quit": "Quit game",
+      "rules": {
+        "title": "Taboo Rules",
+        "r1": "Describe the target word to your team in English.",
+        "r2": "You cannot use forbidden words or their root forms.",
+        "r3": "You cannot say or spell the target word directly.",
+        "r4": "If you say a forbidden word, opponents call 'Taboo!' — turn passes.",
+        "r5": "In timed mode, time out auto-skips the card.",
+        "r6": "In team mode, turns alternate after each card.",
+        "close": "Got it"
+      }
+    },
+    "heads_up": {
+      "title": "Heads Up",
+      "subtitle": "Hold the phone facing your friends. They describe the word in English — you guess.",
+      "how_title": "How to play",
+      "how_1": "One person holds the phone and does not look at the screen.",
+      "how_2": "Friends see the word and describe it in English.",
+      "how_3": "Got it? Green · Pass? Yellow · Round ends when time runs out.",
+      "all": "All",
+      "cards": "words",
+      "start": "Start Round",
+      "get_ready": "Get ready!",
+      "round_done": "Round Over!",
+      "words_guessed": "words guessed",
+      "menu": "Menu",
+      "again": "Again",
+      "friends_describe": "Your friends are describing this word",
+      "tilt_hint": "Large buttons — tap with your thumb",
+      "pass": "Pass",
+      "got_it": "Got it!",
+      "stat_games": "Games",
+      "stat_words": "Total",
+      "stat_best": "Best"
+    },
+    "games": {
+      "back_to_panel": "Back to dashboard",
+      "playing": "Game mode",
+      "round_timer": "Round timer",
+      "show_meaning": "Show Turkish meaning",
+      "hide_meaning": "Hide Turkish meaning"
+    },
+    "charades": {
+      "title": "Charades",
+      "subtitle": "Only you see the word. Act without speaking — your team guesses in English!",
+      "how_title": "How to play",
+      "how_1": "One player holds the phone and sees the word.",
+      "how_2": "Mime and gesture — no talking allowed.",
+      "how_3": "Team guessed right? Green · Pass? Yellow.",
+      "all": "All",
+      "cards": "words",
+      "start": "Start Round",
+      "get_ready": "Get ready!",
+      "round_done": "Round Over!",
+      "words_guessed": "words guessed",
+      "menu": "Menu",
+      "again": "Again",
+      "no_speaking": "No speaking!",
+      "only_you_see": "Only you can see this word",
+      "team_guesses": "Your team is guessing",
+      "pass": "Pass",
+      "got_it": "Got it!",
+      "stat_games": "Games",
+      "stat_words": "Total",
+      "stat_best": "Best"
+    },
+    "emoji_clues": {
+      "title": "Emoji Clues",
+      "tagline": "Combine the emojis → find one English word. (Guess the Emoji logic)",
+      "rule_title": "One rule",
+      "rule_body": "Read the emojis left to right. Each emoji is a clue. Together they point to a single English word. The Turkish meaning appears only after you answer.",
+      "pick_mode": "Choose game mode",
+      "pick_category": "Category",
+      "round_info": "Each round: {count} questions · {lives} lives · 4 choices",
+      "start": "Start Game",
+      "menu": "Menu",
+      "again": "Play Again",
+      "quit": "Quit",
+      "question_label": "Question",
+      "points": "points",
+      "round_clear": "Round complete!",
+      "round_over": "Out of lives!",
+      "correct_label": "correct",
+      "best_streak": "Best streak: {n}",
+      "wrong_pick": "You picked: {word}",
+      "stat_games": "Games",
+      "stat_words": "Correct",
+      "stat_streak": "Streak",
+      "stat_score": "Best",
+      "categories": {
+        "all": "All",
+        "food": "Food",
+        "animals": "Animals",
+        "nature": "Nature",
+        "people": "People",
+        "places": "Places",
+        "daily": "Daily"
+      },
+      "modes": {
+        "picture": {
+          "title": "Picture Mode",
+          "rule": "2 emojis — show the word directly.",
+          "prompt": "What word do these 2 emojis describe?",
+          "hint": "Tip: The emojis depict the thing itself."
+        },
+        "combo": {
+          "title": "Combo Mode",
+          "rule": "3 emojis — combine the clues.",
+          "prompt": "What word do these 3 emojis make together?",
+          "hint": "Tip: Think about each emoji in order."
+        },
+        "chain": {
+          "title": "Story Mode",
+          "rule": "4 emojis — a mini scene.",
+          "prompt": "What English word does this scene describe?",
+          "hint": "Tip: The emojis tell a situation or activity."
+        }
+      }
+    },
+    "settings": {
+      "title": "Settings",
+      "close": "Close",
+      "speech_rate": "Speech rate",
+      "exam_count": "Exam question count",
+      "game_timers": "Game timers",
+      "game_timers_hint": "These defaults apply to all game setup screens.",
+      "taboo_timer": "Taboo — card timer",
+      "heads_up_timer": "Heads Up — round timer",
+      "charades_timer": "Charades — round timer",
+      "emoji_clues_timer": "Emoji Clues — round timer",
+      "reset_progress": "Reset progress",
+      "reset_confirm": "All progress will be deleted. Are you sure?",
+      "exit_lab": "Exit — return to AI Lab"
+    }
+  },
+  "ContactPage": {
       "status_badge": "Open to New B2B & Career Opportunities",
       "title_line1": "Let's transform complex systems into",
       "title_highlight": "scalable products.",

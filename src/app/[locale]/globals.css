@@ -16,6 +16,112 @@
   --color-card: hsl(var(--card));
   --color-card-foreground: hsl(var(--card-foreground));
   --color-ring: hsl(var(--ring));
+
+  /* AI Lab — premium dark, WCAG AA oriented (≥4.5:1 body on canvas where noted) */
+  --color-ailab-canvas: #030303;
+  --color-ailab-panel: #080808;
+  --color-ailab-elevated: #101010;
+  --color-ailab-surface: #161616;
+  --color-ailab-text: #ececec;
+  --color-ailab-muted: #a8adb5;
+  --color-ailab-border: rgb(255 255 255 / 0.12);
+  --color-ailab-border-faint: rgb(255 255 255 / 0.05);
+  --color-ailab-border-soft: rgb(255 255 255 / 0.09);
+  --color-ailab-border-subtle: rgb(255 255 255 / 0.08);
+  --color-ailab-border-muted: rgb(255 255 255 / 0.1);
+  --color-ailab-border-strong: rgb(255 255 255 / 0.14);
+  --color-ailab-border-heavy: rgb(255 255 255 / 0.16);
+  --color-ailab-border-emphasis: rgb(255 255 255 / 0.18);
+  --color-ailab-border-selected: rgb(255 255 255 / 0.2);
+  --color-ailab-border-bright: rgb(255 255 255 / 0.25);
+  --color-ailab-border-dashed: rgb(255 255 255 / 0.2);
+  --color-ailab-border-dashed-hover: rgb(255 255 255 / 0.35);
+  --color-ailab-border-spinner: rgb(255 255 255 / 0.15);
+  --color-ailab-border-spinner-top: rgb(255 255 255 / 0.6);
+  --color-ailab-accent: #7bf1a8;
+  --color-ailab-accent-soft: rgb(123 241 168 / 0.65);
+  --color-ailab-danger-fg: #fec8c8;
+  --color-ailab-danger-bg: rgb(254 80 80 / 0.14);
+  --color-ailab-danger-hover: rgb(254 80 80 / 0.22);
+  --color-ailab-danger-border: rgb(254 140 140 / 0.45);
+
+  --color-ailab-glass-03: rgb(255 255 255 / 0.03);
+  --color-ailab-glass-04: rgb(255 255 255 / 0.04);
+  --color-ailab-glass-05: rgb(255 255 255 / 0.05);
+  --color-ailab-glass-055: rgb(255 255 255 / 0.055);
+  --color-ailab-glass-06: rgb(255 255 255 / 0.06);
+  --color-ailab-glass-07: rgb(255 255 255 / 0.07);
+  --color-ailab-glass-08: rgb(255 255 255 / 0.08);
+  --color-ailab-glass-09: rgb(255 255 255 / 0.09);
+  --color-ailab-glass-10: rgb(255 255 255 / 0.1);
+  --color-ailab-glass-12: rgb(255 255 255 / 0.12);
+  --color-ailab-glass-14: rgb(255 255 255 / 0.14);
+  --color-ailab-glass-20: rgb(255 255 255 / 0.2);
+  --color-ailab-glass-30: rgb(255 255 255 / 0.3);
+
+  --color-ailab-scrim-40: rgb(0 0 0 / 0.4);
+  --color-ailab-scrim-50: rgb(0 0 0 / 0.5);
+  --color-ailab-scrim-80: rgb(0 0 0 / 0.8);
+  --color-ailab-scrim-85: rgb(0 0 0 / 0.85);
+  --color-ailab-scrim-90: rgb(0 0 0 / 0.9);
+  --color-ailab-scrim-95: rgb(0 0 0 / 0.95);
+
+  --color-ailab-code-bg: rgb(0 0 0 / 0.55);
+
+  --shadow-ailab-modal: 0 40px 100px rgb(0 0 0 / 0.92);
+  --shadow-ailab-dropdown: 0 16px 40px rgb(0 0 0 / 0.85);
+  --shadow-ailab-dropdown-up: 0 -20px 50px rgb(0 0 0 / 0.88);
+  --shadow-ailab-inset-highlight: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  --shadow-ailab-accent-sm: 0 0 16px rgb(123 241 168 / 0.08);
+  --shadow-ailab-accent-md: 0 0 20px rgb(123 241 168 / 0.08);
+  --shadow-ailab-accent-focus: 0 0 20px rgb(123 241 168 / 0.12);
+  --shadow-ailab-accent-focus-lg: 0 0 24px rgb(123 241 168 / 0.12);
+  --shadow-ailab-accent-hover: 0 0 16px rgb(123 241 168 / 0.2);
+  --shadow-ailab-accent-drop: 0 0 28px rgb(123 241 168 / 0.12);
+  --shadow-ailab-accent-send: 0 0 28px rgb(123 241 168 / 0.28);
+  --shadow-ailab-accent-bar: 0 0 10px rgb(123 241 168 / 0.4);
+  --shadow-ailab-accent-dot: 0 0 8px rgb(123 241 168 / 0.5);
+
+  /* Scrollbar (Firefox + WebKit) */
+  --color-ailab-scrollbar-thumb-hover: rgb(123 241 168 / 0.42);
+  --color-ailab-scrollbar-fg-hover: rgb(123 241 168 / 0.45);
+  --color-ailab-scrollbar-hairline: rgb(255 255 255 / 0.06);
+  --shadow-ailab-scrollbar-thumb: 0 0 12px rgb(123 241 168 / 0.22);
+}
+
+@layer utilities {
+  .ailab-scrollbar {
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-ailab-border-muted) transparent;
+  }
+
+  .ailab-scrollbar:hover {
+    scrollbar-color: var(--color-ailab-scrollbar-fg-hover) transparent;
+  }
+
+  .ailab-scrollbar::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+  .ailab-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .ailab-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--color-ailab-border);
+    border-radius: 9999px;
+    transition:
+      background-color 0.35s ease,
+      box-shadow 0.35s ease;
+    box-shadow: inset 0 0 0 1px var(--color-ailab-scrollbar-hairline);
+  }
+
+  .ailab-scrollbar:hover::-webkit-scrollbar-thumb {
+    background-color: var(--color-ailab-scrollbar-thumb-hover);
+    box-shadow: var(--shadow-ailab-scrollbar-thumb);
+  }
 }
 
 @layer base {
@@ -54,6 +160,122 @@
     --border: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+}
+
+/* EnglishPath — sabit açık tema (site dark mode'dan etkilenmez) */
+.english-path {
+  color-scheme: light;
+  background-color: #f8fafc;
+  color: #1e293b;
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --primary: 173 80% 36%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 96%;
+  --secondary-foreground: 222 47% 11%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 96%;
+  --accent-foreground: 222 47% 11%;
+  --border: 214 32% 91%;
+  --ring: 173 80% 36%;
+}
+
+.english-path .bg-card {
+  background-color: #ffffff;
+}
+
+.english-path .bg-secondary {
+  background-color: #f1f5f9;
+}
+
+.english-path .text-muted-foreground {
+  color: #64748b;
+}
+
+.english-path .safe-area-pad {
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Site logo mark — subtle idle + hover shine */
+@keyframes logo-mark-breathe {
+  0%,
+  100% {
+    border-color: hsl(var(--border) / 0.45);
+    box-shadow: 0 0 0 0 hsl(var(--foreground) / 0);
+  }
+  50% {
+    border-color: hsl(var(--border) / 0.65);
+    box-shadow: 0 0 14px -6px hsl(var(--foreground) / 0.12);
+  }
+}
+
+.logo-mark-idle {
+  animation: logo-mark-breathe 5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark-idle {
+    animation: none;
+  }
+}
+
+.group:hover .logo-mark-letter {
+  transform: translateY(-0.5px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-mark-shine {
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    hsl(var(--foreground) / 0.06) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  animation: logo-mark-shine 0.7s ease-out forwards;
+}
+
+.group:hover .logo-mark-shine {
+  animation: logo-mark-shine 0.7s ease-out forwards;
+}
+
+@keyframes logo-mark-shine {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Tıklanabilir öğeler — tüm projede */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+label[for],
+select,
+summary,
+input[type="checkbox"],
+input[type="radio"],
+input[type="range"],
+input[type="submit"],
+input[type="button"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"] {
+  cursor: not-allowed;
 }
 
 @layer base {

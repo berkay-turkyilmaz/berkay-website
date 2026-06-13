@@ -21,11 +21,11 @@ export default function LanguageSwitcher() {
   const languages = [
     { code: "tr", label: "Türkçe", flag: "🇹🇷" },
     { code: "en", label: "English", flag: "🇺🇸" },
-    { code: "de", label: "Deutsch", flag: "🇩🇪" }, 
-    // { code: "es", label: "Espana", flag: "es" },
-    // { code: "fr", label: "France", flag: "fr" },
-    // { code: "ar", label: "Arabic", flag: "ar" },
-    // { code: "ja", label: "Japonca", flag: "ja" },
+    { code: "de", label: "Deutsch", flag: "🇩🇪" },
+    { code: "es", label: "Español", flag: "🇪🇸" },
+    { code: "fr", label: "Français", flag: "🇫🇷" },
+    { code: "ar", label: "العربية", flag: "🇸🇦" },
+    { code: "ja", label: "日本語", flag: "🇯🇵" },
   ];
 
   const handleSwitch = (nextLocale: string) => {

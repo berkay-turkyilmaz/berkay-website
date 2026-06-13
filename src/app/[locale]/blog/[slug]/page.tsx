@@ -7,78 +7,12 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { AudioPlayer } from "@/components/features/blog/audio-player";
 import { Suspense } from "react";
+import { getBlogPostContent } from "@/lib/blog/content";
+import { getBlogPostMetaBySlug } from "@/lib/blog/posts";
 
-// --- TYPE DEFINITIONS ---
-interface BlogPost {
-  title: string;
-  excerpt: string;
-  content: string;
-  date: string;
-  readTime: string;
-  category: string;
-  hasAudio: boolean;
-  views?: number;
-}
-
-// --- DATA FETCHING FUNCTION ---
-async function getBlogPost(slug: string, locale: string): Promise<BlogPost | null> {
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const isTr = locale === "tr";
-
-  const posts: Record<string, BlogPost> = {
-    "nextjs-portfolio-guide": {
-      title: isTr
-        ? "Next.js 15 ve Modern Portfolyo Mimarisi"
-        : "Next.js 15 & Modern Portfolio Architecture",
-      excerpt: isTr
-        ? "Tailwind v4, i18n ve Server Actions kullanarak global standartlarda bir yazılım portfolyosu nasıl hazırlanır?"
-        : "How to build a global standard software portfolio using Tailwind v4, i18n, and Server Actions?",
-      content: isTr
-        ? `
-          <p class="lead">Modern web geliştirme dünyasında, bir portfolyo sadece projelerinizi listelediğiniz bir yer değildir; aynı zamanda yazdığınız kodun kalitesini sergilediğiniz yaşayan bir üründür.</p>
-          
-          <h2>Neden Next.js 15?</h2>
-          <p>React ekosisteminin amiral gemisi olan Next.js, App Router yapısı ile sunucu ve istemci bileşenlerini hibrit bir şekilde kullanmamıza olanak tanır. Bu, SEO performansını maksimize eder ve kullanıcı deneyimini optimize eder.</p>
-          
-          <h3>Sesli Deneyim</h3>
-          <p>Bu makaleyi okumak yerine dinleyebilirsiniz. Şu an tarayıcı tabanlı bir motor kullanıyoruz, yakında yerel yapay zeka motoruna geçiş yapacağız. Bu sayede daha doğal ve akıcı bir ses deneyimi sunabileceğiz.</p>
-          
-          <h2>Mimari Kararlar</h2>
-          <p>İyi bir mimari sadece koddan ibaret değildir; aynı zamanda sürdürülebilirlik ve ölçeklenebilirlik demektir. TypeScript ile tip güvenliği, modüler yapı ile bakım kolaylığı sağlarız.</p>
-          
-          <blockquote>
-            <p>"Kod yazmak kolaydır, iyi kod yazmak ise sanattır."</p>
-          </blockquote>
-          
-          <p>Modern web uygulamaları için performans, erişilebilirlik ve kullanıcı deneyimi üçgeninde dengeli bir yaklaşım gereklidir.</p>
-        `
-        : `
-          <p class="lead">In the world of modern web development, a portfolio is not just a place to list your projects; it is a living product where you showcase the quality of your code.</p>
-          
-          <h2>Why Next.js 15?</h2>
-          <p>As the flagship of the React ecosystem, Next.js allows us to use server and client components in a hybrid way with its App Router structure. This maximizes SEO performance and optimizes user experience.</p>
-          
-          <h3>Audio Experience</h3>
-          <p>You can listen to this article instead of reading it. We are currently using a browser-based engine, but we will soon switch to a local AI engine for a more natural audio experience.</p>
-          
-          <h2>Architectural Decisions</h2>
-          <p>Good architecture is not just about code; it's about sustainability and scalability. We ensure type safety with TypeScript and maintainability with modular structure.</p>
-          
-          <blockquote>
-            <p>"Writing code is easy, writing good code is an art."</p>
-          </blockquote>
-        `,
-      date: "2026-01-31",
-      readTime: isTr ? "8 Dakika" : "8 Min",
-      category: isTr ? "Yazılım Mimarisi" : "Architecture",
-      hasAudio: true,
-      views: 1247,
-    },
-  };
-
-  return posts[slug] || null;
+async function getBlogPost(slug: string, locale: string) {
+  if (!getBlogPostMetaBySlug(slug)) return null;
+  return getBlogPostContent(slug, locale);
 }
 
 // --- LOADING COMPONENT ---

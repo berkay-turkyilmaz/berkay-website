@@ -3,68 +3,94 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Code2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { ArrowUpRight, Bot, Globe, Layers } from "lucide-react";
+
+const CARD_KEYS = ["1", "2", "3"] as const;
+const ICONS = [Globe, Layers, Bot] as const;
+const HREFS = ["/projects", "/projects", "/ai-lab"] as const;
+const SPANS = [
+  "lg:col-span-7 lg:row-span-2",
+  "lg:col-span-5",
+  "lg:col-span-5",
+] as const;
 
 export function ProjectsPreview() {
   const t = useTranslations("HomePage");
+  const tFeat = useTranslations("HomePage.featured");
 
   return (
-    <section id="projects" className="scroll-mt-32">
-      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
-        <div className="space-y-4 max-w-2xl">
-          <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground">
-            {t("sections.projects_preview_title") || "Seçilmiş Çalışmalar"}
+    <section id="projects" className="scroll-mt-28">
+      <div className="mb-10 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="space-y-3">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+            {t("sections.projects_label")}
+          </p>
+          <h2 className="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+            {t("sections.projects_preview_title")}
           </h2>
-          <p className="text-muted-foreground/80 leading-relaxed font-medium md:text-lg">
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground md:text-base">
             {t("sections.projects_preview_desc")}
           </p>
         </div>
-        <Link href="/projects" className="group inline-flex items-center gap-2 text-sm font-bold text-muted-foreground hover:text-foreground transition-colors pb-2">
-          {t("sections.view_all_work") || "Tümünü Gör"}
-          <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+        <Link
+          href="/projects"
+          className="group inline-flex items-center gap-2 self-start rounded-lg border border-border/50 bg-secondary/30 px-4 py-2.5 text-sm font-bold text-foreground transition-colors hover:bg-secondary/60 md:self-auto"
+        >
+          {t("sections.view_all_work")}
+          <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
-        {/* Proje 1 (SaaS) - Görünür ve Şık Kart */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }}>
-          <Link href="/projects" className="group block relative aspect-[4/3] bg-card rounded-[2rem] shadow-md border border-border/50 overflow-hidden hover:border-primary/40 hover:shadow-xl transition-all duration-500">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-10">
-              <div className="w-20 h-20 bg-secondary/80 shadow-sm border border-border/50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
-                <Code2 className="w-8 h-8 text-foreground" />
-              </div>
-              <h3 className="text-2xl font-bold tracking-tight text-foreground mb-3">Enterprise SaaS Architecture</h3>
-              <p className="text-sm font-medium text-muted-foreground/80 uppercase tracking-widest">Next.js 15 • TypeScript • Supabase</p>
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* Proje 2 (Code Snippet) - Terminal Hissiyatı */}
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: 0.1 }}>
-          <div className="relative aspect-[4/3] bg-secondary/20 rounded-[2rem] shadow-md border border-border/50 p-8 overflow-hidden hover:border-border/80 transition-all duration-500">
-             <div className="flex items-center gap-3 mb-8 pb-4 border-b border-border/40">
-                <div className="flex gap-2">
-                   <div className="w-3 h-3 rounded-full bg-red-500/80" />
-                   <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                   <div className="w-3 h-3 rounded-full bg-green-500/80" />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:auto-rows-[minmax(140px,auto)]">
+        {CARD_KEYS.map((key, index) => {
+          const Icon = ICONS[index];
+          const isLarge = index === 0;
+          return (
+            <motion.div
+              key={key}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ delay: index * 0.08, duration: 0.45 }}
+              className={SPANS[index]}
+            >
+              <Link
+                href={HREFS[index]}
+                className="group relative flex h-full min-h-[200px] flex-col justify-between overflow-hidden rounded-xl border border-border/50 bg-card p-6 transition-all duration-300 hover:border-primary/25 hover:shadow-lg hover:shadow-primary/5 sm:p-7 lg:min-h-[240px]"
+              >
+                <div
+                  className="pointer-events-none absolute -right-8 -top-8 h-32 w-32 rounded-full bg-primary/5 blur-2xl transition-opacity group-hover:opacity-100 opacity-60"
+                  aria-hidden
+                />
+                <div className="relative flex items-start justify-between gap-4">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-secondary/80 text-foreground ring-1 ring-border/50 transition-transform duration-300 group-hover:scale-105">
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </div>
+                  <span className="font-mono text-xs text-muted-foreground/60">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
                 </div>
-                <span className="text-xs text-muted-foreground font-mono font-medium">~/system/architecture.ts</span>
-             </div>
-             <div className="font-mono text-[13px] leading-relaxed space-y-1 text-muted-foreground">
-                <p><span className="text-primary font-medium">export interface</span> <span className="text-blue-400">SystemConfig</span> {"{"}</p>
-                <p className="pl-6"><span className="text-foreground/80">core</span>: <span className="text-amber-500">"React Server Components"</span>;</p>
-                <p className="pl-6"><span className="text-foreground/80">styling</span>: <span className="text-amber-500">"TailwindCSS v4"</span>;</p>
-                <p className="pl-6"><span className="text-foreground/80">automation</span>: <span className="text-amber-500">"n8n Webhooks"</span>;</p>
-                <p>{"}"}</p>
-             </div>
-             <div className="absolute bottom-6 right-6">
-                <Badge variant="outline" className="text-[10px] font-bold uppercase tracking-widest text-primary bg-background shadow-sm border-border/50">Production Ready</Badge>
-             </div>
-          </div>
-        </motion.div>
+                <div className="relative mt-6 space-y-2">
+                  <h3
+                    className={`font-bold tracking-tight text-foreground ${isLarge ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"}`}
+                  >
+                    {tFeat(`${key}.title`)}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground line-clamp-3">
+                    {tFeat(`${key}.description`)}
+                  </p>
+                  <p className="pt-1 text-[11px] font-semibold uppercase tracking-widest text-primary/80">
+                    {tFeat(`${key}.stack`)}
+                  </p>
+                </div>
+                <div className="relative mt-4 flex items-center gap-1 text-xs font-bold text-muted-foreground transition-colors group-hover:text-foreground">
+                  {tFeat("explore")}
+                  <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </div>
+              </Link>
+            </motion.div>
+          );
+        })}
       </div>
     </section>
   );

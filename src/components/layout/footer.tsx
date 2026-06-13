@@ -2,8 +2,9 @@
 
 import { Github, Linkedin, Mail, Twitter, Cpu, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Link } from "@/i18n/routing"; // i18n Link'ini kullanıyoruz
+import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { SiteLogo } from "@/components/layout/site-logo";
 
 export function Footer() {
   const t = useTranslations("Footer");
@@ -22,7 +23,7 @@ export function Footer() {
     { label: tNav("home"), href: "/" },
     { label: tNav("projects"), href: "/projects" }, // Artık ayrı sayfa
     { label: tNav("blog"), href: "/blog" },         // Artık ayrı sayfa
-    { label: tNav("contact"), href: "/#contact" },
+    { label: tNav("contact"), href: "/contact" },
   ];
 
   return (
@@ -36,10 +37,7 @@ export function Footer() {
           
           {/* Sütun 1: Marka & Durum (4 birim) */}
           <div className="md:col-span-5 space-y-6">
-            <Link href="/" className="flex items-center gap-2 font-black text-2xl tracking-tighter group w-fit">
-              <span className="bg-primary text-primary-foreground px-2 py-0.5 rounded-md text-xl group-hover:rotate-12 transition-transform duration-300">B.</span>
-              <span className="text-foreground">berkaytrkylmzz@gmail.com</span>
-            </Link>
+            <SiteLogo />
             
             <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
               {t("description")}
@@ -98,7 +96,7 @@ export function Footer() {
           <p>© {new Date().getFullYear()} BERKAY TURKYILMAZ.</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-2 hover:text-primary transition-colors cursor-default group">
-              {t("powered_by")} <Cpu className="h-3 w-3 group-hover:animate-pulse text-primary" /> NEXT.JS 15
+              {t("powered_by")} <Cpu className="h-3 w-3 group-hover:animate-pulse text-primary" /> NEXT.JS 16
             </span>
           </div>
         </div>

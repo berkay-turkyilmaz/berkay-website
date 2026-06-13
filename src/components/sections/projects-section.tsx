@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, ChevronDown, Layers, AlertCircle, Code2, ArrowUpRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { WEBHOOKS } from "@/lib/config/webhooks";
 
 // Tip Tanımlaması
 interface Project {
@@ -57,7 +58,7 @@ export function ProjectsSection() {
     setLoading(true);
     setError(false);
     try {
-      const response = await fetch('https://n8n.ipadresim.sslip.io/webhook-test/projects-bring', {
+      const response = await fetch(WEBHOOKS.projects, {
         method: 'GET',
         signal: AbortSignal.timeout(3000) 
       });

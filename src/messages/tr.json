@@ -10,19 +10,40 @@
     "contact": "İletişim"
   },
   "HomePage": {
-    "badge": "Sistem Operasyonel & Fırsatlara Açık",
-    "title": "Mühendislik Odaklı Dijital Deneyimler",
-    "description": "Modern web mimarileri (Next.js), ölçeklenebilir arayüzler ve yapay zeka destekli otonom iş akışları (n8n) inşa ediyorum.",
-    "cta_projects": "Projeleri İncele",
-    "cta_lab": "AI Lab'i Keşfet",
+    "badge": "Yeni fırsatlara açık",
+    "title": "Ölçeklenen ürünler inşa ediyorum.",
+    "description": "Next.js uygulamaları, Supabase altyapıları ve n8n ile AI otomasyonları geliştiren full-stack mühendis.",
+    "cta_projects": "Projeleri gör",
+    "cta_lab": "AI Lab'i aç",
     "hero": {
-      "name": "BERKAY",
-      "portfolio": "WORKSPACE"
+      "scroll_down": "İçeriğe kaydır",
+      "scroll_hint": "Keşfet"
     },
     "sections": {
+      "projects_label": "01 — Portfolyo",
+      "lab_label": "02 — Laboratuvar",
+      "blog_label": "03 — Yayınlar",
       "projects_preview_title": "Seçilmiş Çalışmalar",
       "projects_preview_desc": "Karmaşık iş gereksinimlerini karşılayan, performans odaklı ve ölçeklenebilir dijital ürün mimarileri.",
       "view_all_work": "Tümünü İncele"
+    },
+    "featured": {
+      "explore": "İncele",
+      "1": {
+        "title": "Kurumsal Web Mimarisi",
+        "description": "Next.js 15, React Server Components ve i18n altyapısıyla yüksek performanslı dijital ekosistem.",
+        "stack": "Next.js · TypeScript · Supabase"
+      },
+      "2": {
+        "title": "Otonom Rezervasyon & CRM",
+        "description": "n8n ve serverless mimari ile Google Calendar ve SMS webhook'larını senkronize eden randevu otomasyonu.",
+        "stack": "n8n · Webhooks · Serverless"
+      },
+      "3": {
+        "title": "AI & Otomasyon Laboratuvarı",
+        "description": "Groq LLM, belge analizi ve terminal tabanlı agent deneyleri için canlı test ortamı.",
+        "stack": "Groq · Next.js · AI Agents"
+      }
     },
     "projects": {
       "saas_card": {
@@ -31,16 +52,20 @@
       },
       "code_card": {
         "comment": "// İnovasyon ve ölçeklenebilirlik başlatılıyor...",
+        "filename": "~/system/architecture.ts",
+        "badge": "Üretime hazır",
         "wip": "Üretim Ortamına Hazırlanıyor"
       }
     },
     "automation": {
-      "system_active": "Sistem: Aktif & Çevrimiçi"
+      "system_active": "Pipeline aktif",
+      "mobile_pipeline": "İş akışı"
     },
     "ai_lab": {
-      "tag": "Ar-Ge Aşaması",
-      "title": "AI & Otomasyon Laboratuvarı",
-      "description": "Yerel LLM modelleri ve webhook entegrasyonlarıyla kurgulanmış akıllı veri işleme ve otonom sistem test ortamı."
+      "tag": "Canlı prototip",
+      "title": "AI & Otomasyon Atölyesi",
+      "description": "Groq tabanlı ajanlar, belge analizi ve n8n iş akışları — üretim ortamına yakın canlı deneyler.",
+      "subline": "BEX asistan · Derin analiz · Otomasyon katmanı"
     },
     "blog": {
       "title": "Blog",
@@ -69,10 +94,30 @@
     "welcome": "Sistem hazır. Hangi veriyi analiz etmek istersiniz?",
     "sidebar": {
       "categories": {
+        "chat": "SOHBET",
         "tools": "ARAÇLAR",
+        "portfolio": "PROJELER",
+        "laboratory": "LABORATUVAR",
+        "tools_legacy": "ARAÇLAR",
         "projects": "PROJELER"
       },
       "items": {
+        "bex_assistant": "BEX Asistan",
+        "bex_assistant_desc": "Teknik sorular ve portföy",
+        "document_rag": "Belge Analizi",
+        "document_rag_desc": "PDF · TXT · RAG",
+        "deep_analyzer": "Bağlam Analizi",
+        "deep_analyzer_desc": "Metin ve token görselleştirme",
+        "chain_terminal": "Düşünce Zinciri",
+        "chain_terminal_desc": "Çok adımlı akıl yürütme",
+        "agent_console": "BEX Asistan",
+        "agent_console_desc": "Teknik sorular ve portföy",
+        "prompt_sandbox": "Belge Analizi",
+        "prompt_sandbox_desc": "PDF · TXT · RAG",
+        "nav_settings": "Ayarlar",
+        "nav_settings_desc": "Model ve workspace",
+        "nav_api": "API yapılandırması",
+        "nav_api_desc": "Anahtarlar ve kullanım",
         "terminal": "LLM Terminali",
         "terminal_desc": "AI asistan",
         "pdf": "Döküman Analizi",
@@ -85,17 +130,23 @@
         "booking_desc": "Randevu sistemi"
       },
       "new_chat": "Yeni Sohbet",
+      "expand": "Menüyü genişlet",
+      "history": "Geçmiş",
+      "history_search": "Ara...",
       "settings": "Ayarlar",
-      "user_status": "Yetkili Kullanıcı",
-      "soon": "Yakında"
+      "user_status": "Çalışma alanı",
+      "soon": "Yakında",
+      "back_home": "Ana sayfaya dön",
+      "ui_language": "Arayüz dili",
+      "guest_user": "Misafir"
     },
     "chat": {
       "terminal_empty_title": "BEX hazır.",
       "terminal_empty_desc": "Next.js, Supabase, n8n entegrasyonu veya Berkay'ın projeleri hakkında her şeyi sorabilirsin.",
       "pdf_empty_title": "Döküman yükle, analiz et.",
       "pdf_empty_desc": "PDF, TXT veya MD dosyası yükle — BEX içeriği okuyup sorularını yanıtlar.",
-      "engineer_empty_title": "Mimari danışman aktif.",
-      "engineer_empty_desc": "Sistem tasarımı, infrastructure kararları ve trade-off analizleri için buradayım.",
+      "engineer_empty_title": "Merhaba, ben BEX.",
+      "engineer_empty_desc": "Next.js, Supabase, AI mimarisi veya Berkay'ın projeleri hakkında sorularını yanıtlayabilirim.",
       "thinking": "düşünüyor",
       "copy": "Kopyala",
       "copied": "Kopyalandı",
@@ -104,14 +155,28 @@
       "placeholder_terminal": "Bir şeyler sor veya kod yaz...",
       "placeholder_pdf_loaded": "hakkında sor...",
       "placeholder_pdf_empty": "Önce bir dosya yükle...",
-      "placeholder_engineer": "Mimari veya DevOps sorusu sor...",
+      "placeholder_engineer": "Bir soru sor veya kod yapıştır...",
       "upload_drag": "Dosya sürükle veya tıkla",
       "upload_formats": "PDF · TXT · MD — Maks 20 MB",
       "upload_reading": "PDF okunuyor...",
       "uploaded_label": "Yüklendi · Soru sorabilirsin",
+      "workflow_panel_title": "Düşünce zinciri",
+      "workflow_step_context": "Bağlam analiz ediliyor…",
+      "workflow_step_scan": "Veritabanı ve kaynaklar taranıyor…",
+      "workflow_step_synthesize": "Yanıt sentezleniyor…",
       "footer_warning": "BEX · AR-GE sistemi — çıktıları doğrulayın",
       "error_network": "Bağlantı hatası. İnternet bağlantını kontrol et.",
       "error_stream": "Yanıt alınırken sorun oluştu. Tekrar dene.",
+      "error_file_too_large": "Dosya çok büyük. Maksimum 20 MB.",
+      "error_file_process": "Dosya işlenemedi.",
+      "error_server_connect": "Sunucuya bağlanılamadı. Tekrar dene.",
+      "error_api_key": "Yapay zeka servisi sunucuda yapılandırılmamış.",
+      "role_user": "Sen",
+      "role_assistant": "Asistan",
+      "time_just_now": "az önce",
+      "time_mins": "{n}dk",
+      "time_hours": "{n}s",
+      "time_days": "{n}g",
       "suggested_terminal_1": "Supabase RLS politikası nasıl yazılır?",
       "suggested_terminal_2": "Next.js 15'te streaming API route nasıl yapılır?",
       "suggested_terminal_3": "n8n ile Telegram bot nasıl kurulur?",
@@ -123,11 +188,29 @@
       "suggested_engineer_1": "Monolith mu, microservices mi? Trade-off'ları açıkla",
       "suggested_engineer_2": "n8n ile Supabase nasıl entegre edilir?",
       "suggested_engineer_3": "Vercel Edge vs Node.js runtime farkı nedir?",
-      "suggested_engineer_4": "PostgreSQL connection pooling nasıl yapılandırılır?"
+      "suggested_engineer_4": "PostgreSQL connection pooling nasıl yapılandırılır?",
+      "engineer_prompt_chip_1": "Berkay kimdir ve neler yapar?",
+      "engineer_prompt_chip_2": "Berkay'ın web geliştirme tecrübelerinden bahset",
+      "engineer_prompt_chip_3": "Next.js ve Supabase ile ürün nasıl ölçeklenir?",
+      "engineer_prompt_chip_4": "Portföyündeki projeleri kısaca özetle"
     },
     "settings": {
       "title": "Ayarlar",
       "subtitle": "BEX Workspace Yapılandırması",
+      "subtitle_short": "Workspace",
+      "nav_label": "Ayarlar bölümleri",
+      "section_profile": "Profil",
+      "section_response": "Yanıt",
+      "lang_auto": "Oto",
+      "hint_general": "Groq üzerinden çalışan asistan için üretim parametreleri.",
+      "hint_data": "Yerel tarayıcıda saklanan sohbet önbelleği.",
+      "ui_dark_note": "AI Lab arayüzü koyu palet için optimize edilmiştir; sayfanın genel teması üst menü / site ayarlarından değişebilir.",
+      "language_bex_hint": "BEX'in yanıtlayacağı dil (sayfa dilinden bağımsız).",
+      "lang_auto_desc": "Sayfanın diline göre",
+      "lang_tr_desc": "Her zaman Türkçe",
+      "lang_en_desc": "Always English",
+      "lang_de_desc": "Immer Deutsch",
+      "danger_clear_hint": "Yalnızca bu cihazdaki aktif sohbeti siler.",
       "display_name": "Görünen İsim",
       "display_name_placeholder": "Adınız...",
       "save": "Kaydet",
@@ -153,11 +236,74 @@
       "theme": "Tema",
       "theme_dark": "Koyu",
       "theme_light": "Açık",
-      "theme_system": "Sistem"
+      "theme_system": "Sistem",
+      "models": {
+        "llama_8b_label": "Llama 3.1 8B",
+        "llama_8b_desc": "Hızlı yanıt — günlük kullanım",
+        "llama_8b_speed": "~200 t/s",
+        "llama_70b_label": "Llama 3.3 70B",
+        "llama_70b_desc": "Daha derin analiz ve karmaşık sorular",
+        "llama_70b_speed": "~80 t/s"
+      }
     },
     "header": {
       "new_chat": "Yeni Sohbet",
       "model_label": "Model"
+    },
+    "deepAnalyzer": {
+      "title": "Derin Analizör",
+      "subtitle": "Bağlam penceresi · Groq Llama",
+      "view_heatmap": "Isı",
+      "view_split": "Split",
+      "view_graph": "Graf",
+      "upload_title": "Dosya sürükle-bırak veya tıklayarak seç",
+      "upload_hint": "PDF · TXT · MD — metin analiz alanına aktarılır (max 20 MB)",
+      "placeholder": "Analiz edilecek metni buraya yapıştır...",
+      "token_estimate": "~{n} token",
+      "analyze": "Analiz Et",
+      "analyzing": "Analiz ediliyor...",
+      "or": "veya",
+      "sample_technical": "Teknik Açıklama",
+      "sample_academic": "Akademik Metin",
+      "sample_blog": "Blog Yazısı",
+      "context_window": "Context Window",
+      "context_fill": "{pct}% dolu · Llama 3.1 8192 token limit",
+      "compression_title": "Sıkıştırma Fırsatı",
+      "compression_body": "Metin {pct}% daha verimli yazılabilir.",
+      "copy_optimized": "Optimize kopyala",
+      "copied": "Kopyalandı!",
+      "chunk_roles": "Chunk Rolleri",
+      "role_subject": "Özne/Ana Fikir",
+      "role_predicate": "Yüklem/Eylem",
+      "role_context": "Bağlam",
+      "role_evidence": "Kanıt/Destek",
+      "role_connector": "Bağlaç",
+      "role_conclusion": "Sonuç",
+      "scanning": "Metin taranıyor...",
+      "scan_parsed": "✓ Cümleler parse edildi",
+      "scan_tokens": "✓ Token sayımı tamamlandı",
+      "scan_semantic": "→ Groq Llama 3.1 semantik analiz yapıyor...",
+      "heatmap_title": "Semantik Isı Haritası",
+      "heatmap_hint": "Hover → detay paneli",
+      "graph_title": "Semantik Bağlantı Grafiği",
+      "graph_hint": "Scroll → zoom · Drag → pan",
+      "chunk_label": "Chunk #{n}",
+      "weight": "Ağırlık",
+      "related": "İlgili:",
+      "table_title": "Tam Analiz Tablosu",
+      "col_num": "#",
+      "col_text": "Metin",
+      "col_role": "Rol",
+      "col_weight": "Ağırlık",
+      "col_token": "Token",
+      "col_redundancy": "Fazlalık",
+      "col_reason": "Sebep",
+      "error_file_too_large": "Dosya çok büyük. Maksimum 20 MB.",
+      "error_pdf_process": "PDF işlenemedi.",
+      "error_file_read": "Dosya okunamadı.",
+      "error_unsupported": "Desteklenen formatlar: PDF, TXT, MD.",
+      "error_analysis": "Analiz başarısız",
+      "error_unknown": "Bilinmeyen hata"
     }
   },
   "ProjectsPage": {
@@ -272,6 +418,330 @@
   },
   "LanguageSwitcher": {
     "label": "Dil Modeli Değiştir"
+  },
+  "NotFound": {
+    "title": "Sayfa Kayboldu",
+    "description": "Aradığın otonom sistem bu koordinatlarda bulunamadı.",
+    "back": "Ana Üsse Dön"
+  },
+  "EnglishPath": {
+    "title": "EnglishPath",
+    "subtitle": "Sınıf oyunları ve günlük İngilizce",
+    "back_lab": "AI Lab'e dön",
+    "go_panel": "Panele dön",
+    "tabs": {
+      "dashboard": "Panel",
+      "grammar": "Kurallar",
+      "flashcards": "Kelimeler",
+      "prepositions": "Edatlar",
+      "taboo": "Tabu",
+      "heads_up": "Heads Up",
+      "charades": "Charades",
+      "emoji_clues": "Emoji İpuçları",
+      "games": "Oyunlar",
+      "learn": "Öğren",
+      "all_games": "Tüm oyunlar",
+      "exam": "Sınav",
+      "results": "Sonuçlar",
+      "more": "Daha"
+    },
+    "header": {
+      "level": "Seviye",
+      "days": "Gün"
+    },
+    "dashboard": {
+      "progress_title": "İlerleme",
+      "xp_label": "XP",
+      "total_exams": "Toplam Sınav",
+      "taboo_games": "Tabu",
+      "heads_up_games": "Heads Up",
+      "words_guessed": "Bilinen",
+      "start_exam": "Kendini Dene",
+      "recent_exam": "Son Sınav",
+      "cards": "kart",
+      "play_together": "Sınıfta birlikte oyna",
+      "learn_section": "Öğren & pratik yap",
+      "level_label": "Seviye",
+      "modules": {
+        "flashcards": { "title": "Kelime Kartları", "desc": "Günlük İngilizce kelimeler ve örnek cümleler." },
+        "grammar": { "title": "Dilbilgisi", "desc": "Temel kurallar, günlük hayat örnekleriyle." },
+        "prepositions": { "title": "Edat Alıştırmaları", "desc": "Gerçek cümlelerle edat pratiği." },
+        "taboo": { "title": "Tabu Oyunu", "desc": "Basit günlük kelimeler · yasaklı kelimeleri kullanmadan anlat!" },
+        "heads_up": { "title": "Heads Up", "desc": "Telefonu tut, arkadaşların anlatsın — sınıf klasiği." },
+        "charades": { "title": "Charades", "desc": "Konuşmadan canlandır — takımın tahmin etsin!" },
+        "emoji_clues": { "title": "Emoji İpuçları", "desc": "Guess the Emoji tarzı — emojileri birleştir, İngilizce kelimeyi bul!" }
+      }
+    },
+    "games_hub": {
+      "title": "Sınıf Oyunları",
+      "subtitle": "Arkadaşlarınla oynayabileceğin 4 farklı kelime oyunu. Birini seç ve başla!",
+      "play": "Oyna",
+      "tip": "Arkadaşlarınla birlikte oynamak için en eğlenceli yol!",
+      "deck_why": "Her oyunun kelime sayısı farklıdır çünkü oyun kuralları farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Emoji İpuçları'nda görsel ipuçları gerekir.",
+      "deck_notes": {
+        "taboo": "Kelime + 5 yasaklı kelime — anlatırken kullanılamaz.",
+        "heads_up": "Tek kelime — arkadaşların ekrandan okuyup anlatması için.",
+        "charades": "Canlandırılabilir fiil ve nesneler — konuşmak yasak.",
+        "emoji_clues": "40 bulmaca · 3 mod · 10 soru, 3 can — klasik emoji quiz."
+      },
+      "cards": "kelime",
+      "taboo": { "title": "Tabu", "desc": "Yasaklı kelimeleri kullanmadan İngilizce anlat." },
+      "heads_up": { "title": "Heads Up", "desc": "Arkadaşların anlatır, sen tahmin et." },
+      "charades": { "title": "Charades", "desc": "Sessizce canlandır, takımın tahmin etsin." },
+      "emoji_clues": { "title": "Emoji İpuçları", "desc": "Emojileri soldan sağa birleştir — tek İngilizce kelimeyi bul." }
+    },
+    "flashcards": {
+      "all": "Tümü",
+      "mastered": "öğrenildi",
+      "tap_flip": "Çevirmek için dokun",
+      "speak": "Seslendir",
+      "mark_mastered": "Öğrendim",
+      "already_mastered": "Öğrenildi ✓"
+    },
+    "grammar": {
+      "intro": "Her kuralı okuyup tamamlandı olarak işaretleyerek XP kazan.",
+      "mark_complete": "Tamamlandı olarak işaretle"
+    },
+    "prepositions": {
+      "correct": "doğru",
+      "restart": "Baştan",
+      "next": "Sonraki"
+    },
+    "exam": {
+      "title": "Seviye Sınavı",
+      "intro": "Tür seç, {count} soruluk sınavına başla. Her mod farklı soru stili kullanır.",
+      "pick_mode": "Sınav türü",
+      "pool": "soru",
+      "start": "Sınava Başla",
+      "correct_label": "doğru",
+      "retry": "Tekrar Dene",
+      "view_results": "Sonuçları Gör",
+      "show_review": "Cevapları İncele",
+      "hide_review": "İncelemeyi Gizle",
+      "review_title": "Soru incelemesi",
+      "your_answer": "Senin cevabın",
+      "correct_answer": "Doğru cevap",
+      "next": "Sonraki",
+      "finish": "Bitir",
+      "exit_exam": "Sınavdan çık",
+      "exit_confirm": "Sınavdan çıkmak istediğine emin misin? İlerleme kaydedilmez.",
+      "input_placeholder": "Cevabını yaz...",
+      "modes": {
+        "mixed": "Karışık",
+        "multiple": "Çoktan Seçmeli",
+        "true_false": "Doğru / Yanlış",
+        "tap": "Hızlı İşaretle",
+        "fill": "Boşluk Doldur",
+        "translate": "Çeviri"
+      },
+      "mode_desc": {
+        "mixed": "Tüm soru türlerinden karışık paket.",
+        "multiple": "4 seçenekli klasik çoktan seçmeli.",
+        "true_false": "İfade doğru mu yanlış mı — işaretle.",
+        "tap": "İki seçenekten doğru olanı hızlıca işaretle.",
+        "fill": "Cümledeki eksik kelimeyi yaz.",
+        "translate": "Türkçe cümleyi İngilizceye çevir."
+      },
+      "types": {
+        "multiple": "Çoktan Seçmeli",
+        "fill": "Boşluk Doldur",
+        "translate": "Çeviri",
+        "true_false": "Doğru / Yanlış",
+        "tap": "Hızlı İşaretle"
+      }
+    },
+    "results": {
+      "title": "Sınav Geçmişi",
+      "empty": "Henüz sınav sonucu yok.",
+      "take_exam": "Sınava Gir",
+      "clear": "Temizle",
+      "exam_modes": {
+        "mixed": "Karışık",
+        "multiple": "Çoktan Seçmeli",
+        "true_false": "Doğru / Yanlış",
+        "tap": "Hızlı İşaretle",
+        "fill": "Boşluk Doldur",
+        "translate": "Çeviri"
+      }
+    },
+    "taboo": {
+      "title": "Tabu Oyunu",
+      "subtitle": "Herkesin bilebileceği günlük kelimeler. Yasaklı kelimeleri söylemeden İngilizce anlat — sınıfta takım halinde oyna!",
+      "modes": {
+        "practice": "Pratik",
+        "practice_desc": "Zaman sınırı yok, ipucu ve telaffuz desteği.",
+        "timed": "Zamanlı",
+        "timed_desc": "Her kart için geri sayım — hızlı düşün!",
+        "party": "Takım",
+        "party_desc": "İki takım sırayla anlatır, skor tablosu."
+      },
+      "pick_mode": "Mod seç",
+      "category": "Kategori",
+      "difficulty": "Zorluk",
+      "all": "Tümü",
+      "diff": { "easy": "Kolay", "medium": "Orta", "hard": "Zor" },
+      "round_size": "Tur kart sayısı",
+      "show_meaning": "Türkçe anlamı göster",
+      "hide_meaning": "Türkçe anlamı gizle",
+      "cards_available": "kart mevcut",
+      "no_cards_filter": "Bu filtreyle eşleşen kart yok. Kategori veya zorluk seçimini değiştir.",
+      "difficulty_counts": "Kolay {easy} · Orta {medium} · Zor {hard}",
+      "rules_btn": "Kurallar",
+      "start_game": "Oyunu Başlat",
+      "stats": {
+        "games": "Oyun",
+        "guessed": "Bilinen",
+        "best": "Rekor",
+        "party": "Takım A-B"
+      },
+      "round_complete": "Tur Tamamlandı!",
+      "correct": "Doğru",
+      "skipped": "Pas",
+      "fouls": "Tabu",
+      "party_score": "Takım Skoru",
+      "back_setup": "Kurulum",
+      "play_again": "Tekrar Oyna",
+      "team_a": "Takım A",
+      "team_b": "Takım B",
+      "current_turn": "Sıra",
+      "forbidden": "Yasak Kelimeler",
+      "foul_btn": "Tabu!",
+      "skip": "Pas",
+      "correct_btn": "Bildi!",
+      "quit": "Oyundan çık",
+      "rules": {
+        "title": "Tabu Kuralları",
+        "r1": "Hedef kelimeyi takımına İngilizce olarak anlatmaya çalış.",
+        "r2": "Kırmızı listedeki yasak kelimeleri ve köklerini kullanamazsın.",
+        "r3": "Hedef kelimeyi doğrudan söyleyemez veya heceleyemezsin.",
+        "r4": "Tabu kelime söylersen rakip 'Tabu!' diyebilir — tur geçer.",
+        "r5": "Zamanlı modda süre bitince otomatik pas geçilir.",
+        "r6": "Takım modunda sıra her karttan sonra değişir.",
+        "close": "Anladım"
+      }
+    },
+    "heads_up": {
+      "title": "Heads Up",
+      "subtitle": "Telefonu al, ekranı arkadaşlarına çevir. Onlar İngilizce anlatır, sen tahmin et.",
+      "how_title": "Nasıl oynanır?",
+      "how_1": "Bir kişi telefonu tutar ve ekrana bakmaz.",
+      "how_2": "Arkadaşlar ekrandaki kelimeyi görür ve İngilizce anlatır.",
+      "how_3": "Bildin mi? Yeşil · Pas? Sarı · Süre bitince tur biter.",
+      "all": "Tümü",
+      "cards": "kelime",
+      "start": "Turu Başlat",
+      "get_ready": "Hazır ol!",
+      "round_done": "Tur Bitti!",
+      "words_guessed": "kelime bildin",
+      "menu": "Menü",
+      "again": "Tekrar",
+      "friends_describe": "Arkadaşların bu kelimeyi anlatıyor",
+      "tilt_hint": "Büyük butonlar — başparmakla dokun",
+      "pass": "Pas",
+      "got_it": "Bildim!",
+      "stat_games": "Oyun",
+      "stat_words": "Toplam",
+      "stat_best": "Rekor"
+    },
+    "games": {
+      "back_to_panel": "Ana panele dön",
+      "playing": "Oyun modu",
+      "round_timer": "Tur süresi",
+      "show_meaning": "Türkçe anlamı göster",
+      "hide_meaning": "Türkçe anlamı gizle"
+    },
+    "charades": {
+      "title": "Charades",
+      "subtitle": "Kelimeyi sadece sen görürsün. Konuşmadan canlandır, takımın İngilizce tahmin etsin!",
+      "how_title": "Nasıl oynanır?",
+      "how_1": "Oyuncu telefonu tutar ve kelimeyi görür.",
+      "how_2": "Hiç konuşmadan jest ve mimikle canlandırır.",
+      "how_3": "Takım doğru tahmin edince yeşil, pas geçmek için sarı.",
+      "all": "Tümü",
+      "cards": "kelime",
+      "start": "Turu Başlat",
+      "get_ready": "Hazır ol!",
+      "round_done": "Tur Bitti!",
+      "words_guessed": "kelime bildiniz",
+      "menu": "Menü",
+      "again": "Tekrar",
+      "no_speaking": "Konuşmak yasak!",
+      "only_you_see": "Bu kelimeyi sadece sen görüyorsun",
+      "team_guesses": "Takımın tahmin ediyor",
+      "pass": "Pas",
+      "got_it": "Bildiler!",
+      "stat_games": "Oyun",
+      "stat_words": "Toplam",
+      "stat_best": "Rekor"
+    },
+    "emoji_clues": {
+      "title": "Emoji İpuçları",
+      "tagline": "Emojileri birleştir → tek İngilizce kelimeyi bul. (Guess the Emoji mantığı)",
+      "rule_title": "Tek kural",
+      "rule_body": "Soldan sağa emojilere bak. Her emoji bir ipucu. Hepsini birleştirince tek bir İngilizce kelime çıkar. Türkçe anlamı sadece cevapladıktan sonra görürsün.",
+      "pick_mode": "Oyun modu seç",
+      "pick_category": "Kategori",
+      "round_info": "Her tur {count} soru · {lives} can · 4 şık",
+      "start": "Oyuna Başla",
+      "menu": "Menü",
+      "again": "Tekrar Oyna",
+      "quit": "Çık",
+      "question_label": "Soru",
+      "points": "puan",
+      "round_clear": "Tur tamamlandı!",
+      "round_over": "Canların bitti!",
+      "correct_label": "doğru",
+      "best_streak": "En iyi seri: {n}",
+      "wrong_pick": "Seçimin: {word}",
+      "stat_games": "Oyun",
+      "stat_words": "Doğru",
+      "stat_streak": "Seri",
+      "stat_score": "Rekor",
+      "categories": {
+        "all": "Tümü",
+        "food": "Yemek",
+        "animals": "Hayvan",
+        "nature": "Doğa",
+        "people": "İnsan",
+        "places": "Yer",
+        "daily": "Günlük"
+      },
+      "modes": {
+        "picture": {
+          "title": "Resim Modu",
+          "rule": "2 emoji — kelimeyi doğrudan gösterir.",
+          "prompt": "Bu 2 emoji hangi kelimeyi anlatıyor?",
+          "hint": "İpucu: Emojiler nesnenin kendisini gösterir."
+        },
+        "combo": {
+          "title": "Birleştir Modu",
+          "rule": "3 emoji — ipuçlarını birleştir.",
+          "prompt": "3 emoji bir araya gelince hangi kelime oluşur?",
+          "hint": "İpucu: Her emojiyi sırayla düşün, ortak kelimeyi bul."
+        },
+        "chain": {
+          "title": "Hikâye Modu",
+          "rule": "4 emoji — küçük bir sahne anlatır.",
+          "prompt": "Bu sahne hangi İngilizce kelimeyi anlatıyor?",
+          "hint": "İpucu: Emojiler bir olayı veya durumu anlatır."
+        }
+      }
+    },
+    "settings": {
+      "title": "Ayarlar",
+      "close": "Kapat",
+      "speech_rate": "Seslendirme hızı",
+      "exam_count": "Sınav soru sayısı",
+      "game_timers": "Oyun süreleri",
+      "game_timers_hint": "Buradan ayarladığın süreler tüm oyun kurulum ekranlarında varsayılan olarak kullanılır.",
+      "taboo_timer": "Tabu — kart süresi",
+      "heads_up_timer": "Heads Up — tur süresi",
+      "charades_timer": "Charades — tur süresi",
+      "emoji_clues_timer": "Emoji İpuçları — tur süresi",
+      "reset_progress": "İlerlemeyi sıfırla",
+      "reset_confirm": "Tüm ilerleme silinecek. Emin misin?",
+      "exit_lab": "Çıkış yap — AI Lab'e dön"
+    }
   },
   "ContactPage": {
     "status_badge": "Yeni B2B & Kariyer Fırsatlarına Açık",

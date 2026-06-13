@@ -6,6 +6,7 @@ import {
   CheckCircle2, Zap, ArrowDown
 } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 // --- SABİTLER & VERİLER ---
 const NODE_WIDTH = 180;
@@ -42,17 +43,27 @@ const connectionPaths = [
 ];
 
 export default function N8NCanvas() {
+  const t = useTranslations("HomePage.automation");
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
-  const primaryColor = '#22d3ee'; 
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  const primaryColor = "#22d3ee";
 
   useEffect(() => {
     setMounted(true);
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const onChange = () => setReduceMotion(mq.matches);
+    mq.addEventListener("change", onChange);
+
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => {
+      mq.removeEventListener("change", onChange);
+      window.removeEventListener("resize", checkMobile);
+    };
   }, []);
   
   if (!mounted) return <div className="w-full h-full bg-slate-950 animate-pulse" />;
@@ -70,18 +81,20 @@ export default function N8NCanvas() {
           <div className="text-center space-y-2 mb-2 sticky top-0 bg-slate-950/80 backdrop-blur-md py-2 z-20 w-full">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono text-cyan-400">
                <Zap size={10} />
-               <span>MOBILE_VIEW</span>
+               <span>{t("mobile_pipeline")}</span>
             </div>
           </div>
 
           <div className="relative w-full max-w-xs pl-4">
             {/* 1. THE PIPELINE (Dikey Bağlantı Çizgisi) */}
-            <div className="absolute left-6 top-4 bottom-4 w-0.5 bg-slate-800 rounded-full overflow-hidden">
-              <motion.div 
-                className="w-full h-1/3 bg-gradient-to-b from-transparent via-cyan-400 to-transparent blur-[2px]"
-                animate={{ top: ["-30%", "130%"] }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-              />
+            <div className="absolute left-6 top-4 bottom-4 w-px bg-slate-800/80 rounded-full overflow-hidden">
+              {!reduceMotion && (
+                <motion.div
+                  className="w-full h-1/4 bg-gradient-to-b from-transparent via-cyan-400/80 to-transparent"
+                  animate={{ top: ["-30%", "130%"] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                />
+              )}
             </div>
 
             {/* 2. NODES (Kartlar) */}
@@ -92,10 +105,14 @@ export default function N8NCanvas() {
                 return (
                   <motion.div
                     key={node.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ delay: idx * 0.1 }}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{
+                      delay: idx * 0.07,
+                      duration: 0.45,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
                     className="relative pl-12"
                   >
                     {/* Bağlantı Noktası */}
@@ -113,7 +130,7 @@ export default function N8NCanvas() {
                       p-3 rounded-xl border backdrop-blur-md transition-all active:scale-95
                       ${node.type === 'main' 
                         ? 'bg-slate-900/90 border-cyan-500/40 shadow-[0_4px_20px_-5px_rgba(34,211,238,0.15)]' 
-                        : 'bg-slate-950/60 border-white/5'
+                        : 'bg-slate-950/60 border-ailab-border-faint'
                       }
                     `}>
                       <div className="flex items-center gap-3">
@@ -192,31 +209,45 @@ export default function N8NCanvas() {
               <motion.path
                 d={conn.path}
                 stroke={primaryColor}
-                strokeOpacity="0.1"
+                strokeOpacity="0.08"
                 strokeWidth="2"
                 fill="none"
-                initial={{ pathLength: 0 }}
-                whileInView={{ pathLength: 1 }}
+                initial={{ pathLength: 0, opacity: 0 }}
+                whileInView={{ pathLength: 1, opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ duration: 1, delay: conn.order * 0.2 }}
+                transition={{
+                  pathLength: { duration: 0.9, delay: conn.order * 0.15, ease: [0.16, 1, 0.3, 1] },
+                  opacity: { duration: 0.4, delay: conn.order * 0.15 },
+                }}
               />
 
-              <motion.path
-                d={conn.path}
-                stroke="url(#lineGradient)"
-                strokeWidth="3"
-                fill="none"
-                strokeDasharray="100 300"
-                initial={{ strokeDashoffset: 400 }}
-                animate={{ strokeDashoffset: 0 }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity, 
-                  ease: "linear",
-                  delay: conn.order * 0.2 
-                }}
-                style={{ filter: "url(#glow)" }}
-              />
+              {!reduceMotion && (
+                <motion.path
+                  d={conn.path}
+                  stroke="url(#lineGradient)"
+                  strokeWidth="2"
+                  fill="none"
+                  strokeLinecap="round"
+                  strokeDasharray="40 120"
+                  initial={{ strokeDashoffset: 160, opacity: 0 }}
+                  animate={{ strokeDashoffset: 0, opacity: [0.4, 0.9, 0.4] }}
+                  transition={{
+                    strokeDashoffset: {
+                      duration: 3.5,
+                      repeat: Infinity,
+                      ease: "linear",
+                      delay: conn.order * 0.35,
+                    },
+                    opacity: {
+                      duration: 3.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: conn.order * 0.35,
+                    },
+                  }}
+                  style={{ filter: "url(#glow)" }}
+                />
+              )}
             </g>
           ))}
         </svg>
@@ -228,10 +259,14 @@ export default function N8NCanvas() {
             return (
               <motion.div
                 key={node.id}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0.92, y: 8 }}
+                whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: node.order * 0.2, type: "spring" }}
+                transition={{
+                  delay: node.order * 0.12,
+                  duration: 0.5,
+                  ease: [0.16, 1, 0.3, 1],
+                }}
                 style={{ 
                   left: `${(node.x / 1120) * 100}%`,
                   top: `${((node.y - NODE_HEIGHT/2) / 560) * 100}%`,
@@ -241,12 +276,16 @@ export default function N8NCanvas() {
                   absolute p-3 rounded-xl border backdrop-blur-md transition-all duration-300 group
                   ${node.type === 'main' 
                     ? 'bg-slate-900/95 border-cyan-500/50 shadow-[0_0_20px_-5px_rgba(34,211,238,0.3)]' 
-                    : 'bg-slate-950/80 border-white/10 hover:border-white/20'
+                    : 'bg-slate-950/80 border-ailab-border-muted hover:border-ailab-border-selected'
                   }
                 `}
               >
                 {node.type === 'main' && (
-                   <div className="absolute inset-0 rounded-xl bg-cyan-500/5 animate-pulse" />
+                   <motion.div
+                     className="absolute inset-0 rounded-xl bg-cyan-500/5"
+                     animate={reduceMotion ? undefined : { opacity: [0.3, 0.6, 0.3] }}
+                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                   />
                 )}
 
                 <div className="flex items-center gap-3 relative z-10">
@@ -274,15 +313,20 @@ export default function N8NCanvas() {
         </div>
       </div>
       
-      <div className="absolute bottom-4 right-6 flex items-center gap-3 px-3 py-1.5 rounded-full bg-black/40 border border-white/5 backdrop-blur-md text-[9px] font-mono text-slate-400">
-         <div className="flex items-center gap-1.5">
-           <Zap size={10} className="text-cyan-400" />
-           <span>LIVE_EXECUTION</span>
+      <div className="absolute bottom-4 right-4 flex items-center gap-3 rounded-full border border-white/[0.06] bg-black/40 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-500 backdrop-blur-md sm:right-6">
+         <div className="flex items-center gap-1.5 text-cyan-400/90">
+           <Zap size={10} />
+           <span>Live</span>
          </div>
-         <div className="w-px h-3 bg-white/10" />
+         <div className="h-3 w-px bg-white/10" />
          <div className="flex items-center gap-1.5">
-           <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-           <span>NODES_READY</span>
+           <span className="relative flex h-1.5 w-1.5">
+             {!reduceMotion && (
+               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400/70 opacity-75 motion-reduce:animate-none" />
+             )}
+             <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+           </span>
+           <span>Ready</span>
          </div>
       </div>
 

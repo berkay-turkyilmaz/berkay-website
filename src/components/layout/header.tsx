@@ -7,6 +7,7 @@ import LanguageSwitcher from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { Github, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { SiteLogo } from "@/components/layout/site-logo";
 
 const cn = (...classes: (string | undefined | null | false)[]) => 
   classes.filter(Boolean).join(" ");
@@ -56,20 +57,7 @@ export function Header() {
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
           
-          {/* --- LOGO --- */}
-          <Link 
-            href="/" 
-            className="flex items-center gap-2 sm:gap-3 group z-50 cursor-pointer relative"
-          >
-            <div className="w-10 h-10 bg-gradient-to-br from-primary to-primary/80 text-primary-foreground rounded-xl flex items-center justify-center font-black text-xl transition-all duration-300 group-hover:rotate-12 group-hover:scale-110 shadow-lg shadow-primary/25 border border-primary/20 relative overflow-hidden">
-              {/* Parıltı efekti */}
-              <span className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/20 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <span className="relative z-10">B.</span>
-            </div>
-            <span className="text-xl font-black tracking-tighter hidden sm:block text-foreground group-hover:text-primary transition-colors duration-300">
-              BERKAY
-            </span>
-          </Link>
+          <SiteLogo />
 
           {/* --- MASAÜSTÜ NAVİGASYON --- */}
           <nav className="hidden md:block">

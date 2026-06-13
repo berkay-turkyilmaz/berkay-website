@@ -10,52 +10,77 @@
     "contact": "Contacto"
   },
   "HomePage": {
-    "badge": "Sistema Operativo & Abierto a Oportunidades",
-    "title": "Experiencias Digitales<br />Impulsadas por la Ingeniería",
-    "description": "Diseño interfaces escalables y flujos de trabajo autónomos impulsados por IA (n8n) utilizando arquitecturas web modernas como Next.js.",
-    "cta_projects": "Explorar Proyectos",
-    "cta_lab": "Descubrir AI Lab",
+    "badge": "Open for new opportunities",
+    "title": "I build products that scale.",
+    "description": "Full-stack engineer shipping Next.js apps, Supabase backends, and AI automations with n8n.",
+    "cta_projects": "View projects",
+    "cta_lab": "Open AI Lab",
     "hero": {
-      "name": "BERKAY",
-      "portfolio": "WORKSPACE"
+      "scroll_down": "Desplazar al contenido",
+      "scroll_hint": "Explorar"
     },
     "sections": {
+      "projects_label": "01 — Portafolio",
+      "lab_label": "02 — Laboratorio",
+      "blog_label": "03 — Publicaciones",
       "projects_preview_title": "Trabajos Seleccionados",
       "projects_preview_desc": "Arquitecturas de productos digitales orientadas al rendimiento y escalables que cumplen con requisitos empresariales complejos.",
       "view_all_work": "Ver Todos los Trabajos"
     },
+    "featured": {
+      "explore": "Explorar",
+      "1": {
+        "title": "Arquitectura Web Empresarial",
+        "description": "Ecosistema digital de alto rendimiento con Next.js 15, React Server Components e i18n.",
+        "stack": "Next.js · TypeScript · Supabase"
+      },
+      "2": {
+        "title": "Reservas Autónomas y CRM",
+        "description": "Automatización de citas que sincroniza Google Calendar y webhooks SMS vía n8n y arquitectura serverless.",
+        "stack": "n8n · Webhooks · Serverless"
+      },
+      "3": {
+        "title": "Laboratorio de IA y Automatización",
+        "description": "Entorno en vivo para Groq LLM, análisis de documentos y experimentos con agentes en terminal.",
+        "stack": "Groq · Next.js · AI Agents"
+      }
+    },
     "projects": {
       "saas_card": {
-        "title": "Arquitectura Enterprise SaaS",
-        "subtitle": "Infraestructura Next.js 15 & Supabase"
+        "title": "Enterprise SaaS Architecture",
+        "subtitle": "Next.js 15 & Supabase Infrastructure"
       },
       "code_card": {
-        "comment": "// Inicializando innovación y escalabilidad...",
-        "wip": "Preparando para Producción"
+        "comment": "// Initializing innovation and scalability...",
+        "filename": "~/system/architecture.ts",
+        "badge": "Production ready",
+        "wip": "Preparing for Production"
       }
     },
     "automation": {
-      "system_active": "Sistema: Activo & En Línea"
+      "system_active": "System online",
+      "mobile_pipeline": "Workflow"
     },
     "ai_lab": {
-      "tag": "Fase de I+D",
-      "title": "Laboratorio de IA & Automatización",
-      "description": "Entorno de prueba para procesamiento inteligente de datos y sistemas autónomos, construido con LLMs locales e integraciones de webhooks."
+      "tag": "Live prototype",
+      "title": "AI & Automation Studio",
+      "description": "Groq agents, document analysis, and n8n workflows — production-grade live experiments.",
+      "subline": "BEX assistant · Deep analysis · Automation layer"
     },
     "blog": {
       "title": "Blog",
-      "subtitle": "Artículos Técnicos y Notas de Arquitectura",
-      "view_all": "Leer Todo",
+      "subtitle": "Technical Articles & Architecture Notes",
+      "view_all": "Read All",
       "posts": {
         "1": {
-          "title": "Arquitectura Micro-Frontend y Next.js 15",
-          "excerpt": "Diseño de arquitectura web empresarial con Server Actions y React Server Components.",
-          "category": "Arquitectura"
+          "title": "Next.js 15 and Micro-Frontend Architecture",
+          "excerpt": "Enterprise web architecture design with Server Actions and React Server Components.",
+          "category": "Architecture"
         },
         "2": {
-          "title": "Automatización con LLM y n8n en Flujos Empresariales",
-          "excerpt": "Una guía para transformar flujos de datos manuales en sistemas autónomos a través de webhooks.",
-          "category": "Ingeniería"
+          "title": "LLM and n8n Automation in Business Workflows",
+          "excerpt": "A guide to transforming manual data flows into autonomous systems via webhooks.",
+          "category": "Engineering"
         }
       }
     },
@@ -69,26 +94,227 @@
     "welcome": "Sistema listo. ¿Qué datos te gustaría analizar?",
     "sidebar": {
       "categories": {
-        "tools": "HERRAMIENTAS DE INGENIERÍA",
-        "apps": "INTEGRACIONES DE SISTEMA"
+        "laboratory": "LABORATORY",
+        "tools": "TOOLS",
+        "portfolio": "PROJECTS",
+        "tools_legacy": "TOOLS",
+        "projects": "PROJECTS",
+        "apps": "INTEGRACIONES DE SISTEMA",
+        "chat": "CHAT"
       },
       "items": {
+        "deep_analyzer": "Context Analysis",
+        "deep_analyzer_desc": "Text and token visualization",
+        "chain_terminal": "Chain-of-thought",
+        "chain_terminal_desc": "Multi-step reasoning",
+        "agent_console": "BEX Assistant",
+        "agent_console_desc": "Technical Q&A and portfolio",
+        "prompt_sandbox": "Document Analysis",
+        "prompt_sandbox_desc": "PDF · TXT · RAG",
+        "nav_settings": "Settings",
+        "nav_settings_desc": "Model and workspace",
+        "nav_api": "API configuration",
+        "nav_api_desc": "Keys and usage",
+        "terminal": "LLM Terminal",
+        "terminal_desc": "AI assistant",
+        "pdf": "Document Analysis",
+        "pdf_desc": "RAG · PDF",
+        "engineer": "System Engineer",
+        "engineer_desc": "Architecture",
+        "english": "EnglishPath",
+        "english_desc": "AI EdTech",
+        "booking": "Booking SaaS",
+        "booking_desc": "Appointment system",
         "chat": "Terminal LLM",
-        "pdf": "Análisis de Documentos",
         "prompt": "Ingeniero de Sistemas",
         "youtube": "Extracción de Datos",
-        "scheduler": "Automatización de Citas"
+        "scheduler": "Automatización de Citas",
+        "bex_assistant": "BEX Assistant",
+        "bex_assistant_desc": "Technical Q&A and portfolio",
+        "document_rag": "Document Analysis",
+        "document_rag_desc": "PDF · TXT · RAG"
       },
       "new_chat": "Nueva Sesión",
-      "user_status": "Usuario Autorizado"
+      "expand": "Expandir menú",
+      "history": "Historial",
+      "history_search": "Buscar...",
+      "settings": "Ajustes",
+      "user_status": "Workspace",
+      "soon": "Pronto",
+      "back_home": "Back to site",
+      "ui_language": "Interface language",
+      "guest_user": "Guest"
     },
-    "input": {
-      "placeholders": {
-        "chat": "Consulta sobre arquitectura de sistemas, análisis de código o escenarios de integración...",
-        "pdf": "Solicita estructuras de datos o resúmenes del documento subido...",
-        "prompt": "Indica tu requerimiento y lo compilaré en un prompt optimizado..."
+    "chat": {
+      "terminal_empty_title": "BEX ready.",
+      "terminal_empty_desc": "Ask anything about Next.js, Supabase, n8n integrations, or Berkay's projects.",
+      "pdf_empty_title": "Upload a document, analyze it.",
+      "pdf_empty_desc": "Upload a PDF, TXT or MD file — BEX reads the content and answers your questions.",
+      "engineer_empty_title": "Hi, I'm BEX.",
+      "engineer_empty_desc": "Ask about Next.js, Supabase, AI architecture, or Berkay's projects.",
+      "thinking": "thinking",
+      "copy": "Copy",
+      "copied": "Copied",
+      "stop": "Stop",
+      "send": "Send",
+      "placeholder_terminal": "Ask something or write code...",
+      "placeholder_pdf_loaded": "Ask about...",
+      "placeholder_pdf_empty": "Upload a file first...",
+      "placeholder_engineer": "Ask an architecture or DevOps question...",
+      "upload_drag": "Drag file or click",
+      "upload_formats": "PDF · TXT · MD — Max 20 MB",
+      "upload_reading": "Reading PDF...",
+      "uploaded_label": "Uploaded · You can ask questions",
+      "workflow_panel_title": "Reasoning trace",
+      "workflow_step_context": "Analyzing context…",
+      "workflow_step_scan": "Scanning data sources…",
+      "workflow_step_synthesize": "Synthesizing response…",
+      "footer_warning": "BEX · R&D system — verify outputs",
+      "error_network": "Connection error. Check your internet.",
+      "error_stream": "Error receiving response. Please retry.",
+      "error_file_too_large": "File too large. Maximum 20 MB.",
+      "error_file_process": "Could not process the file.",
+      "error_server_connect": "Could not reach the server. Try again.",
+      "error_api_key": "AI service is not configured on the server.",
+      "role_user": "You",
+      "role_assistant": "Assistant",
+      "time_just_now": "just now",
+      "time_mins": "{n}m",
+      "time_hours": "{n}h",
+      "time_days": "{n}d",
+      "suggested_terminal_1": "How to write Supabase RLS policies?",
+      "suggested_terminal_2": "How to create a streaming API route in Next.js 15?",
+      "suggested_terminal_3": "How to set up a Telegram bot with n8n?",
+      "suggested_terminal_4": "How to implement semantic search with pgvector?",
+      "suggested_pdf_1": "Summarize this document",
+      "suggested_pdf_2": "List the main topics",
+      "suggested_pdf_3": "What are the key data points?",
+      "suggested_pdf_4": "What is the author's main argument?",
+      "suggested_engineer_1": "Monolith vs microservices — explain the trade-offs",
+      "suggested_engineer_2": "How to integrate n8n with Supabase?",
+      "suggested_engineer_3": "Vercel Edge vs Node.js runtime differences?",
+      "suggested_engineer_4": "How to configure PostgreSQL connection pooling?",
+      "engineer_prompt_chip_1": "Who is Berkay and what does he build?",
+      "engineer_prompt_chip_2": "Summarize Berkay's web development experience",
+      "engineer_prompt_chip_3": "How do you scale a product with Next.js and Supabase?",
+      "engineer_prompt_chip_4": "Give a short overview of Berkay's portfolio projects"
+    },
+    "settings": {
+      "title": "Settings",
+      "subtitle": "BEX Workspace Configuration",
+      "subtitle_short": "Workspace",
+      "nav_label": "Settings sections",
+      "tab_general": "Assistant",
+      "tab_language": "Language",
+      "tab_data": "Data",
+      "panel_intro": "Personalize your BEX assistant.",
+      "hint_general": "Generation settings for the Groq-powered assistant.",
+      "hint_data": "Session chat stored locally in your browser.",
+      "ui_dark_note": "AI Lab is designed for a dark palette. Site-wide light/dark is controlled from the main layout, not here.",
+      "language_bex_hint": "Language BEX uses to answer (independent of the page locale).",
+      "lang_auto_desc": "Match page language",
+      "lang_tr_desc": "Always Turkish",
+      "lang_en_desc": "Always English",
+      "lang_de_desc": "Always German",
+      "danger_clear_hint": "Clears active chat cache on this device only.",
+      "display_name": "Display Name",
+      "display_name_placeholder": "Your name...",
+      "save": "Save",
+      "model": "AI Model",
+      "response_length": "Response Length",
+      "length_short": "Short",
+      "length_short_desc": "Summary",
+      "length_medium": "Medium",
+      "length_medium_desc": "Balanced",
+      "length_detailed": "Detailed",
+      "length_detailed_desc": "Comprehensive",
+      "creativity": "Creativity",
+      "creativity_precise": "Precise",
+      "creativity_creative": "Creative",
+      "language": "Response Language",
+      "streaming": "Streaming Mode",
+      "streaming_desc": "Show response in real-time",
+      "danger_zone": "Danger Zone",
+      "clear_chat": "Clear active chat",
+      "cleared": "Chat cleared",
+      "close": "Close",
+      "version": "BEX · AI Lab v2.0",
+      "theme": "Theme",
+      "theme_dark": "Dark",
+      "theme_light": "Light",
+      "theme_system": "System",
+      "models": {
+        "llama_8b_label": "Llama 3.1 8B",
+        "llama_8b_desc": "Fast replies — daily use",
+        "llama_8b_speed": "~200 t/s",
+        "llama_70b_label": "Llama 3.3 70B",
+        "llama_70b_desc": "Deeper analysis for complex questions",
+        "llama_70b_speed": "~80 t/s"
       },
-      "warning": "Este sistema utiliza LLMs locales para propósitos de I+D. Por favor, verifica las salidas antes de operaciones críticas."
+      "section_profile": "Profile",
+      "section_profile_desc": "Name shown in chat and sidebar.",
+      "section_response": "Response style",
+      "lang_auto": "Auto",
+      "saved": "Saved"
+    },
+    "header": {
+      "new_chat": "New Chat",
+      "model_label": "Model"
+    },
+    "deepAnalyzer": {
+      "title": "Deep Analyzer",
+      "subtitle": "Context window · Groq Llama",
+      "view_heatmap": "Heatmap",
+      "view_split": "Split",
+      "view_graph": "Graph",
+      "upload_title": "Drag & drop or click to select",
+      "upload_hint": "PDF · TXT · MD — imported into the analysis field (max 20 MB)",
+      "placeholder": "Paste text to analyze here...",
+      "token_estimate": "~{n} tokens",
+      "analyze": "Analyze",
+      "analyzing": "Analyzing...",
+      "or": "or",
+      "sample_technical": "Technical excerpt",
+      "sample_academic": "Academic text",
+      "sample_blog": "Blog post",
+      "context_window": "Context Window",
+      "context_fill": "{pct}% full · Llama 3.1 8192 token limit",
+      "compression_title": "Compression opportunity",
+      "compression_body": "Text could be written {pct}% more efficiently.",
+      "copy_optimized": "Copy optimized",
+      "copied": "Copied!",
+      "chunk_roles": "Chunk roles",
+      "role_subject": "Subject / main idea",
+      "role_predicate": "Predicate / action",
+      "role_context": "Context",
+      "role_evidence": "Evidence / support",
+      "role_connector": "Connector",
+      "role_conclusion": "Conclusion",
+      "scanning": "Scanning text...",
+      "scan_parsed": "✓ Sentences parsed",
+      "scan_tokens": "✓ Token count complete",
+      "scan_semantic": "→ Groq Llama 3.1 running semantic analysis...",
+      "heatmap_title": "Semantic heatmap",
+      "heatmap_hint": "Hover → detail panel",
+      "graph_title": "Semantic connection graph",
+      "graph_hint": "Scroll → zoom · Drag → pan",
+      "chunk_label": "Chunk #{n}",
+      "weight": "Weight",
+      "related": "Related:",
+      "table_title": "Full analysis table",
+      "col_num": "#",
+      "col_text": "Text",
+      "col_role": "Role",
+      "col_weight": "Weight",
+      "col_token": "Tokens",
+      "col_redundancy": "Redundancy",
+      "col_reason": "Reason",
+      "error_file_too_large": "File too large. Maximum 20 MB.",
+      "error_pdf_process": "Could not process PDF.",
+      "error_file_read": "Could not read file.",
+      "error_unsupported": "Supported formats: PDF, TXT, MD.",
+      "error_analysis": "Analysis failed",
+      "error_unknown": "Unknown error"
     }
   },
   "ProjectsPage": {
@@ -203,6 +429,11 @@
   },
   "LanguageSwitcher": {
     "label": "Cambiar Modelo de Lenguaje"
+  },
+  "NotFound": {
+    "title": "Página no encontrada",
+    "description": "El sistema autónomo que buscas no se encontró en estas coordenadas.",
+    "back": "Volver al inicio"
   },
   "ContactPage": {
     "status_badge": "Abierto a Nuevas Oportunidades B2B & Profesionales",
