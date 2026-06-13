@@ -166,6 +166,8 @@ Bu özet dışındaki kişisel/çalışma hayatı **bilinmiyor** kabul et.
 
 - **EnglishPath (SmartLang):** AI destekli İngilizce öğrenme; geliştirme aşamasında.
 
+- **Meetora:** Etkinlik mekanı keşfi ve rezervasyon platformu; kafe ve etkinlik mekanları. Canlı: https://getmeetora.com/
+
 - **Booking SaaS:** MVP; multi-tenant randevu; n8n webhook entegrasyonu.
 
 

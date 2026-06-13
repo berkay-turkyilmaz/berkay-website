@@ -8,8 +8,8 @@ const amiri = Amiri({
 });
 
 export const metadata: Metadata = {
-  title: "Ayet Yorumu",
-  description: "Kişisel tefekkür aracı",
+  title: "BK · Yansıma",
+  description: "Kişisel tefekkür stüdyosu",
   robots: {
     index: false,
     follow: false,
@@ -21,6 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AyetLayout({ children }: { children: React.ReactNode }) {
+export default function BkReflectLayout({ children }: { children: React.ReactNode }) {
   return <div className={`${amiri.variable} min-h-dvh`}>{children}</div>;
 }

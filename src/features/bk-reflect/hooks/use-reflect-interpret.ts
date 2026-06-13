@@ -1,19 +1,27 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
-export type AyetFormInput = {
+export type ReflectFormInput = {
   reference: string;
   verseText: string;
   question: string;
 };
 
-export function useAyetInterpret() {
+function parseStreamError(text: string): string | null {
+  if (text.startsWith("__ERR_EXTRACT__:")) {
+    return text.slice("__ERR_EXTRACT__:".length);
+  }
+  return null;
+}
+
+export function useReflectInterpret() {
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const interpret = useCallback(async (input: AyetFormInput) => {
+  const interpret = useCallback(async (input: ReflectFormInput) => {
     const reference = input.reference.trim();
     const verseText = input.verseText.trim();
 
@@ -22,12 +30,15 @@ export function useAyetInterpret() {
       return;
     }
 
+    abortRef.current?.abort();
+    abortRef.current = new AbortController();
+
     setIsLoading(true);
     setError(null);
     setResult("");
 
     try {
-      const res = await fetch("/api/ayet-interpret", {
+      const res = await fetch("/api/bk-reflect", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -35,6 +46,7 @@ export function useAyetInterpret() {
           verseText: verseText || undefined,
           question: input.question.trim() || undefined,
         }),
+        signal: abortRef.current.signal,
       });
 
       if (!res.ok) {
@@ -52,13 +64,24 @@ export function useAyetInterpret() {
         const { done, value } = await reader.read();
         if (done) break;
         accumulated += decoder.decode(value, { stream: true });
+        const streamErr = parseStreamError(accumulated);
+        if (streamErr) {
+          throw new Error(streamErr);
+        }
         setResult(accumulated);
       }
     } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") return;
+      if (err instanceof Error && err.name === "AbortError") return;
       setError(err instanceof Error ? err.message : "Beklenmeyen bir hata oluştu");
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const stop = useCallback(() => {
+    abortRef.current?.abort();
+    setIsLoading(false);
   }, []);
 
   const reset = useCallback(() => {
@@ -66,5 +89,5 @@ export function useAyetInterpret() {
     setError(null);
   }, []);
 
-  return { result, isLoading, error, interpret, reset };
+  return { result, isLoading, error, interpret, reset, stop };
 }

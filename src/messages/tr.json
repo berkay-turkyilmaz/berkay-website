@@ -127,7 +127,9 @@
         "english": "EnglishPath",
         "english_desc": "AI EdTech",
         "booking": "Booking SaaS",
-        "booking_desc": "Randevu sistemi"
+        "booking_desc": "Randevu sistemi",
+        "meetora": "Meetora",
+        "meetora_desc": "Etkinlik mekanı rezervasyonu"
       },
       "new_chat": "Yeni Sohbet",
       "expand": "Menüyü genişlet",

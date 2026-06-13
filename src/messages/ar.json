@@ -125,6 +125,8 @@
         "english_desc": "AI EdTech",
         "booking": "Booking SaaS",
         "booking_desc": "Appointment system",
+        "meetora": "Meetora",
+        "meetora_desc": "Event venue booking",
         "chat": "محطة LLM",
         "prompt": "مهندس النظم",
         "youtube": "استخراج البيانات",

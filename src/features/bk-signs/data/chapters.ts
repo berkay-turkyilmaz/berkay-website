@@ -1,4 +1,4 @@
-export type MucizeChapter = {
+export type SignsChapter = {
   id: string;
   title: string;
   reference: string;
@@ -8,7 +8,7 @@ export type MucizeChapter = {
   note?: string;
 };
 
-export const MUCIZE_CHAPTERS: MucizeChapter[] = [
+export const SIGNS_CHAPTERS: SignsChapter[] = [
   {
     id: "hadid",
     title: "Demirin İndirilmesi",

@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { BookOpen, Loader2, Sparkles } from "lucide-react";
+import { BookOpen, Loader2, Sparkles, Square, Bot } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AyetResult } from "@/features/ayet/components/ayet-result";
-import { useAyetInterpret } from "@/features/ayet/hooks/use-ayet-interpret";
+import { ReflectResult } from "@/features/bk-reflect/components/reflect-result";
+import { useReflectInterpret } from "@/features/bk-reflect/hooks/use-reflect-interpret";
 
 const QUICK_REFERENCES = [
   { label: "Fatiha 1", value: "1:1" },
@@ -15,8 +15,8 @@ const QUICK_REFERENCES = [
   { label: "Yasin 36:58", value: "36:58" },
 ] as const;
 
-export function AyetLanding() {
-  const { result, isLoading, error, interpret, reset } = useAyetInterpret();
+export function ReflectLanding() {
+  const { result, isLoading, error, interpret, reset, stop } = useReflectInterpret();
   const [reference, setReference] = useState("");
   const [verseText, setVerseText] = useState("");
   const [question, setQuestion] = useState("");
@@ -28,7 +28,6 @@ export function AyetLanding() {
 
   return (
     <div className="relative min-h-dvh overflow-hidden bg-[#060a08] text-amber-50">
-      {/* Ambient background */}
       <div
         className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_50%_at_50%_-10%,rgb(180_140_60/0.08),transparent_60%)]"
         aria-hidden
@@ -44,29 +43,34 @@ export function AyetLanding() {
       />
 
       <div className="relative mx-auto flex max-w-3xl flex-col px-5 pb-20 pt-14 sm:px-6 sm:pt-20">
-        {/* Hero */}
         <header className="mb-12 text-center">
           <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-amber-800/30 bg-amber-950/30 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-amber-200/70">
             <BookOpen className="h-3.5 w-3.5" />
-            Tefekkür
+            BK · Tefekkür
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-amber-50 sm:text-4xl md:text-5xl">
-            Ayet Yorumu
+            Yansıma Stüdyosu
           </h1>
           <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-amber-100/55 sm:text-base">
-            Kur&apos;an ayetlerini bağlamıyla birlikte anlamaya yardımcı olan kişisel bir
-            tefekkür aracı. Resmi fetva veya bağlayıcı dinî hüküm niteliği taşımaz.
+            Ayetleri bağlamıyla birlikte anlamaya yardımcı olan kişisel bir tefekkür aracı.
+            Resmi fetva veya bağlayıcı dinî hüküm niteliği taşımaz.
+          </p>
+          <p className="mx-auto mt-3 inline-flex items-center gap-1.5 rounded-full border border-amber-900/25 bg-amber-950/20 px-3 py-1 text-[11px] text-amber-200/45">
+            <Bot className="h-3 w-3" />
+            Yanıtlar yapay zeka ile üretilir; doğrulanmış tefsir kaynağı değildir.
           </p>
         </header>
 
-        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="rounded-2xl border border-amber-900/25 bg-[#0a0f0c]/90 p-6 shadow-2xl backdrop-blur-md sm:p-8"
         >
           <div className="space-y-5">
             <div className="space-y-2">
-              <label htmlFor="reference" className="text-xs font-semibold uppercase tracking-wider text-amber-200/60">
+              <label
+                htmlFor="reference"
+                className="text-xs font-semibold uppercase tracking-wider text-amber-200/60"
+              >
                 Sure : Ayet
               </label>
               <Input
@@ -96,8 +100,12 @@ export function AyetLanding() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="verseText" className="text-xs font-semibold uppercase tracking-wider text-amber-200/60">
-                Ayet metni veya meal <span className="normal-case text-amber-100/30">(isteğe bağlı)</span>
+              <label
+                htmlFor="verseText"
+                className="text-xs font-semibold uppercase tracking-wider text-amber-200/60"
+              >
+                Ayet metni veya meal{" "}
+                <span className="normal-case text-amber-100/30">(isteğe bağlı)</span>
               </label>
               <Textarea
                 id="verseText"
@@ -111,7 +119,10 @@ export function AyetLanding() {
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="question" className="text-xs font-semibold uppercase tracking-wider text-amber-200/60">
+              <label
+                htmlFor="question"
+                className="text-xs font-semibold uppercase tracking-wider text-amber-200/60"
+              >
                 Sorunuz <span className="normal-case text-amber-100/30">(isteğe bağlı)</span>
               </label>
               <Input
@@ -131,31 +142,42 @@ export function AyetLanding() {
             </p>
           )}
 
-          <Button
-            type="submit"
-            disabled={isLoading}
-            className="mt-6 h-12 w-full rounded-xl bg-amber-700/90 font-semibold text-amber-50 hover:bg-amber-600 disabled:opacity-60"
-          >
-            {isLoading ? (
-              <>
-                <Loader2 className="h-4 w-4 animate-spin" />
-                Yorumlanıyor…
-              </>
-            ) : (
-              <>
-                <Sparkles className="h-4 w-4" />
-                Ayeti Yorumla
-              </>
+          <div className="mt-6 flex gap-3">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="h-12 flex-1 rounded-xl bg-amber-700/90 font-semibold text-amber-50 hover:bg-amber-600 disabled:opacity-60"
+            >
+              {isLoading ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Yorumlanıyor…
+                </>
+              ) : (
+                <>
+                  <Sparkles className="h-4 w-4" />
+                  Yorumla
+                </>
+              )}
+            </Button>
+            {isLoading && (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={stop}
+                className="h-12 rounded-xl border-amber-800/40 bg-transparent text-amber-200/70 hover:bg-amber-950/40"
+              >
+                <Square className="h-4 w-4" />
+                Durdur
+              </Button>
             )}
-          </Button>
+          </div>
         </form>
 
-        {/* Result */}
         <div className="mt-8">
-          <AyetResult content={result} isLoading={isLoading} />
+          <ReflectResult content={result} isLoading={isLoading} />
         </div>
 
-        {/* Disclaimer */}
         <footer className="mt-16 border-t border-amber-900/20 pt-8 text-center text-xs leading-relaxed text-amber-100/35">
           <p>
             Bu sayfa yalnızca kişisel tefekkür amaçlıdır. Dinî konularda Diyanet İşleri

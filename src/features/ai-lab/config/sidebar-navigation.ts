@@ -10,6 +10,8 @@ import {
 
   ExternalLink,
 
+  MapPin,
+
   type LucideIcon,
 
 } from "lucide-react";
@@ -153,6 +155,24 @@ export const AILAB_SIDEBAR_SECTIONS: readonly SidebarSection[] = [
         type: "link",
 
         href: "/ai-lab/english-path",
+
+        isOutbound: true,
+
+      },
+
+      {
+
+        id: "meetora",
+
+        labelKey: "sidebar.items.meetora",
+
+        descKey: "sidebar.items.meetora_desc",
+
+        icon: MapPin,
+
+        type: "link",
+
+        href: "https://getmeetora.com/",
 
         isOutbound: true,
 

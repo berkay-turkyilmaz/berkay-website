@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/ayet", "/*/ayet", "/mucize", "/*/mucize"],
+      disallow: ["/bk-reflect", "/*/bk-reflect", "/bk-signs", "/*/bk-signs"],
     },
   };
 }

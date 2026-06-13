@@ -2,6 +2,8 @@
 
 import { useRef } from "react";
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { VideoLayer } from "@/features/bk-signs/components/video-layer";
+import { SIGNS_VIDEO_SLOTS } from "@/features/bk-signs/data/video-assets";
 
 const PHASE_TEXTS = [
   "Güneş akıp gidiyor…",
@@ -20,6 +22,7 @@ export function CosmicScrollStage() {
 
   const sunX = useTransform(scrollYProgress, [0, 0.25], ["-8%", "22%"]);
   const sunScale = useTransform(scrollYProgress, [0, 0.25, 0.45, 0.55], [0.55, 0.7, 1.35, 1.6]);
+  const sunOpacity = useTransform(scrollYProgress, [0.38, 0.48], [1, 0]);
   const sunHue = useTransform(scrollYProgress, [0.15, 0.45], [45, 0]);
   const sunFilter = useTransform(sunHue, (h) => `hue-rotate(${h}deg)`);
   const burstOpacity = useTransform(scrollYProgress, [0.42, 0.5, 0.62], [0, 1, 0]);
@@ -27,6 +30,9 @@ export function CosmicScrollStage() {
   const ironOpacity = useTransform(scrollYProgress, [0.58, 0.72, 0.92], [0, 1, 0.6]);
   const earthScale = useTransform(scrollYProgress, [0.65, 0.95], [0.6, 1]);
   const labelOpacity = useTransform(scrollYProgress, [0, 0.08, 0.92, 1], [0, 1, 1, 0]);
+  const videoSunOpacity = useTransform(scrollYProgress, [0, 0.35, 0.45], [0.55, 0.85, 0]);
+  const videoBurstOpacity = useTransform(scrollYProgress, [0.4, 0.48, 0.65], [0, 0.9, 0]);
+  const videoEarthOpacity = useTransform(scrollYProgress, [0.6, 0.72, 0.95], [0, 0.85, 0.5]);
 
   return (
     <div ref={containerRef} className="relative h-[320vh]">
@@ -40,11 +46,22 @@ export function CosmicScrollStage() {
           aria-hidden
         />
 
+        <motion.div className="absolute inset-0 z-[1]" style={{ opacity: videoSunOpacity }}>
+          <VideoLayer src={SIGNS_VIDEO_SLOTS.sun} className="opacity-80 mix-blend-screen" />
+        </motion.div>
+        <motion.div className="absolute inset-0 z-[1]" style={{ opacity: videoBurstOpacity }}>
+          <VideoLayer src={SIGNS_VIDEO_SLOTS.burst} loop={false} className="opacity-90 mix-blend-screen" />
+        </motion.div>
+        <motion.div className="absolute inset-0 z-[1]" style={{ opacity: videoEarthOpacity }}>
+          <VideoLayer src={SIGNS_VIDEO_SLOTS.ironEarth} className="opacity-75 mix-blend-screen" />
+        </motion.div>
+
         <motion.div
           className="absolute z-10 rounded-full"
           style={{
             x: sunX,
             scale: sunScale,
+            opacity: sunOpacity,
             width: 140,
             height: 140,
             filter: sunFilter,
@@ -85,6 +102,18 @@ export function CosmicScrollStage() {
           style={{ opacity: labelOpacity }}
         >
           <PhaseLabel progress={scrollYProgress} />
+        </motion.div>
+
+        <motion.div
+          className="absolute left-4 right-4 top-4 z-50 mx-auto max-w-md"
+          style={{ opacity: labelOpacity }}
+        >
+          <div className="h-0.5 overflow-hidden rounded-full bg-white/10">
+            <motion.div
+              className="h-full origin-left rounded-full bg-amber-400/70"
+              style={{ scaleX: scrollYProgress }}
+            />
+          </div>
         </motion.div>
 
         <motion.p

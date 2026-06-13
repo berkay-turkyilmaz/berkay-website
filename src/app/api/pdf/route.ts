@@ -1,13 +1,15 @@
-import { createGroq } from "@ai-sdk/groq";
 import { streamText } from "ai";
 import { NextRequest } from "next/server";
 import * as zlib from "zlib";
 import { promisify } from "util";
+import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
+import { normalizeBexLanguage } from "@/lib/ai/bex-language";
+import { createPlainTextStreamResponse } from "@/lib/ai/text-stream-response";
+import { resolveLanguageModel } from "@/lib/ai/provider-registry";
 
 const inflate = promisify(zlib.inflate);
 const inflateRaw = promisify(zlib.inflateRaw);
 
-const groq = createGroq({ apiKey: process.env.GROQ_API_KEY });
 export const maxDuration = 60;
 
 type ResponseLength = "short" | "medium" | "detailed";
@@ -187,7 +189,7 @@ function getRealDateTime() {
   return new Intl.DateTimeFormat("tr-TR", {
     weekday: "long", year: "numeric", month: "long",
     day: "numeric", hour: "2-digit", minute: "2-digit",
-    timeZone: "Europe/Berlin",
+    timeZone: "Europe/Istanbul",
   }).format(new Date());
 }
 
@@ -280,6 +282,13 @@ export async function POST(req: NextRequest) {
 
     // ── Chat: retrieve + stream ──────────────────────────────────────────────
     if (contentType.includes("application/json")) {
+      if (!process.env.GROQ_API_KEY?.trim()) {
+        return Response.json(
+          { error: "GROQ_API_KEY is not configured on the server." },
+          { status: 503 }
+        );
+      }
+
       const {
         messages = [],
         chunks = [] as string[],
@@ -290,36 +299,30 @@ export async function POST(req: NextRequest) {
         language = "tr",
       } = await req.json();
 
-      const lang: Language =
-        language === "en" || language === "de" ? language : "tr";
+      const lang = normalizeBexLanguage(
+        language === "en" || language === "de" || language === "tr" ? language : "tr"
+      );
 
       if (!chunks?.length) {
         return Response.json({ error: "Döküman içeriği boş. Önce dosya yükleyin." }, { status: 400 });
       }
 
+      const modelId = (GROQ_CHAT_MODEL_IDS as readonly string[]).includes(model)
+        ? model
+        : "llama-3.1-8b-instant";
+
       const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === "user");
       const relevant = retrieveTopChunks(chunks, lastUser?.content ?? "");
       const system = buildSystemPrompt(relevant, chunks.length, fileName, responseLength, lang);
 
-      const result = streamText({ model: groq(model), system, messages, temperature });
-
-      const stream = new ReadableStream({
-        async start(controller) {
-          const encoder = new TextEncoder();
-          for await (const chunk of result.textStream) {
-            controller.enqueue(encoder.encode(chunk));
-          }
-          controller.close();
-        },
+      const result = streamText({
+        model: resolveLanguageModel("groq", modelId as (typeof GROQ_CHAT_MODEL_IDS)[number]),
+        system,
+        messages,
+        temperature,
       });
 
-      return new Response(stream, {
-        headers: {
-          "Content-Type": "text/plain; charset=utf-8",
-          "Transfer-Encoding": "chunked",
-          "Cache-Control": "no-cache",
-        },
-      });
+      return createPlainTextStreamResponse(result.textStream, { logLabel: "BEX PDF" });
     }
 
     return new Response("Unsupported content type", { status: 415 });

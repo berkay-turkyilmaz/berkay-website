@@ -124,6 +124,8 @@
         "english_desc": "AI EdTech",
         "booking": "Booking SaaS",
         "booking_desc": "Appointment system",
+        "meetora": "Meetora",
+        "meetora_desc": "Event venue booking",
         "bex_assistant": "BEX Assistant",
         "bex_assistant_desc": "Technical Q&A and portfolio",
         "document_rag": "Document Analysis",

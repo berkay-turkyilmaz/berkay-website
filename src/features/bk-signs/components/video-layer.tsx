@@ -10,7 +10,6 @@ type VideoLayerProps = {
   active?: boolean;
 };
 
-/** Dosya varsa video, yoksa null — üst katman CSS placeholder gösterir */
 export function VideoLayer({ src, className, loop = true, active = true }: VideoLayerProps) {
   const [available, setAvailable] = useState(false);
 

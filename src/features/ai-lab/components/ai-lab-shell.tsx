@@ -14,7 +14,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { PanelLeft, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MODEL_OPTIONS, SESSION_KEYS, HISTORY_KEY, DEFAULT_SETTINGS } from "../constants";
+import { MODEL_OPTIONS, SESSION_KEYS, HISTORY_KEY, DEFAULT_SETTINGS, normalizeChatMode } from "../constants";
 import type { BexChatMessage, ChatHistoryItem, ChatMode, SidebarItem, WorkspaceSettings } from "../types";
 import {
   AILAB_ROUTES,
@@ -129,7 +129,7 @@ export function AiLabShell({ children }: { children: ReactNode }) {
         if (firstUser && parsed.length > 0) {
           const item: ChatHistoryItem = {
             id: Date.now().toString(),
-            mode: activeMode,
+            mode: normalizeChatMode(activeMode),
             title:
               firstUser.content.slice(0, 45) + (firstUser.content.length > 45 ? "…" : ""),
             timestamp: Date.now(),
@@ -182,7 +182,9 @@ export function AiLabShell({ children }: { children: ReactNode }) {
       return;
     }
     if (item.type === "link" && item.href) {
-      if (item.isOutbound) {
+      if (item.href.startsWith("http://") || item.href.startsWith("https://")) {
+        window.open(item.href, "_blank", "noopener,noreferrer");
+      } else if (item.isOutbound) {
         const prefix = locale === "tr" ? "" : `/${locale}`;
         window.open(`${prefix}${item.href}`, "_blank", "noopener,noreferrer");
       } else {
@@ -264,18 +266,18 @@ export function AiLabShell({ children }: { children: ReactNode }) {
           filteredHistory={filteredHistory}
           activeChatId={activeChatId}
           onHistoryItemClick={(item) => {
-            const mode = item.mode === "terminal" ? "engineer" : item.mode;
+            const mode = normalizeChatMode(item.mode);
             setActiveMode(mode);
             setEnableAgentWorkflow(false);
             setActiveChatId(item.id);
             if (item.messages?.length) {
               sessionStorage.setItem(
-                SESSION_KEYS[item.mode],
+                SESSION_KEYS[mode],
                 JSON.stringify(item.messages)
               );
               setChatSessionKey(`restore-${item.id}`);
             }
-            const target = getChatRouteForMode(item.mode);
+            const target = getChatRouteForMode(mode);
             if (!pathnameSuffixMatches(pathname, target)) {
               router.push(target as Parameters<typeof router.push>[0]);
             }

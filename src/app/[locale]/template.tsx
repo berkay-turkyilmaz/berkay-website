@@ -7,7 +7,7 @@ import { BRAND_NAME, LogoMark } from "@/components/brand/logo-mark";
 export default function Template({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  if (pathname?.includes("/ayet") || pathname?.includes("/mucize")) {
+  if (pathname?.includes("/bk-reflect") || pathname?.includes("/bk-signs")) {
     return <>{children}</>;
   }
 

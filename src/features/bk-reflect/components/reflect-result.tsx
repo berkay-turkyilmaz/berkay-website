@@ -4,13 +4,13 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { cn } from "@/lib/utils";
 
-type AyetResultProps = {
+type ReflectResultProps = {
   content: string;
   isLoading: boolean;
   className?: string;
 };
 
-export function AyetResult({ content, isLoading, className }: AyetResultProps) {
+export function ReflectResult({ content, isLoading, className }: ReflectResultProps) {
   if (!content && !isLoading) return null;
 
   return (
@@ -21,7 +21,11 @@ export function AyetResult({ content, isLoading, className }: AyetResultProps) {
       )}
     >
       {isLoading && !content && (
-        <p className="text-sm text-amber-100/50 animate-pulse">Yorum hazırlanıyor…</p>
+        <div className="space-y-3" aria-live="polite">
+          <p className="text-sm text-amber-100/50 animate-pulse">Yorum hazırlanıyor…</p>
+          <div className="h-2 w-3/4 rounded bg-amber-900/30 animate-pulse" />
+          <div className="h-2 w-1/2 rounded bg-amber-900/20 animate-pulse" />
+        </div>
       )}
       {content && (
         <ReactMarkdown
@@ -67,7 +71,7 @@ export function AyetResult({ content, isLoading, className }: AyetResultProps) {
         </ReactMarkdown>
       )}
       {isLoading && content && (
-        <span className="mt-2 inline-block h-4 w-0.5 animate-pulse bg-amber-400/70" />
+        <span className="mt-2 inline-block h-4 w-0.5 animate-pulse bg-amber-400/70" aria-hidden />
       )}
     </article>
   );

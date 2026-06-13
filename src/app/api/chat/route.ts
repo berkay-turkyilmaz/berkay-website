@@ -1,17 +1,12 @@
 import { streamText } from "ai";
 import { NextRequest } from "next/server";
-import { buildBexSystemPrompt, type BexLanguage } from "@/lib/agents/prompts/bex-chat";
+import { buildBexSystemPrompt } from "@/lib/agents/prompts/bex-chat";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
+import { normalizeBexLanguage } from "@/lib/ai/bex-language";
+import { createPlainTextStreamResponse } from "@/lib/ai/text-stream-response";
 import { chatPostBodySchema } from "@/app/api/chat/schema";
 
-export const maxDuration = 30;
-
-function normalizeBexLanguage(
-  language: "tr" | "en" | "de" | "auto"
-): BexLanguage {
-  if (language === "auto") return "en";
-  return language;
-}
+export const maxDuration = 60;
 
 export async function POST(req: NextRequest) {
   try {
@@ -50,8 +45,10 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const resolvedMode = mode === "terminal" ? "engineer" : mode;
+
     const systemPrompt = buildBexSystemPrompt(
-      mode,
+      resolvedMode,
       responseLength,
       normalizeBexLanguage(language)
     );
@@ -63,30 +60,8 @@ export async function POST(req: NextRequest) {
       temperature,
     });
 
-    const stream = new ReadableStream({
-      async start(controller) {
-        const encoder = new TextEncoder();
-        try {
-          for await (const chunk of result.textStream) {
-            controller.enqueue(encoder.encode(chunk));
-          }
-        } catch (err) {
-          console.error("[BEX Stream Error]:", err);
-          const errMsg =
-            err instanceof Error ? err.message : "Bilinmeyen model hatası";
-          controller.enqueue(encoder.encode(`__ERR_EXTRACT__:${errMsg}`));
-        } finally {
-          controller.close();
-        }
-      },
-    });
-
-    return new Response(stream, {
-      headers: {
-        "Content-Type": "text/plain; charset=utf-8",
-        "Transfer-Encoding": "chunked",
-        "Cache-Control": "no-cache, no-transform",
-      },
+    return createPlainTextStreamResponse(result.textStream, {
+      logLabel: "BEX",
     });
   } catch (error) {
     console.error("[BEX General API Error]:", error);

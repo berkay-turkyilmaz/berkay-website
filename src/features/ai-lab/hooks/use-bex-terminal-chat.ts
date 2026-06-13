@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { SESSION_KEYS } from "../constants";
+import { SESSION_KEYS, normalizeChatMode } from "../constants";
 import type { BexChatMessage, ChatMode, UploadedDoc, WorkspaceSettings } from "../types";
 import { useAgentWorkflow } from "./use-agent-workflow";
 
@@ -27,8 +27,8 @@ export function useBexTerminalChat({
   const t = useTranslations("AiLabPage.chat");
 
   const safeMode: ChatMode = (["terminal", "pdf", "engineer"] as ChatMode[]).includes(mode)
-    ? mode
-    : "terminal";
+    ? normalizeChatMode(mode)
+    : "engineer";
   const sessionKey = SESSION_KEYS[safeMode];
 
   const modeConfig = {
@@ -232,6 +232,7 @@ export function useBexTerminalChat({
               responseLength: settings?.responseLength ?? "medium",
               temperature: settings?.temperature ?? 0.7,
               language: lang,
+              provider: "groq" as const,
             };
 
       const res = await fetch(safeMode === "pdf" ? "/api/pdf" : "/api/chat", {
@@ -269,6 +270,17 @@ export function useBexTerminalChat({
         const { done, value } = await reader.read();
         if (done) break;
         acc += decoder.decode(value, { stream: true });
+        if (acc.startsWith("__ERR_EXTRACT__:")) {
+          const errMsg = acc.slice("__ERR_EXTRACT__:".length);
+          setMessages((p) =>
+            p.map((m) =>
+              m.id === assistantId
+                ? { ...m, content: `__ERR_EXTRACT__:${errMsg}` }
+                : m
+            )
+          );
+          return;
+        }
         setMessages((p) =>
           p.map((m) =>
             m.id === assistantId ? { ...m, content: acc } : m

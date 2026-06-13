@@ -127,7 +127,9 @@
         "english": "EnglishPath",
         "english_desc": "AI EdTech",
         "booking": "Booking SaaS",
-        "booking_desc": "Appointment system"
+        "booking_desc": "Appointment system",
+        "meetora": "Meetora",
+        "meetora_desc": "Event venue booking"
       },
       "new_chat": "New Chat",
       "expand": "Expand menu",
