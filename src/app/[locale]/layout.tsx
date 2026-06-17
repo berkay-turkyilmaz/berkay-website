@@ -30,6 +30,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
   return {
+    metadataBase: new URL("https://berkay-dev.vercel.app"),
     title: {
       default: "BERKAY | Software Engineer & AI Architect",
       template: "%s | BERKAY"
@@ -46,12 +47,25 @@ export async function generateMetadata({
     },
     openGraph: {
       type: "website",
-      locale: locale === "tr" ? "tr_TR" : locale === "de" ? "de_DE" : "en_US",
+      locale:
+        locale === "tr"
+          ? "tr_TR"
+          : locale === "de"
+            ? "de_DE"
+            : locale === "es"
+              ? "es_ES"
+              : locale === "fr"
+                ? "fr_FR"
+                : locale === "ja"
+                  ? "ja_JP"
+                  : locale === "ar"
+                    ? "ar_SA"
+                    : "en_US",
       url: "https://berkay-dev.vercel.app/",
       siteName: "BERKAY",
       images: [
         {
-          url: "/og-image.jpg",
+          url: "/opengraph-image",
           width: 1200,
           height: 630,
           alt: "Berkay Türkyılmaz Portfolio Architecture",

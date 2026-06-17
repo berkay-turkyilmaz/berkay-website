@@ -7,7 +7,10 @@
     "projects": "Projeler",
     "blog": "Blog",
     "lab": "AI Lab",
-    "contact": "İletişim"
+    "contact": "İletişim",
+    "github_aria": "GitHub profili",
+    "menu_open": "Menüyü aç",
+    "menu_close": "Menüyü kapat"
   },
   "HomePage": {
     "badge": "Yeni fırsatlara açık",
@@ -379,6 +382,7 @@
     "back_to_blog": "Makalelere Dön",
     "read_time": "dk okuma süresi",
     "share": "Ağına Paylaş",
+    "share_copied": "Makale bağlantısı kopyalandı!",
     "next_post": "Sonraki Makale",
     "toc_title": "İçerik Akışı"
   },
@@ -439,7 +443,7 @@
       "taboo": "Tabu",
       "heads_up": "Heads Up",
       "charades": "Charades",
-      "emoji_clues": "Emoji İpuçları",
+      "category_blitz": "Category Blitz",
       "games": "Oyunlar",
       "learn": "Öğren",
       "all_games": "Tüm oyunlar",
@@ -468,10 +472,10 @@
         "flashcards": { "title": "Kelime Kartları", "desc": "Günlük İngilizce kelimeler ve örnek cümleler." },
         "grammar": { "title": "Dilbilgisi", "desc": "Temel kurallar, günlük hayat örnekleriyle." },
         "prepositions": { "title": "Edat Alıştırmaları", "desc": "Gerçek cümlelerle edat pratiği." },
-        "taboo": { "title": "Tabu Oyunu", "desc": "Basit günlük kelimeler · yasaklı kelimeleri kullanmadan anlat!" },
-        "heads_up": { "title": "Heads Up", "desc": "Telefonu tut, arkadaşların anlatsın — sınıf klasiği." },
-        "charades": { "title": "Charades", "desc": "Konuşmadan canlandır — takımın tahmin etsin!" },
-        "emoji_clues": { "title": "Emoji İpuçları", "desc": "Guess the Emoji tarzı — emojileri birleştir, İngilizce kelimeyi bul!" }
+        "taboo": { "title": "Tabu Oyunu", "desc": "200+ kelime · ünlüler, filmler, günlük İngilizce — yasaklı kelimeleri kullanmadan anlat!" },
+        "heads_up": { "title": "Heads Up", "desc": "Ünlüler, filmler ve günlük kelimeler — telefonu tut, arkadaşların anlatsın." },
+        "charades": { "title": "Charades", "desc": "120+ kelime · film, spor, ünlü — konuşmadan canlandır!" },
+        "category_blitz": { "title": "Category Blitz", "desc": "Scattergories tarzı — harf + kategori, takımınla İngilizce kelime üret!" }
       }
     },
     "games_hub": {
@@ -479,18 +483,18 @@
       "subtitle": "Arkadaşlarınla oynayabileceğin 4 farklı kelime oyunu. Birini seç ve başla!",
       "play": "Oyna",
       "tip": "Arkadaşlarınla birlikte oynamak için en eğlenceli yol!",
-      "deck_why": "Her oyunun kelime sayısı farklıdır çünkü oyun kuralları farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Emoji İpuçları'nda görsel ipuçları gerekir.",
+      "deck_why": "Her oyunun içeriği farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Category Blitz'te harf + kategori kombinasyonları kullanılır.",
       "deck_notes": {
-        "taboo": "Kelime + 5 yasaklı kelime — anlatırken kullanılamaz.",
-        "heads_up": "Tek kelime — arkadaşların ekrandan okuyup anlatması için.",
-        "charades": "Canlandırılabilir fiil ve nesneler — konuşmak yasak.",
-        "emoji_clues": "40 bulmaca · 3 mod · 10 soru, 3 can — klasik emoji quiz."
+        "taboo": "200+ kart · kolay/orta/zor · ünlüler ve filmler dahil.",
+        "heads_up": "150+ kelime · günlük hayat, ünlüler ve sinema sekmeleri.",
+        "charades": "120+ kelime · film, spor, hayvan ve günlük yaşam.",
+        "category_blitz": "20 kategori · harf + konu — sınıf ve takım modu."
       },
       "cards": "kelime",
       "taboo": { "title": "Tabu", "desc": "Yasaklı kelimeleri kullanmadan İngilizce anlat." },
       "heads_up": { "title": "Heads Up", "desc": "Arkadaşların anlatır, sen tahmin et." },
       "charades": { "title": "Charades", "desc": "Sessizce canlandır, takımın tahmin etsin." },
-      "emoji_clues": { "title": "Emoji İpuçları", "desc": "Emojileri soldan sağa birleştir — tek İngilizce kelimeyi bul." }
+      "category_blitz": { "title": "Category Blitz", "desc": "Harf + kategori — takımınla İngilizce kelime üret." }
     },
     "flashcards": {
       "all": "Tümü",
@@ -586,6 +590,7 @@
       "show_meaning": "Türkçe anlamı göster",
       "hide_meaning": "Türkçe anlamı gizle",
       "cards_available": "kart mevcut",
+      "seen_today": "bugün görüldü",
       "no_cards_filter": "Bu filtreyle eşleşen kart yok. Kategori veya zorluk seçimini değiştir.",
       "difficulty_counts": "Kolay {easy} · Orta {medium} · Zor {hard}",
       "rules_btn": "Kurallar",
@@ -624,13 +629,19 @@
     },
     "heads_up": {
       "title": "Heads Up",
-      "subtitle": "Telefonu al, ekranı arkadaşlarına çevir. Onlar İngilizce anlatır, sen tahmin et.",
+      "subtitle": "Ünlüler, filmler ve günlük kelimeler. Telefonu al, ekranı arkadaşlarına çevir — onlar İngilizce anlatır, sen tahmin et.",
       "how_title": "Nasıl oynanır?",
       "how_1": "Bir kişi telefonu tutar ve ekrana bakmaz.",
       "how_2": "Arkadaşlar ekrandaki kelimeyi görür ve İngilizce anlatır.",
       "how_3": "Bildin mi? Yeşil · Pas? Sarı · Süre bitince tur biter.",
       "all": "Tümü",
+      "diff": {
+        "easy": "Kolay",
+        "medium": "Orta",
+        "hard": "Zor"
+      },
       "cards": "kelime",
+      "seen_today": "bugün görüldü",
       "start": "Turu Başlat",
       "get_ready": "Hazır ol!",
       "round_done": "Tur Bitti!",
@@ -660,7 +671,13 @@
       "how_2": "Hiç konuşmadan jest ve mimikle canlandırır.",
       "how_3": "Takım doğru tahmin edince yeşil, pas geçmek için sarı.",
       "all": "Tümü",
+      "diff": {
+        "easy": "Kolay",
+        "medium": "Orta",
+        "hard": "Zor"
+      },
       "cards": "kelime",
+      "seen_today": "bugün görüldü",
       "start": "Turu Başlat",
       "get_ready": "Hazır ol!",
       "round_done": "Tur Bitti!",
@@ -676,57 +693,46 @@
       "stat_words": "Toplam",
       "stat_best": "Rekor"
     },
-    "emoji_clues": {
-      "title": "Emoji İpuçları",
-      "tagline": "Emojileri birleştir → tek İngilizce kelimeyi bul. (Guess the Emoji mantığı)",
-      "rule_title": "Tek kural",
-      "rule_body": "Soldan sağa emojilere bak. Her emoji bir ipucu. Hepsini birleştirince tek bir İngilizce kelime çıkar. Türkçe anlamı sadece cevapladıktan sonra görürsün.",
-      "pick_mode": "Oyun modu seç",
-      "pick_category": "Kategori",
-      "round_info": "Her tur {count} soru · {lives} can · 4 şık",
-      "start": "Oyuna Başla",
-      "menu": "Menü",
-      "again": "Tekrar Oyna",
-      "quit": "Çık",
-      "question_label": "Soru",
-      "points": "puan",
-      "round_clear": "Tur tamamlandı!",
-      "round_over": "Canların bitti!",
-      "correct_label": "doğru",
-      "best_streak": "En iyi seri: {n}",
-      "wrong_pick": "Seçimin: {word}",
-      "stat_games": "Oyun",
-      "stat_words": "Doğru",
-      "stat_streak": "Seri",
-      "stat_score": "Rekor",
-      "categories": {
-        "all": "Tümü",
-        "food": "Yemek",
-        "animals": "Hayvan",
-        "nature": "Doğa",
-        "people": "İnsan",
-        "places": "Yer",
-        "daily": "Günlük"
-      },
+    "category_blitz": {
+      "title": "Category Blitz",
+      "subtitle": "Scattergories tarzı sınıf oyunu — harf ve kategori verilir, takımın İngilizce kelime söyler.",
+      "how_title": "Nasıl oynanır?",
+      "how_1": "Ekranda bir harf ve kategori görünür (ör. B — Hollywood Movies).",
+      "how_2": "Süre içinde o harfle başlayan geçerli bir İngilizce kelime söyleyin.",
+      "how_3": "İpucu butonu örnek cevapları gösterir — öğrenmek için kullanın.",
+      "mode": "Oyun modu",
       "modes": {
-        "picture": {
-          "title": "Resim Modu",
-          "rule": "2 emoji — kelimeyi doğrudan gösterir.",
-          "prompt": "Bu 2 emoji hangi kelimeyi anlatıyor?",
-          "hint": "İpucu: Emojiler nesnenin kendisini gösterir."
-        },
-        "combo": {
-          "title": "Birleştir Modu",
-          "rule": "3 emoji — ipuçlarını birleştir.",
-          "prompt": "3 emoji bir araya gelince hangi kelime oluşur?",
-          "hint": "İpucu: Her emojiyi sırayla düşün, ortak kelimeyi bul."
-        },
-        "chain": {
-          "title": "Hikâye Modu",
-          "rule": "4 emoji — küçük bir sahne anlatır.",
-          "prompt": "Bu sahne hangi İngilizce kelimeyi anlatıyor?",
-          "hint": "İpucu: Emojiler bir olayı veya durumu anlatır."
-        }
+        "solo": "Solo",
+        "teams": "Takım",
+        "classroom": "Sınıf"
+      },
+      "all": "Tümü",
+      "diff": {
+        "easy": "Kolay",
+        "medium": "Orta",
+        "hard": "Zor"
+      },
+      "timer": "Tur süresi",
+      "rounds": "Tur sayısı",
+      "start": "Oyuna Başla",
+      "category": "Kategori",
+      "prompt": "Bu harfle başlayan bir İngilizce kelime söyleyin!",
+      "examples": "Örnek cevaplar",
+      "examples_general": "Genel örnekler",
+      "hint_letter_note": "“{letter}” harfiyle başlayan kelime arıyorsunuz — yukarıdakiler ilham için.",
+      "hint": "İpucu",
+      "pass": "Pas",
+      "got_it": "Bildik!",
+      "quit": "Çık",
+      "round_complete": "Tur tamamlandı!",
+      "words_named": "kelime",
+      "passed": "pas",
+      "play_again": "Tekrar",
+      "back": "Menü",
+      "stats": {
+        "games": "Oyun",
+        "words": "Kelime",
+        "best": "Rekor"
       }
     },
     "settings": {
@@ -739,7 +745,7 @@
       "taboo_timer": "Tabu — kart süresi",
       "heads_up_timer": "Heads Up — tur süresi",
       "charades_timer": "Charades — tur süresi",
-      "emoji_clues_timer": "Emoji İpuçları — tur süresi",
+      "category_blitz_timer": "Category Blitz — tur süresi",
       "reset_progress": "İlerlemeyi sıfırla",
       "reset_confirm": "Tüm ilerleme silinecek. Emin misin?",
       "exit_lab": "Çıkış yap — AI Lab'e dön"
@@ -753,6 +759,8 @@
     "email_label": "Doğrudan İletişim",
     "response_time": "SLA: Genellikle 24 saat içerisinde yanıtlanır",
     "location_label": "Geliştirme Merkezi",
+    "location_city": "İstanbul, Türkiye",
+    "location_mode": "Uzaktan & Hibrit",
     "social_label": "Ağlar & Repository"
   }
 }

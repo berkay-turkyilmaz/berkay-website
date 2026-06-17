@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Drama, Gamepad2, Info, Smartphone, Sparkles } from "lucide-react";
+import { ArrowRight, Drama, Gamepad2, Info, Smartphone, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
@@ -42,12 +42,12 @@ export function GamesHubTab({ onNavigate }: Props) {
       stat: GAME_DECK_STATS.charades.count,
     },
     {
-      id: "emoji_clues" as const,
-      icon: Sparkles,
-      title: t("emoji_clues.title"),
-      desc: t("emoji_clues.desc"),
-      deckNote: t("deck_notes.emoji_clues"),
-      stat: GAME_DECK_STATS.emoji_clues.count,
+      id: "category_blitz" as const,
+      icon: Zap,
+      title: t("category_blitz.title"),
+      desc: t("category_blitz.desc"),
+      deckNote: t("deck_notes.category_blitz"),
+      stat: GAME_DECK_STATS.category_blitz.count,
     },
   ];
 

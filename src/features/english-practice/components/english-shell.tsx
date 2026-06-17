@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -13,6 +13,7 @@ import {
   Target,
   Trophy,
 } from "lucide-react";
+import { usePathname, useRouter } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type {
   EnglishTab,
@@ -20,8 +21,11 @@ import type {
   TabooRoundStats,
   HeadsUpRoundStats,
   CharadesRoundStats,
+  CategoryBlitzRoundStats,
+  ExamMode,
 } from "../types";
 import { useEnglishProgress } from "../hooks/use-english-progress";
+import { englishPathHref, parseEnglishPathTab } from "../lib/english-path-routes";
 import { ep, isGameTab } from "../styles";
 import { DashboardTab } from "./dashboard-tab";
 import { EnglishHeader } from "./english-header";
@@ -33,10 +37,9 @@ import { ResultsTab } from "./results-tab";
 import { TabooGameTab } from "./taboo-game-tab";
 import { HeadsUpGameTab } from "./heads-up-game-tab";
 import { CharadesGameTab } from "./charades-game-tab";
-import { EmojiCluesGameTab } from "./emoji-clues-game-tab";
+import { CategoryBlitzGameTab } from "./category-blitz-game-tab";
 import { GamesHubTab } from "./games-hub-tab";
 import { SettingsPanel } from "./settings-panel";
-import type { EmojiCluesRoundStats, ExamMode } from "../types";
 
 const MOBILE_PRIMARY_TABS: { id: EnglishTab; icon: typeof Activity; labelKey: string }[] = [
   { id: "dashboard", icon: Activity, labelKey: "tabs.dashboard" },
@@ -53,9 +56,13 @@ const MORE_TABS: { id: EnglishTab; icon: typeof Activity; labelKey: string }[] =
 
 export function EnglishShell() {
   const t = useTranslations("EnglishPath");
-  const [activeTab, setActiveTab] = useState<EnglishTab>("dashboard");
+  const pathname = usePathname();
+  const router = useRouter();
+  const activeTab = parseEnglishPathTab(pathname);
+
   const [showSettings, setShowSettings] = useState(false);
   const [showMore, setShowMore] = useState(false);
+  const [gamePlaying, setGamePlaying] = useState(false);
 
   const {
     progress,
@@ -69,7 +76,7 @@ export function EnglishShell() {
     updateTabooStats,
     updateHeadsUpStats,
     updateCharadesStats,
-    updateEmojiCluesStats,
+    updateCategoryBlitzStats,
     updateProgress,
     resetProgress,
   } = useEnglishProgress();
@@ -128,32 +135,37 @@ export function EnglishShell() {
     });
   };
 
-  const handleEmojiCluesRoundComplete = (stats: EmojiCluesRoundStats) => {
-    const prev = progress.emojiCluesStats;
-    updateEmojiCluesStats({
+  const handleCategoryBlitzRoundComplete = (stats: CategoryBlitzRoundStats) => {
+    const prev = progress.categoryBlitzStats;
+    updateCategoryBlitzStats({
       gamesPlayed: prev.gamesPlayed + 1,
-      wordsGuessed: prev.wordsGuessed + stats.correct,
-      bestStreak: Math.max(prev.bestStreak, stats.bestStreak),
-      bestRound: Math.max(prev.bestRound, stats.correct),
-      bestScore: Math.max(prev.bestScore ?? 0, stats.score),
+      wordsNamed: prev.wordsNamed + stats.wordsNamed,
+      bestRound: Math.max(prev.bestRound, stats.wordsNamed),
+      bestStreak: Math.max(prev.bestStreak, stats.wordsNamed),
     });
   };
 
-  const navigate = (tab: EnglishTab) => {
-    setActiveTab(tab);
-    setShowMore(false);
-  };
+  const navigate = useCallback(
+    (tab: EnglishTab) => {
+      setShowMore(false);
+      router.push(englishPathHref(tab) as Parameters<typeof router.push>[0]);
+    },
+    [router]
+  );
 
   const goHome = () => navigate("dashboard");
 
-  const inGame = isGameTab(activeTab);
-  const mobileGamesActive = inGame || activeTab === "games";
+  const inGameRoute = isGameTab(activeTab);
+  const hideMobileChrome = inGameRoute && gamePlaying;
+  const mobileGamesActive = inGameRoute || activeTab === "games";
 
   useEffect(() => {
-    if (inGame) {
-      setShowMore(false);
-    }
-  }, [inGame]);
+    if (hideMobileChrome) setShowMore(false);
+  }, [hideMobileChrome]);
+
+  useEffect(() => {
+    if (!inGameRoute) setGamePlaying(false);
+  }, [inGameRoute]);
 
   const updateTabooDuration = (tabooRoundDuration: number) =>
     updateSettings({ tabooRoundDuration });
@@ -161,6 +173,9 @@ export function EnglishShell() {
     updateSettings({ headsUpRoundDuration });
   const updateCharadesDuration = (charadesRoundDuration: number) =>
     updateSettings({ charadesRoundDuration });
+  const updateCategoryBlitzDuration = (categoryBlitzRoundDuration: number) =>
+    updateSettings({ categoryBlitzRoundDuration });
+
   if (!loaded) {
     return (
       <div className={cn(ep.page, "english-path flex items-center justify-center")}>
@@ -175,7 +190,7 @@ export function EnglishShell() {
       className={cn(
         ep.page,
         "english-path relative",
-        inGame ? "pb-0 md:pb-8" : "pb-[4.75rem] md:pb-8"
+        hideMobileChrome ? "pb-0 md:pb-8" : "pb-[4.75rem] md:pb-8"
       )}
     >
       <div className={ep.pageMesh} aria-hidden />
@@ -186,10 +201,15 @@ export function EnglishShell() {
         onHome={goHome}
         onOpenSettings={() => setShowSettings(true)}
         progress={progress}
-        hiddenOnMobile={inGame}
+        hiddenOnMobile={hideMobileChrome}
       />
 
-      <main className={cn("max-w-6xl mx-auto px-4 sm:px-6", inGame ? "pt-3 md:pt-5" : "pt-5 md:pt-6")}>
+      <main
+        className={cn(
+          "max-w-6xl mx-auto px-4 sm:px-6",
+          hideMobileChrome ? "pt-3 md:pt-5" : "pt-5 md:pt-6"
+        )}
+      >
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -249,6 +269,7 @@ export function EnglishShell() {
                 tabooStats={progress.tabooStats}
                 onRoundComplete={handleTabooRoundComplete}
                 onXp={addXp}
+                onPlayingChange={setGamePlaying}
               />
             )}
             {activeTab === "heads_up" && (
@@ -258,6 +279,7 @@ export function EnglishShell() {
                 stats={progress.headsUpStats}
                 onRoundComplete={handleHeadsUpRoundComplete}
                 onXp={addXp}
+                onPlayingChange={setGamePlaying}
               />
             )}
             {activeTab === "charades" && (
@@ -267,21 +289,24 @@ export function EnglishShell() {
                 stats={progress.charadesStats}
                 onRoundComplete={handleCharadesRoundComplete}
                 onXp={addXp}
+                onPlayingChange={setGamePlaying}
               />
             )}
-            {activeTab === "emoji_clues" && (
-              <EmojiCluesGameTab
-                stats={progress.emojiCluesStats}
-                onRoundComplete={handleEmojiCluesRoundComplete}
+            {activeTab === "category_blitz" && (
+              <CategoryBlitzGameTab
+                roundDuration={progress.settings.categoryBlitzRoundDuration}
+                onRoundDurationChange={updateCategoryBlitzDuration}
+                stats={progress.categoryBlitzStats}
+                onRoundComplete={handleCategoryBlitzRoundComplete}
                 onXp={addXp}
+                onPlayingChange={setGamePlaying}
               />
             )}
           </motion.div>
         </AnimatePresence>
       </main>
 
-      {/* Mobil alt menü — oyun sırasında gizli (yanlışlıkla çıkışı önler) */}
-      {!inGame && (
+      {!hideMobileChrome && (
         <nav
           className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 pb-[env(safe-area-inset-bottom)]"
           aria-label={t("title")}

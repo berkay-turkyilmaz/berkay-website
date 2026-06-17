@@ -1,6 +1,6 @@
 import type { EnglishProgress } from "./types";
 
-export const PROGRESS_STORAGE_KEY = "englishpath-progress-v3";
+export const PROGRESS_STORAGE_KEY = "englishpath-progress-v4";
 export const XP_PER_LEVEL = 500;
 
 export const DEFAULT_PROGRESS: EnglishProgress = {
@@ -28,12 +28,11 @@ export const DEFAULT_PROGRESS: EnglishProgress = {
     wordsGuessed: 0,
     bestRound: 0,
   },
-  emojiCluesStats: {
+  categoryBlitzStats: {
     gamesPlayed: 0,
-    wordsGuessed: 0,
-    bestStreak: 0,
+    wordsNamed: 0,
     bestRound: 0,
-    bestScore: 0,
+    bestStreak: 0,
   },
   settings: {
     speechRate: 0.95,
@@ -42,7 +41,7 @@ export const DEFAULT_PROGRESS: EnglishProgress = {
     tabooRoundDuration: 60,
     headsUpRoundDuration: 60,
     charadesRoundDuration: 60,
-    emojiCluesRoundDuration: 60,
+    categoryBlitzRoundDuration: 30,
   },
 };
 
@@ -55,6 +54,6 @@ export const XP_REWARDS = {
   tabooPartyWin: 30,
   headsUpCorrect: 10,
   charadesCorrect: 10,
-  emojiCluesCorrect: 8,
+  categoryBlitzCorrect: 10,
   dailyStreak: 50,
 } as const;

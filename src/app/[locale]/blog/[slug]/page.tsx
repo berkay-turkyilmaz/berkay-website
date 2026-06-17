@@ -1,7 +1,8 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowLeft, Share2, Eye } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, Eye } from "lucide-react";
+import { ShareArticleButton } from "@/components/features/blog/share-article-button";
 import { Link } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -63,13 +64,11 @@ export default async function BlogDetail({
             <span>{t("back_to_blog")}</span>
           </Link>
 
-          <button
-            className="p-2.5 rounded-full text-muted-foreground hover:bg-secondary hover:text-primary transition-all border border-transparent hover:border-border/50"
-            title={t("share")}
-            aria-label="Share article"
-          >
-            <Share2 className="w-4 h-4" />
-          </button>
+          <ShareArticleButton
+            title={post.title}
+            label={t("share")}
+            copiedLabel={t("share_copied")}
+          />
         </nav>
 
         {/* Article Header */}

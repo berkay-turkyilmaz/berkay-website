@@ -34,17 +34,17 @@ export default function ProjectsPage() {
             {/* Rozet Alanı */}
             <div className="inline-flex items-center gap-2.5 text-primary font-mono text-[11px] font-bold tracking-[0.2em] uppercase">
               <LayoutGrid className="w-4 h-4" />
-              {t("badge") || "PORTFOLYO & MİMARİ"}
+              {t("badge")}
             </div>
 
             {/* Başlık */}
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tighter text-foreground text-balance leading-[1.1]">
-              {t("title") || "Sistemler ve Ürünler"}
+              {t("title")}
             </h1>
 
             {/* Açıklama */}
             <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium text-balance max-w-2xl">
-              {t("description") || "Full-stack geliştirmeden veri otomasyon çözümlerine kadar uçtan uca mimarisini kurduğum dijital ürünler."}
+              {t("description")}
             </p>
           </motion.div>
         </div>

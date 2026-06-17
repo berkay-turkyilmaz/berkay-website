@@ -12,9 +12,9 @@ import {
   Gamepad2,
   Settings,
   Smartphone,
-  Sparkles,
   Target,
   Trophy,
+  Zap,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
@@ -34,7 +34,7 @@ const GAME_ITEMS: NavItem[] = [
   { id: "taboo", icon: Gamepad2, labelKey: "tabs.taboo" },
   { id: "heads_up", icon: Smartphone, labelKey: "tabs.heads_up" },
   { id: "charades", icon: Drama, labelKey: "tabs.charades" },
-  { id: "emoji_clues", icon: Sparkles, labelKey: "tabs.emoji_clues" },
+  { id: "category_blitz", icon: Zap, labelKey: "tabs.category_blitz" },
 ];
 
 const PRIMARY_ITEMS: NavItem[] = [

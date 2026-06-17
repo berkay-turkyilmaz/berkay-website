@@ -24,3 +24,7 @@ export const BLOG_POSTS: readonly BlogPostMeta[] = [
 export function getBlogPostMetaBySlug(slug: string): BlogPostMeta | undefined {
   return BLOG_POSTS.find((post) => post.slug === slug);
 }
+
+export function getBlogPostSlugs(): string[] {
+  return BLOG_POSTS.map((post) => post.slug);
+}

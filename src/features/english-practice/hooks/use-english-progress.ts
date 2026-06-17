@@ -24,8 +24,20 @@ function loadProgress(): EnglishProgress {
       tabooStats: { ...DEFAULT_PROGRESS.tabooStats, ...parsed.tabooStats },
       headsUpStats: { ...DEFAULT_PROGRESS.headsUpStats, ...parsed.headsUpStats },
       charadesStats: { ...DEFAULT_PROGRESS.charadesStats, ...parsed.charadesStats },
-      emojiCluesStats: { ...DEFAULT_PROGRESS.emojiCluesStats, ...parsed.emojiCluesStats },
-      settings: { ...DEFAULT_PROGRESS.settings, ...parsed.settings },
+      categoryBlitzStats: {
+        ...DEFAULT_PROGRESS.categoryBlitzStats,
+        ...(parsed.categoryBlitzStats ??
+          (parsed as { emojiCluesStats?: EnglishProgress["categoryBlitzStats"] }).emojiCluesStats),
+      },
+      settings: {
+        ...DEFAULT_PROGRESS.settings,
+        ...parsed.settings,
+        categoryBlitzRoundDuration:
+          parsed.settings?.categoryBlitzRoundDuration ??
+          (parsed.settings as { emojiCluesRoundDuration?: number } | undefined)
+            ?.emojiCluesRoundDuration ??
+          DEFAULT_PROGRESS.settings.categoryBlitzRoundDuration,
+      },
     };
   } catch {
     return DEFAULT_PROGRESS;
@@ -199,12 +211,12 @@ export function useEnglishProgress() {
     []
   );
 
-  const updateEmojiCluesStats = useCallback(
-    (patch: Partial<EnglishProgress["emojiCluesStats"]>) => {
+  const updateCategoryBlitzStats = useCallback(
+    (patch: Partial<EnglishProgress["categoryBlitzStats"]>) => {
       setProgress((prev) => {
         const next = {
           ...prev,
-          emojiCluesStats: { ...prev.emojiCluesStats, ...patch },
+          categoryBlitzStats: { ...prev.categoryBlitzStats, ...patch },
         };
         localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
         return next;
@@ -226,7 +238,7 @@ export function useEnglishProgress() {
     updateTabooStats,
     updateHeadsUpStats,
     updateCharadesStats,
-    updateEmojiCluesStats,
+    updateCategoryBlitzStats,
     resetProgress,
   };
 }

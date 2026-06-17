@@ -88,8 +88,8 @@ export default function ContactPage() {
                       <MapPin className="w-5 h-5 text-muted-foreground" />
                       <span className="font-bold">{t("location_label")}</span>
                    </div>
-                   <p className="text-lg">İstanbul, Türkiye</p>
-                   <p className="text-xs text-muted-foreground mt-1">Remote & Hybrid</p>
+                   <p className="text-lg">{t("location_city")}</p>
+                   <p className="text-xs text-muted-foreground mt-1">{t("location_mode")}</p>
                 </div>
                 
                 {/* Sosyal Medya */}

@@ -94,6 +94,14 @@ export function SettingsPanel({ settings, onUpdate, onReset, onClose }: Props) {
               value={settings.charadesRoundDuration}
               onChange={(charadesRoundDuration) => onUpdate({ charadesRoundDuration })}
             />
+            <GameTimerSlider
+              label={t("category_blitz_timer")}
+              value={settings.categoryBlitzRoundDuration}
+              onChange={(categoryBlitzRoundDuration) => onUpdate({ categoryBlitzRoundDuration })}
+              min={15}
+              max={60}
+              step={5}
+            />
             <p className="text-xs text-slate-400 leading-relaxed">{t("game_timers_hint")}</p>
           </div>
 

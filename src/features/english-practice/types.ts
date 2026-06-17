@@ -9,7 +9,7 @@ export type EnglishTab =
   | "taboo"
   | "heads_up"
   | "charades"
-  | "emoji_clues";
+  | "category_blitz";
 
 export type FlashcardCategory =
   | "daily"
@@ -120,7 +120,10 @@ export type TabooCategory =
   | "emotions"
   | "social"
   | "hobbies"
-  | "worklife";
+  | "worklife"
+  | "celebrities"
+  | "movies"
+  | "technology";
 
 export type TabooDifficulty = "easy" | "medium" | "hard";
 
@@ -161,22 +164,53 @@ export type HeadsUpCategory =
   | "places"
   | "nature"
   | "actions"
-  | "transport";
+  | "transport"
+  | "celebrities"
+  | "movies";
 
 export interface HeadsUpCard {
   id: string;
   word: string;
   category: HeadsUpCategory;
   hint?: string;
+  difficulty?: "easy" | "medium" | "hard";
 }
 
-export type CharadesCategory = "actions" | "emotions" | "sports" | "animals" | "objects";
+export type CharadesCategory =
+  | "actions"
+  | "emotions"
+  | "sports"
+  | "animals"
+  | "objects"
+  | "movies"
+  | "celebrities";
 
 export interface CharadesCard {
   id: string;
   word: string;
   category: CharadesCategory;
   hint: string;
+  difficulty?: "easy" | "medium" | "hard";
+}
+
+export type CategoryBlitzDifficulty = "easy" | "medium" | "hard";
+
+export type CategoryBlitzMode = "solo" | "teams" | "classroom";
+
+export interface CategoryBlitzCategory {
+  id: string;
+  name: string;
+  hintTr: string;
+  difficulty: CategoryBlitzDifficulty;
+  /** Example valid English answers (any letter). */
+  samples: string[];
+}
+
+export interface CategoryBlitzRoundStats {
+  roundsCompleted: number;
+  wordsNamed: number;
+  passed: number;
+  total: number;
 }
 
 export interface EnglishProgress {
@@ -204,12 +238,11 @@ export interface EnglishProgress {
     wordsGuessed: number;
     bestRound: number;
   };
-  emojiCluesStats: {
+  categoryBlitzStats: {
     gamesPlayed: number;
-    wordsGuessed: number;
-    bestStreak: number;
+    wordsNamed: number;
     bestRound: number;
-    bestScore: number;
+    bestStreak: number;
   };
   settings: {
     speechRate: number;
@@ -218,6 +251,6 @@ export interface EnglishProgress {
     tabooRoundDuration: number;
     headsUpRoundDuration: number;
     charadesRoundDuration: number;
-    emojiCluesRoundDuration: number;
+    categoryBlitzRoundDuration: number;
   };
 }

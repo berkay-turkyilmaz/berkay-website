@@ -100,7 +100,7 @@ export function Header() {
               target="_blank"
               rel="noopener noreferrer"
               className="group p-2.5 rounded-full hover:bg-secondary/70 transition-all duration-300 text-muted-foreground hover:text-foreground cursor-pointer border border-transparent hover:border-border/50 hover:shadow-sm"
-              aria-label="GitHub profili"
+              aria-label={t("github_aria")}
             >
               <Github className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
             </Link>
@@ -110,7 +110,7 @@ export function Header() {
           <button
             className="md:hidden z-50 p-2 text-foreground hover:bg-secondary/50 rounded-lg transition-colors cursor-pointer"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? "Menüyü kapat" : "Menüyü aç"}
+            aria-label={mobileMenuOpen ? t("menu_close") : t("menu_open")}
           >
             <AnimatePresence mode="wait">
               {mobileMenuOpen ? (
@@ -186,7 +186,7 @@ export function Header() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="p-3 bg-secondary/70 hover:bg-secondary rounded-full cursor-pointer transition-all hover:scale-110 border border-border/50"
-                  aria-label="GitHub profili"
+                  aria-label={t("github_aria")}
                 >
                   <Github className="w-6 h-6" />
                 </Link>

@@ -90,7 +90,7 @@ export const ep = {
 
 
 
-export const GAME_TABS = ["taboo", "heads_up", "charades", "emoji_clues"] as const;
+export const GAME_TABS = ["taboo", "heads_up", "charades", "category_blitz"] as const;
 
 export type GameTab = (typeof GAME_TABS)[number];
 

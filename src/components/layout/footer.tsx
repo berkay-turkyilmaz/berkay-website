@@ -15,14 +15,15 @@ export function Footer() {
     { icon: Github, href: "https://github.com/berkay-turkyilmaz", label: "Github" },
     { icon: Linkedin, href: "https://linkedin.com/in/berkay-turkyilmaz", label: "LinkedIn" },
     { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Mail, href: "mailto:hello@berkaytrkylmzz@gmail.com", label: "Email" },
+    { icon: Mail, href: "mailto:berkaytrkylmzz@gmail.com", label: "Email" },
   ];
 
   // Site İçi Linkler
   const siteLinks = [
     { label: tNav("home"), href: "/" },
-    { label: tNav("projects"), href: "/projects" }, // Artık ayrı sayfa
-    { label: tNav("blog"), href: "/blog" },         // Artık ayrı sayfa
+    { label: tNav("projects"), href: "/projects" },
+    { label: tNav("blog"), href: "/blog" },
+    { label: tNav("lab"), href: "/ai-lab" },
     { label: tNav("contact"), href: "/contact" },
   ];
 
@@ -84,8 +85,8 @@ export function Footer() {
             
             <p className="text-xs text-muted-foreground leading-relaxed">
               {t("project_idea")} <br />
-              <a href="mailto:hello@berkaytrkylmzz@gmail.com" className="text-primary hover:underline font-semibold">
-                hello@berkaytrkylmzz@gmail.com
+              <a href="mailto:berkaytrkylmzz@gmail.com" className="text-primary hover:underline font-semibold">
+                berkaytrkylmzz@gmail.com
               </a> {t("write_me")}.
             </p>
           </div>

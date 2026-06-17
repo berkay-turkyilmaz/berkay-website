@@ -68,11 +68,11 @@ export function DashboardTab({ progress, onNavigate }: Props) {
       stat: `${GAME_DECK_STATS.charades.count}`,
     },
     {
-      id: "emoji_clues",
-      icon: Sparkles,
-      title: t("modules.emoji_clues.title"),
-      desc: t("modules.emoji_clues.desc"),
-      stat: `${GAME_DECK_STATS.emoji_clues.count}`,
+      id: "category_blitz",
+      icon: Zap,
+      title: t("modules.category_blitz.title"),
+      desc: t("modules.category_blitz.desc"),
+      stat: `${GAME_DECK_STATS.category_blitz.count}`,
     },
   ];
 

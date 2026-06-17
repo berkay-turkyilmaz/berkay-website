@@ -16,8 +16,9 @@ import {
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
+import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
 import { CHARADES_CARDS, CHARADES_CATEGORY_LABELS } from "../data/charades-cards";
-import type { CharadesCategory, CharadesRoundStats } from "../types";
+import type { CharadesCategory, CharadesRoundStats, TabooDifficulty } from "../types";
 import { ep } from "../styles";
 import { XP_REWARDS } from "../constants";
 import { GameTimerSlider } from "./game-timer-slider";
@@ -31,16 +32,8 @@ type Props = {
   stats: { gamesPlayed: number; wordsGuessed: number; bestRound: number };
   onRoundComplete: (stats: CharadesRoundStats) => void;
   onXp: (amount: number) => void;
+  onPlayingChange?: (playing: boolean) => void;
 };
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 function vibrate(pattern: number | number[] = 40) {
   if (typeof navigator !== "undefined" && navigator.vibrate) navigator.vibrate(pattern);
@@ -52,11 +45,13 @@ export function CharadesGameTab({
   stats,
   onRoundComplete,
   onXp,
+  onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.charades");
   const tg = useTranslations("EnglishPath.games");
   const [phase, setPhase] = useState<Phase>("setup");
   const [category, setCategory] = useState<CharadesCategory | "all">("all");
+  const [difficulty, setDifficulty] = useState<TabooDifficulty | "all">("all");
   const [showMeaning, setShowMeaning] = useState(false);
   const [deck, setDeck] = useState<typeof CHARADES_CARDS>([]);
   const [index, setIndex] = useState(0);
@@ -68,13 +63,36 @@ export function CharadesGameTab({
     total: 0,
   });
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const roundStatsRef = useRef(roundStats);
+  const endedRef = useRef(false);
 
-  const pool = useMemo(
-    () =>
+  roundStatsRef.current = roundStats;
+
+  useEffect(() => {
+    onPlayingChange?.(phase === "playing");
+    return () => onPlayingChange?.(false);
+  }, [phase, onPlayingChange]);
+
+  const pool = useMemo(() => {
+    let cards =
       category === "all"
         ? CHARADES_CARDS
-        : CHARADES_CARDS.filter((c) => c.category === category),
-    [category]
+        : CHARADES_CARDS.filter((c) => c.category === category);
+    if (difficulty !== "all") {
+      cards = cards.filter((c) => (c.difficulty ?? "medium") === difficulty);
+    }
+    return cards;
+  }, [category, difficulty]);
+
+  const deckKey = useMemo(
+    () =>
+      difficulty === "all" ? `charades-${category}` : `charades-${category}-${difficulty}`,
+    [category, difficulty]
+  );
+
+  const dailySeenCount = useMemo(
+    () => getDailySeenCount(deckKey, pool),
+    [deckKey, pool]
   );
 
   const card = deck[index];
@@ -88,9 +106,10 @@ export function CharadesGameTab({
   };
 
   const startRound = () => {
-    const newDeck = shuffle(pool).slice(0, Math.min(25, pool.length));
+    const newDeck = buildSmartDeck(pool, Math.min(25, pool.length), deckKey);
     setDeck(newDeck);
     setIndex(0);
+    endedRef.current = false;
     setShowMeaning(false);
     setRoundStats({ correct: 0, passed: 0, total: newDeck.length });
     setCountdown(3);
@@ -116,19 +135,15 @@ export function CharadesGameTab({
     if (phase !== "playing") return;
     clearTimer();
     timerRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearTimer();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTimeLeft((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
     return clearTimer;
-  }, [phase, index]);
+  }, [phase, roundDuration]);
 
   const endRound = useCallback(
     (final: CharadesRoundStats) => {
+      if (endedRef.current) return;
+      endedRef.current = true;
       clearTimer();
       setPhase("round_end");
       onRoundComplete(final);
@@ -138,12 +153,15 @@ export function CharadesGameTab({
 
   useEffect(() => {
     if (phase === "playing" && timeLeft === 0) {
-      endRound(roundStats);
+      endRound(roundStatsRef.current);
     }
-  }, [timeLeft, phase, endRound, roundStats]);
+  }, [timeLeft, phase, endRound]);
 
   const advance = (patch: Partial<CharadesRoundStats>) => {
-    const next = { ...roundStats, ...patch };
+    const leaving = deck[index];
+    if (leaving) markCardSeen(deckKey, leaving.id);
+
+    const next = { ...roundStatsRef.current, ...patch };
     setRoundStats(next);
     if (index + 1 >= deck.length) {
       endRound(next);
@@ -155,12 +173,12 @@ export function CharadesGameTab({
   const handleCorrect = () => {
     vibrate(30);
     onXp(XP_REWARDS.charadesCorrect);
-    advance({ correct: roundStats.correct + 1 });
+    advance({ correct: roundStatsRef.current.correct + 1 });
   };
 
   const handlePass = () => {
     vibrate([20, 30, 20]);
-    advance({ passed: roundStats.passed + 1 });
+    advance({ passed: roundStatsRef.current.passed + 1 });
   };
 
   const quitToSetup = () => {
@@ -212,6 +230,22 @@ export function CharadesGameTab({
           ))}
         </div>
 
+        <div className="flex flex-wrap gap-2 justify-center">
+          {(["all", "easy", "medium", "hard"] as const).map((d) => (
+            <button
+              key={d}
+              type="button"
+              onClick={() => setDifficulty(d)}
+              className={cn(
+                ep.chip,
+                difficulty === d && "!bg-amber-500 !text-white !border-amber-500 shadow-md shadow-amber-500/30"
+              )}
+            >
+              {d === "all" ? t("all") : t(`diff.${d}`)}
+            </button>
+          ))}
+        </div>
+
         <div className={cn(ep.card, "p-5")}>
           <GameTimerSlider
             value={roundDuration}
@@ -223,6 +257,9 @@ export function CharadesGameTab({
 
         <p className="text-center text-xs text-slate-400 font-mono">
           {pool.length} {t("cards")}
+          {dailySeenCount > 0 && (
+            <span className="text-slate-300"> · {dailySeenCount} {t("seen_today")}</span>
+          )}
         </p>
 
         <Pressable

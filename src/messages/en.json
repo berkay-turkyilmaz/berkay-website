@@ -7,7 +7,10 @@
       "projects": "Projects",
       "blog": "Blog",
       "lab": "AI Lab",
-      "contact": "Contact"
+      "contact": "Contact",
+      "github_aria": "GitHub profile",
+      "menu_open": "Open menu",
+      "menu_close": "Close menu"
     },
     "HomePage": {
       "badge": "Open for new opportunities",
@@ -379,6 +382,7 @@
       "back_to_blog": "Back to Articles",
       "read_time": "min read time",
       "share": "Share to Network",
+      "share_copied": "Article link copied!",
       "next_post": "Next Article",
       "toc_title": "Table of Contents"
     },
@@ -439,7 +443,7 @@
       "taboo": "Taboo",
       "heads_up": "Heads Up",
       "charades": "Charades",
-      "emoji_clues": "Emoji Clues",
+      "category_blitz": "Category Blitz",
       "games": "Games",
       "learn": "Learn",
       "all_games": "All games",
@@ -471,26 +475,26 @@
         "taboo": { "title": "Taboo Game", "desc": "Simple everyday words · describe without forbidden words!" },
         "heads_up": { "title": "Heads Up", "desc": "Hold the phone — friends describe, you guess." },
         "charades": { "title": "Charades", "desc": "Act without speaking — your team guesses!" },
-        "emoji_clues": { "title": "Emoji Clues", "desc": "Guess the Emoji style — combine emojis, find the English word!" }
+        "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team!" }
       }
     },
     "games_hub": {
       "play": "Play",
       "tip": "The most fun way to learn with friends!",
-      "deck_why": "Each game has a different word count because the rules differ: Taboo needs forbidden-word lists, Charades needs mime-friendly words, Emoji Clues needs visual hints.",
+      "deck_why": "Each game has different content: Taboo uses forbidden-word lists, Charades uses mime-friendly words, Category Blitz uses letter + category combos.",
       "deck_notes": {
-        "taboo": "Word + 5 forbidden words you cannot say.",
-        "heads_up": "Single word — friends read from the screen and describe.",
-        "charades": "Mime-friendly verbs and objects — no speaking.",
-        "emoji_clues": "40 puzzles · 3 modes · 10 questions, 3 lives — classic emoji quiz."
+        "taboo": "200+ cards · easy/medium/hard · celebrities and movies included.",
+        "heads_up": "150+ words · everyday life, celebrities and cinema tabs.",
+        "charades": "120+ mime-friendly words · movies, sports, animals.",
+        "category_blitz": "20 categories · letter + topic — solo, team and classroom modes."
       },
       "title": "Classroom Games",
       "subtitle": "Four word games to play with friends. Pick one and start!",
-      "cards": "cards",
+      "cards": "words",
       "taboo": { "title": "Taboo", "desc": "Describe in English without forbidden words." },
       "heads_up": { "title": "Heads Up", "desc": "Friends describe, you guess." },
       "charades": { "title": "Charades", "desc": "Mime silently, team guesses." },
-      "emoji_clues": { "title": "Emoji Clues", "desc": "Combine emojis left to right — find one English word." }
+      "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team." }
     },
     "flashcards": {
       "all": "All",
@@ -586,6 +590,7 @@
       "show_meaning": "Show Turkish meaning",
       "hide_meaning": "Hide Turkish meaning",
       "cards_available": "cards available",
+      "seen_today": "seen today",
       "no_cards_filter": "No cards match this filter. Try a different category or difficulty.",
       "difficulty_counts": "Easy {easy} · Medium {medium} · Hard {hard}",
       "rules_btn": "Rules",
@@ -630,7 +635,13 @@
       "how_2": "Friends see the word and describe it in English.",
       "how_3": "Got it? Green · Pass? Yellow · Round ends when time runs out.",
       "all": "All",
+      "diff": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      },
       "cards": "words",
+      "seen_today": "seen today",
       "start": "Start Round",
       "get_ready": "Get ready!",
       "round_done": "Round Over!",
@@ -660,7 +671,13 @@
       "how_2": "Mime and gesture — no talking allowed.",
       "how_3": "Team guessed right? Green · Pass? Yellow.",
       "all": "All",
+      "diff": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      },
       "cards": "words",
+      "seen_today": "seen today",
       "start": "Start Round",
       "get_ready": "Get ready!",
       "round_done": "Round Over!",
@@ -675,6 +692,48 @@
       "stat_games": "Games",
       "stat_words": "Total",
       "stat_best": "Best"
+    },
+    "category_blitz": {
+      "title": "Category Blitz",
+      "subtitle": "Scattergories-style classroom game — get a letter and category, your team names English words.",
+      "how_title": "How to play",
+      "how_1": "A letter and category appear on screen (e.g. B — Hollywood Movies).",
+      "how_2": "Within the time limit, say a valid English word starting with that letter.",
+      "how_3": "The hint button shows example answers — use them to learn.",
+      "mode": "Game mode",
+      "modes": {
+        "solo": "Solo",
+        "teams": "Teams",
+        "classroom": "Classroom"
+      },
+      "all": "All",
+      "diff": {
+        "easy": "Easy",
+        "medium": "Medium",
+        "hard": "Hard"
+      },
+      "timer": "Round timer",
+      "rounds": "Number of rounds",
+      "start": "Start Game",
+      "category": "Category",
+      "prompt": "Name an English word starting with this letter!",
+      "examples": "Example answers",
+      "examples_general": "General examples",
+      "hint_letter_note": "You need a word starting with \"{letter}\" — the list above is for inspiration.",
+      "hint": "Hint",
+      "pass": "Pass",
+      "got_it": "Got it!",
+      "quit": "Quit",
+      "round_complete": "Round complete!",
+      "words_named": "words",
+      "passed": "passed",
+      "play_again": "Again",
+      "back": "Menu",
+      "stats": {
+        "games": "Games",
+        "words": "Words",
+        "best": "Best"
+      }
     },
     "emoji_clues": {
       "title": "Emoji Clues",
@@ -739,7 +798,7 @@
       "taboo_timer": "Taboo — card timer",
       "heads_up_timer": "Heads Up — round timer",
       "charades_timer": "Charades — round timer",
-      "emoji_clues_timer": "Emoji Clues — round timer",
+      "category_blitz_timer": "Category Blitz — round timer",
       "reset_progress": "Reset progress",
       "reset_confirm": "All progress will be deleted. Are you sure?",
       "exit_lab": "Exit — return to AI Lab"
@@ -753,6 +812,8 @@
       "email_label": "Direct Communication",
       "response_time": "SLA: Usually replies within 24 hours",
       "location_label": "Development Hub",
+      "location_city": "Istanbul, Turkey",
+      "location_mode": "Remote & Hybrid",
       "social_label": "Networks & Repository"
     }
   }

@@ -34,6 +34,7 @@ import type {
 } from "../types";
 import { useSpeech } from "../hooks/use-speech";
 import { XP_REWARDS } from "../constants";
+import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
 import { ep } from "../styles";
 import { GameTimerSlider } from "./game-timer-slider";
 import { FadeUp, Pressable } from "./motion-primitives";
@@ -56,16 +57,8 @@ type Props = {
     partyScores?: { A: number; B: number }
   ) => void;
   onXp: (amount: number) => void;
+  onPlayingChange?: (playing: boolean) => void;
 };
-
-function shuffle<T>(arr: T[]): T[] {
-  const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
 
 export function TabooGameTab({
   speechRate,
@@ -74,6 +67,7 @@ export function TabooGameTab({
   tabooStats,
   onRoundComplete,
   onXp,
+  onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.taboo");
   const { speak } = useSpeech(speechRate);
@@ -99,6 +93,12 @@ export function TabooGameTab({
   const [foulFlash, setFoulFlash] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const autoSkipRef = useRef(false);
+  const advancingRef = useRef(false);
+  const statsRef = useRef(stats);
+  const partyScoresRef = useRef(partyScores);
+
+  statsRef.current = stats;
+  partyScoresRef.current = partyScores;
 
   const filteredPool = useMemo(() => {
     return TABOO_CARDS.filter((c) => {
@@ -110,6 +110,11 @@ export function TabooGameTab({
 
   const currentCard = deck[cardIndex];
 
+  useEffect(() => {
+    onPlayingChange?.(phase === "playing");
+    return () => onPlayingChange?.(false);
+  }, [phase, onPlayingChange]);
+
   const clearTimer = () => {
     if (timerRef.current) {
       clearInterval(timerRef.current);
@@ -119,8 +124,20 @@ export function TabooGameTab({
 
   const buildDeck = useCallback(() => {
     const pool = filteredPool.length > 0 ? filteredPool : TABOO_CARDS;
-    return shuffle(pool).slice(0, Math.min(roundSize, pool.length));
-  }, [filteredPool, roundSize]);
+    const deckKey =
+      difficulty === "all"
+        ? `taboo-${category}`
+        : `taboo-${category}-${difficulty}`;
+    return buildSmartDeck(pool, Math.min(roundSize, pool.length), deckKey);
+  }, [filteredPool, roundSize, category, difficulty]);
+
+  const dailySeenCount = useMemo(
+    () => getDailySeenCount(
+      difficulty === "all" ? `taboo-${category}` : `taboo-${category}-${difficulty}`,
+      filteredPool.length > 0 ? filteredPool : TABOO_CARDS
+    ),
+    [filteredPool, category, difficulty]
+  );
 
   const startGame = () => {
     const newDeck = buildDeck();
@@ -131,23 +148,27 @@ export function TabooGameTab({
     setPartyTeam("A");
     setTimeLeft(mode === "practice" ? 0 : roundDuration);
     setShowHint(false);
+    autoSkipRef.current = false;
+    advancingRef.current = false;
     setPhase("playing");
   };
 
+  // Card timer — independent of card index to avoid restart cascades
   useEffect(() => {
     if (phase !== "playing" || mode === "practice") return;
     clearTimer();
     timerRef.current = setInterval(() => {
-      setTimeLeft((prev) => {
-        if (prev <= 1) {
-          clearTimer();
-          return 0;
-        }
-        return prev - 1;
-      });
+      setTimeLeft((prev) => (prev <= 1 ? 0 : prev - 1));
     }, 1000);
     return clearTimer;
-  }, [phase, mode, cardIndex]);
+  }, [phase, mode]);
+
+  // Reset per-card timer when index changes
+  useEffect(() => {
+    if (phase !== "playing" || mode === "practice") return;
+    setTimeLeft(roundDuration);
+    autoSkipRef.current = false;
+  }, [cardIndex, phase, mode, roundDuration]);
 
   const endRound = useCallback(
     (finalStats: TabooRoundStats, finalPartyScores: { A: number; B: number }) => {
@@ -178,45 +199,49 @@ export function TabooGameTab({
       patch: Partial<TabooRoundStats> | ((prev: TabooRoundStats) => Partial<TabooRoundStats>),
       scorePatch?: Partial<{ A: number; B: number }>
     ) => {
+      if (advancingRef.current) return;
+      advancingRef.current = true;
+
       setShowHint(false);
       setFoulFlash(false);
-      autoSkipRef.current = false;
 
-      setStats((prevStats) => {
-        const patchValue = typeof patch === "function" ? patch(prevStats) : patch;
-        const nextStats = { ...prevStats, ...patchValue };
+      const prevStats = statsRef.current;
+      const patchValue = typeof patch === "function" ? patch(prevStats) : patch;
+      const nextStats = { ...prevStats, ...patchValue };
+      const nextParty = scorePatch
+        ? { ...partyScoresRef.current, ...scorePatch }
+        : partyScoresRef.current;
 
-        setPartyScores((prevParty) => {
-          const nextParty = scorePatch ? { ...prevParty, ...scorePatch } : prevParty;
+      const leavingCard = deck[cardIndex];
+      if (leavingCard) {
+        const deckKey =
+          difficulty === "all"
+            ? `taboo-${category}`
+            : `taboo-${category}-${difficulty}`;
+        markCardSeen(deckKey, leavingCard.id);
+      }
 
-          setCardIndex((prevIndex) => {
-            if (prevIndex + 1 >= deck.length) {
-              endRound(nextStats, nextParty);
-              return prevIndex;
-            }
-            if (mode !== "practice") setTimeLeft(roundDuration);
-            return prevIndex + 1;
-          });
+      setStats(nextStats);
+      if (scorePatch) setPartyScores(nextParty);
 
-          return nextParty;
-        });
+      const nextIndex = cardIndex + 1;
+      if (nextIndex >= deck.length) {
+        endRound(nextStats, nextParty);
+        advancingRef.current = false;
+        return;
+      }
 
-        return nextStats;
-      });
+      setCardIndex(nextIndex);
+      advancingRef.current = false;
     },
-    [deck.length, mode, roundDuration, endRound]
+    [cardIndex, deck, category, difficulty, endRound]
   );
 
   useEffect(() => {
-    if (
-      phase === "playing" &&
-      mode !== "practice" &&
-      timeLeft === 0 &&
-      !autoSkipRef.current
-    ) {
-      autoSkipRef.current = true;
-      advanceCard((prev) => ({ skipped: prev.skipped + 1 }));
-    }
+    if (phase !== "playing" || mode === "practice" || timeLeft !== 0) return;
+    if (autoSkipRef.current || advancingRef.current) return;
+    autoSkipRef.current = true;
+    advanceCard((prev) => ({ skipped: prev.skipped + 1 }));
   }, [timeLeft, phase, mode, advanceCard]);
 
   const handleCorrect = () => {
@@ -368,6 +393,12 @@ export function TabooGameTab({
           <div className="space-y-1.5">
             <p className="text-xs text-slate-500 font-mono tabular-nums">
               {filteredPool.length} {t("cards_available")}
+              {dailySeenCount > 0 && (
+                <span className="text-slate-400">
+                  {" "}
+                  · {dailySeenCount} {t("seen_today")}
+                </span>
+              )}
             </p>
             <p className="text-[11px] text-slate-400">
               {t("difficulty_counts", {
