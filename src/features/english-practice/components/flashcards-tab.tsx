@@ -7,9 +7,13 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { FLASHCARDS, FLASHCARD_CATEGORY_LABELS } from "../data/flashcards";
 import type { FlashcardCategory } from "../types";
+import { LEARN_THEMES } from "../lib/game-themes";
+import { themeChip } from "../lib/theme-utils";
 import { useSpeech } from "../hooks/use-speech";
 import { XP_REWARDS } from "../constants";
 import { ep } from "../styles";
+
+const FC_THEME = LEARN_THEMES.flashcards;
 
 type Props = {
   mastered: string[];
@@ -20,6 +24,8 @@ type Props = {
 
 export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
   const t = useTranslations("EnglishPath.flashcards");
+  const tCat = useTranslations("EnglishPath.categories");
+  const tA11y = useTranslations("EnglishPath.a11y");
   const { speak } = useSpeech(speechRate);
   const [category, setCategory] = useState<FlashcardCategory | "all">("all");
   const [index, setIndex] = useState(0);
@@ -69,9 +75,9 @@ export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
               setIndex(0);
               setFlipped(false);
             }}
-            className={cn(ep.chip, category === cat && ep.chipActive)}
+            className={cn(themeChip(FC_THEME, category === cat))}
           >
-            {cat === "all" ? t("all") : FLASHCARD_CATEGORY_LABELS[cat]}
+            {cat === "all" ? t("all") : tCat(cat)}
           </button>
         ))}
       </div>
@@ -100,7 +106,7 @@ export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
                 </span>
               )}
               <span className={cn("text-xs uppercase tracking-widest mb-2", ep.mutedSm)}>
-                {FLASHCARD_CATEGORY_LABELS[card.category]}
+                {tCat(card.category)}
               </span>
               <div className="text-3xl font-bold text-slate-800 mb-3">{card.front}</div>
               <div className="font-mono text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
@@ -135,7 +141,7 @@ export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
             type="button"
             onClick={goPrev}
             className={cn(ep.btnSecondary, "p-3 rounded-xl")}
-            aria-label="Previous"
+            aria-label={tA11y("nav_prev")}
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -143,7 +149,7 @@ export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
             type="button"
             onClick={() => setFlipped(false)}
             className={cn(ep.btnSecondary, "p-3 rounded-xl")}
-            aria-label="Reset flip"
+            aria-label={tA11y("nav_reset")}
           >
             <RotateCcw className="w-5 h-5" />
           </button>
@@ -165,7 +171,7 @@ export function FlashcardsTab({ mastered, speechRate, onMaster, onXp }: Props) {
             type="button"
             onClick={goNext}
             className={cn(ep.btnSecondary, "p-3 rounded-xl")}
-            aria-label="Next"
+            aria-label={tA11y("nav_next")}
           >
             <ChevronRight className="w-5 h-5" />
           </button>

@@ -435,6 +435,15 @@
     "subtitle": "Sınıf oyunları ve günlük İngilizce",
     "back_lab": "AI Lab'e dön",
     "go_panel": "Panele dön",
+    "a11y": {
+      "nav_main": "EnglishPath ana navigasyon",
+      "quit": "Oyundan çık",
+      "pronounce": "Kelimeyi seslendir",
+      "fullscreen": "Tam ekran",
+      "nav_prev": "Önceki kart",
+      "nav_reset": "Çeviriyi sıfırla",
+      "nav_next": "Sonraki kart"
+    },
     "tabs": {
       "dashboard": "Panel",
       "grammar": "Kurallar",
@@ -456,18 +465,36 @@
       "days": "Gün"
     },
     "dashboard": {
+      "welcome": "Öğrenme merkezin",
+      "hero_title": "Sınıf İngilizcesi, adım adım",
+      "hero_subtitle": "Arkadaşlarınla oyunlar, kelime çalışması ve sınavlar — hepsi tek yerde.",
       "progress_title": "İlerleme",
       "xp_label": "XP",
+      "xp_progress": "Seviye ilerlemesi",
+      "streak_days": "gün",
       "total_exams": "Toplam Sınav",
       "taboo_games": "Tabu",
       "heads_up_games": "Heads Up",
       "words_guessed": "Bilinen",
       "start_exam": "Kendini Dene",
+      "exam_cta_desc": "Karışık dilbilgisi, çeviri ve hızlı işaretleme soruları — her doğru cevap XP kazandırır.",
       "recent_exam": "Son Sınav",
       "cards": "kart",
       "play_together": "Sınıfta birlikte oyna",
+      "view_all_games": "Tüm oyunlar",
       "learn_section": "Öğren & pratik yap",
+      "continue_learning": "Kaldığın yerden devam et",
+      "open_module": "Aç",
+      "word_library": "Kelime kütüphanesi",
+      "total_words": "oyun ve çalışma kelimesi",
+      "mastery": "Kelime hakimiyeti",
       "level_label": "Seviye",
+      "grades": {
+        "excellent": "Mükemmel!",
+        "good": "İyi iş",
+        "fair": "Pratik yapmaya devam",
+        "needs_work": "Gelişim alanı var"
+      },
       "modules": {
         "flashcards": { "title": "Kelime Kartları", "desc": "Günlük İngilizce kelimeler ve örnek cümleler." },
         "grammar": { "title": "Dilbilgisi", "desc": "Temel kurallar, günlük hayat örnekleriyle." },
@@ -485,10 +512,10 @@
       "tip": "Arkadaşlarınla birlikte oynamak için en eğlenceli yol!",
       "deck_why": "Her oyunun içeriği farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Category Blitz'te harf + kategori kombinasyonları kullanılır.",
       "deck_notes": {
-        "taboo": "200+ kart · kolay/orta/zor · ünlüler ve filmler dahil.",
-        "heads_up": "150+ kelime · günlük hayat, ünlüler ve sinema sekmeleri.",
-        "charades": "120+ kelime · film, spor, hayvan ve günlük yaşam.",
-        "category_blitz": "20 kategori · harf + konu — sınıf ve takım modu."
+        "taboo": "{count} kart · kolay/orta/zor · ünlüler ve filmler dahil.",
+        "heads_up": "{count} kelime · günlük hayat, ünlüler ve sinema sekmeleri.",
+        "charades": "{count} canlandırılabilir kelime · film, spor, hayvan.",
+        "category_blitz": "{count} kategori · harf + konu — sınıf ve takım modu."
       },
       "cards": "kelime",
       "taboo": { "title": "Tabu", "desc": "Yasaklı kelimeleri kullanmadan İngilizce anlat." },
@@ -503,6 +530,73 @@
       "speak": "Seslendir",
       "mark_mastered": "Öğrendim",
       "already_mastered": "Öğrenildi ✓"
+    },
+    "categories": {
+      "daily": "Günlük Hayat",
+      "food": "Yiyecek & İçecek",
+      "people": "İnsanlar",
+      "travel": "Seyahat",
+      "emotions": "Duygular",
+      "social": "Sosyal Hayat",
+      "hobbies": "Hobiler"
+    },
+    "game_categories": {
+      "taboo": {
+        "food": "Yiyecek & İçecek",
+        "people": "İnsanlar & Hayvanlar",
+        "home": "Ev",
+        "entertainment": "Eğlence & TV",
+        "places": "Mekanlar & Doğa",
+        "emotions": "Duygular",
+        "social": "Sosyal",
+        "hobbies": "Eylemler",
+        "worklife": "İş & Hayat",
+        "celebrities": "Ünlüler",
+        "movies": "Filmler & Sinema",
+        "technology": "Teknoloji"
+      },
+      "heads_up": {
+        "everyday": "Günlük",
+        "food": "Yiyecek",
+        "people": "İnsanlar & Hayvanlar",
+        "places": "Mekanlar",
+        "nature": "Doğa",
+        "actions": "Duygular & Eylemler",
+        "transport": "Ulaşım",
+        "celebrities": "Ünlüler",
+        "movies": "Filmler & Sinema"
+      },
+      "charades": {
+        "actions": "Eylemler",
+        "emotions": "Duygular",
+        "sports": "Spor",
+        "animals": "Hayvanlar",
+        "objects": "Günlük Hayat",
+        "movies": "Filmler",
+        "celebrities": "Showbiz"
+      },
+      "category_blitz": {
+        "animals": "Hayvanlar",
+        "food": "Yiyecek & İçecek",
+        "countries": "Ülkeler",
+        "cities": "Dünya Şehirleri",
+        "hollywood": "Hollywood Filmleri",
+        "turkish_cinema": "Türk Filmleri",
+        "celebrities": "Uluslararası Ünlüler",
+        "turkish_celebs": "Türk Ünlüler",
+        "sports": "Sporlar",
+        "jobs": "Meslekler",
+        "technology": "Teknoloji",
+        "school": "Okul & Eğitim",
+        "nature": "Doğa",
+        "emotions": "Duygular",
+        "transport": "Ulaşım",
+        "music": "Müzik",
+        "clothing": "Giyim",
+        "household": "Ev Eşyaları",
+        "verbs": "Fiiller",
+        "adjectives": "Sıfatlar"
+      }
     },
     "grammar": {
       "intro": "Her kuralı okuyup tamamlandı olarak işaretleyerek XP kazan.",
@@ -532,6 +626,14 @@
       "exit_exam": "Sınavdan çık",
       "exit_confirm": "Sınavdan çıkmak istediğine emin misin? İlerleme kaydedilmez.",
       "input_placeholder": "Cevabını yaz...",
+      "pool_total": "soru havuzunda",
+      "xp_hint": "Çalışma başına {xp} XP'ye kadar",
+      "grades": {
+        "excellent": "Mükemmel!",
+        "good": "İyi iş",
+        "fair": "Pratik yapmaya devam",
+        "needs_work": "Gelişim alanı var"
+      },
       "modes": {
         "mixed": "Karışık",
         "multiple": "Çoktan Seçmeli",
@@ -716,6 +818,7 @@
       "rounds": "Tur sayısı",
       "start": "Oyuna Başla",
       "category": "Kategori",
+      "points": "{n} puan",
       "prompt": "Bu harfle başlayan bir İngilizce kelime söyleyin!",
       "examples": "Örnek cevaplar",
       "examples_general": "Genel örnekler",

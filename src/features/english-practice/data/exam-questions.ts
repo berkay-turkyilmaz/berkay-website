@@ -1,5 +1,6 @@
 import type { ExamMode, ExamQuestion, ExamQuestionType } from "../types";
 import { fisherYatesShuffle } from "../lib/exam-scoring";
+import { EXAM_QUESTIONS_EXTENDED } from "./exam-questions-extended";
 
 export const EXAM_QUESTION_POOL: ExamQuestion[] = [
   { id: "e1", type: "multiple", prompt: "She ___ to the gym three times a week.", options: ["go", "goes", "going", "gone"], answer: "goes", explanation: "Present simple, 3rd person: goes." },
@@ -49,6 +50,7 @@ export const EXAM_QUESTION_POOL: ExamQuestion[] = [
   { id: "tp6", type: "tap", prompt: "Tap the correct preposition:", options: ["depend of", "depend on"], answer: "depend on", explanation: "depend on something." },
   { id: "tp7", type: "tap", prompt: "Tap the correct form:", options: ["more easier", "easier"], answer: "easier", explanation: "Comparative: easier." },
   { id: "tp8", type: "tap", prompt: "Tap the correct sentence:", options: ["I look forward to see you.", "I look forward to seeing you."], answer: "I look forward to seeing you.", explanation: "to + -ing after look forward." },
+  ...EXAM_QUESTIONS_EXTENDED,
 ];
 
 const MODE_TYPE_MAP: Record<ExamMode, ExamQuestionType[] | "all"> = {

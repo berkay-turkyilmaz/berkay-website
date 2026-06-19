@@ -69,4 +69,13 @@ export const CHARADES_CARDS_EXTENDED: CharadesCard[] = [
   c("cn06", "Shark", "animals", "Yüzgeç, diş", "medium"),
   c("cn07", "Horse", "animals", "At koşusu", "easy"),
   c("cn08", "Bee", "animals", "Vızıldamak", "easy"),
+
+  // B1/B2 mime-friendly
+  c("cn09", "Cooking", "actions", "Yemek pişirmek", "easy"),
+  c("cn10", "Typing", "actions", "Klavye", "easy"),
+  c("cn11", "Photography", "actions", "Fotoğraf çekmek", "medium"),
+  c("cn12", "Rock climbing", "sports", "Tırmanış", "hard"),
+  c("cn13", "Yawning", "actions", "Esneme", "easy"),
+  c("cn14", "Whispering", "actions", "Fısıldamak", "easy"),
+  c("cn15", "Applause", "actions", "Alkış", "easy"),
 ];

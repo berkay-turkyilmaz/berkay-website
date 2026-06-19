@@ -1,4 +1,5 @@
 import type { Flashcard } from "../types";
+import { FLASHCARDS_EXTENDED } from "./flashcards-extended";
 
 /** Basit, günlük hayat kelimeleri — A1–A2 seviye */
 export const FLASHCARDS: Flashcard[] = [
@@ -49,6 +50,7 @@ export const FLASHCARDS: Flashcard[] = [
   { id: "h3", front: "Movie", back: "Film", phonetic: "/ˈmuːvi/", category: "hobbies", example: "Let's watch a movie tonight." },
   { id: "h4", front: "Book", back: "Kitap", phonetic: "/bʊk/", category: "hobbies", example: "I'm reading a good book." },
   { id: "h5", front: "Dance", back: "Dans", phonetic: "/dɑːns/", category: "hobbies", example: "They like to dance." },
+  ...FLASHCARDS_EXTENDED,
 ];
 
 export const FLASHCARD_CATEGORY_LABELS: Record<string, string> = {

@@ -17,6 +17,13 @@ import {
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
+import { GAME_THEMES } from "../lib/game-themes";
+import {
+  themeAccentText,
+  themeBtnPrimary,
+  themeChip,
+  themeProgressBar,
+} from "../lib/theme-utils";
 import { HEADS_UP_CARDS, HEADS_UP_CATEGORY_LABELS } from "../data/heads-up-cards";
 import type { HeadsUpCategory, HeadsUpRoundStats } from "../types";
 import { ep } from "../styles";
@@ -24,6 +31,8 @@ import { XP_REWARDS } from "../constants";
 import { GameTimerSlider } from "./game-timer-slider";
 import { GameWordDisplay } from "./game-word-display";
 import { FadeUp, Pressable } from "./motion-primitives";
+
+const HU_THEME = GAME_THEMES.heads_up;
 
 type Phase = "setup" | "countdown" | "playing" | "round_end";
 
@@ -49,6 +58,8 @@ export function HeadsUpGameTab({
   onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.heads_up");
+  const tCat = useTranslations("EnglishPath.game_categories.heads_up");
+  const tA11y = useTranslations("EnglishPath.a11y");
   const tg = useTranslations("EnglishPath.games");
   const [phase, setPhase] = useState<Phase>("setup");
   const [category, setCategory] = useState<HeadsUpCategory | "all">("all");
@@ -217,7 +228,7 @@ export function HeadsUpGameTab({
         </FadeUp>
 
         <div className={cn(ep.card, "p-5 space-y-4")}>
-          <p className="text-xs font-bold uppercase tracking-widest text-teal-600">{t("how_title")}</p>
+          <p className={cn("text-xs font-bold uppercase tracking-widest", HU_THEME.accentFg)}>{t("how_title")}</p>
           <ol className="space-y-2 text-sm text-slate-600 list-decimal list-inside">
             <li>{t("how_1")}</li>
             <li>{t("how_2")}</li>
@@ -231,9 +242,9 @@ export function HeadsUpGameTab({
               key={cat}
               type="button"
               onClick={() => setCategory(cat as HeadsUpCategory | "all")}
-              className={cn(ep.chip, category === cat && ep.chipActive)}
+              className={cn(themeChip(HU_THEME, category === cat))}
             >
-              {cat === "all" ? t("all") : HEADS_UP_CATEGORY_LABELS[cat]}
+              {cat === "all" ? t("all") : tCat(cat)}
             </button>
           ))}
         </div>
@@ -244,7 +255,7 @@ export function HeadsUpGameTab({
               key={d}
               type="button"
               onClick={() => setDifficulty(d)}
-              className={cn(ep.chip, difficulty === d && ep.chipActive)}
+              className={cn(themeChip(HU_THEME, difficulty === d))}
             >
               {d === "all" ? t("all") : t(`diff.${d}`)}
             </button>
@@ -256,7 +267,7 @@ export function HeadsUpGameTab({
             value={roundDuration}
             onChange={onRoundDurationChange}
             min={45}
-            accentClass="accent-violet-500"
+            theme={HU_THEME}
           />
         </div>
 
@@ -291,7 +302,7 @@ export function HeadsUpGameTab({
           key={countdown}
           initial={{ scale: 0.5, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="text-8xl font-black text-teal-600"
+          className={cn("text-8xl font-black", HU_THEME.accentFg)}
         >
           {countdown || "GO!"}
         </motion.span>
@@ -305,7 +316,7 @@ export function HeadsUpGameTab({
       <div className={cn(ep.gameFullscreen, "items-center justify-center p-6")}>
         <Trophy className="w-14 h-14 text-amber-500 mb-4" />
         <h2 className="text-3xl font-black text-slate-800 mb-2">{t("round_done")}</h2>
-        <p className="text-5xl font-black text-teal-600 mb-1">{roundStats.correct}</p>
+        <p className={cn("text-5xl font-black mb-1", HU_THEME.accentFg)}>{roundStats.correct}</p>
         <p className="text-slate-500 mb-8">{t("words_guessed")}</p>
         <div className="flex gap-3 w-full max-w-xs">
           <button
@@ -336,7 +347,7 @@ export function HeadsUpGameTab({
           type="button"
           onClick={quitToSetup}
           className="md:hidden p-2 rounded-xl bg-white border border-slate-200"
-          aria-label="Quit"
+          aria-label={tA11y("quit")}
         >
           <X className="w-5 h-5 text-slate-600" />
         </button>
@@ -344,7 +355,7 @@ export function HeadsUpGameTab({
         <div
           className={cn(
             "font-mono font-bold text-xl tabular-nums px-4 py-1 rounded-full",
-            timeLeft <= 10 ? "bg-rose-100 text-rose-600" : "bg-teal-100 text-teal-700"
+            timeLeft <= 10 ? "bg-rose-100 text-rose-600" : cn(HU_THEME.surface, HU_THEME.accentFg)
           )}
         >
           {timeLeft}s
@@ -353,7 +364,7 @@ export function HeadsUpGameTab({
           type="button"
           onClick={enterFullscreen}
           className="p-2 rounded-xl bg-white/80 border border-slate-200"
-          aria-label="Fullscreen"
+          aria-label={tA11y("fullscreen")}
         >
           <Maximize2 className="w-5 h-5 text-slate-600" />
         </button>
@@ -362,7 +373,7 @@ export function HeadsUpGameTab({
       <div className="px-4 mb-2">
         <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-teal-500 transition-all"
+            className={cn("h-full transition-all", themeProgressBar(HU_THEME))}
             style={{ width: `${roundDuration > 0 ? (timeLeft / roundDuration) * 100 : 0}%` }}
           />
         </div>
@@ -383,7 +394,7 @@ export function HeadsUpGameTab({
           >
             <div className="bg-white rounded-[2rem] border border-slate-200 shadow-xl p-6 sm:p-10 text-center min-w-0">
               <span className="text-xs font-bold text-violet-500 uppercase tracking-widest">
-                {HEADS_UP_CATEGORY_LABELS[card.category]}
+                {tCat(card.category)}
               </span>
               <div className="mt-4 px-1 min-w-0 flex justify-center">
                 <GameWordDisplay word={card.word} />

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Check, Clock, LogOut, Trophy, X } from "lucide-react";
+import { Award, Check, Clock, LogOut, Sparkles, Trophy, X, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { countQuestionsForMode, pickExamQuestions } from "../data/exam-questions";
@@ -10,6 +10,7 @@ import { isAnswerCorrect } from "../lib/exam-scoring";
 import type { ExamMode, ExamQuestion } from "../types";
 import { XP_REWARDS } from "../constants";
 import { ep } from "../styles";
+import { EXAM_QUESTION_POOL } from "../data/exam-questions";
 
 type Props = {
   questionCount: number;
@@ -23,6 +24,13 @@ type Props = {
 type Phase = "intro" | "active" | "review" | "done";
 
 const EXAM_MODES: ExamMode[] = ["mixed", "multiple", "true_false", "tap", "fill", "translate"];
+
+function getGradeKey(pct: number): "excellent" | "good" | "fair" | "needs_work" {
+  if (pct >= 90) return "excellent";
+  if (pct >= 75) return "good";
+  if (pct >= 60) return "fair";
+  return "needs_work";
+}
 
 type ReviewRow = {
   question: ExamQuestion;
@@ -138,18 +146,36 @@ export function ExamTab({
 
   if (phase === "intro") {
     return (
-      <div className="max-w-2xl mx-auto space-y-8 py-8">
-        <div className="text-center space-y-3">
-          <Trophy className="w-14 h-14 text-amber-500 mx-auto" />
-          <h2 className="text-3xl font-bold text-slate-800">{t("title")}</h2>
-          <p className={cn(ep.muted, "text-sm max-w-md mx-auto")}>
-            {t("intro", { count: effectiveCount })}
-          </p>
+      <div className="max-w-3xl mx-auto space-y-8 py-6 pb-10">
+        <div
+          className={cn(
+            ep.heroGradient,
+            "relative overflow-hidden rounded-2xl p-8 text-center text-white border border-slate-700/30"
+          )}
+        >
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(245,158,11,0.2),transparent_55%)]" />
+          <div className="relative">
+            <Trophy className="w-12 h-12 text-amber-300 mx-auto mb-4" aria-hidden />
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("title")}</h2>
+            <p className="text-slate-300 text-sm mt-2 max-w-lg mx-auto leading-relaxed">
+              {t("intro", { count: effectiveCount })}
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 mt-6">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/15 text-xs font-medium">
+                <Sparkles className="w-3.5 h-3.5 text-teal-300" aria-hidden />
+                {EXAM_QUESTION_POOL.length} {t("pool_total")}
+              </span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/15 text-xs font-medium">
+                <Zap className="w-3.5 h-3.5 text-amber-300" aria-hidden />
+                {t("xp_hint", { xp: effectiveCount * XP_REWARDS.examPerCorrect })}
+              </span>
+            </div>
+          </div>
         </div>
 
         <div>
           <p className={cn(ep.sectionLabel, "mb-3 px-1")}>{t("pick_mode")}</p>
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {EXAM_MODES.map((mode) => {
               const count = countQuestionsForMode(mode);
               const active = activeMode === mode;
@@ -163,12 +189,14 @@ export function ExamTab({
                     ep.card,
                     ep.clickable,
                     "p-4 text-left transition-all disabled:opacity-40",
-                    active && "border-teal-400 ring-2 ring-teal-100 bg-teal-50"
+                    active && "border-teal-400 ring-2 ring-teal-100 bg-teal-50/80"
                   )}
                 >
                   <p className="font-semibold text-slate-800 text-sm">{t(`modes.${mode}`)}</p>
                   <p className="text-xs text-slate-500 mt-1 leading-snug">{t(`mode_desc.${mode}`)}</p>
-                  <p className="text-[10px] font-mono text-teal-600 mt-2">{count} {t("pool")}</p>
+                  <p className="text-[10px] font-mono text-teal-600 mt-2 font-semibold">
+                    {count} {t("pool")}
+                  </p>
                 </button>
               );
             })}
@@ -189,20 +217,43 @@ export function ExamTab({
 
   if (phase === "review" || phase === "done") {
     const pct = finalScore.total > 0 ? Math.round((finalScore.score / finalScore.total) * 100) : 0;
+    const gradeKey = getGradeKey(pct);
+    const xpEarned = finalScore.score * XP_REWARDS.examPerCorrect;
+    const durationMin = Math.floor(elapsed / 60);
+    const durationSec = elapsed % 60;
 
     return (
       <div className="max-w-2xl mx-auto space-y-6 py-6 pb-10">
         <motion.div
           initial={{ scale: 0.96, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className={cn(ep.card, "p-6 text-center")}
+          className={cn(ep.card, "p-6 sm:p-8 text-center overflow-hidden relative")}
         >
-          <div className="text-5xl font-black text-teal-600 tabular-nums">%{pct}</div>
-          <p className="text-lg font-semibold text-slate-800 mt-2">
-            {finalScore.score} / {finalScore.total} {t("correct_label")}
-          </p>
-          <p className="text-sm text-slate-500 mt-1">{t(`modes.${activeMode}`)}</p>
-          <div className="flex flex-wrap gap-3 justify-center mt-6">
+          <div className="absolute inset-0 bg-gradient-to-br from-teal-50/80 via-white to-amber-50/40 pointer-events-none" />
+          <div className="relative">
+            <Award
+              className={cn(
+                "w-10 h-10 mx-auto mb-3",
+                pct >= 75 ? "text-amber-500" : pct >= 60 ? "text-teal-600" : "text-slate-400"
+              )}
+              aria-hidden
+            />
+            <div className="text-5xl font-black text-teal-600 tabular-nums">%{pct}</div>
+            <p className="text-base font-semibold text-slate-800 mt-2">{t(`grades.${gradeKey}`)}</p>
+            <p className="text-sm text-slate-500 mt-1">
+              {finalScore.score} / {finalScore.total} {t("correct_label")} · {t(`modes.${activeMode}`)}
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 mt-4 text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-100">
+                <Clock className="w-3.5 h-3.5" aria-hidden />
+                {durationMin}:{String(durationSec).padStart(2, "0")}
+              </span>
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-medium">
+                <Zap className="w-3.5 h-3.5" aria-hidden />
+                +{xpEarned} XP
+              </span>
+            </div>
+            <div className="flex flex-wrap gap-3 justify-center mt-6">
             <button
               type="button"
               onClick={start}
@@ -224,6 +275,7 @@ export function ExamTab({
             >
               {t("view_results")}
             </button>
+            </div>
           </div>
         </motion.div>
 

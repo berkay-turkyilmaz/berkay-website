@@ -6,8 +6,12 @@ import { Check, X, RotateCcw } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { PREPOSITION_EXERCISES } from "../data/prepositions";
+import { LEARN_THEMES } from "../lib/game-themes";
+import { themeBtnPrimary } from "../lib/theme-utils";
 import { XP_REWARDS } from "../constants";
 import { ep } from "../styles";
+
+const PP_THEME = LEARN_THEMES.prepositions;
 
 type Props = {
   scores: Record<string, boolean>;
@@ -72,7 +76,7 @@ export function PrepositionsTab({ scores, onAnswer, onXp }: Props) {
                 ? selected === exercise.answer
                   ? "border-emerald-500 text-emerald-600"
                   : "border-rose-500 text-rose-600"
-                : "border-teal-500 text-teal-600"
+                : "border-emerald-500 text-emerald-600"
             )}
           >
             {revealed ? exercise.answer : "?"}
@@ -93,7 +97,7 @@ export function PrepositionsTab({ scores, onAnswer, onXp }: Props) {
                 className={cn(
                   "py-3 px-4 rounded-xl font-semibold text-sm border transition-all",
                   !revealed &&
-                    "hover:border-teal-300 hover:bg-teal-50 border-slate-200 bg-white text-slate-700",
+                    cn("hover:bg-emerald-50 hover:border-emerald-200 border-slate-200 bg-white text-slate-700"),
                   revealed && isAnswer && "border-emerald-500 bg-emerald-50 text-emerald-700",
                   revealed && isSelected && !isAnswer && "border-rose-500 bg-rose-50 text-rose-700",
                   revealed && !isSelected && !isAnswer && "opacity-40 border-slate-200"
@@ -126,7 +130,7 @@ export function PrepositionsTab({ scores, onAnswer, onXp }: Props) {
           <button
             type="button"
             onClick={next}
-            className={cn(ep.btnPrimary, "mt-6 w-full py-3 rounded-xl font-bold")}
+            className={cn(themeBtnPrimary(PP_THEME), "mt-6 w-full py-3 rounded-xl font-bold")}
           >
             {t("next")}
           </button>

@@ -88,4 +88,13 @@ export const TABOO_CARDS_EXTENDED: TabooCard[] = [
   c("adv06", "Remote Work", ["home", "office", "online", "Zoom", "laptop"], "worklife", "Uzaktan çalışma", "medium"),
   c("adv07", "Influencer", ["social media", "follower", "Instagram", "brand", "content"], "social", "Fenomen", "medium"),
   c("adv08", "Podcast", ["listen", "audio", "episode", "host", "Spotify"], "entertainment", "Podcast", "medium"),
+
+  // B1/B2 classroom vocabulary
+  c("adv09", "Negotiation", ["deal", "agree", "business", "price", "contract"], "worklife", "Pazarlık", "hard"),
+  c("adv10", "Presentation", ["slides", "speak", "audience", "PowerPoint", "meeting"], "worklife", "Sunum", "medium"),
+  c("adv11", "Interview", ["job", "questions", "employer", "CV", "hire"], "worklife", "Mülakat", "medium"),
+  c("adv12", "Neighbourhood", ["area", "local", "street", "community", "near"], "places", "Mahalle", "medium"),
+  c("adv13", "Recycling", ["waste", "bin", "plastic", "environment", "reuse"], "places", "Geri dönüşüm", "medium"),
+  c("adv14", "Volunteering", ["help", "charity", "free", "community", "work"], "social", "Gönüllülük", "medium"),
+  c("adv15", "Homework", ["school", "study", "teacher", "assignment", "class"], "social", "Ödev", "easy"),
 ];

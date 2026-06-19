@@ -2,6 +2,9 @@
 
 import { Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
+import type { ThemeTokens } from "../lib/game-themes";
+import { themeClockIcon, themeTimerAccent } from "../lib/theme-utils";
 
 type Props = {
   value: number;
@@ -10,7 +13,7 @@ type Props = {
   max?: number;
   step?: number;
   accentClass?: string;
-  /** Özel etiket; yoksa varsayılan "Tur süresi" */
+  theme?: ThemeTokens;
   label?: string;
 };
 
@@ -20,17 +23,21 @@ export function GameTimerSlider({
   min = 30,
   max = 120,
   step = 15,
-  accentClass = "accent-teal-600",
+  accentClass,
+  theme,
   label,
 }: Props) {
   const t = useTranslations("EnglishPath.games");
+  const sliderAccent = accentClass ?? (theme ? themeTimerAccent(theme) : "accent-teal-600");
+  const clockClass = theme ? themeClockIcon(theme) : "text-teal-600";
+  const valueClass = theme ? theme.accentFg : "text-teal-700";
 
   return (
     <div className="space-y-2">
       <label className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-        <Clock className="w-4 h-4 text-teal-600 shrink-0" />
+        <Clock className={cn("w-4 h-4 shrink-0", clockClass)} aria-hidden />
         {label ?? t("round_timer")}:{" "}
-        <span className="text-teal-700 font-mono tabular-nums">{value}s</span>
+        <span className={cn("font-mono tabular-nums", valueClass)}>{value}s</span>
       </label>
       <input
         type="range"
@@ -39,9 +46,9 @@ export function GameTimerSlider({
         step={step}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className={`w-full h-2 rounded-full ${accentClass}`}
+        className={cn("w-full h-2 rounded-full", sliderAccent)}
       />
-      <div className="flex justify-between text-[10px] text-slate-400 font-mono tabular-nums">
+      <div className="flex justify-between text-xs text-slate-400 font-mono tabular-nums">
         <span>{min}s</span>
         <span>{max}s</span>
       </div>

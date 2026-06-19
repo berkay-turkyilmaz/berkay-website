@@ -35,9 +35,13 @@ import type {
 import { useSpeech } from "../hooks/use-speech";
 import { XP_REWARDS } from "../constants";
 import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
+import { GAME_THEMES } from "../lib/game-themes";
+import { themeAccentText, themeBtnPrimary, themeChip, themeProgressBar, themeSurfaceBanner } from "../lib/theme-utils";
 import { ep } from "../styles";
 import { GameTimerSlider } from "./game-timer-slider";
 import { FadeUp, Pressable } from "./motion-primitives";
+
+const TABOO_THEME = GAME_THEMES.taboo;
 
 type GamePhase = "setup" | "playing" | "round_end" | "paused";
 
@@ -70,6 +74,8 @@ export function TabooGameTab({
   onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.taboo");
+  const tCat = useTranslations("EnglishPath.game_categories.taboo");
+  const tA11y = useTranslations("EnglishPath.a11y");
   const { speak } = useSpeech(speechRate);
 
   const [phase, setPhase] = useState<GamePhase>("setup");
@@ -280,7 +286,7 @@ export function TabooGameTab({
       <div className="max-w-3xl mx-auto space-y-6 pb-8">
         <FadeUp>
           <div className={cn(ep.heroGradient, "relative overflow-hidden rounded-2xl p-6 sm:p-8 text-white text-center shadow-lg")}>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(13,148,136,0.3),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(244,63,94,0.28),transparent_50%)]" />
             <motion.span
               className="text-4xl inline-block mb-2 relative"
               animate={{ rotate: [0, -10, 10, 0] }}
@@ -323,11 +329,11 @@ export function TabooGameTab({
                     ep.clickable,
                     "p-5 text-left transition-all",
                     active
-                      ? "border-teal-400 ring-2 ring-teal-100 bg-teal-50 shadow-sm"
+                      ? "border-rose-400 ring-2 ring-rose-100 bg-rose-50 shadow-sm"
                       : "hover:border-slate-300"
                   )}
                 >
-                  <Icon className={cn("w-7 h-7 mb-3", active ? "text-teal-600" : "text-slate-400")} />
+                  <Icon className={cn("w-7 h-7 mb-3", active ? TABOO_THEME.icon : "text-slate-400")} />
                   <p className="font-black text-slate-800">{m.label}</p>
                   <p className="text-xs text-slate-500 mt-1 leading-relaxed">{m.desc}</p>
                 </motion.button>
@@ -345,9 +351,9 @@ export function TabooGameTab({
                   key={cat}
                   type="button"
                   onClick={() => setCategory(cat as TabooCategory | "all")}
-                  className={cn(ep.chip, category === cat && ep.chipActive)}
+                  className={cn(themeChip(TABOO_THEME, category === cat))}
                 >
-                  {cat === "all" ? t("all") : TABOO_CATEGORY_LABELS[cat]}
+                  {cat === "all" ? t("all") : tCat(cat)}
                 </button>
               ))}
             </div>
@@ -361,7 +367,7 @@ export function TabooGameTab({
                   key={d}
                   type="button"
                   onClick={() => setDifficulty(d as TabooDifficulty | "all")}
-                  className={cn(ep.chip, "capitalize", difficulty === d && ep.chipActive)}
+                  className={cn(themeChip(TABOO_THEME, difficulty === d), "capitalize")}
                 >
                   {d === "all" ? t("all") : t(`diff.${d}`)}
                 </button>
@@ -379,7 +385,7 @@ export function TabooGameTab({
               max={20}
               value={roundSize}
               onChange={(e) => setRoundSize(Number(e.target.value))}
-              className="w-full mt-2 accent-teal-600"
+              className="w-full mt-2 accent-rose-600"
             />
           </div>
 
@@ -387,6 +393,7 @@ export function TabooGameTab({
             <GameTimerSlider
               value={roundDuration}
               onChange={onRoundDurationChange}
+              theme={TABOO_THEME}
             />
           )}
 
@@ -489,7 +496,7 @@ export function TabooGameTab({
             <p className="text-xs text-slate-500">{t("fouls")}</p>
           </div>
         </div>
-        <p className="text-4xl font-black text-teal-600">%{accuracy}</p>
+        <p className={cn("text-4xl font-black", themeAccentText(TABOO_THEME))}>%{accuracy}</p>
         {mode === "party" && (
           <p className="text-lg font-bold">
             {t("party_score")}: {partyScores.A} - {partyScores.B}
@@ -506,7 +513,7 @@ export function TabooGameTab({
           <button
             type="button"
             onClick={startGame}
-            className={cn(ep.btnPrimary, "px-6 py-3 rounded-xl font-semibold flex items-center gap-2")}
+            className={cn(themeBtnPrimary(TABOO_THEME), "px-6 py-3 rounded-xl font-semibold flex items-center gap-2")}
           >
             <RotateCcw className="w-4 h-4" /> {t("play_again")}
           </button>
@@ -524,7 +531,7 @@ export function TabooGameTab({
           type="button"
           onClick={quitToSetup}
           className={cn(ep.clickable, "md:hidden p-2 rounded-xl bg-white border border-slate-200 shadow-sm")}
-          aria-label="Quit"
+          aria-label={tA11y("quit")}
         >
           <X className="w-5 h-5 text-slate-600" />
         </button>
@@ -534,11 +541,11 @@ export function TabooGameTab({
         </span>
         {mode === "party" && (
           <div className="flex items-center gap-3 text-sm font-bold">
-            <span className={cn(partyTeam === "A" ? "text-teal-600" : "text-slate-400")}>
+            <span className={cn(partyTeam === "A" ? themeAccentText(TABOO_THEME) : "text-slate-400")}>
               {t("team_a")}: {partyScores.A}
             </span>
             <span className="text-slate-300">|</span>
-            <span className={cn(partyTeam === "B" ? "text-teal-600" : "text-slate-400")}>
+            <span className={cn(partyTeam === "B" ? themeAccentText(TABOO_THEME) : "text-slate-400")}>
               {t("team_b")}: {partyScores.B}
             </span>
           </div>
@@ -565,13 +572,13 @@ export function TabooGameTab({
 
       <div className="h-1 bg-slate-200 rounded-full overflow-hidden">
         <div
-          className="h-full bg-teal-500 transition-all"
+          className={cn("h-full transition-all", themeProgressBar(TABOO_THEME))}
           style={{ width: `${((cardIndex + 1) / deck.length) * 100}%` }}
         />
       </div>
 
       {mode === "party" && (
-        <div className="text-center text-sm font-semibold text-teal-700 bg-teal-50 border border-teal-100 py-2 rounded-xl">
+        <div className={cn("text-center", themeSurfaceBanner(TABOO_THEME))}>
           {t("current_turn")}: {partyTeam === "A" ? t("team_a") : t("team_b")}
         </div>
       )}
@@ -589,13 +596,13 @@ export function TabooGameTab({
         >
           <div className="flex items-center justify-between mb-4">
             <span className="text-xs font-bold uppercase tracking-widest text-slate-400">
-              {TABOO_CATEGORY_LABELS[currentCard.category]} · {t(`diff.${currentCard.difficulty}`)}
+              {tCat(currentCard.category)} · {t(`diff.${currentCard.difficulty}`)}
             </span>
             <button
               type="button"
               onClick={() => speak(currentCard.word)}
               className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600"
-              aria-label="Pronounce"
+              aria-label={tA11y("pronounce")}
             >
               <Volume2 className="w-4 h-4" />
             </button>
@@ -624,7 +631,7 @@ export function TabooGameTab({
           <button
             type="button"
             onClick={() => setShowHint((h) => !h)}
-            className="mt-6 w-full py-2.5 text-sm font-medium text-slate-600 hover:text-teal-700 bg-slate-50 hover:bg-teal-50 rounded-xl flex items-center justify-center gap-2 border border-slate-100"
+            className="mt-6 w-full py-2.5 text-sm font-medium text-slate-600 hover:text-rose-700 bg-slate-50 hover:bg-rose-50 rounded-xl flex items-center justify-center gap-2 border border-slate-100"
           >
             {showHint ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             {showHint ? t("hide_meaning") : t("show_meaning")}

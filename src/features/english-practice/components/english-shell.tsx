@@ -26,6 +26,8 @@ import type {
 } from "../types";
 import { useEnglishProgress } from "../hooks/use-english-progress";
 import { englishPathHref, parseEnglishPathTab } from "../lib/english-path-routes";
+import { getThemeForTab } from "../lib/game-themes";
+import { themeNavActive } from "../lib/theme-utils";
 import { ep, isGameTab } from "../styles";
 import { DashboardTab } from "./dashboard-tab";
 import { EnglishHeader } from "./english-header";
@@ -63,6 +65,15 @@ export function EnglishShell() {
   const [showSettings, setShowSettings] = useState(false);
   const [showMore, setShowMore] = useState(false);
   const [gamePlaying, setGamePlaying] = useState(false);
+
+  useEffect(() => {
+    if (!showMore) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [showMore]);
 
   const {
     progress,
@@ -309,12 +320,19 @@ export function EnglishShell() {
       {!hideMobileChrome && (
         <nav
           className="md:hidden fixed bottom-0 inset-x-0 z-50 bg-white/95 backdrop-blur-md border-t border-slate-200 pb-[env(safe-area-inset-bottom)]"
-          aria-label={t("title")}
+          aria-label={t("a11y.nav_main")}
         >
           <div className="grid grid-cols-5 h-16 max-w-lg mx-auto">
             {MOBILE_PRIMARY_TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = tab.id === "games" ? mobileGamesActive : activeTab === tab.id;
+              const highlightTheme =
+                isActive && tab.id === "games" && isGameTab(activeTab)
+                  ? getThemeForTab(activeTab)
+                  : isActive
+                    ? getThemeForTab(tab.id)
+                    : null;
+              const navStyle = highlightTheme ? themeNavActive(highlightTheme) : null;
               return (
                 <button
                   key={tab.id}
@@ -322,19 +340,21 @@ export function EnglishShell() {
                   onClick={() => navigate(tab.id)}
                   className={cn(
                     ep.clickable,
-                    "flex flex-col items-center justify-center gap-0.5 transition-colors",
-                    isActive ? "text-teal-700" : "text-slate-400"
+                    "flex flex-col items-center justify-center gap-0.5 transition-colors min-w-0 px-0.5",
+                    isActive ? (navStyle?.text ?? "text-teal-700") : "text-slate-400"
                   )}
                 >
                   <span
                     className={cn(
                       "flex items-center justify-center w-9 h-7 rounded-lg transition-colors",
-                      isActive && "bg-teal-50"
+                      isActive && (navStyle?.bg ?? "bg-teal-50")
                     )}
                   >
-                    <Icon className="w-5 h-5" />
+                    <Icon className="w-5 h-5 shrink-0" />
                   </span>
-                  <span className="text-[9px] font-bold leading-none">{t(tab.labelKey)}</span>
+                  <span className="text-[10px] font-semibold leading-tight truncate max-w-full">
+                    {t(tab.labelKey)}
+                  </span>
                 </button>
               );
             })}
@@ -343,19 +363,27 @@ export function EnglishShell() {
               onClick={() => setShowMore(true)}
               className={cn(
                 ep.clickable,
-                "flex flex-col items-center justify-center gap-0.5 transition-colors",
-                MORE_TABS.some((m) => m.id === activeTab) ? "text-teal-700" : "text-slate-400"
+                "flex flex-col items-center justify-center gap-0.5 transition-colors min-w-0 px-0.5",
+                (() => {
+                  const moreActive = MORE_TABS.some((m) => m.id === activeTab);
+                  if (!moreActive) return "text-slate-400";
+                  const theme = getThemeForTab(activeTab);
+                  return theme ? themeNavActive(theme).text : "text-teal-700";
+                })()
               )}
             >
               <span
                 className={cn(
                   "flex items-center justify-center w-9 h-7 rounded-lg",
-                  MORE_TABS.some((m) => m.id === activeTab) && "bg-teal-50"
+                  MORE_TABS.some((m) => m.id === activeTab) &&
+                    (getThemeForTab(activeTab)
+                      ? themeNavActive(getThemeForTab(activeTab)!).bg
+                      : "bg-teal-50")
                 )}
               >
-                <MoreHorizontal className="w-5 h-5" />
+                <MoreHorizontal className="w-5 h-5 shrink-0" />
               </span>
-              <span className="text-[9px] font-bold leading-none">{t("tabs.more")}</span>
+              <span className="text-[10px] font-semibold leading-tight">{t("tabs.more")}</span>
             </button>
           </div>
         </nav>

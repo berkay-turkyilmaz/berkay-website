@@ -1,7 +1,7 @@
 "use client";
 
 import { Trophy, Trash2 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { ExamResult } from "../types";
 import { ep } from "../styles";
@@ -14,6 +14,7 @@ type Props = {
 
 export function ResultsTab({ results, onClear, onStartExam }: Props) {
   const t = useTranslations("EnglishPath.results");
+  const locale = useLocale();
 
   if (results.length === 0) {
     return (
@@ -42,7 +43,9 @@ export function ResultsTab({ results, onClear, onStartExam }: Props) {
       {results.map((r) => (
         <div key={r.id} className={cn(ep.card, "flex items-center justify-between p-5 !rounded-2xl")}>
           <div>
-            <p className={cn("font-mono text-sm", ep.mutedSm)}>{new Date(r.date).toLocaleString()}</p>
+            <p className={cn("font-mono text-sm", ep.mutedSm)}>
+              {new Date(r.date).toLocaleString(locale)}
+            </p>
             <p className={cn("text-sm mt-1", ep.muted)}>
               {r.mode && (
                 <span className="text-teal-600 font-medium">{t(`exam_modes.${r.mode}`)} · </span>

@@ -74,4 +74,14 @@ export const HEADS_UP_CARDS_EXTENDED: HeadsUpCard[] = [
   h("hmv08", "Mirror", "everyday", "Ayna", "medium"),
   h("hmv09", "Toothbrush", "everyday", "Diş fırçası", "medium"),
   h("hmv10", "Remote control", "everyday", "Kumanda", "medium"),
+
+  // B1 travel & school
+  h("hmv11", "Passport", "places", "Pasaport", "medium"),
+  h("hmv12", "Suitcase", "places", "Bavul", "easy"),
+  h("hmv13", "Boarding pass", "transport", "Biniş kartı", "hard"),
+  h("hmv14", "Dictionary", "everyday", "Sözlük", "easy"),
+  h("hmv15", "Whiteboard", "everyday", "Tahta", "easy"),
+  h("hmv16", "Calculator", "everyday", "Hesap makinesi", "easy"),
+  h("hmv17", "Stadium", "places", "Stadyum", "medium"),
+  h("hmv18", "Pharmacy", "places", "Eczane", "medium"),
 ];

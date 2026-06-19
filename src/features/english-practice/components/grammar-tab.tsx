@@ -6,8 +6,12 @@ import { BookOpen, Check, ChevronDown } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { GRAMMAR_RULES } from "../data/grammar";
+import { LEARN_THEMES } from "../lib/game-themes";
+import { themeBtnPrimary } from "../lib/theme-utils";
 import { XP_REWARDS } from "../constants";
 import { ep } from "../styles";
+
+const GR_THEME = LEARN_THEMES.grammar;
 
 type Props = {
   completed: string[];
@@ -46,7 +50,7 @@ export function GrammarTab({ completed, onComplete, onXp }: Props) {
               className="w-full flex items-center justify-between p-5 text-left hover:bg-slate-50 transition-colors"
             >
               <div className="flex items-center gap-3">
-                <BookOpen className={cn("w-5 h-5", isDone ? "text-emerald-500" : "text-teal-600")} />
+                <BookOpen className={cn("w-5 h-5", isDone ? "text-emerald-500" : GR_THEME.icon)} />
                 <span className="font-bold text-slate-800">{rule.title}</span>
                 {isDone && <Check className="w-4 h-4 text-emerald-500" />}
               </div>
@@ -64,7 +68,7 @@ export function GrammarTab({ completed, onComplete, onXp }: Props) {
                 >
                   <div className="px-5 pb-5 space-y-4 border-t border-slate-100 pt-4">
                     <p className="text-slate-600">{rule.summary}</p>
-                    <div className="bg-slate-50 rounded-xl px-4 py-3 font-mono text-sm text-teal-700 border border-slate-100">
+                    <div className={cn("bg-slate-50 rounded-xl px-4 py-3 font-mono text-sm border border-slate-100", GR_THEME.accentFg)}>
                       {rule.formula}
                     </div>
                     <ul className="space-y-2">
@@ -82,7 +86,7 @@ export function GrammarTab({ completed, onComplete, onXp }: Props) {
                       <button
                         type="button"
                         onClick={() => handleMarkRead(rule.id)}
-                        className={cn(ep.btnPrimary, "w-full py-2.5 rounded-xl font-semibold text-sm")}
+                        className={cn(themeBtnPrimary(GR_THEME), "w-full py-2.5 rounded-xl font-semibold text-sm")}
                       >
                         {t("mark_complete")}
                       </button>

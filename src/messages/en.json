@@ -435,6 +435,15 @@
     "subtitle": "Classroom games & everyday English",
     "back_lab": "Back to AI Lab",
     "go_panel": "Back to dashboard",
+    "a11y": {
+      "nav_main": "EnglishPath main navigation",
+      "quit": "Quit game",
+      "pronounce": "Pronounce word",
+      "fullscreen": "Toggle fullscreen",
+      "nav_prev": "Previous card",
+      "nav_reset": "Reset flip",
+      "nav_next": "Next card"
+    },
     "tabs": {
       "dashboard": "Dashboard",
       "grammar": "Grammar",
@@ -456,18 +465,36 @@
       "days": "Days"
     },
     "dashboard": {
+      "welcome": "Your learning hub",
+      "hero_title": "Classroom English, level by level",
+      "hero_subtitle": "Games with friends, vocabulary drills, and exams — all in one place.",
       "progress_title": "Progress",
       "xp_label": "XP",
+      "xp_progress": "Level progress",
+      "streak_days": "days",
       "total_exams": "Total Exams",
       "taboo_games": "Taboo",
       "heads_up_games": "Heads Up",
       "words_guessed": "Guessed",
       "start_exam": "Test Yourself",
+      "exam_cta_desc": "Mixed grammar, translation, and quick-tap questions — earn XP for every correct answer.",
       "recent_exam": "Latest Exam",
       "cards": "cards",
       "play_together": "Play together in class",
+      "view_all_games": "View all games",
       "learn_section": "Learn & practice",
+      "continue_learning": "Continue where you left off",
+      "open_module": "Open",
+      "word_library": "Word library",
+      "total_words": "game & study words",
+      "mastery": "Vocabulary mastery",
       "level_label": "Level",
+      "grades": {
+        "excellent": "Excellent!",
+        "good": "Good job",
+        "fair": "Keep practicing",
+        "needs_work": "Room to grow"
+      },
       "modules": {
         "flashcards": { "title": "Flashcards", "desc": "Everyday English words with real example sentences." },
         "grammar": { "title": "Grammar", "desc": "Core rules with daily-life examples." },
@@ -483,10 +510,10 @@
       "tip": "The most fun way to learn with friends!",
       "deck_why": "Each game has different content: Taboo uses forbidden-word lists, Charades uses mime-friendly words, Category Blitz uses letter + category combos.",
       "deck_notes": {
-        "taboo": "200+ cards · easy/medium/hard · celebrities and movies included.",
-        "heads_up": "150+ words · everyday life, celebrities and cinema tabs.",
-        "charades": "120+ mime-friendly words · movies, sports, animals.",
-        "category_blitz": "20 categories · letter + topic — solo, team and classroom modes."
+        "taboo": "{count} cards · easy/medium/hard · celebrities and movies included.",
+        "heads_up": "{count} words · everyday life, celebrities and cinema tabs.",
+        "charades": "{count} mime-friendly words · movies, sports, animals.",
+        "category_blitz": "{count} categories · letter + topic — solo, team and classroom modes."
       },
       "title": "Classroom Games",
       "subtitle": "Four word games to play with friends. Pick one and start!",
@@ -503,6 +530,73 @@
       "speak": "Speak",
       "mark_mastered": "Mark learned",
       "already_mastered": "Learned ✓"
+    },
+    "categories": {
+      "daily": "Daily Life",
+      "food": "Food & Drink",
+      "people": "People",
+      "travel": "Travel",
+      "emotions": "Feelings",
+      "social": "Social Life",
+      "hobbies": "Hobbies"
+    },
+    "game_categories": {
+      "taboo": {
+        "food": "Food & Drink",
+        "people": "People & Animals",
+        "home": "Home",
+        "entertainment": "Fun & TV",
+        "places": "Places & Nature",
+        "emotions": "Feelings",
+        "social": "Social",
+        "hobbies": "Actions",
+        "worklife": "Work & Life",
+        "celebrities": "Celebrities",
+        "movies": "Movies & Cinema",
+        "technology": "Technology"
+      },
+      "heads_up": {
+        "everyday": "Everyday",
+        "food": "Food",
+        "people": "People & Animals",
+        "places": "Places",
+        "nature": "Nature",
+        "actions": "Feelings & Actions",
+        "transport": "Transport",
+        "celebrities": "Celebrities",
+        "movies": "Movies & Cinema"
+      },
+      "charades": {
+        "actions": "Actions",
+        "emotions": "Feelings",
+        "sports": "Sports",
+        "animals": "Animals",
+        "objects": "Daily Life",
+        "movies": "Movies",
+        "celebrities": "Showbiz"
+      },
+      "category_blitz": {
+        "animals": "Animals",
+        "food": "Food & Drinks",
+        "countries": "Countries",
+        "cities": "World Cities",
+        "hollywood": "Hollywood Movies",
+        "turkish_cinema": "Turkish Movies",
+        "celebrities": "International Celebrities",
+        "turkish_celebs": "Turkish Celebrities",
+        "sports": "Sports",
+        "jobs": "Jobs & Professions",
+        "technology": "Technology",
+        "school": "School & Education",
+        "nature": "Nature",
+        "emotions": "Feelings & Emotions",
+        "transport": "Transport",
+        "music": "Music",
+        "clothing": "Clothing",
+        "household": "Things at Home",
+        "verbs": "Action Verbs",
+        "adjectives": "Descriptive Words"
+      }
     },
     "grammar": {
       "intro": "Read each rule and mark complete to earn XP.",
@@ -532,6 +626,14 @@
       "exit_exam": "Exit exam",
       "exit_confirm": "Leave the exam? Your progress will not be saved.",
       "input_placeholder": "Type your answer...",
+      "pool_total": "questions in pool",
+      "xp_hint": "Up to {xp} XP per run",
+      "grades": {
+        "excellent": "Excellent!",
+        "good": "Good job",
+        "fair": "Keep practicing",
+        "needs_work": "Room to grow"
+      },
       "modes": {
         "mixed": "Mixed",
         "multiple": "Multiple Choice",
@@ -716,6 +818,7 @@
       "rounds": "Number of rounds",
       "start": "Start Game",
       "category": "Category",
+      "points": "{n} pts",
       "prompt": "Name an English word starting with this letter!",
       "examples": "Example answers",
       "examples_general": "General examples",

@@ -30,9 +30,13 @@ import type {
   CategoryBlitzRoundStats,
 } from "../types";
 import { XP_REWARDS } from "../constants";
+import { GAME_THEMES } from "../lib/game-themes";
+import { themeAccentText, themeChip, themeProgressBar, themeStatBadge } from "../lib/theme-utils";
 import { ep } from "../styles";
 import { GameTimerSlider } from "./game-timer-slider";
 import { FadeUp, Pressable } from "./motion-primitives";
+
+const CB_THEME = GAME_THEMES.category_blitz;
 
 type Phase = "setup" | "playing" | "round_end";
 
@@ -71,6 +75,8 @@ export function CategoryBlitzGameTab({
   onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.category_blitz");
+  const tCat = useTranslations("EnglishPath.game_categories.category_blitz");
+  const tTaboo = useTranslations("EnglishPath.taboo");
 
   const [phase, setPhase] = useState<Phase>("setup");
   const [mode, setMode] = useState<CategoryBlitzMode>("teams");
@@ -224,7 +230,7 @@ export function CategoryBlitzGameTab({
         </FadeUp>
 
         <div className={cn(ep.card, "p-5 space-y-3")}>
-          <p className="text-xs font-bold uppercase tracking-widest text-teal-600">{t("how_title")}</p>
+          <p className={cn("text-xs font-bold uppercase tracking-widest", CB_THEME.accentFg)}>{t("how_title")}</p>
           <ol className="space-y-2 text-sm text-slate-600 list-decimal list-inside">
             <li>{t("how_1")}</li>
             <li>{t("how_2")}</li>
@@ -240,7 +246,7 @@ export function CategoryBlitzGameTab({
                 key={m}
                 type="button"
                 onClick={() => setMode(m)}
-                className={cn(ep.chip, "text-center py-2.5", mode === m && ep.chipActive)}
+                className={cn(themeChip(CB_THEME, mode === m), "text-center py-2.5")}
               >
                 {t(`modes.${m}`)}
               </button>
@@ -254,7 +260,7 @@ export function CategoryBlitzGameTab({
               key={d}
               type="button"
               onClick={() => setDifficulty(d)}
-              className={cn(ep.chip, difficulty === d && ep.chipActive)}
+              className={cn(themeChip(CB_THEME, difficulty === d))}
             >
               {d === "all" ? t("all") : t(`diff.${d}`)}
               {d !== "all" && (
@@ -271,6 +277,7 @@ export function CategoryBlitzGameTab({
           min={15}
           max={60}
           step={5}
+          theme={CB_THEME}
         />
 
         <div className={cn(ep.card, "p-4 flex items-center justify-between")}>
@@ -315,7 +322,7 @@ export function CategoryBlitzGameTab({
         <h2 className="text-2xl font-bold text-slate-900">{t("round_complete")}</h2>
         <div className="grid grid-cols-2 gap-3">
           <div className={cn(ep.card, "p-4")}>
-            <p className="text-3xl font-bold text-teal-700">{roundStats.wordsNamed}</p>
+            <p className={cn("text-3xl font-bold", CB_THEME.accentFg)}>{roundStats.wordsNamed}</p>
             <p className="text-xs text-slate-500 mt-1">{t("words_named")}</p>
           </div>
           <div className={cn(ep.card, "p-4")}>
@@ -326,12 +333,12 @@ export function CategoryBlitzGameTab({
         {mode === "teams" && (
           <div className={cn(ep.card, "p-4 flex justify-center gap-8")}>
             <div>
-              <p className="text-2xl font-bold text-teal-700">{teamScores.A}</p>
-              <p className="text-xs text-slate-500">Team A</p>
+              <p className={cn("text-2xl font-bold", CB_THEME.accentFg)}>{teamScores.A}</p>
+              <p className="text-xs text-slate-500">{tTaboo("team_a")}</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-violet-700">{teamScores.B}</p>
-              <p className="text-xs text-slate-500">Team B</p>
+              <p className="text-xs text-slate-500">{tTaboo("team_b")}</p>
             </div>
           </div>
         )}
@@ -354,7 +361,7 @@ export function CategoryBlitzGameTab({
           <X className="w-5 h-5" />
         </button>
         <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
-          <Clock className="w-4 h-4 text-teal-600" />
+          <Clock className={cn("w-4 h-4", CB_THEME.icon)} />
           <span className={cn("tabular-nums font-bold", timeLeft <= 5 && "text-rose-600")}>
             {timeLeft}s
           </span>
@@ -369,23 +376,25 @@ export function CategoryBlitzGameTab({
           key={letter}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="w-24 h-24 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-5xl font-black shadow-lg"
+          className="w-24 h-24 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-5xl font-black shadow-lg shadow-teal-600/25"
         >
           {letter}
         </motion.div>
 
         <div className="text-center space-y-2 max-w-sm">
-          <p className="text-xs font-bold uppercase tracking-widest text-teal-600">{t("category")}</p>
-          <h3 className="text-2xl sm:text-3xl font-bold text-slate-900">{currentCategory?.name}</h3>
+          <p className={cn("text-xs font-bold uppercase tracking-widest", CB_THEME.accentFg)}>{t("category")}</p>
+          <h3 className="text-2xl sm:text-3xl font-bold text-slate-900">
+            {currentCategory ? tCat(currentCategory.id) : ""}
+          </h3>
           <p className="text-sm text-slate-500">{currentCategory?.hintTr}</p>
         </div>
 
         {mode === "teams" && (
           <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-100 text-sm font-semibold">
             <Users className="w-4 h-4" />
-            Team {team}
+            {team === "A" ? tTaboo("team_a") : tTaboo("team_b")}
             <span className="text-slate-400">·</span>
-            <span className="text-teal-700">{teamScores[team]} pts</span>
+            <span className={CB_THEME.accentFg}>{t("points", { n: teamScores[team] })}</span>
           </div>
         )}
 
@@ -463,7 +472,7 @@ export function CategoryBlitzGameTab({
 function StatBox({ label, value }: { label: string; value: number }) {
   return (
     <div className={cn(ep.surfaceMuted, "p-3")}>
-      <p className="text-xl font-bold text-teal-700 tabular-nums">{value}</p>
+      <p className={cn("text-xl font-bold tabular-nums", CB_THEME.accentFg)}>{value}</p>
       <p className="text-[10px] text-slate-500 mt-0.5">{label}</p>
     </div>
   );

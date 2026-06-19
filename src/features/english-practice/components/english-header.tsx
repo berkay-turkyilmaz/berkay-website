@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import {
   Activity,
+  ArrowLeft,
   BarChart3,
   BookOpen,
   Brain,
@@ -16,6 +17,7 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
 import { ep } from "../styles";
@@ -149,6 +151,18 @@ export function EnglishHeader({
       )}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="hidden md:flex items-center h-9 border-b border-slate-100">
+          <Link
+            href="/ai-lab"
+            className={cn(
+              ep.clickable,
+              "inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-teal-700 transition-colors py-1"
+            )}
+          >
+            <ArrowLeft className="w-3.5 h-3.5" aria-hidden />
+            {t("back_lab")}
+          </Link>
+        </div>
         <div className="flex items-center justify-between gap-4 h-14 md:h-[3.75rem]">
           {/* Marka — panele dön */}
           <button
@@ -221,36 +235,36 @@ export function EnglishHeader({
             })}
           </nav>
 
-          {/* Tablet: sadece ikonlu kısa nav */}
-          <nav className="hidden md:flex lg:hidden items-center gap-0.5 flex-1 justify-center">
-            <button
-              type="button"
-              onClick={() => onNavigate("dashboard")}
-              className={cn(ep.navTab, activeTab === "dashboard" && ep.navTabActive, "px-2.5")}
-              title={t("tabs.dashboard")}
-            >
-              <Activity className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate("games")}
-              className={cn(
-                ep.navTab,
-                gamesActive && ep.navTabActive,
-                "px-2.5"
-              )}
-              title={t("tabs.games")}
-            >
-              <Gamepad2 className="w-4 h-4" />
-            </button>
-            <button
-              type="button"
-              onClick={() => onNavigate("exam")}
-              className={cn(ep.navTab, activeTab === "exam" && ep.navTabActive, "px-2.5")}
-              title={t("tabs.exam")}
-            >
-              <Trophy className="w-4 h-4" />
-            </button>
+          {/* Tablet: öğrenme ve sonuçlara kısayol */}
+          <nav className="hidden md:flex lg:hidden items-center gap-0.5 flex-1 justify-center overflow-x-auto no-scrollbar">
+            {(
+              [
+                { id: "dashboard" as const, icon: Activity },
+                { id: "flashcards" as const, icon: Brain },
+                { id: "games" as const, icon: Gamepad2, gamesGroup: true },
+                { id: "grammar" as const, icon: BookOpen },
+                { id: "prepositions" as const, icon: Target },
+                { id: "exam" as const, icon: Trophy },
+                { id: "results" as const, icon: BarChart3 },
+              ] as const
+            ).map((item) => {
+              const Icon = item.icon;
+              const isActive =
+                "gamesGroup" in item && item.gamesGroup
+                  ? gamesActive
+                  : activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => onNavigate(item.id)}
+                  className={cn(ep.navTab, isActive && ep.navTabActive, "px-2.5 shrink-0")}
+                  title={t(`tabs.${item.id}`)}
+                >
+                  <Icon className="w-4 h-4" />
+                </button>
+              );
+            })}
           </nav>
 
           <div className="flex items-center gap-2 shrink-0">

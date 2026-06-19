@@ -17,12 +17,16 @@ import {
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
+import { GAME_THEMES } from "../lib/game-themes";
+import { themeAccentText, themeChip, themeProgressBar } from "../lib/theme-utils";
 import { CHARADES_CARDS, CHARADES_CATEGORY_LABELS } from "../data/charades-cards";
 import type { CharadesCategory, CharadesRoundStats, TabooDifficulty } from "../types";
 import { ep } from "../styles";
 import { XP_REWARDS } from "../constants";
 import { GameTimerSlider } from "./game-timer-slider";
 import { FadeUp, Pressable } from "./motion-primitives";
+
+const CH_THEME = GAME_THEMES.charades;
 
 type Phase = "setup" | "countdown" | "playing" | "round_end";
 
@@ -48,6 +52,8 @@ export function CharadesGameTab({
   onPlayingChange,
 }: Props) {
   const t = useTranslations("EnglishPath.charades");
+  const tCat = useTranslations("EnglishPath.game_categories.charades");
+  const tA11y = useTranslations("EnglishPath.a11y");
   const tg = useTranslations("EnglishPath.games");
   const [phase, setPhase] = useState<Phase>("setup");
   const [category, setCategory] = useState<CharadesCategory | "all">("all");
@@ -206,7 +212,7 @@ export function CharadesGameTab({
         </FadeUp>
 
         <div className={cn(ep.card, "p-5 space-y-4")}>
-          <p className={cn(ep.sectionLabel, "text-teal-600")}>{t("how_title")}</p>
+          <p className={cn(ep.sectionLabel, CH_THEME.accentFg)}>{t("how_title")}</p>
           <ol className="space-y-2 text-sm text-slate-600 list-decimal list-inside">
             <li>{t("how_1")}</li>
             <li>{t("how_2")}</li>
@@ -220,12 +226,9 @@ export function CharadesGameTab({
               key={cat}
               type="button"
               onClick={() => setCategory(cat as CharadesCategory | "all")}
-              className={cn(
-                ep.chip,
-                category === cat && "!bg-amber-500 !text-white !border-amber-500 shadow-md shadow-amber-500/30"
-              )}
+              className={cn(themeChip(CH_THEME, category === cat))}
             >
-              {cat === "all" ? t("all") : CHARADES_CATEGORY_LABELS[cat]}
+              {cat === "all" ? t("all") : tCat(cat)}
             </button>
           ))}
         </div>
@@ -236,10 +239,7 @@ export function CharadesGameTab({
               key={d}
               type="button"
               onClick={() => setDifficulty(d)}
-              className={cn(
-                ep.chip,
-                difficulty === d && "!bg-amber-500 !text-white !border-amber-500 shadow-md shadow-amber-500/30"
-              )}
+              className={cn(themeChip(CH_THEME, difficulty === d))}
             >
               {d === "all" ? t("all") : t(`diff.${d}`)}
             </button>
@@ -247,12 +247,7 @@ export function CharadesGameTab({
         </div>
 
         <div className={cn(ep.card, "p-5")}>
-          <GameTimerSlider
-            value={roundDuration}
-            onChange={onRoundDurationChange}
-            min={45}
-            accentClass="accent-amber-500"
-          />
+          <GameTimerSlider value={roundDuration} onChange={onRoundDurationChange} min={45} theme={CH_THEME} />
         </div>
 
         <p className="text-center text-xs text-slate-400 font-mono">
@@ -290,7 +285,7 @@ export function CharadesGameTab({
           type="button"
           onClick={quitToSetup}
           className="md:hidden absolute top-4 right-4 p-2 rounded-xl bg-white border border-slate-200"
-          aria-label="Quit"
+          aria-label={tA11y("quit")}
         >
           <X className="w-5 h-5 text-slate-600" />
         </button>
@@ -343,7 +338,7 @@ export function CharadesGameTab({
           type="button"
           onClick={quitToSetup}
           className="md:hidden p-2 rounded-xl bg-white border border-slate-200"
-          aria-label="Quit"
+          aria-label={tA11y("quit")}
         >
           <X className="w-5 h-5 text-slate-600" />
         </button>
@@ -361,7 +356,7 @@ export function CharadesGameTab({
       <div className="px-4 mb-2">
         <div className="h-1.5 bg-slate-200 rounded-full overflow-hidden">
           <div
-            className="h-full bg-teal-500 transition-all"
+            className={cn("h-full transition-all", themeProgressBar(CH_THEME))}
             style={{ width: `${roundDuration > 0 ? (timeLeft / roundDuration) * 100 : 0}%` }}
           />
         </div>
@@ -387,7 +382,7 @@ export function CharadesGameTab({
           >
             <div className="bg-white rounded-[2rem] border-2 border-amber-200 shadow-xl p-8 sm:p-12 text-center">
               <span className="text-xs font-bold text-amber-600 uppercase tracking-widest">
-                {CHARADES_CATEGORY_LABELS[card.category]}
+                {tCat(card.category)}
               </span>
               <h2 className="text-4xl sm:text-5xl font-black text-slate-800 mt-4 leading-tight break-words">
                 {card.word}
