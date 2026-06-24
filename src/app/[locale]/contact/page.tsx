@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
-import { Mail, MapPin, Linkedin, Github, Twitter, ArrowRight } from "lucide-react";
+import { Mail, MapPin, Linkedin, Github, ArrowRight } from "lucide-react";
 
 // --- BİLEŞENLER ---
 // Form kodunu ayrı dosyaya aldığını varsayıyorum, almadıysan yukarıdaki kodunu buraya import et
@@ -18,7 +18,6 @@ export default function ContactPage() {
   const socialLinks = [
     { icon: Linkedin, href: "https://www.linkedin.com/in/berkay-turkyilmaz", label: "LinkedIn", color: "hover:text-blue-600" },
     { icon: Github, href: "https://github.com/berkay-turkyilmaz", label: "GitHub", color: "hover:text-zinc-900 dark:hover:text-white" },
-    { icon: Twitter, href: "https://x.com", label: "X / Twitter", color: "hover:text-blue-400" },
   ];
 
   return (
@@ -103,6 +102,7 @@ export default function ContactPage() {
                           target="_blank" 
                           rel="noopener noreferrer"
                           className={`p-2 rounded-lg bg-secondary hover:bg-background transition-all hover:shadow-md ${social.color}`}
+                          aria-label={social.label}
                           title={social.label}
                         >
                           <social.icon className="w-5 h-5" />

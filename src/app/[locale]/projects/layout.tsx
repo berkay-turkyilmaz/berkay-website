@@ -1,7 +1,5 @@
-import type { ReactNode } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { AiLabShell } from "@/features/ai-lab/components/ai-lab-shell";
 import { createPageMetadata } from "@/lib/seo/page-metadata";
 
 export async function generateMetadata({
@@ -14,12 +12,12 @@ export async function generateMetadata({
 
   return createPageMetadata({
     locale,
-    path: "/ai-lab",
-    title: t("ai_lab_title"),
-    description: t("ai_lab_description"),
+    path: "/projects",
+    title: t("projects_title"),
+    description: t("projects_description"),
   });
 }
 
-export default function AiLabWorkspaceLayout({ children }: { children: ReactNode }) {
-  return <AiLabShell>{children}</AiLabShell>;
+export default function ProjectsLayout({ children }: { children: React.ReactNode }) {
+  return children;
 }

@@ -1,5 +1,6 @@
 import { streamText } from "ai";
 import { NextRequest } from "next/server";
+import { getApiError } from "@/lib/api/error-messages";
 import * as zlib from "zlib";
 import { promisify } from "util";
 import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
@@ -234,7 +235,13 @@ Giriş cümlesi yazma.`.trim();
 
 // ─── Route ────────────────────────────────────────────────────────────────────
 
+function getPdfLang(req: NextRequest): string {
+  const accept = req.headers.get("accept-language") ?? "";
+  return accept.startsWith("tr") ? "tr" : "en";
+}
+
 export async function POST(req: NextRequest) {
+  const lang = getPdfLang(req);
   try {
     const contentType = req.headers.get("content-type") ?? "";
 
@@ -243,8 +250,8 @@ export async function POST(req: NextRequest) {
       const formData = await req.formData();
       const file = formData.get("file") as File | null;
 
-      if (!file) return Response.json({ error: "Dosya bulunamadı." }, { status: 400 });
-      if (file.size > 20 * 1024 * 1024) return Response.json({ error: "Dosya çok büyük. Max 20 MB." }, { status: 400 });
+      if (!file) return Response.json({ error: getApiError(lang, "invalid_request") }, { status: 400 });
+      if (file.size > 20 * 1024 * 1024) return Response.json({ error: getApiError(lang, "file_too_large") }, { status: 400 });
 
       const arrayBuffer = await file.arrayBuffer();
       let fullText = "";
@@ -304,7 +311,7 @@ export async function POST(req: NextRequest) {
       );
 
       if (!chunks?.length) {
-        return Response.json({ error: "Döküman içeriği boş. Önce dosya yükleyin." }, { status: 400 });
+        return Response.json({ error: getApiError(lang, "invalid_request") }, { status: 400 });
       }
 
       const modelId = (GROQ_CHAT_MODEL_IDS as readonly string[]).includes(model)
@@ -328,6 +335,6 @@ export async function POST(req: NextRequest) {
     return new Response("Unsupported content type", { status: 415 });
   } catch (err) {
     console.error("BEX /api/pdf error:", err);
-    return new Response("Internal server error", { status: 500 });
+    return new Response(getApiError(lang, "internal"), { status: 500 });
   }
 }

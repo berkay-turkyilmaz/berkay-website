@@ -9,11 +9,41 @@ import { getTranslations } from "next-intl/server";
 import { AudioPlayer } from "@/components/features/blog/audio-player";
 import { Suspense } from "react";
 import { getBlogPostContent } from "@/lib/blog/content";
-import { getBlogPostMetaBySlug } from "@/lib/blog/posts";
+import { getBlogPostMetaBySlug, getBlogPostSlugs } from "@/lib/blog/posts";
+import { createPageMetadata } from "@/lib/seo/page-metadata";
+import { routing } from "@/i18n/routing";
+import type { Metadata } from "next";
 
 async function getBlogPost(slug: string, locale: string) {
   if (!getBlogPostMetaBySlug(slug)) return null;
   return getBlogPostContent(slug, locale);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  const { slug, locale } = await params;
+  const meta = getBlogPostMetaBySlug(slug);
+  if (!meta) return {};
+
+  const t = await getTranslations({ locale, namespace: "BlogHub" });
+  const title = t(`posts.${meta.id}.title`);
+  const description = t(`posts.${meta.id}.excerpt`);
+
+  return createPageMetadata({
+    locale,
+    path: `/blog/${slug}`,
+    title,
+    description,
+  });
+}
+
+export function generateStaticParams() {
+  return getBlogPostSlugs().flatMap((slug) =>
+    routing.locales.map((locale) => ({ slug, locale }))
+  );
 }
 
 // --- LOADING COMPONENT ---
@@ -32,12 +62,14 @@ export default async function BlogDetail({
   const { slug, locale } = await params;
 
   // Parallel data fetching
-  const [post, t] = await Promise.all([
+  const [post, t, tHub] = await Promise.all([
     getBlogPost(slug, locale),
     getTranslations({ locale, namespace: "BlogDetail" }),
+    getTranslations({ locale, namespace: "BlogHub" }),
   ]);
 
-  if (!post) {
+  const meta = getBlogPostMetaBySlug(slug);
+  if (!post || !meta) {
     notFound();
   }
 
@@ -79,7 +111,7 @@ export default async function BlogDetail({
               variant="outline"
               className="rounded-lg px-4 py-1.5 text-[10px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 font-bold"
             >
-              {post.category}
+              {tHub(`categories.${meta.category}`)}
             </Badge>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground font-mono">

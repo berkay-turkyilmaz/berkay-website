@@ -1,6 +1,21 @@
   {
     "Metadata": {
-      "description": "Software engineer architecting modern web technologies, scalable interfaces, and AI-driven autonomous systems."
+      "description": "Software engineer architecting modern web technologies, scalable interfaces, and AI-driven autonomous systems.",
+      "site_name": "BERKAY",
+      "site_title": "BERKAY | Software Engineer & AI Architect",
+      "og_alt": "Berkay Türkyılmaz Portfolio",
+      "projects_title": "Projects",
+      "projects_description": "Selected works — Next.js apps, n8n automations, and scalable product architectures.",
+      "blog_title": "Blog",
+      "blog_description": "Technical articles on web architecture, AI integrations, and automation.",
+      "contact_title": "Contact",
+      "contact_description": "Get in touch for collaborations, consulting, and product engineering.",
+      "ai_lab_title": "AI Lab",
+      "ai_lab_description": "Interactive AI workspace — BEX assistant, document analysis, EnglishPath, and experiments.",
+      "english_path_title": "EnglishPath",
+      "english_path_description": "Classroom English games, vocabulary drills, grammar, and level exams.",
+      "booking_title": "Booking Demo",
+      "booking_description": "Interactive barber shop appointment system — n8n webhook integration showcase."
     },
     "Navigation": {
       "home": "Home",
@@ -34,7 +49,7 @@
         "explore": "Explore",
         "1": {
           "title": "Enterprise Web Architecture",
-          "description": "High-performance digital ecosystem built with Next.js 15, React Server Components, and i18n.",
+          "description": "High-performance digital ecosystem built with Next.js 16, React Server Components, and i18n.",
           "stack": "Next.js · TypeScript · Supabase"
         },
         "2": {
@@ -51,7 +66,7 @@
       "projects": {
         "saas_card": {
           "title": "Enterprise SaaS Architecture",
-          "subtitle": "Next.js 15 & Supabase Infrastructure"
+          "subtitle": "Next.js 16 & Supabase Infrastructure"
         },
         "code_card": {
           "comment": "// Initializing innovation and scalability...",
@@ -76,7 +91,7 @@
         "view_all": "Read All",
         "posts": {
           "1": {
-            "title": "Next.js 15 and Micro-Frontend Architecture",
+            "title": "Next.js 16 and Micro-Frontend Architecture",
             "excerpt": "Enterprise web architecture design with Server Actions and React Server Components.",
             "category": "Architecture"
           },
@@ -183,7 +198,7 @@
       "time_hours": "{n}h",
       "time_days": "{n}d",
       "suggested_terminal_1": "How to write Supabase RLS policies?",
-      "suggested_terminal_2": "How to create a streaming API route in Next.js 15?",
+      "suggested_terminal_2": "How to create a streaming API route in Next.js 16?",
       "suggested_terminal_3": "How to set up a Telegram bot with n8n?",
       "suggested_terminal_4": "How to implement semantic search with pgvector?",
       "suggested_pdf_1": "Summarize this document",
@@ -314,7 +329,39 @@
   "ProjectsPage": {
       "badge": "PORTFOLIO & ARCHITECTURE",
       "title": "Systems & Products",
-      "description": "End-to-end architected digital products, from full-stack development to data automation solutions."
+      "description": "End-to-end architected digital products, from full-stack development to data automation solutions.",
+      "filter_all": "All",
+      "filter_live": "Live",
+      "filter_completed": "Completed",
+      "filter_in_progress": "In Progress",
+      "status_live": "Live",
+      "status_completed": "Completed",
+      "status_in_progress": "In Progress",
+      "view_project": "View Project",
+      "source_code": "Source Code",
+      "empty": "No projects match this filter.",
+      "projects": {
+        "bex": {
+          "title": "BEX — Groq-Powered AI Assistant",
+          "description": "Real-time AI assistant running on Groq LLM (Llama 3.1 8B), integrated into the portfolio. Features streaming responses, multilingual UI, and a PDF analysis module."
+        },
+        "portfolio": {
+          "title": "Multilingual Portfolio Infrastructure",
+          "description": "Production-ready portfolio system with Next.js 16 App Router, 7-language support via next-intl, Supabase backend, n8n automation webhooks, and Vercel Edge deployment."
+        },
+        "booking": {
+          "title": "Intelligent Booking System with n8n",
+          "description": "Serverless appointment automation syncing Google Calendar, SMS webhooks, and email notifications. Zero manual intervention via n8n workflows."
+        },
+        "saas": {
+          "title": "Full-Stack SaaS Boilerplate",
+          "description": "Production-ready SaaS template with Auth (Supabase Auth), subscription management (Stripe), multi-tenant architecture, role-based access control, and i18n."
+        },
+        "pdf": {
+          "title": "Document Analysis Engine",
+          "description": "Tool that uploads PDF documents and analyzes, summarizes, and answers questions using Groq LLM. Built on a RAG architecture foundation."
+        }
+      }
     },
     "ProjectsSection": {
       "badge": "Portfolio Archive",
@@ -329,7 +376,8 @@
       "states": {
         "empty": "No active products available to list at the moment.",
         "error_title": "Database Error",
-        "error_desc": "A timeout occurred while fetching projects via API."
+        "error_desc": "A timeout occurred while fetching projects via API.",
+        "mock_badge": "Showing curated portfolio samples — live feed unavailable"
       },
       "mock_projects": {
         "1": {
@@ -338,7 +386,7 @@
         },
         "2": {
           "title": "Modern Web Architecture v1",
-          "description": "High-performance digital ecosystem developed with Next.js 15, React Server Components, and i18n infrastructure."
+          "description": "High-performance digital ecosystem developed with Next.js 16, React Server Components, and i18n infrastructure."
         },
         "3": {
           "title": "Financial Data Processing & Reporting Bot",
@@ -363,16 +411,52 @@
       },
       "posts": {
         "1": {
-          "title": "Next.js 15 & Modern Portfolio Architecture",
+          "title": "Next.js 16 & Modern Portfolio Architecture",
           "excerpt": "How to build a global standard software portfolio using Tailwind v4, i18n, and Server Actions?",
           "date": "31 Jan 2026",
           "read_time": "8 min"
         },
         "2": {
           "title": "AI-Powered Automations",
-          "excerpt": "How to automate business processes using n8n and Google Gemini?",
+          "excerpt": "How to automate business processes using n8n and Groq?",
           "date": "28 Jan 2026",
           "read_time": "5 min"
+        },
+        "3": {
+          "title": "n8n Workflow Automation: From Zero to Production",
+          "excerpt": "Real-world automation scenarios from self-hosting n8n to Google Workspace, Supabase, and webhook integrations.",
+          "date": "5 Feb 2026",
+          "read_time": "7 min"
+        },
+        "4": {
+          "title": "Full-Stack Architecture with Supabase: Auth, RLS & Realtime",
+          "excerpt": "Using Supabase as a complete backend infrastructure — Row Level Security, Edge Functions, and Realtime subscriptions.",
+          "date": "10 Feb 2026",
+          "read_time": "9 min"
+        },
+        "5": {
+          "title": "Type-Safe API Design with TypeScript",
+          "excerpt": "Runtime validation with Zod, API route type safety, and shared error handling patterns.",
+          "date": "15 Feb 2026",
+          "read_time": "6 min"
+        },
+        "6": {
+          "title": "Streaming LLM Integration with Groq API",
+          "excerpt": "Token-by-token streaming in Next.js with Groq's ultra-low latency API, abort controller, and UX optimization.",
+          "date": "20 Feb 2026",
+          "read_time": "8 min"
+        },
+        "7": {
+          "title": "Vercel Edge Runtime: When, Why, and How",
+          "excerpt": "Choosing Edge Runtime vs Node.js, cold start issues, Edge Middleware scenarios, and real benchmarks.",
+          "date": "25 Feb 2026",
+          "read_time": "5 min"
+        },
+        "8": {
+          "title": "i18n in Next.js App Router: Production Guide with next-intl",
+          "excerpt": "App Router i18n setup, static page generation, locale-aware SEO metadata, and translation workflow.",
+          "date": "1 Mar 2026",
+          "read_time": "10 min"
         }
       }
     },
@@ -384,7 +468,10 @@
       "share": "Share to Network",
       "share_copied": "Article link copied!",
       "next_post": "Next Article",
-      "toc_title": "Table of Contents"
+      "toc_title": "Table of Contents",
+      "audio_title": "Audio Article",
+      "audio_playing": "Playing now",
+      "audio_idle": "AI narration"
     },
     "ContactForm": {
       "tag": "Establish Connection",
@@ -420,7 +507,9 @@
       "stay_connected": "Communication Networks",
       "project_idea": "Looking to solve a complex problem with software?",
       "write_me": "reach out via",
-      "powered_by": "ARCHITECTURE INFRASTRUCTURE"
+      "powered_by": "ARCHITECTURE INFRASTRUCTURE",
+      "copyright": "© {year} BERKAY TURKYILMAZ.",
+      "stack_label": "NEXT.JS 16"
     },
     "LanguageSwitcher": {
       "label": "Change Language Model"
@@ -428,7 +517,8 @@
     "NotFound": {
     "title": "Page Not Found",
     "description": "The autonomous system you are looking for could not be located at these coordinates.",
-    "back": "Return to Base"
+    "back": "Return to Base",
+    "contact": "Contact"
   },
   "EnglishPath": {
     "title": "EnglishPath",
@@ -437,6 +527,7 @@
     "go_panel": "Back to dashboard",
     "a11y": {
       "nav_main": "EnglishPath main navigation",
+      "loading": "Loading progress",
       "quit": "Quit game",
       "pronounce": "Pronounce word",
       "fullscreen": "Toggle fullscreen",
@@ -905,6 +996,101 @@
       "reset_progress": "Reset progress",
       "reset_confirm": "All progress will be deleted. Are you sure?",
       "exit_lab": "Exit — return to AI Lab"
+    }
+  },
+  "CurrentFocus": {
+    "badge": "Currently Building",
+    "badge_consulting": "Consulting",
+    "badge_open": "Open to Work",
+    "building_label": "Working on",
+    "project_saas": "SaaS Boilerplate",
+    "description_saas": "Building a full-stack SaaS infrastructure — Supabase Auth, Stripe subscriptions, and multi-tenant architecture.",
+    "since_march": "Since March 2026",
+    "available_for_title": "Available for",
+    "available_freelance": "Freelance projects",
+    "available_consulting": "Technical consulting",
+    "available_fulltime": "Full-time opportunities",
+    "cta": "Get in touch"
+  },
+  "BookingPage": {
+    "brand": {
+      "title": "Barber Shop",
+      "location": "Ataşehir, Istanbul"
+    },
+    "info": {
+      "hours_title": "Working Hours",
+      "hours_sub": "Mon–Sat · 08:00–20:00",
+      "closed_title": "Closed Days",
+      "closed_sub": "No service on Sundays",
+      "confirm_title": "Instant Confirmation",
+      "confirm_sub": "SMS notification"
+    },
+    "summary_title": "Your Selection",
+    "form": {
+      "title": "Book an Appointment",
+      "subtitle": "Complete all fields to finalize your booking."
+    },
+    "sections": {
+      "personal": "Personal Information",
+      "service": "Service Selection",
+      "datetime": "Date & Time"
+    },
+    "fields": {
+      "full_name": "Full Name",
+      "phone": "Phone Number",
+      "service": "Service Type",
+      "staff": "Staff",
+      "date": "Appointment Date",
+      "time": "Time Slot"
+    },
+    "placeholders": {
+      "full_name": "Your first and last name",
+      "phone": "5XX XXX XX XX",
+      "service": "Select a service...",
+      "staff": "Select a barber..."
+    },
+    "services": {
+      "sac_sakal": { "label": "Hair & Beard Trim", "duration": "45 min" },
+      "sac": { "label": "Haircut", "duration": "30 min" },
+      "sakal": { "label": "Beard Trim", "duration": "20 min" },
+      "cilt_bakimi": { "label": "Skin Care", "duration": "60 min" }
+    },
+    "prices": {
+      "sac_sakal": "₺350",
+      "sac": "₺200",
+      "sakal": "₺150",
+      "cilt_bakimi": "₺450"
+    },
+    "barbers": {
+      "ahmet_usta": { "label": "Ahmet Usta", "role": "Founding Barber" },
+      "mehmet_usta": { "label": "Mehmet Usta", "role": "Senior Barber" },
+      "farketmez": { "label": "First Available", "role": "Earliest slot" }
+    },
+    "calendar": {
+      "prev_month": "Previous month",
+      "next_month": "Next month",
+      "today": "Today",
+      "closed_sunday": "Closed (Sunday)",
+      "sunday_error": "We do not operate on Sundays.",
+      "date_selected": "{date} selected"
+    },
+    "time": {
+      "pick_date_first": "Select a date first to see available times",
+      "booked": "Booked",
+      "selected": "Selected"
+    },
+    "success": {
+      "title": "Appointment Confirmed",
+      "body": "Your booking was saved successfully. You will receive an SMS confirmation shortly.",
+      "new_booking": "Book Another Appointment"
+    },
+    "errors": {
+      "submit": "A system error occurred. Please check your connection and try again."
+    },
+    "submit": {
+      "label": "Confirm Appointment →",
+      "loading": "Saving appointment...",
+      "footnote": "Please arrive on time. Late appointments may be cancelled."
     }
   },
   "ContactPage": {

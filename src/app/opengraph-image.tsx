@@ -20,22 +20,78 @@ export default function OpenGraphImage() {
           fontFamily: "system-ui, sans-serif",
         }}
       >
+        {/* Top badge */}
         <div
           style={{
-            fontSize: 28,
-            fontWeight: 700,
-            letterSpacing: "0.35em",
-            color: "#14b8a6",
-            marginBottom: 24,
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            marginBottom: "32px",
           }}
         >
-          BERKAY
+          <div
+            style={{
+              width: "8px",
+              height: "8px",
+              borderRadius: "50%",
+              background: "#14b8a6",
+            }}
+          />
+          <span
+            style={{
+              fontSize: "18px",
+              fontWeight: 700,
+              letterSpacing: "0.3em",
+              color: "#14b8a6",
+              textTransform: "uppercase",
+            }}
+          >
+            BERKAY TÜRKYILMAZ
+          </span>
         </div>
-        <div style={{ fontSize: 64, fontWeight: 900, lineHeight: 1.1, maxWidth: 900 }}>
-          Software Engineer & AI Architect
+
+        {/* Main heading */}
+        <div
+          style={{
+            fontSize: 62,
+            fontWeight: 900,
+            lineHeight: 1.1,
+            maxWidth: 860,
+            marginBottom: "24px",
+          }}
+        >
+          Software Engineer &amp; AI Architect
         </div>
-        <div style={{ fontSize: 28, color: "#a1a1aa", marginTop: 28, maxWidth: 800 }}>
+
+        {/* Description */}
+        <div style={{ fontSize: 26, color: "#a1a1aa", maxWidth: 700, lineHeight: 1.5, marginBottom: "40px" }}>
           Next.js · Supabase · n8n · Groq LLM
+        </div>
+
+        {/* Bottom bar */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "24px",
+            padding: "16px 24px",
+            background: "rgba(255,255,255,0.04)",
+            borderRadius: "12px",
+            border: "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          {["Next.js 16", "TypeScript", "AI Systems", "7 Languages"].map((tag) => (
+            <span
+              key={tag}
+              style={{
+                fontSize: "16px",
+                color: "#71717a",
+                fontWeight: 600,
+              }}
+            >
+              {tag}
+            </span>
+          ))}
         </div>
       </div>
     ),

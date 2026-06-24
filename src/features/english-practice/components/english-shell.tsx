@@ -189,9 +189,14 @@ export function EnglishShell() {
 
   if (!loaded) {
     return (
-      <div className={cn(ep.page, "english-path flex items-center justify-center")}>
+      <div
+        className={cn(ep.page, "english-path flex items-center justify-center")}
+        role="status"
+        aria-live="polite"
+        aria-label={t("a11y.loading")}
+      >
         <div className={ep.pageMesh} />
-        <Activity className="w-8 h-8 animate-spin text-teal-600" />
+        <Activity className="w-8 h-8 animate-spin text-teal-600" aria-hidden />
       </div>
     );
   }

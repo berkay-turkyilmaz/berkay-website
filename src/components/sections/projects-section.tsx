@@ -1,254 +1,284 @@
 "use client";
 
-import { useEffect, useState, useCallback } from 'react';
-import { useTranslations } from 'next-intl';
+import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, ChevronDown, Layers, AlertCircle, Code2, ArrowUpRight } from "lucide-react";
+import { Link } from "@/i18n/routing";
+import {
+  ArrowUpRight,
+  Layers,
+  CheckCircle2,
+  Clock,
+  Zap,
+  ExternalLink,
+} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { WEBHOOKS } from "@/lib/config/webhooks";
+import { PROJECTS, type ProjectStatus } from "@/data/projects";
 
-// Tip Tanımlaması
-interface Project {
-  id: string | number;
-  baslik: string;
-  aciklama: string;
-  gorsel_url: string;
-  link: string;
-  teknolojiler: string[];
-}
+// ─── Status Badge ──────────────────────────────────────────────────────────────
 
-export function ProjectsSection() {
-  const t = useTranslations("ProjectsSection");
-  
-  // 🛠️ MOCK DATA (Yedek Veri - Artık i18n dil dosyasına bağlı!)
-  const MOCK_PROJECTS: Project[] = [
-    {
-      id: 1,
-      baslik: t("mock_projects.1.title"),
-      aciklama: t("mock_projects.1.description"),
-      gorsel_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
-      link: "https://github.com/berkay-turkyilmaz",
-      teknolojiler: ["n8n", "Webhook", "Next.js 15", "Automation"]
+function StatusBadge({ status }: { status: ProjectStatus }) {
+  const t = useTranslations("ProjectsPage");
+
+  const config = {
+    live: {
+      icon: <span className="relative flex h-2 w-2 mr-1.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>,
+      label: t("status_live"),
+      cls: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     },
-    {
-      id: 2,
-      baslik: t("mock_projects.2.title"),
-      aciklama: t("mock_projects.2.description"),
-      gorsel_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop",
-      link: "https://github.com/berkay-turkyilmaz",
-      teknolojiler: ["Next.js 15", "TypeScript", "Tailwind CSS", "Framer Motion"]
+    completed: {
+      icon: <CheckCircle2 className="w-3 h-3 mr-1.5" />,
+      label: t("status_completed"),
+      cls: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
     },
-    {
-      id: 3,
-      baslik: t("mock_projects.3.title"),
-      aciklama: t("mock_projects.3.description"),
-      gorsel_url: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?q=80&w=2070&auto=format&fit=crop",
-      link: "https://github.com/berkay-turkyilmaz",
-      teknolojiler: ["n8n", "REST API", "Data Automation", "Financial Data"]
-    }
-  ];
-  
-  const [allProjects, setAllProjects] = useState<Project[]>([]);
-  const [visibleCount, setVisibleCount] = useState(4);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+    "in-progress": {
+      icon: <Clock className="w-3 h-3 mr-1.5" />,
+      label: t("status_in_progress"),
+      cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
+    },
+  };
 
-  const getProjects = useCallback(async () => {
-    setLoading(true);
-    setError(false);
-    try {
-      const response = await fetch(WEBHOOKS.projects, {
-        method: 'GET',
-        signal: AbortSignal.timeout(3000) 
-      });
-      
-      if (!response.ok) throw new Error("Network response was not ok");
-      
-      const data = await response.json();
-      const processedData = Array.isArray(data) ? data : (data.items || []);
-      setAllProjects(processedData);
-
-    } catch (err) {
-      console.warn("API bağlantısı sağlanamadı, lokal sistem (Mock Data) devreye alınıyor:", err);
-      setAllProjects(MOCK_PROJECTS);
-    } finally {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); // t referansını bağımlılıklara eklemiyoruz ki sonsuz döngü olmasın
-
-  useEffect(() => {
-    getProjects();
-  }, [getProjects]);
-
-  const visibleProjects = allProjects.slice(0, visibleCount);
+  const { icon, label, cls } = config[status];
 
   return (
-    // bg-background class'ını doğrudan ekledik ki ana kapsayıcıda beyaz bozulmasın
-    <section id="projects" className="flex flex-col lg:flex-row gap-12 lg:gap-16 py-24 border-t border-border/30 scroll-mt-24 relative overflow-hidden bg-background">
-      
-      {/* Arka plan dekoratif ışık - Çok hafif tutuldu */}
-      <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] pointer-events-none" />
+    <span
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${cls}`}
+    >
+      {icon}
+      {label}
+    </span>
+  );
+}
 
-      {/* --- SOL PANEL (Sticky Info) --- */}
-      <div className="lg:w-1/3 lg:sticky lg:top-32 h-fit space-y-8 z-10">
-        <div className="space-y-4">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary border border-border text-primary font-mono text-[10px] font-bold tracking-widest uppercase">
-            <Layers className="w-3.5 h-3.5" />
-            <span>{t("badge")}</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-foreground text-balance">
-            {t("title")}
-          </h2>
-          <p className="text-muted-foreground leading-relaxed font-medium text-lg text-balance">
-            {t("description")}
-          </p>
-        </div>
-        
-        {/* Şeffaflık (bg-card/X) KALDIRILDI. Doğrudan bg-card kullanıldı. */}
-        <div className="p-6 bg-card border border-border rounded-2xl shadow-sm">
-          <p className="text-[11px] font-bold text-muted-foreground mb-4 uppercase tracking-widest flex items-center gap-2">
-            <Code2 className="w-4 h-4" />
-            {t("tech_stack_title")}
-          </p>
-          <div className="flex flex-wrap gap-2.5">
-            {["Next.js 15", "n8n", "Supabase", "Tailwind CSS", "Docker", "TypeScript"].map((tech) => (
-              <Badge 
-                key={tech} 
-                variant="secondary" 
-                className="bg-secondary text-secondary-foreground hover:bg-secondary/80 border-transparent transition-colors px-3 py-1.5 shadow-sm"
+// ─── Project Card ─────────────────────────────────────────────────────────────
+
+interface ProjectCardProps {
+  project: (typeof PROJECTS)[0];
+  featured?: boolean;
+  index: number;
+}
+
+function ProjectCard({ project, featured = false, index }: ProjectCardProps) {
+  const t = useTranslations("ProjectsPage");
+
+  const isInternal =
+    project.link && (project.link.startsWith("/") || project.link.startsWith("#"));
+
+  const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
+    if (!project.link) return <>{children}</>;
+    if (isInternal) {
+      return (
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        <Link href={project.link as any}>
+          {children}
+        </Link>
+      );
+    }
+    return (
+      <a href={project.link} target="_blank" rel="noopener noreferrer">
+        {children}
+      </a>
+    );
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 24 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: 16 }}
+      transition={{ duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+      className={`group relative bg-card border border-border rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 ${
+        featured ? "md:col-span-2" : ""
+      }`}
+    >
+      {/* Glow on hover */}
+      <div className="absolute inset-0 bg-primary/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+      <div className={`p-6 sm:p-7 flex flex-col h-full ${featured ? "gap-5" : "gap-4"}`}>
+        {/* Top row: status + link */}
+        <div className="flex items-start justify-between gap-3">
+          <StatusBadge status={project.status} />
+          {project.link && (
+            <LinkWrapper>
+              <button
+                type="button"
+                className="p-2 bg-secondary hover:bg-primary hover:text-primary-foreground rounded-xl transition-all duration-200 text-muted-foreground shrink-0 group/icon"
+                aria-label={t("view_project")}
               >
-                {tech}
-              </Badge>
-            ))}
-          </div>
+                {isInternal ? (
+                  <ArrowUpRight className="w-3.5 h-3.5 group-hover/icon:translate-x-0.5 group-hover/icon:-translate-y-0.5 transition-transform" />
+                ) : (
+                  <ExternalLink className="w-3.5 h-3.5 group-hover/icon:translate-x-0.5 group-hover/icon:-translate-y-0.5 transition-transform" />
+                )}
+              </button>
+            </LinkWrapper>
+          )}
+        </div>
+
+        {/* Title + description */}
+        <div className="flex-1 space-y-2.5">
+          <h3
+            className={`font-bold text-foreground group-hover:text-primary transition-colors leading-tight ${
+              featured ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"
+            }`}
+          >
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {(t as any)(project.titleKey)}
+          </h3>
+          <p className="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground/80 transition-colors">
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {(t as any)(project.descriptionKey)}
+          </p>
+        </div>
+
+        {/* Tech badges */}
+        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+          {project.tech.map((tech) => (
+            <Badge
+              key={tech}
+              variant="outline"
+              className="text-[10px] font-semibold px-2 py-0.5 border-border/60 text-muted-foreground group-hover:border-primary/30 group-hover:text-primary/80 transition-colors"
+            >
+              {tech}
+            </Badge>
+          ))}
         </div>
       </div>
+    </motion.div>
+  );
+}
 
-      {/* --- SAĞ PANEL (Projects List) --- */}
-      <div className="lg:w-2/3 w-full flex flex-col gap-6 z-10">
-        
-        {/* Loading Skeleton - Solid Renkler */}
-        {loading && (
-          <div className="space-y-6">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-56 rounded-[2rem] bg-secondary border border-border overflow-hidden relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-background/50 to-transparent -translate-x-full animate-[shimmer_1.5s_infinite]" />
-              </div>
-            ))}
-          </div>
-        )}
+// ─── Filter Tabs ──────────────────────────────────────────────────────────────
 
-        {/* Hata Durumu */}
-        {!loading && error && (
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="p-8 border border-destructive/20 bg-destructive/10 rounded-[2rem] text-center"
+type FilterValue = "all" | ProjectStatus;
+
+function FilterTabs({
+  active,
+  onChange,
+  counts,
+}: {
+  active: FilterValue;
+  onChange: (v: FilterValue) => void;
+  counts: Record<FilterValue, number>;
+}) {
+  const t = useTranslations("ProjectsPage");
+
+  const tabs: { value: FilterValue; label: string }[] = [
+    { value: "all", label: t("filter_all") },
+    { value: "live", label: t("filter_live") },
+    { value: "completed", label: t("filter_completed") },
+    { value: "in-progress", label: t("filter_in_progress") },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-2">
+      {tabs.map(({ value, label }) => (
+        <button
+          key={value}
+          type="button"
+          onClick={() => onChange(value)}
+          aria-pressed={active === value}
+          className={`px-4 py-2 rounded-xl text-[12px] font-bold transition-all duration-200 border ${
+            active === value
+              ? "bg-primary text-primary-foreground border-primary shadow-sm"
+              : "bg-card text-muted-foreground border-border/50 hover:border-border hover:text-foreground"
+          }`}
+        >
+          {label}
+          <span
+            className={`ml-1.5 text-[10px] tabular-nums ${
+              active === value ? "opacity-70" : "opacity-40"
+            }`}
           >
-            <div className="inline-flex p-3 rounded-full bg-destructive/20 mb-4 ring-4 ring-destructive/10">
-              <AlertCircle className="w-6 h-6 text-destructive" />
-            </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">{t("states.error_title")}</h3>
-            <p className="text-muted-foreground mb-6 max-w-md mx-auto">{t("states.error_desc")}</p>
-            <Button onClick={getProjects} variant="outline" className="gap-2 border-destructive/30 hover:bg-destructive text-foreground hover:text-destructive-foreground">
-              <RefreshCw className="w-4 h-4" />
-              {t("buttons.retry")}
-            </Button>
-          </motion.div>
-        )}
+            {counts[value]}
+          </span>
+        </button>
+      ))}
+    </div>
+  );
+}
 
-        {/* Proje Listesi */}
-        {!loading && !error && visibleProjects.length === 0 ? (
-          <div className="p-12 border border-dashed border-border rounded-[2rem] text-center text-muted-foreground bg-secondary/50">
-            {t("states.empty")}
-          </div>
-        ) : (
-          <AnimatePresence>
-            <div className="space-y-6">
-              {visibleProjects.map((project, idx) => (
-                <motion.div
-                  key={project.id || idx}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.1, ease: "easeOut" }}
-                  // Şeffaflık (bg-card/X) KALDIRILDI. Doğrudan bg-card kullanıldı.
-                  className="group relative flex flex-col md:flex-row gap-6 p-5 sm:p-6 rounded-[2rem] border border-border bg-card hover:border-primary/40 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5 overflow-hidden"
-                >
-                  
-                  {/* Görsel Alanı */}
-                  <div className="w-full md:w-64 h-48 md:h-auto shrink-0 overflow-hidden rounded-2xl border border-border bg-muted relative">
-                    <img 
-                      src={project.gorsel_url} 
-                      alt={project.baslik}
-                      onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop"; 
-                      }}
-                      className="w-full h-full object-cover grayscale-[0.5] opacity-90 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700 group-hover:scale-105"
-                    />
-                  </div>
+// ─── Main Component ───────────────────────────────────────────────────────────
 
-                  {/* İçerik Alanı */}
-                  <div className="flex flex-col justify-between flex-grow py-2 z-10">
-                    <div>
-                      <div className="flex justify-between items-start mb-2 gap-4">
-                        <h3 className="text-xl md:text-2xl font-bold text-foreground group-hover:text-primary transition-colors leading-tight">
-                          {project.baslik}
-                        </h3>
-                        <a 
-                          href={project.link} 
-                          target="_blank" 
-                          rel="noopener noreferrer" 
-                          className="p-2.5 bg-secondary hover:bg-primary hover:text-primary-foreground rounded-xl transition-all duration-300 text-muted-foreground flex-shrink-0 group/link shadow-sm"
-                          aria-label={t("buttons.view_project")}
-                        >
-                          <ArrowUpRight className="h-4 w-4 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                        </a>
-                      </div>
-                      <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-6 group-hover:text-foreground/90 transition-colors">
-                        {project.aciklama}
-                      </p>
-                    </div>
+export function ProjectsSection() {
+  const t = useTranslations("ProjectsPage");
+  const [filter, setFilter] = useState<FilterValue>("all");
 
-                    {/* Teknolojiler */}
-                    <div className="flex flex-wrap gap-2 mt-auto">
-                      {Array.isArray(project.teknolojiler) && project.teknolojiler.map((tech: string, index: number) => (
-                        <Badge 
-                          key={`${project.id}-${index}`} 
-                          variant="outline" 
-                          className="text-[10px] font-semibold tracking-wide px-2.5 py-1 border-border bg-background text-muted-foreground group-hover:border-primary/30 group-hover:text-primary transition-colors"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </AnimatePresence>
-        )}
+  const counts: Record<FilterValue, number> = {
+    all: PROJECTS.length,
+    live: PROJECTS.filter((p) => p.status === "live").length,
+    completed: PROJECTS.filter((p) => p.status === "completed").length,
+    "in-progress": PROJECTS.filter((p) => p.status === "in-progress").length,
+  };
 
-        {/* Load More Button */}
-        {!loading && !error && visibleCount < allProjects.length && (
-          <motion.div 
-            initial={{ opacity: 0 }} 
-            animate={{ opacity: 1 }} 
-            transition={{ delay: 0.3 }}
-            className="pt-4"
-          >
-            <Button 
-              onClick={() => setVisibleCount(prev => prev + 3)} 
-              variant="outline" 
-              className="w-full py-6 sm:py-7 border-border rounded-[1.5rem] bg-secondary hover:bg-secondary/80 text-foreground transition-all duration-300 font-semibold text-sm group shadow-sm"
-            >
-              {t("buttons.load_more")} 
-              <ChevronDown className="ml-2 h-4 w-4 group-hover:translate-y-1 transition-transform" />
-            </Button>
-          </motion.div>
-        )}
+  const filtered =
+    filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.status === filter);
+
+  const featuredVisible = filtered.filter((p) => p.featured);
+  const nonFeaturedVisible = filtered.filter((p) => !p.featured);
+
+  return (
+    <section className="space-y-8">
+      {/* Section header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-2 text-[11px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+          <Layers className="w-4 h-4 text-primary" />
+          {t("badge")}
+        </div>
+        <FilterTabs active={filter} onChange={setFilter} counts={counts} />
       </div>
+
+      <AnimatePresence mode="popLayout">
+        <div className="space-y-4">
+          {/* Featured row (2-column on md+) */}
+          {featuredVisible.length > 0 && (
+            <motion.div
+              key={`featured-${filter}`}
+              layout
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              {featuredVisible.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  featured={false}
+                  index={i}
+                />
+              ))}
+            </motion.div>
+          )}
+
+          {/* Non-featured row (3-column on lg+) */}
+          {nonFeaturedVisible.length > 0 && (
+            <motion.div
+              key={`regular-${filter}`}
+              layout
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+            >
+              {nonFeaturedVisible.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={featuredVisible.length + i}
+                />
+              ))}
+            </motion.div>
+          )}
+
+          {/* Empty state */}
+          {filtered.length === 0 && (
+            <motion.div
+              key="empty"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="py-20 text-center text-muted-foreground"
+            >
+              <Zap className="w-8 h-8 mx-auto mb-4 opacity-20" />
+              <p className="font-medium">{t("empty")}</p>
+            </motion.div>
+          )}
+        </div>
+      </AnimatePresence>
     </section>
   );
 }

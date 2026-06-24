@@ -4,6 +4,8 @@ import { HeroSection } from "@/components/features/home/hero-section";
 import { ProjectsPreview } from "@/components/features/home/projects-preview";
 import { AiLabPreview } from "@/components/features/home/ailab-preview";
 import { BlogPreview } from "@/components/features/home/blog-preview";
+import { CurrentFocusWidget } from "@/components/features/home/current-focus-widget";
+import { GitHubActivity } from "@/components/github-activity";
 import ContactForm from "@/components/forms/contact";
 
 export default function Home() {
@@ -18,8 +20,13 @@ export default function Home() {
           id="home-content"
           className="container mx-auto w-full scroll-mt-20 space-y-20 px-5 pb-20 sm:space-y-24 sm:px-6 sm:pb-24 lg:space-y-28 lg:px-12 xl:px-16"
         >
-          {/* Çizgiler artık çok daha soft (border/20) */}
           <div className="h-px w-full bg-gradient-to-r from-transparent via-border/20 to-transparent" />
+
+          {/* Current status + GitHub activity strip */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <CurrentFocusWidget />
+            <GitHubActivity />
+          </div>
 
           <ProjectsPreview />
 

@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
+import { buildLanguageAlternates } from "@/lib/seo/page-metadata";
 import "./globals.css";
 
 // --- FONT CONFIGURATION ---
@@ -32,12 +33,13 @@ export async function generateMetadata({
   return {
     metadataBase: new URL("https://berkay-dev.vercel.app"),
     title: {
-      default: "BERKAY | Software Engineer & AI Architect",
-      template: "%s | BERKAY"
+      default: t("site_title"),
+      template: `%s | ${t("site_name")}`,
     },
     description: t("description"),
     keywords: ["Next.js", "AI Architecture", "n8n", "React", "Frontend", "Enterprise Web"],
     authors: [{ name: "Berkay Türkyılmaz" }],
+    alternates: buildLanguageAlternates("/"),
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
@@ -68,7 +70,7 @@ export async function generateMetadata({
           url: "/opengraph-image",
           width: 1200,
           height: 630,
-          alt: "Berkay Türkyılmaz Portfolio Architecture",
+          alt: t("og_alt"),
         },
       ],
     },
@@ -87,7 +89,7 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
       <body 
         className={`
           ${geistSans.variable} 

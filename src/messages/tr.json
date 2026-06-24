@@ -1,6 +1,21 @@
 {
   "Metadata": {
-    "description": "Modern web teknolojileri, ölçeklenebilir arayüzler ve yapay zeka destekli otonom sistemler üreten yazılım mühendisi."
+    "description": "Modern web teknolojileri, ölçeklenebilir arayüzler ve yapay zeka destekli otonom sistemler üreten yazılım mühendisi.",
+    "site_name": "BERKAY",
+    "site_title": "BERKAY | Yazılım Mühendisi & AI Mimarı",
+    "og_alt": "Berkay Türkyılmaz Portfolyo",
+    "projects_title": "Projeler",
+    "projects_description": "Seçilmiş işler — Next.js uygulamaları, n8n otomasyonları ve ölçeklenebilir ürün mimarileri.",
+    "blog_title": "Blog",
+    "blog_description": "Web mimarisi, AI entegrasyonları ve otomasyon üzerine teknik yazılar.",
+    "contact_title": "İletişim",
+    "contact_description": "İş birlikleri, danışmanlık ve ürün geliştirme için iletişime geçin.",
+    "ai_lab_title": "AI Lab",
+    "ai_lab_description": "Etkileşimli AI çalışma alanı — BEX asistan, doküman analizi, EnglishPath ve deneyler.",
+    "english_path_title": "EnglishPath",
+    "english_path_description": "Sınıf İngilizce oyunları, kelime çalışması, dilbilgisi ve seviye sınavları.",
+    "booking_title": "Randevu Demo",
+    "booking_description": "Etkileşimli berber randevu sistemi — n8n webhook entegrasyonu vitrini."
   },
   "Navigation": {
     "home": "Ana Sayfa",
@@ -34,7 +49,7 @@
       "explore": "İncele",
       "1": {
         "title": "Kurumsal Web Mimarisi",
-        "description": "Next.js 15, React Server Components ve i18n altyapısıyla yüksek performanslı dijital ekosistem.",
+        "description": "Next.js 16, React Server Components ve i18n altyapısıyla yüksek performanslı dijital ekosistem.",
         "stack": "Next.js · TypeScript · Supabase"
       },
       "2": {
@@ -51,7 +66,7 @@
     "projects": {
       "saas_card": {
         "title": "Kurumsal SaaS Mimarisi",
-        "subtitle": "Next.js 15 & Supabase Altyapısı"
+        "subtitle": "Next.js 16 & Supabase Altyapısı"
       },
       "code_card": {
         "comment": "// İnovasyon ve ölçeklenebilirlik başlatılıyor...",
@@ -76,7 +91,7 @@
       "view_all": "Tümünü Oku",
       "posts": {
         "1": {
-          "title": "Next.js 15 ve Mikro-Frontend Mimarisi",
+          "title": "Next.js 16 ve Mikro-Frontend Mimarisi",
           "excerpt": "Server Actions ve React Server Components ile kurumsal web mimarisi tasarımı.",
           "category": "Mimari"
         },
@@ -183,7 +198,7 @@
       "time_hours": "{n}s",
       "time_days": "{n}g",
       "suggested_terminal_1": "Supabase RLS politikası nasıl yazılır?",
-      "suggested_terminal_2": "Next.js 15'te streaming API route nasıl yapılır?",
+      "suggested_terminal_2": "Next.js 16'te streaming API route nasıl yapılır?",
       "suggested_terminal_3": "n8n ile Telegram bot nasıl kurulur?",
       "suggested_terminal_4": "pgvector ile semantic search nasıl implement edilir?",
       "suggested_pdf_1": "Bu dökümanı özetle",
@@ -314,7 +329,39 @@
   "ProjectsPage": {
     "badge": "PORTFOLYO & MİMARİ",
     "title": "Projeler",
-    "description": "Full-stack geliştirmeden veri otomasyon çözümlerine kadar uçtan uca mimarisini kurduğum dijital ürünler."
+    "description": "Full-stack geliştirmeden veri otomasyon çözümlerine kadar uçtan uca mimarisini kurduğum dijital ürünler.",
+    "filter_all": "Tümü",
+    "filter_live": "Canlı",
+    "filter_completed": "Tamamlandı",
+    "filter_in_progress": "Devam Ediyor",
+    "status_live": "Canlı",
+    "status_completed": "Tamamlandı",
+    "status_in_progress": "Devam Ediyor",
+    "view_project": "Projeyi İncele",
+    "source_code": "Kaynak Kod",
+    "empty": "Bu filtreyle eşleşen proje yok.",
+    "projects": {
+      "bex": {
+        "title": "BEX — Groq Tabanlı AI Asistan",
+        "description": "Groq LLM (Llama 3.1 8B) üzerinde çalışan, portfolyo entegre gerçek zamanlı AI asistan. Streaming yanıt, çok dilli arayüz ve PDF analiz modülü içerir."
+      },
+      "portfolio": {
+        "title": "Çok Dilli Portfolyo Altyapısı",
+        "description": "Next.js 16 App Router, next-intl ile 7 dil desteği, Supabase backend, n8n otomasyon webhook'ları ve Vercel Edge deployment'ı içeren production-ready portfolyo sistemi."
+      },
+      "booking": {
+        "title": "n8n ile Akıllı Rezervasyon Sistemi",
+        "description": "Google Calendar, SMS webhook'ları ve e-posta bildirimlerini senkronize eden serverless randevu otomasyonu. n8n workflow'ları ile sıfır manuel müdahale."
+      },
+      "saas": {
+        "title": "Full-Stack SaaS Boilerplate",
+        "description": "Auth (Supabase Auth), subscription yönetimi (Stripe), multi-tenant mimari, rol tabanlı erişim kontrolü ve i18n içeren üretim hazır SaaS şablonu."
+      },
+      "pdf": {
+        "title": "Doküman Analiz Motoru",
+        "description": "PDF belgelerini yükleyip Groq LLM ile analiz eden, özetleyen ve sorulara cevap veren araç. RAG mimarisi temel alınarak geliştirildi."
+      }
+    }
   },
   "ProjectsSection": {
     "badge": "Portfolyo Arşivi",
@@ -329,7 +376,8 @@
     "states": {
       "empty": "Şu an için listelenecek aktif ürün bulunmuyor.",
       "error_title": "Veritabanı Hatası",
-      "error_desc": "Projeler API üzerinden çekilirken bir zaman aşımı oluştu."
+      "error_desc": "Projeler API üzerinden çekilirken bir zaman aşımı oluştu.",
+      "mock_badge": "Seçilmiş portfolyo örnekleri gösteriliyor — canlı akış kullanılamıyor"
     },
     "mock_projects": {
       "1": {
@@ -338,7 +386,7 @@
       },
       "2": {
         "title": "Kurumsal Web Mimarisi v1",
-        "description": "Next.js 15, React Server Components ve i18n (çoklu dil) altyapısıyla geliştirilmiş, yüksek performanslı dijital ekosistem."
+        "description": "Next.js 16, React Server Components ve i18n (çoklu dil) altyapısıyla geliştirilmiş, yüksek performanslı dijital ekosistem."
       },
       "3": {
         "title": "Finansal Veri İşleme & Raporlama Botu",
@@ -363,16 +411,52 @@
     },
     "posts": {
       "1": {
-        "title": "Next.js 15 ve Modern Portfolyo Mimarisi",
+        "title": "Next.js 16 ve Modern Portfolyo Mimarisi",
         "excerpt": "Tailwind v4, i18n ve Server Actions kullanarak global standartlarda bir yazılım portfolyosu nasıl hazırlanır?",
         "date": "31 Oca 2026",
         "read_time": "8 dk"
       },
       "2": {
         "title": "Yapay Zeka Destekli Otomasyonlar",
-        "excerpt": "n8n ve Google Gemini kullanarak iş süreçlerini nasıl otomatize edebilirsiniz?",
+        "excerpt": "n8n ve Groq kullanarak iş süreçlerini nasıl otomatize edebilirsiniz?",
         "date": "28 Oca 2026",
         "read_time": "5 dk"
+      },
+      "3": {
+        "title": "n8n ile İş Akışı Otomasyonu: Sıfırdan Production'a",
+        "excerpt": "n8n'i self-host etmekten Google Workspace, Supabase ve webhook entegrasyonlarına kadar gerçek dünya otomasyon senaryoları.",
+        "date": "5 Şub 2026",
+        "read_time": "7 dk"
+      },
+      "4": {
+        "title": "Supabase ile Full-Stack Mimari: Auth, RLS ve Realtime",
+        "excerpt": "Supabase'i sadece bir database olarak değil, tam bir backend altyapısı olarak kullanmak. Row Level Security, Edge Functions ve Realtime.",
+        "date": "10 Şub 2026",
+        "read_time": "9 dk"
+      },
+      "5": {
+        "title": "TypeScript ile Type-Safe API Tasarımı",
+        "excerpt": "Zod ile runtime validation, API route tip güvenliği ve ortak hata yönetimi pattern'leri.",
+        "date": "15 Şub 2026",
+        "read_time": "6 dk"
+      },
+      "6": {
+        "title": "Groq API ile Streaming LLM Entegrasyonu",
+        "excerpt": "Groq'un ultra-düşük latency API'si ile Next.js'de token-by-token streaming, abort controller ve UX optimizasyonu.",
+        "date": "20 Şub 2026",
+        "read_time": "8 dk"
+      },
+      "7": {
+        "title": "Vercel Edge Runtime: Ne Zaman, Neden, Nasıl",
+        "excerpt": "Edge Runtime vs Node.js Runtime seçimi, cold start problemleri ve Edge Middleware kullanım senaryoları.",
+        "date": "25 Şub 2026",
+        "read_time": "5 dk"
+      },
+      "8": {
+        "title": "Next.js App Router'da i18n: next-intl Prodüksiyon Rehberi",
+        "excerpt": "next-intl ile App Router i18n kurulumu, statik sayfa üretimi, locale-aware SEO metadata ve çeviri workflow'u.",
+        "date": "1 Mar 2026",
+        "read_time": "10 dk"
       }
     }
   },
@@ -384,7 +468,10 @@
     "share": "Ağına Paylaş",
     "share_copied": "Makale bağlantısı kopyalandı!",
     "next_post": "Sonraki Makale",
-    "toc_title": "İçerik Akışı"
+    "toc_title": "İçerik Akışı",
+    "audio_title": "Sesli Makale",
+    "audio_playing": "Şimdi oynatılıyor",
+    "audio_idle": "AI anlatım"
   },
   "ContactForm": {
     "tag": "Bağlantı Kur",
@@ -420,7 +507,9 @@
     "stay_connected": "İletişim Ağları",
     "project_idea": "Karmaşık bir problemi yazılımla çözmek mi istiyorsunuz?",
     "write_me": "üzerinden ulaşın.",
-    "powered_by": "MİMARİ ALTYAPI"
+    "powered_by": "MİMARİ ALTYAPI",
+    "copyright": "© {year} BERKAY TURKYILMAZ.",
+    "stack_label": "NEXT.JS 16"
   },
   "LanguageSwitcher": {
     "label": "Dil Modeli Değiştir"
@@ -428,7 +517,8 @@
   "NotFound": {
     "title": "Sayfa Kayboldu",
     "description": "Aradığın otonom sistem bu koordinatlarda bulunamadı.",
-    "back": "Ana Üsse Dön"
+    "back": "Ana Üsse Dön",
+    "contact": "İletişim"
   },
   "EnglishPath": {
     "title": "EnglishPath",
@@ -437,6 +527,7 @@
     "go_panel": "Panele dön",
     "a11y": {
       "nav_main": "EnglishPath ana navigasyon",
+      "loading": "İlerleme yükleniyor",
       "quit": "Oyundan çık",
       "pronounce": "Kelimeyi seslendir",
       "fullscreen": "Tam ekran",
@@ -852,6 +943,101 @@
       "reset_progress": "İlerlemeyi sıfırla",
       "reset_confirm": "Tüm ilerleme silinecek. Emin misin?",
       "exit_lab": "Çıkış yap — AI Lab'e dön"
+    }
+  },
+  "CurrentFocus": {
+    "badge": "Şu An Üzerinde Çalışıyorum",
+    "badge_consulting": "Danışmanlık",
+    "badge_open": "İş Arıyorum",
+    "building_label": "Üzerinde çalışıyorum",
+    "project_saas": "SaaS Boilerplate",
+    "description_saas": "Full-stack SaaS altyapısı geliştiriyorum — Supabase Auth, Stripe ve multi-tenant mimari.",
+    "since_march": "Mart 2026'dan beri",
+    "available_for_title": "Müsait olduğum alanlar",
+    "available_freelance": "Freelance projeler",
+    "available_consulting": "Teknik danışmanlık",
+    "available_fulltime": "Full-time fırsatlar",
+    "cta": "İletişime geç"
+  },
+  "BookingPage": {
+    "brand": {
+      "title": "Barber Shop",
+      "location": "Ataşehir, İstanbul"
+    },
+    "info": {
+      "hours_title": "Çalışma Saatleri",
+      "hours_sub": "Pzt–Cmt · 08:00–20:00",
+      "closed_title": "Kapalı Günler",
+      "closed_sub": "Pazar hizmet verilmez",
+      "confirm_title": "Anında Onay",
+      "confirm_sub": "SMS bildirimi"
+    },
+    "summary_title": "Seçiminiz",
+    "form": {
+      "title": "Randevu Oluştur",
+      "subtitle": "Tüm alanları doldurarak randevunuzu tamamlayın."
+    },
+    "sections": {
+      "personal": "Kişisel Bilgiler",
+      "service": "Hizmet Seçimi",
+      "datetime": "Tarih ve Saat"
+    },
+    "fields": {
+      "full_name": "İsim Soyisim",
+      "phone": "Telefon Numarası",
+      "service": "İşlem Türü",
+      "staff": "Personel",
+      "date": "Randevu Tarihi",
+      "time": "Saat Seçimi"
+    },
+    "placeholders": {
+      "full_name": "Adınız ve Soyadınız",
+      "phone": "5XX XXX XX XX",
+      "service": "Hizmet seçin...",
+      "staff": "Berber seçin..."
+    },
+    "services": {
+      "sac_sakal": { "label": "Saç & Sakal Kesimi", "duration": "45 dk" },
+      "sac": { "label": "Saç Kesimi", "duration": "30 dk" },
+      "sakal": { "label": "Sakal Kesimi", "duration": "20 dk" },
+      "cilt_bakimi": { "label": "Cilt Bakımı", "duration": "60 dk" }
+    },
+    "prices": {
+      "sac_sakal": "₺350",
+      "sac": "₺200",
+      "sakal": "₺150",
+      "cilt_bakimi": "₺450"
+    },
+    "barbers": {
+      "ahmet_usta": { "label": "Ahmet Usta", "role": "Kurucu Berber" },
+      "mehmet_usta": { "label": "Mehmet Usta", "role": "Kıdemli Berber" },
+      "farketmez": { "label": "İlk Uygun", "role": "En erken randevu" }
+    },
+    "calendar": {
+      "prev_month": "Önceki ay",
+      "next_month": "Sonraki ay",
+      "today": "Bugün",
+      "closed_sunday": "Kapalı (Pazar)",
+      "sunday_error": "Pazar günleri hizmet vermemekteyiz.",
+      "date_selected": "{date} seçildi"
+    },
+    "time": {
+      "pick_date_first": "Saatleri görmek için önce tarih seçin",
+      "booked": "Dolu",
+      "selected": "Seçili"
+    },
+    "success": {
+      "title": "Randevunuz Onaylandı",
+      "body": "İşleminiz başarıyla kaydedildi. Kısa süre içinde SMS ile bilgilendirileceksiniz.",
+      "new_booking": "Yeni Randevu Oluştur"
+    },
+    "errors": {
+      "submit": "Sistemsel bir hata oluştu. Lütfen bağlantınızı kontrol edip tekrar deneyin."
+    },
+    "submit": {
+      "label": "Randevuyu Onayla →",
+      "loading": "Randevu Kaydediliyor...",
+      "footnote": "Randevunuza geç kalmayınız. Geç kalınan randevular iptal edilir!"
     }
   },
   "ContactPage": {

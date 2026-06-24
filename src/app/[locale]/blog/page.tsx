@@ -72,7 +72,9 @@ export default function Blog() {
             {categories.map((cat) => (
               <button
                 key={cat}
+                type="button"
                 onClick={() => setSelectedCategory(cat)}
+                aria-pressed={selectedCategory === cat}
                 className={`px-5 py-2.5 rounded-full text-[13px] font-bold transition-all whitespace-nowrap shadow-sm ring-1 ${
                   selectedCategory === cat 
                   ? "bg-primary text-primary-foreground ring-primary shadow-primary/20" 

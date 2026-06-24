@@ -1,21 +1,20 @@
 "use client";
 
-import { Github, Linkedin, Mail, Twitter, Cpu, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, Mail, Cpu, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { SiteLogo } from "@/components/layout/site-logo";
+import { siteConfig } from "@/data/site-config";
 
 export function Footer() {
   const t = useTranslations("Footer");
   const tNav = useTranslations("Navigation");
 
-  // Sosyal Medya Linkleri (Veri Yapısı)
   const socialLinks = [
-    { icon: Github, href: "https://github.com/berkay-turkyilmaz", label: "Github" },
-    { icon: Linkedin, href: "https://linkedin.com/in/berkay-turkyilmaz", label: "LinkedIn" },
-    { icon: Twitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: Mail, href: "mailto:berkaytrkylmzz@gmail.com", label: "Email" },
+    { icon: Github, href: siteConfig.github, label: "GitHub" },
+    { icon: Linkedin, href: siteConfig.linkedin, label: "LinkedIn" },
+    { icon: Mail, href: `mailto:${siteConfig.email}`, label: "Email" },
   ];
 
   // Site İçi Linkler
@@ -85,8 +84,8 @@ export function Footer() {
             
             <p className="text-xs text-muted-foreground leading-relaxed">
               {t("project_idea")} <br />
-              <a href="mailto:berkaytrkylmzz@gmail.com" className="text-primary hover:underline font-semibold">
-                berkaytrkylmzz@gmail.com
+              <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline font-semibold">
+                {siteConfig.email}
               </a> {t("write_me")}.
             </p>
           </div>
@@ -94,10 +93,10 @@ export function Footer() {
 
         {/* Alt Bilgi */}
         <div className="mt-16 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-          <p>© {new Date().getFullYear()} BERKAY TURKYILMAZ.</p>
+          <p>{t("copyright", { year: new Date().getFullYear() })}</p>
           <div className="flex items-center gap-4">
             <span className="flex items-center gap-2 hover:text-primary transition-colors cursor-default group">
-              {t("powered_by")} <Cpu className="h-3 w-3 group-hover:animate-pulse text-primary" /> NEXT.JS 16
+              {t("powered_by")} <Cpu className="h-3 w-3 group-hover:animate-pulse text-primary" /> {t("stack_label")}
             </span>
           </div>
         </div>

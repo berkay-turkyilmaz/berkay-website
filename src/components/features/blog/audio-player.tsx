@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 interface AudioPlayerProps {
   title: string;
@@ -11,6 +12,7 @@ interface AudioPlayerProps {
 }
 
 export function AudioPlayer({ title, text }: AudioPlayerProps) {
+  const t = useTranslations("BlogDetail");
   const [isPlaying, setIsPlaying] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [utterance, setUtterance] = useState<SpeechSynthesisUtterance | null>(null);
@@ -141,9 +143,9 @@ export function AudioPlayer({ title, text }: AudioPlayerProps) {
                     )}
                 </div>
                 <div>
-                    <h3 className="text-sm font-bold text-foreground line-clamp-1">Audio Article</h3>
+                    <h3 className="text-sm font-bold text-foreground line-clamp-1">{t("audio_title")}</h3>
                     <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">
-                        {isPlaying ? "Playing Now" : "AI Narration"}
+                        {isPlaying ? t("audio_playing") : t("audio_idle")}
                     </p>
                 </div>
             </div>

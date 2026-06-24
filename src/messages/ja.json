@@ -31,7 +31,7 @@
       "explore": "見る",
       "1": {
         "title": "エンタープライズWebアーキテクチャ",
-        "description": "Next.js 15、React Server Components、i18nで構築した高性能デジタルエコシステム。",
+        "description": "Next.js 16、React Server Components、i18nで構築した高性能デジタルエコシステム。",
         "stack": "Next.js · TypeScript · Supabase"
       },
       "2": {
@@ -48,7 +48,7 @@
     "projects": {
       "saas_card": {
         "title": "Enterprise SaaS Architecture",
-        "subtitle": "Next.js 15 & Supabase Infrastructure"
+        "subtitle": "Next.js 16 & Supabase Infrastructure"
       },
       "code_card": {
         "comment": "// Initializing innovation and scalability...",
@@ -73,7 +73,7 @@
       "view_all": "Read All",
       "posts": {
         "1": {
-          "title": "Next.js 15 and Micro-Frontend Architecture",
+          "title": "Next.js 16 and Micro-Frontend Architecture",
           "excerpt": "Enterprise web architecture design with Server Actions and React Server Components.",
           "category": "Architecture"
         },
@@ -185,7 +185,7 @@
       "time_hours": "{n}h",
       "time_days": "{n}d",
       "suggested_terminal_1": "How to write Supabase RLS policies?",
-      "suggested_terminal_2": "How to create a streaming API route in Next.js 15?",
+      "suggested_terminal_2": "How to create a streaming API route in Next.js 16?",
       "suggested_terminal_3": "How to set up a Telegram bot with n8n?",
       "suggested_terminal_4": "How to implement semantic search with pgvector?",
       "suggested_pdf_1": "Summarize this document",
@@ -346,7 +346,7 @@
       },
       "2": {
         "title": "モダンWebアーキテクチャ v1",
-        "description": "Next.js 15、React Server Components、およびi18nインフラストラクチャで開発された高性能なデジタルエコシステム。"
+        "description": "Next.js 16、React Server Components、およびi18nインフラストラクチャで開発された高性能なデジタルエコシステム。"
       },
       "3": {
         "title": "財務データ処理 & レポーティングボット",
@@ -371,14 +371,14 @@
     },
     "posts": {
       "1": {
-        "title": "Next.js 15 & モダンポートフォリオアーキテクチャ",
+        "title": "Next.js 16 & モダンポートフォリオアーキテクチャ",
         "excerpt": "Tailwind v4、i18n、Server Actionsを使用して世界標準のソフトウェアポートフォリオを構築する方法。",
         "date": "2026年1月31日",
         "read_time": "8分"
       },
       "2": {
         "title": "AI主導のオートメーション",
-        "excerpt": "n8nとGoogle Geminiを使用してビジネスプロセスを自動化する方法。",
+        "excerpt": "n8nとGroqを使用してビジネスプロセスを自動化する方法。",
         "date": "2026年1月28日",
         "read_time": "5分"
       }
