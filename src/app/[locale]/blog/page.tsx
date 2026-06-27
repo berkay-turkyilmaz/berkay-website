@@ -100,45 +100,58 @@ export default function Blog() {
                   transition={{ duration: 0.3, delay: idx * 0.05 }}
                 >
                   <Link href={`/blog/${post.slug}`} className="group block h-full">
-                    <article className="flex flex-col h-full p-6 sm:p-8 rounded-[2rem] bg-card shadow-sm ring-1 ring-border/10 hover:ring-primary/30 hover:shadow-xl transition-all duration-500 relative overflow-hidden">
+                    <article className="flex flex-col h-full rounded-[2rem] bg-card shadow-sm ring-1 ring-border/10 hover:ring-primary/30 hover:shadow-xl transition-all duration-500 relative overflow-hidden">
                       
-                      <div className="flex justify-between items-start mb-6">
-                        <Badge variant="secondary" className="bg-secondary text-foreground ring-1 ring-border/10 text-[10px] tracking-widest uppercase px-3 py-1 font-bold">
-                          {t(`categories.${post.category}`)}
-                        </Badge>
-                        
-                        {post.hasAudio && (
-                          <div 
-                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-[10px] font-bold uppercase tracking-wider ring-1 ring-green-500/20" 
-                            title={t("audio_article")}
-                          >
-                            <Headphones className="w-3 h-3" />
-                            {/* Anahtar "audio_label" olarak düzeltildi */}
-                            <span className="hidden sm:inline">{t("audio_label")}</span>
-                          </div>
-                        )}
+                      {/* Gradient cover image */}
+                      <div
+                        className={`relative h-44 bg-gradient-to-br ${post.gradient} flex-shrink-0 overflow-hidden`}
+                      >
+                        {/* Grid pattern */}
+                        <div
+                          className="absolute inset-0 opacity-[0.05]"
+                          style={{
+                            backgroundImage:
+                              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+                            backgroundSize: "28px 28px",
+                          }}
+                        />
+                        {/* Category badge on cover */}
+                        <div className="absolute top-4 left-5 flex items-center gap-2">
+                          <Badge variant="secondary" className="bg-black/40 text-white/80 border-white/10 text-[10px] tracking-widest uppercase px-3 py-1 font-bold backdrop-blur-sm">
+                            {t(`categories.${post.category}`)}
+                          </Badge>
+                          {post.hasAudio && (
+                            <div
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/20 text-green-300 text-[10px] font-bold uppercase tracking-wider border border-green-500/30 backdrop-blur-sm"
+                              title={t("audio_article")}
+                            >
+                              <Headphones className="w-3 h-3" />
+                              <span className="hidden sm:inline">{t("audio_label")}</span>
+                            </div>
+                          )}
+                        </div>
+                        {/* Arrow on hover */}
+                        <div className="absolute bottom-4 right-5 w-9 h-9 rounded-full bg-white/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300 backdrop-blur-sm border border-white/20">
+                          <ArrowRight className="w-4 h-4 text-white group-hover:-rotate-45 transition-transform duration-300" />
+                        </div>
                       </div>
 
-                      <div className="flex-1 space-y-4">
-                        <h3 className="text-2xl font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
-                          {t(`posts.${post.id}.title`)}
-                        </h3>
-                        <p className="text-muted-foreground line-clamp-3 leading-relaxed text-sm font-medium">
-                          {t(`posts.${post.id}.excerpt`)}
-                        </p>
-                      </div>
+                      {/* Card content */}
+                      <div className="flex flex-col flex-1 p-6 sm:p-7 space-y-4">
+                        <div className="flex-1 space-y-3">
+                          <h3 className="text-xl font-bold text-foreground leading-tight group-hover:text-primary transition-colors">
+                            {t(`posts.${post.id}.title`)}
+                          </h3>
+                          <p className="text-muted-foreground line-clamp-2 leading-relaxed text-sm font-medium">
+                            {t(`posts.${post.id}.excerpt`)}
+                          </p>
+                        </div>
 
-                      {/* uppercase sınıfı kaldırıldı, MİN/JAN hatası giderildi.
-                          Tarih ve süre bilgileri JSON'dan (t('posts.X.date')) çekiliyor. */}
-                      <footer className="mt-8 pt-6 border-t border-border/20 flex items-center justify-between text-[13px] font-semibold text-muted-foreground tracking-wide">
-                        <div className="flex gap-4 font-mono">
+                        <footer className="pt-4 border-t border-border/20 flex items-center gap-4 text-[12px] font-semibold text-muted-foreground font-mono">
                           <span className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" /> {t(`posts.${post.id}.date`)}</span>
                           <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {t(`posts.${post.id}.read_time`)}</span>
-                        </div>
-                        <div className="w-8 h-8 rounded-full bg-secondary/80 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all shadow-sm">
-                           <ArrowRight className="w-4 h-4 group-hover:-rotate-45 transition-transform duration-300" />
-                        </div>
-                      </footer>
+                        </footer>
+                      </div>
                     </article>
                   </Link>
                 </motion.div>

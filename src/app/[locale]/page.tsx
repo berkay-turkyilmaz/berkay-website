@@ -6,7 +6,7 @@ import { AiLabPreview } from "@/components/features/home/ailab-preview";
 import { BlogPreview } from "@/components/features/home/blog-preview";
 import { CurrentFocusWidget } from "@/components/features/home/current-focus-widget";
 import { GitHubActivity } from "@/components/github-activity";
-import ContactForm from "@/components/forms/contact";
+import { ContactCTA } from "@/components/features/home/contact-cta";
 
 export default function Home() {
   return (
@@ -34,10 +34,7 @@ export default function Home() {
 
           <BlogPreview />
 
-          <section id="contact" className="mx-auto w-full max-w-3xl scroll-mt-32">
-            <div className="mb-16 h-px w-full bg-gradient-to-r from-transparent via-border/20 to-transparent" />
-            <ContactForm />
-          </section>
+          <ContactCTA />
         </div>
       </main>
 

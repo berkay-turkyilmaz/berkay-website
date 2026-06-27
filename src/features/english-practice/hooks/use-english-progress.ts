@@ -21,6 +21,7 @@ function loadProgress(): EnglishProgress {
     return {
       ...DEFAULT_PROGRESS,
       ...parsed,
+      weakFlashcards: parsed.weakFlashcards ?? [],
       tabooStats: { ...DEFAULT_PROGRESS.tabooStats, ...parsed.tabooStats },
       headsUpStats: { ...DEFAULT_PROGRESS.headsUpStats, ...parsed.headsUpStats },
       charadesStats: { ...DEFAULT_PROGRESS.charadesStats, ...parsed.charadesStats },
@@ -113,6 +114,36 @@ export function useEnglishProgress() {
         const next = {
           ...prev,
           masteredFlashcards: [...prev.masteredFlashcards, id],
+        };
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
+        return next;
+      });
+    },
+    []
+  );
+
+  const markFlashcardWeak = useCallback(
+    (id: string) => {
+      setProgress((prev) => {
+        if (prev.weakFlashcards.includes(id)) return prev;
+        const next = {
+          ...prev,
+          weakFlashcards: [...prev.weakFlashcards, id],
+        };
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
+        return next;
+      });
+    },
+    []
+  );
+
+  const unmarkFlashcardWeak = useCallback(
+    (id: string) => {
+      setProgress((prev) => {
+        if (!prev.weakFlashcards.includes(id)) return prev;
+        const next = {
+          ...prev,
+          weakFlashcards: prev.weakFlashcards.filter((w) => w !== id),
         };
         localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
         return next;
@@ -232,6 +263,8 @@ export function useEnglishProgress() {
     updateProgress,
     updateSettings,
     markFlashcardMastered,
+    markFlashcardWeak,
+    unmarkFlashcardWeak,
     markGrammarComplete,
     savePrepositionAnswer,
     addExamResult,

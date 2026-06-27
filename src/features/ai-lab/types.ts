@@ -7,7 +7,7 @@ export interface WorkspaceSettings {
   model: GroqChatModelId;
   responseLength: "short" | "medium" | "detailed";
   theme: "dark" | "light" | "system";
-  language: "tr" | "en" | "de" | "auto";
+  language: "tr" | "en" | "de" | "es" | "fr" | "ja" | "auto";
   temperature: number;
   displayName: string;
 }

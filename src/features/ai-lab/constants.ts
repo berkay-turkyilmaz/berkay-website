@@ -78,6 +78,12 @@ export const LANGUAGES = [
 
   { code: "de", label: "Deutsch", flag: "🇩🇪" },
 
+  { code: "es", label: "Español", flag: "🇪🇸" },
+
+  { code: "fr", label: "Français", flag: "🇫🇷" },
+
+  { code: "ja", label: "日本語", flag: "🇯🇵" },
+
 ];
 
 

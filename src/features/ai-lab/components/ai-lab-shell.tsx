@@ -12,7 +12,8 @@ import {
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { PanelLeft, Settings } from "lucide-react";
+import { ArrowLeft, PanelLeft, Settings } from "lucide-react";
+import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { MODEL_OPTIONS, SESSION_KEYS, HISTORY_KEY, DEFAULT_SETTINGS, normalizeChatMode } from "../constants";
 import type { BexChatMessage, ChatHistoryItem, ChatMode, SidebarItem, WorkspaceSettings } from "../types";
@@ -167,7 +168,13 @@ export function AiLabShell({ children }: { children: ReactNode }) {
         ? "de"
         : locale.startsWith("tr")
           ? "tr"
-          : "en"
+          : locale.startsWith("es")
+            ? "es"
+            : locale.startsWith("fr")
+              ? "fr"
+              : locale.startsWith("ja")
+                ? "ja"
+                : "en"
       : settings.language;
 
   const flatNav = flattenSidebarItems(AILAB_SIDEBAR_SECTIONS);
@@ -258,6 +265,10 @@ export function AiLabShell({ children }: { children: ReactNode }) {
           isSidebarOpen={isSidebarOpen}
           isMobile={isMobile}
           activeSidebarId={activeSidebarId}
+          showNewChat={
+            isAiLabWorkspaceHome(pathname) ||
+            pathnameSuffixMatches(pathname, AILAB_ROUTES.sandbox)
+          }
           chatHistory={chatHistory}
           showHistory={showHistory}
           onToggleHistory={() => setShowHistory((v) => !v)}
@@ -305,6 +316,20 @@ export function AiLabShell({ children }: { children: ReactNode }) {
 
               <div className="h-3 w-px bg-ailab-border" />
 
+              {/* Back to portfolio — visible on mobile, hidden on md+ (sidebar user menu handles it) */}
+              <Link
+                href="/"
+                className={cn(
+                  "md:hidden flex items-center gap-1.5 px-2 py-1 rounded-lg text-[11px] font-medium",
+                  "text-ailab-text/50 transition-[color,background-color] duration-200",
+                  "hover:text-ailab-text/80 hover:bg-ailab-glass-06",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
+                )}
+              >
+                <ArrowLeft className="w-3 h-3" />
+                <span>{t("sidebar.back_home_short")}</span>
+              </Link>
+
               <AnimatePresence mode="wait">
                 <motion.span
                   key={activeSidebarId}
@@ -312,7 +337,7 @@ export function AiLabShell({ children }: { children: ReactNode }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 4 }}
                   transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-                  className="text-xs font-semibold text-ailab-text/65"
+                  className="hidden md:block text-xs font-semibold text-ailab-text/65"
                 >
                   {activeLabel}
                 </motion.span>
@@ -320,6 +345,21 @@ export function AiLabShell({ children }: { children: ReactNode }) {
             </div>
 
             <div className="flex items-center gap-1">
+              {/* Back to portfolio — visible on desktop */}
+              <Link
+                href="/"
+                className={cn(
+                  "hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] font-medium",
+                  "text-ailab-text/45 transition-[color,background-color] duration-200",
+                  "hover:text-ailab-text/75 hover:bg-ailab-glass-06",
+                  "ring-1 ring-inset ring-ailab-border-muted/50",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
+                )}
+              >
+                <ArrowLeft className="w-3 h-3" />
+                <span>{t("sidebar.back_home")}</span>
+              </Link>
+
               <div className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-ailab-glass-04 ring-1 ring-inset ring-ailab-border-muted transition-[box-shadow] duration-300 ease-out">
                 <div className="w-1.5 h-1.5 rounded-full bg-ailab-accent shadow-ailab-accent-dot" />
                 <span className="text-[10px] font-mono text-ailab-text/55 max-w-[120px] truncate">

@@ -146,33 +146,61 @@ Bu özet dışındaki kişisel/çalışma hayatı **bilinmiyor** kabul et.
 
 
 
-**Profil:** Software engineering, AI mimarisi, uçtan uca ürün geliştirme (full-stack + otomasyon). Kayıtlı bilgi: yaş **25**, konum **İstanbul**.
+**Profil:** Frontend Developer. Türk Telekom (One Bilgi Sistemleri) ölçeğinde müşteri ve iç ekip web uygulamaları için modern web standartlarına uygun arayüz mimarisi geliştiriyor. JavaScript (ES6+), HTML5, CSS3/SASS temeli; React.js, responsive tasarım, REST API entegrasyonu. Agile (Jira), Figma/Zeplin ile UX/UI koordinasyonu. Konum: **İstanbul, Türkiye**.
 
 
 
 **İletişim:**
 
-- E-posta: berkay_trkylmz@hotmail.com
+- E-posta: berkaytrkylmzz@gmail.com
 
 - GitHub: https://github.com/berkay-turkyilmaz
 
 - LinkedIn: https://www.linkedin.com/in/berkay-turkyilmaz
 
-
-
-**Ürünler (yalnızca bu çerçeve):**
-
-- **berkay.dev / AI Lab:** Portföy + AI Lab; Next.js, Vercel AI SDK, Groq, i18n.
-
-- **EnglishPath (SmartLang):** AI destekli İngilizce öğrenme; geliştirme aşamasında.
-
-- **Meetora:** Etkinlik mekanı keşfi ve rezervasyon platformu; kafe ve etkinlik mekanları. Canlı: https://getmeetora.com/
-
-- **Booking SaaS:** MVP; multi-tenant randevu; n8n webhook entegrasyonu.
+- Portföy: https://berkay-dev.vercel.app
 
 
 
-**Teknik yığın:** Next.js (App Router, RSC), TypeScript, Tailwind, Framer Motion, Supabase (PostgreSQL, pgvector, RLS), Vercel AI SDK, n8n, Docker, GitHub Actions, Ubuntu VPS.
+**Deneyim (onaylı):**
+
+1. **Türk Telekom (One Bilgi Sistemleri)** — Frontend Developer · Ekim 2022 — günümüz
+
+   - Müşteri ve iç ekip web uygulamaları için frontend mimarisi
+
+   - Figma/Zeplin tasarımlarını responsive ve cross-browser uyumlu kodlama
+
+   - Jira ile Agile süreçler; backend ekiplerle veri entegrasyonu
+
+2. **Ottoman Creative** — Frontend Developer Staj · 2017 — 2019
+
+   - HTML, CSS ve temel JavaScript ile interaktif arayüzler
+
+   - UI testleri ve hata düzeltme
+
+
+
+**Eğitim:**
+
+- **İstanbul Üniversitesi** — Coğrafi Bilgi Sistemleri · 2019 — 2024
+
+
+
+**Dil:** İngilizce — A2 seviye
+
+
+
+**Kişisel yazılım projeleri:**
+
+- **berkay.dev / berkay-dev.vercel.app:** Kişisel portföy sitesi; modern arayüz, responsive tasarım, Vercel deploy. AI Lab (BEX asistan, PDF analiz, EnglishPath) bu sitede.
+
+- **Finans Botu Otomasyonu:** n8n ile harici API'lerden finansal veri çekme, işleme ve raporlama workflow'ları; manuel iş yükünü azaltma.
+
+
+
+**Araçlar & stack (CV):** JavaScript, HTML5, CSS3/SASS, React.js, Flexbox/Grid, REST APIs, Git, GitHub, Jira, Figma, Zeplin, VS Code, Microsoft SharePoint.
+
+**Portföy / yan projelerde ek:** Next.js, TypeScript, Tailwind, Groq, n8n, Vercel.
 
 `.trim();
 
@@ -234,7 +262,7 @@ function modeInstructions(mode: string): string {
 
 - Debug: semptom → olası neden → düzeltme adımı.
 
-- Mimari: önce problem ve kısıtlar; Berkay'ın pratik yığınına (Next.js, Supabase, n8n) uygun öneri; over-engineering'i reddet.
+- Mimari: önce problem ve kısıtlar; Berkay'ın pratik yığınına (React, JavaScript, REST, Jira/Figma workflow; yan projelerde Next.js, n8n) uygun öneri; over-engineering'i reddet.
 
 - Kod: minimal çalışır örnek; gereksiz boilerplate yok.
 

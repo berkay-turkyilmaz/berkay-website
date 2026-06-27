@@ -127,57 +127,93 @@ export default function TerminalChat({
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex flex-col justify-center min-h-[min(100%,calc(100dvh-200px))] sm:min-h-[calc(100vh-220px)]"
+                className="flex flex-col justify-center min-h-[min(100%,calc(100dvh-200px))] sm:min-h-[calc(100vh-220px)] py-8"
               >
-                <div className="mb-12">
-                  <div className="mb-6 flex items-center gap-3">
-                    <motion.div
-                      initial={{ scale: 0.85, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 200, delay: 0.05 }}
-                      className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-ailab-glass-06 ring-1 ring-inset ring-ailab-border-muted"
-                    >
-                      <span className="text-sm font-bold text-ailab-muted">
-                        {AI_AGENT_NAME.slice(0, 1)}
-                      </span>
-                    </motion.div>
-                    <span className="font-semibold tracking-[0.12em] text-ailab-text text-sm md:text-base">
-                      {AI_AGENT_NAME}
-                    </span>
-                  </div>
-                  <h2 className="text-xl font-semibold mb-3 text-ailab-text tracking-tight">{config.emptyTitle}</h2>
-                  <p className="text-sm leading-relaxed max-w-md text-ailab-muted">{config.emptyDesc}</p>
+                {/* BEX Hero */}
+                <div className="mb-8 md:mb-10">
+                  <motion.div
+                    initial={{ scale: 0.85, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ type: "spring", stiffness: 220, delay: 0.05 }}
+                    className="mb-5 flex items-center gap-3.5"
+                  >
+                    {/* Avatar with glow */}
+                    <div className="relative flex-shrink-0">
+                      <div className={cn(
+                        "w-12 h-12 rounded-2xl flex items-center justify-center",
+                        "bg-gradient-to-br from-ailab-accent/25 to-ailab-accent/5",
+                        "ring-1 ring-inset ring-ailab-accent/35",
+                        "shadow-[0_0_24px_var(--color-ailab-accent-soft),inset_0_1px_0_rgba(255,255,255,0.06)]"
+                      )}>
+                        <span className="text-base font-black text-ailab-accent tracking-tighter">
+                          {AI_AGENT_NAME.slice(0, 1)}
+                        </span>
+                      </div>
+                      {/* Online indicator */}
+                      <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-ailab-canvas flex items-center justify-center">
+                        <div className="w-2.5 h-2.5 rounded-full bg-ailab-accent/90 shadow-[0_0_6px_var(--color-ailab-accent)]" />
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold tracking-[0.1em] text-ailab-text">{AI_AGENT_NAME}</p>
+                      <p className="text-[10px] text-ailab-muted font-mono uppercase tracking-widest mt-0.5">
+                        {t("engineer_status")}
+                      </p>
+                    </div>
+                  </motion.div>
+
+                  <motion.h2
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="text-2xl md:text-3xl font-bold mb-2.5 text-ailab-text tracking-tight"
+                  >
+                    {config.emptyTitle}
+                  </motion.h2>
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.15 }}
+                    className="text-sm leading-relaxed max-w-md text-ailab-muted"
+                  >
+                    {config.emptyDesc}
+                  </motion.p>
 
                   {safeMode === "pdf" && !uploadedDoc && (
-                    <TerminalPdfDropZone
-                      onFile={(f) => void handleFile(f)}
-                      isLoading={isUploading}
-                      error={uploadError}
-                      dragLabel={t("upload_drag")}
-                      formatLabel={t("upload_formats")}
-                      readingLabel={t("upload_reading")}
-                    />
+                    <div className="mt-6">
+                      <TerminalPdfDropZone
+                        onFile={(f) => void handleFile(f)}
+                        isLoading={isUploading}
+                        error={uploadError}
+                        dragLabel={t("upload_drag")}
+                        formatLabel={t("upload_formats")}
+                        readingLabel={t("upload_reading")}
+                      />
+                    </div>
                   )}
                 </div>
 
-                {(safeMode !== "pdf" || uploadedDoc) && safeMode !== "engineer" && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {/* Suggestion cards — shown for all modes */}
+                {(safeMode !== "pdf" || uploadedDoc) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {suggestedQuestions[safeMode].map((q, i) => (
                       <motion.button
                         key={q}
                         type="button"
                         initial={{ opacity: 0, y: 8 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 + i * 0.06 }}
+                        transition={{ delay: 0.18 + i * 0.06 }}
                         onClick={() => setInput(q)}
                         className={cn(
-                          "text-left p-4 rounded-xl transition-all duration-300 ease-in-out",
+                          "group text-left p-4 rounded-xl transition-all duration-200",
                           "bg-ailab-glass-04 ring-1 ring-inset ring-ailab-border-subtle",
-                          "hover:bg-ailab-glass-06 hover:ring-ailab-accent/30 hover:shadow-ailab-accent-sm",
-                          "active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/50"
+                          "hover:bg-ailab-glass-07 hover:ring-ailab-accent/25",
+                          "active:scale-[0.985] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/50"
                         )}
                       >
-                        <span className="text-xs leading-relaxed text-ailab-text">{q}</span>
+                        <span className="text-[13px] leading-relaxed text-ailab-text/80 group-hover:text-ailab-text transition-colors duration-200">
+                          {q}
+                        </span>
                       </motion.button>
                     ))}
                   </div>
@@ -238,26 +274,6 @@ export default function TerminalChat({
 
       <div className="pointer-events-none z-20 flex-shrink-0 bg-gradient-to-t from-ailab-canvas via-ailab-canvas to-transparent px-3 pb-[max(1.25rem,env(safe-area-inset-bottom))] pt-2 sm:px-6 sm:pb-5 sm:pt-3">
         <div className="mx-auto max-w-2xl pointer-events-auto">
-          {displayMessages.length === 0 && safeMode === "engineer" && (
-            <div className="mb-3 -mx-1 flex gap-2 overflow-x-auto pb-1 px-1 ailab-scrollbar sm:mx-0 sm:flex-wrap sm:overflow-visible sm:justify-start">
-              {(["engineer_prompt_chip_1", "engineer_prompt_chip_2", "engineer_prompt_chip_3", "engineer_prompt_chip_4"] as const).map((key) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setInput(t(key))}
-                  className={cn(
-                    "pointer-events-auto shrink-0 rounded-full px-3.5 py-2.5 text-left text-[11px] font-medium leading-snug",
-                    "bg-ailab-glass-06 text-ailab-text ring-1 ring-inset ring-ailab-border-subtle",
-                    "transition-all duration-300 hover:bg-ailab-glass-10 hover:ring-ailab-accent/30 hover:shadow-ailab-accent-sm",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45",
-                    "sm:max-w-full"
-                  )}
-                >
-                  {t(key)}
-                </button>
-              ))}
-            </div>
-          )}
           <AnimatePresence>
             {uploadedDoc && (
               <motion.div
@@ -371,9 +387,14 @@ export default function TerminalChat({
             </div>
           </div>
 
-          <p className="hidden sm:block text-center text-[10px] mt-2.5 tracking-wider text-ailab-muted font-medium [font-variant:small-caps]">
-            {t("footer_warning")}
-          </p>
+          <div className="hidden sm:flex items-center justify-between mt-2.5 px-1">
+            <p className="text-[10px] tracking-wider text-ailab-muted font-medium [font-variant:small-caps]">
+              {t("footer_warning")}
+            </p>
+            <p className="text-[10px] text-ailab-muted/60 font-mono">
+              {t("keyboard_hint")}
+            </p>
+          </div>
         </div>
       </div>
     </div>

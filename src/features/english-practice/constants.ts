@@ -1,6 +1,6 @@
 import type { EnglishProgress } from "./types";
 
-export const PROGRESS_STORAGE_KEY = "englishpath-progress-v4";
+export const PROGRESS_STORAGE_KEY = "englishpath-progress-v5";
 export const XP_PER_LEVEL = 500;
 
 export const DEFAULT_PROGRESS: EnglishProgress = {
@@ -9,6 +9,7 @@ export const DEFAULT_PROGRESS: EnglishProgress = {
   streak: 0,
   lastStudyDate: null,
   masteredFlashcards: [],
+  weakFlashcards: [],
   completedGrammar: [],
   prepositionScores: {},
   examResults: [],

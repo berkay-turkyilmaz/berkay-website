@@ -1,10 +1,18 @@
 import { ImageResponse } from "next/og";
+import { getTranslations } from "next-intl/server";
 
 export const alt = "BERKAY — Software Engineer & AI Architect";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
   return new ImageResponse(
     (
       <div
@@ -20,7 +28,6 @@ export default function OpenGraphImage() {
           fontFamily: "system-ui, sans-serif",
         }}
       >
-        {/* Top badge */}
         <div
           style={{
             display: "flex",
@@ -50,25 +57,30 @@ export default function OpenGraphImage() {
           </span>
         </div>
 
-        {/* Main heading */}
         <div
           style={{
-            fontSize: 62,
+            fontSize: 58,
             fontWeight: 900,
             lineHeight: 1.1,
-            maxWidth: 860,
+            maxWidth: 900,
             marginBottom: "24px",
           }}
         >
-          Software Engineer &amp; AI Architect
+          {t("og_image_headline")}
         </div>
 
-        {/* Description */}
-        <div style={{ fontSize: 26, color: "#a1a1aa", maxWidth: 700, lineHeight: 1.5, marginBottom: "40px" }}>
-          Next.js · Supabase · n8n · Groq LLM
+        <div
+          style={{
+            fontSize: 26,
+            color: "#a1a1aa",
+            maxWidth: 700,
+            lineHeight: 1.5,
+            marginBottom: "40px",
+          }}
+        >
+          {t("og_image_tagline")}
         </div>
 
-        {/* Bottom bar */}
         <div
           style={{
             display: "flex",

@@ -7,6 +7,61 @@ function shuffle<T>(arr: T[]): T[] {
   return a;
 }
 
+/**
+ * Build a weighted taboo deck for "all difficulties" mode.
+ * Targets: 5% easy, 45% medium, 50% hard (biased toward challenge).
+ * Falls back to proportional if not enough cards of a tier.
+ */
+export function buildWeightedTabooDeck<T extends { id: string; difficulty: "easy" | "medium" | "hard" }>(
+  pool: T[],
+  count: number,
+  gameKey: string
+): T[] {
+  if (pool.length === 0) return [];
+  const target = Math.min(count, pool.length);
+
+  const dailySeen = new Set(readJsonArray(dailyStorageKey(gameKey)));
+  const sessionSeen = new Set(readJsonArray(sessionStorageKey(gameKey)));
+
+  // Helper: filter available cards for a difficulty tier
+  const getAvailable = (diff: "easy" | "medium" | "hard"): T[] => {
+    const tier = pool.filter((c) => c.difficulty === diff);
+    let avail = tier.filter((c) => !dailySeen.has(c.id));
+    if (avail.length === 0) avail = tier.filter((c) => !sessionSeen.has(c.id));
+    if (avail.length === 0) avail = [...tier];
+    return shuffle(avail);
+  };
+
+  const easyPool = getAvailable("easy");
+  const mediumPool = getAvailable("medium");
+  const hardPool = getAvailable("hard");
+
+  // Target counts: 5% easy, 45% medium, 50% hard
+  let nEasy = Math.round(target * 0.05);
+  let nMedium = Math.round(target * 0.45);
+  let nHard = target - nEasy - nMedium;
+
+  // Clamp to available
+  nEasy = Math.min(nEasy, easyPool.length);
+  nHard = Math.min(nHard, hardPool.length);
+  nMedium = Math.min(nMedium, mediumPool.length);
+
+  // Fill gaps with available cards from other tiers
+  const deficit = target - nEasy - nMedium - nHard;
+  if (deficit > 0) {
+    const extra = Math.min(deficit, mediumPool.length - nMedium);
+    nMedium += extra;
+  }
+
+  const picked = shuffle([
+    ...easyPool.slice(0, nEasy),
+    ...mediumPool.slice(0, nMedium),
+    ...hardPool.slice(0, nHard),
+  ]);
+
+  return picked.slice(0, target);
+}
+
 function todayKey(): string {
   return new Date().toISOString().slice(0, 10);
 }

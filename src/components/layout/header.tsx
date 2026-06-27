@@ -39,10 +39,11 @@ export function Header() {
   }, [mobileMenuOpen]);
 
   const navItems = [
+    { key: "about", href: "/about" },
     { key: "projects", href: "/projects" },
     { key: "blog", href: "/blog" },
     { key: "lab", href: "/ai-lab" },
-    { key: "contact", href: "/contact" }, 
+    { key: "contact", href: "/contact" },
   ];
 
   return (

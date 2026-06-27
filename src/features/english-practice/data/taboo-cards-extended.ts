@@ -90,11 +90,94 @@ export const TABOO_CARDS_EXTENDED: TabooCard[] = [
   c("adv08", "Podcast", ["listen", "audio", "episode", "host", "Spotify"], "entertainment", "Podcast", "medium"),
 
   // B1/B2 classroom vocabulary
-  c("adv09", "Negotiation", ["deal", "agree", "business", "price", "contract"], "worklife", "Pazarlık", "hard"),
-  c("adv10", "Presentation", ["slides", "speak", "audience", "PowerPoint", "meeting"], "worklife", "Sunum", "medium"),
-  c("adv11", "Interview", ["job", "questions", "employer", "CV", "hire"], "worklife", "Mülakat", "medium"),
-  c("adv12", "Neighbourhood", ["area", "local", "street", "community", "near"], "places", "Mahalle", "medium"),
-  c("adv13", "Recycling", ["waste", "bin", "plastic", "environment", "reuse"], "places", "Geri dönüşüm", "medium"),
-  c("adv14", "Volunteering", ["help", "charity", "free", "community", "work"], "social", "Gönüllülük", "medium"),
-  c("adv15", "Homework", ["school", "study", "teacher", "assignment", "class"], "social", "Ödev", "easy"),
+  c("adv09", "Negotiation",  ["deal", "agree", "business", "price", "contract"],          "worklife",    "Pazarlık",          "hard"),
+  c("adv10", "Presentation", ["slides", "speak", "audience", "PowerPoint", "meeting"],    "worklife",    "Sunum",             "medium"),
+  c("adv11", "Interview",    ["job", "questions", "employer", "CV", "hire"],              "worklife",    "Mülakat",           "medium"),
+  c("adv12", "Neighbourhood",["area", "local", "street", "community", "near"],            "places",      "Mahalle",           "medium"),
+  c("adv13", "Recycling",    ["waste", "bin", "plastic", "environment", "reuse"],         "places",      "Geri dönüşüm",      "medium"),
+  c("adv14", "Volunteering", ["help", "charity", "free", "community", "work"],            "social",      "Gönüllülük",        "medium"),
+  c("adv15", "Homework",     ["school", "study", "teacher", "assignment", "class"],       "social",      "Ödev",              "easy"),
+
+  // ── TECHNOLOGY / AI — hard ────────────────────────────────────────────────
+  c("tech01", "Machine Learning",  ["AI", "data", "algorithm", "train", "model"],              "technology", "Makine öğrenmesi",    "hard"),
+  c("tech02", "Algorithm",         ["steps", "code", "computer", "solve", "program"],           "technology", "Algoritma",           "hard"),
+  c("tech03", "Automation",        ["robot", "machine", "program", "task", "manual"],           "technology", "Otomasyon",           "hard"),
+  c("tech04", "Cybersecurity",     ["hack", "data", "protect", "online", "password"],           "technology", "Siber güvenlik",      "hard"),
+  c("tech05", "Cloud Computing",   ["internet", "server", "store", "remote", "data"],           "technology", "Bulut bilişim",       "hard"),
+  c("tech06", "Data Privacy",      ["personal", "protect", "share", "law", "information"],      "technology", "Veri gizliliği",      "hard"),
+  c("tech07", "Open Source",       ["code", "free", "public", "share", "GitHub"],               "technology", "Açık kaynak",         "hard"),
+  c("tech08", "Virtual Reality",   ["headset", "game", "3D", "immersive", "simulation"],        "technology", "Sanal gerçeklik",     "hard"),
+  c("tech09", "Streaming",         ["watch", "online", "Netflix", "live", "video"],             "technology", "Yayın akışı",         "medium"),
+  c("tech10", "API",               ["connect", "software", "data", "request", "developer"],     "technology", "Uygulama programlama arayüzü", "hard"),
+  c("tech11", "Blockchain",        ["Bitcoin", "chain", "secure", "crypto", "ledger"],          "technology", "Blok zinciri",        "hard"),
+  c("tech12", "Augmented Reality", ["camera", "overlay", "real world", "phone", "virtual"],     "technology", "Artırılmış gerçeklik","hard"),
+
+  // ── BUSINESS / FORMAL — hard ─────────────────────────────────────────────
+  c("bz01", "Strategy",      ["plan", "goal", "business", "long-term", "achieve"],             "worklife", "Strateji",          "hard"),
+  c("bz02", "Stakeholder",   ["company", "interest", "investor", "owner", "involved"],         "worklife", "Paydaş",            "hard"),
+  c("bz03", "Revenue",       ["money", "income", "company", "earn", "sales"],                  "worklife", "Gelir / Hasılat",   "hard"),
+  c("bz04", "Outsource",     ["hire", "external", "company", "task", "cheaper"],               "worklife", "Dış kaynak kullanmak","hard"),
+  c("bz05", "Innovation",    ["new", "idea", "create", "change", "invent"],                    "worklife", "İnovasyon",         "hard"),
+  c("bz06", "Methodology",   ["approach", "process", "way", "system", "plan"],                 "worklife", "Metodoloji",        "hard"),
+  c("bz07", "Benchmark",     ["compare", "standard", "measure", "best", "performance"],        "worklife", "Kıyaslama ölçütü",  "hard"),
+  c("bz08", "Facilitate",    ["help", "make easier", "lead", "organise", "support"],           "worklife", "Kolaylaştırmak",    "hard"),
+  c("bz09", "Portfolio",     ["work", "projects", "samples", "career", "collection"],          "worklife", "Portföy",           "hard"),
+  c("bz10", "Merger",        ["company", "join", "buy", "combine", "business"],                "worklife", "Birleşme",          "hard"),
+  c("bz11", "Dividend",      ["money", "profit", "invest", "shares", "pay"],                   "worklife", "Temettü",           "hard"),
+  c("bz12", "Scalability",   ["grow", "system", "bigger", "capacity", "tech"],                 "worklife", "Ölçeklenebilirlik", "hard"),
+
+  // ── ENVIRONMENT / SUSTAINABILITY — hard ──────────────────────────────────
+  c("eco01", "Carbon Footprint",   ["CO2", "environment", "travel", "reduce", "emissions"],    "places", "Karbon ayak izi",    "hard"),
+  c("eco02", "Renewable Energy",   ["solar", "wind", "clean", "power", "sustainable"],         "places", "Yenilenebilir enerji","hard"),
+  c("eco03", "Biodiversity",       ["species", "nature", "animals", "plants", "ecosystem"],    "places", "Biyoçeşitlilik",     "hard"),
+  c("eco04", "Deforestation",      ["trees", "cut", "jungle", "Amazon", "forest"],             "places", "Ormansızlaşma",      "hard"),
+  c("eco05", "Emissions",          ["CO2", "gas", "pollution", "factory", "climate"],          "places", "Emisyon / Atık",     "hard"),
+  c("eco06", "Sustainable Development",["future", "economy", "environment", "balance", "green"],"places","Sürdürülebilir kalkınma","hard"),
+  c("eco07", "Ecosystem",          ["nature", "animals", "plants", "environment", "balance"],  "places", "Ekosistem",          "hard"),
+  c("eco08", "Conservation",       ["protect", "save", "nature", "wildlife", "national park"], "places", "Doğa koruma",        "hard"),
+
+  // ── ABSTRACT / ACADEMIC — hard ────────────────────────────────────────────
+  c("abs01", "Democracy",      ["vote", "election", "government", "people", "rights"],         "social", "Demokrasi",         "hard"),
+  c("abs02", "Ideology",       ["belief", "politics", "ideas", "system", "group"],             "social", "İdeoloji",          "hard"),
+  c("abs03", "Empathy",        ["feel", "understand", "others", "emotions", "care"],           "emotions","Empati",            "hard"),
+  c("abs04", "Prejudice",      ["judge", "before", "bias", "unfair", "assume"],                "social", "Önyargı",           "hard"),
+  c("abs05", "Hypothesis",     ["idea", "test", "science", "experiment", "theory"],            "technology","Hipotez",         "hard"),
+  c("abs06", "Perspective",    ["view", "opinion", "angle", "point", "see"],                   "social", "Bakış açısı",       "hard"),
+  c("abs07", "Consequence",    ["result", "happen", "effect", "after", "because"],             "social", "Sonuç / Etki",      "hard"),
+  c("abs08", "Responsibility", ["duty", "must", "role", "obligation", "yours"],                "social", "Sorumluluk",        "hard"),
+  c("abs09", "Equality",       ["same", "rights", "fair", "gender", "race"],                   "social", "Eşitlik",           "hard"),
+  c("abs10", "Freedom",        ["choice", "right", "speak", "go", "liberty"],                  "social", "Özgürlük",          "hard"),
+  c("abs11", "Compromise",     ["agree", "both", "middle", "give", "take"],                    "social", "Uzlaşma",           "hard"),
+  c("abs12", "Bureaucracy",    ["forms", "government", "rules", "slow", "paperwork"],          "social", "Bürokrasi",         "hard"),
+  c("abs13", "Stereotype",     ["judge", "group", "assume", "always", "type"],                 "social", "Kalıp yargı",       "hard"),
+  c("abs14", "Procrastinate",  ["later", "delay", "avoid", "wait", "lazy"],                    "hobbies","Ertelemek",         "hard"),
+
+  // ── HEALTH / MEDICAL — hard ──────────────────────────────────────────────
+  c("med01", "Diagnosis",     ["doctor", "sick", "find", "disease", "test"],                   "people", "Teşhis",            "hard"),
+  c("med02", "Symptom",       ["pain", "sick", "feel", "body", "sign"],                        "people", "Belirti",           "hard"),
+  c("med03", "Prescription",  ["doctor", "medicine", "paper", "pharmacy", "drug"],             "people", "Reçete",            "hard"),
+  c("med04", "Mental Health",  ["mind", "stress", "therapy", "emotion", "wellbeing"],           "emotions","Ruh sağlığı",      "hard"),
+  c("med05", "Vaccination",   ["needle", "protect", "disease", "children", "immune"],          "people", "Aşılama",           "hard"),
+  c("med06", "Pandemic",      ["virus", "world", "COVID", "spread", "lockdown"],               "places", "Pandemi",           "hard"),
+
+  // ── EDUCATION / CAMPUS — hard ────────────────────────────────────────────
+  c("edu01", "Scholarship",   ["money", "study", "university", "award", "free"],               "places", "Burs",              "hard"),
+  c("edu02", "Dissertation",  ["write", "university", "research", "long", "thesis"],           "places", "Tez / Bitirme ödevi","hard"),
+  c("edu03", "Plagiarism",    ["copy", "others", "work", "cheat", "publish"],                  "places", "İntihal",           "hard"),
+  c("edu04", "Curriculum",    ["school", "subjects", "plan", "teach", "year"],                 "places", "Müfredat",          "hard"),
+  c("edu05", "Tuition",       ["school", "money", "pay", "university", "cost"],                "places", "Öğrenim ücreti",    "hard"),
+
+  // ── ECONOMICS / FINANCE — hard ───────────────────────────────────────────
+  c("fin01", "Inflation",     ["prices", "money", "rise", "economy", "value"],                "worklife", "Enflasyon",         "hard"),
+  c("fin02", "Investment",    ["money", "stocks", "return", "risk", "future"],                 "worklife", "Yatırım",           "hard"),
+  c("fin03", "Recession",     ["economy", "slow", "jobs", "money", "crisis"],                  "worklife", "Durgunluk",         "hard"),
+  c("fin04", "Cryptocurrency",["Bitcoin", "digital", "wallet", "blockchain", "invest"],        "technology","Kripto para",      "hard"),
+  c("fin05", "Interest rate", ["bank", "loan", "money", "borrow", "percent"],                  "worklife", "Faiz oranı",        "hard"),
+
+  // ── ARTS & CULTURE — hard ────────────────────────────────────────────────
+  c("art01", "Renaissance",   ["Italy", "art", "history", "Leonardo", "period"],               "entertainment","Rönesans",       "hard"),
+  c("art02", "Contemporary",  ["modern", "now", "current", "art", "recent"],                   "entertainment","Çağdaş",         "hard"),
+  c("art03", "Exhibition",    ["museum", "art", "show", "display", "gallery"],                 "entertainment","Sergi",           "hard"),
+  c("art04", "Choreography",  ["dance", "moves", "design", "stage", "steps"],                  "entertainment","Koreografi",     "hard"),
+  c("art05", "Satire",        ["funny", "criticize", "politics", "humour", "mock"],            "entertainment","Hiciv / Satir",  "hard"),
 ];

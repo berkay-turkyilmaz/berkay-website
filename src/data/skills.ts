@@ -4,30 +4,21 @@ export interface SkillCategory {
   skills: string[];
 }
 
+/** CV-aligned skill groups (Özet / Beceriler) */
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
-    id: "frontend",
-    labelKey: "skills.frontend",
-    skills: ["Next.js 16", "React", "TypeScript", "Tailwind CSS", "Framer Motion", "shadcn/ui"],
+    id: "languages",
+    labelKey: "languages",
+    skills: ["JavaScript (ES6+)", "HTML5", "CSS3", "SASS/SCSS"],
   },
   {
-    id: "backend",
-    labelKey: "skills.backend",
-    skills: ["Supabase", "PostgreSQL", "Node.js", "Edge Functions", "REST APIs", "tRPC"],
+    id: "libraries",
+    labelKey: "libraries",
+    skills: ["React.js", "Responsive Web Design", "Flexbox/Grid", "REST APIs"],
   },
   {
-    id: "automation",
-    labelKey: "skills.automation",
-    skills: ["n8n", "Webhooks", "Cron Jobs", "Google Workspace API", "Stripe", "Serverless"],
-  },
-  {
-    id: "ai",
-    labelKey: "skills.ai",
-    skills: ["Groq API", "Llama 3.1", "RAG Architecture", "Streaming LLM", "Vector Search", "PDF.js"],
-  },
-  {
-    id: "devops",
-    labelKey: "skills.devops",
-    skills: ["Vercel", "Docker", "GitHub Actions", "Turbopack", "Zod", "next-intl"],
+    id: "tools",
+    labelKey: "tools",
+    skills: ["Git", "GitHub", "Jira", "Figma", "Zeplin", "VS Code", "Microsoft SharePoint"],
   },
 ];

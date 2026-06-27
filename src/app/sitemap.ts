@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { routing } from "@/i18n/routing";
 import { getBlogPostSlugs } from "@/lib/blog/posts";
+import { getProjectSlugs } from "@/data/projects";
 import { localePath } from "@/lib/seo/page-metadata";
 
 const BLOG_LAST_MODIFIED: Record<string, Date> = {
@@ -10,7 +11,10 @@ const BLOG_LAST_MODIFIED: Record<string, Date> = {
 
 const STATIC_PATHS = [
   "",
+  "/about",
   "/projects",
+  "/resume",
+  "/privacy",
   "/blog",
   "/contact",
   "/ai-lab",
@@ -43,6 +47,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
         lastModified: BLOG_LAST_MODIFIED[slug] ?? siteUpdated,
         changeFrequency: "monthly",
         priority: 0.6,
+      });
+    }
+
+    for (const slug of getProjectSlugs()) {
+      entries.push({
+        url: localePath(locale, `/projects/${slug}`),
+        lastModified: siteUpdated,
+        changeFrequency: "monthly",
+        priority: 0.75,
       });
     }
   }

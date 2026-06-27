@@ -18,7 +18,20 @@ export type FlashcardCategory =
   | "travel"
   | "emotions"
   | "social"
-  | "hobbies";
+  | "hobbies"
+  | "body"
+  | "colors"
+  | "clothes"
+  | "weather"
+  | "work"
+  | "technology"
+  | "health"
+  | "environment"
+  | "business"
+  | "academic";
+
+/** CEFR level for each flashcard */
+export type FlashcardLevel = "A1" | "A2" | "B1" | "B2";
 
 export interface Flashcard {
   id: string;
@@ -27,6 +40,8 @@ export interface Flashcard {
   phonetic: string;
   category: FlashcardCategory;
   example: string;
+  /** CEFR level — all existing cards default to A1/A2 if not explicitly set */
+  level: FlashcardLevel;
 }
 
 export interface GrammarRule {
@@ -219,6 +234,8 @@ export interface EnglishProgress {
   streak: number;
   lastStudyDate: string | null;
   masteredFlashcards: string[];
+  /** Cards marked as "need more practice" */
+  weakFlashcards: string[];
   completedGrammar: string[];
   prepositionScores: Record<string, boolean>;
   examResults: ExamResult[];

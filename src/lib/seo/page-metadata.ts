@@ -13,6 +13,13 @@ const OG_LOCALE: Record<string, string> = {
   ar: "ar_SA",
 };
 
+export function openGraphImagePath(locale: string): string {
+  if (locale === routing.defaultLocale) {
+    return "/opengraph-image";
+  }
+  return `/${locale}/opengraph-image`;
+}
+
 export function localePath(locale: string, path: string): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
   if (locale === routing.defaultLocale) {
@@ -56,7 +63,7 @@ export function createPageMetadata({
       locale: OG_LOCALE[locale] ?? "en_US",
       type: "website",
       siteName: "BERKAY",
-      images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
+      images: [{ url: openGraphImagePath(locale), width: 1200, height: 630 }],
     },
     twitter: {
       card: "summary_large_image",

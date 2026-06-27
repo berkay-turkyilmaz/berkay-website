@@ -81,6 +81,8 @@ export function EnglishShell() {
     addXp,
     updateSettings,
     markFlashcardMastered,
+    markFlashcardWeak,
+    unmarkFlashcardWeak,
     markGrammarComplete,
     savePrepositionAnswer,
     addExamResult,
@@ -241,8 +243,11 @@ export function EnglishShell() {
             {activeTab === "flashcards" && (
               <FlashcardsTab
                 mastered={progress.masteredFlashcards}
+                weak={progress.weakFlashcards}
                 speechRate={progress.settings.speechRate}
                 onMaster={markFlashcardMastered}
+                onMarkWeak={markFlashcardWeak}
+                onUnmarkWeak={unmarkFlashcardWeak}
                 onXp={addXp}
               />
             )}

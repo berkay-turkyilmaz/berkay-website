@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion, type Variants } from "framer-motion";
-import { ArrowRight, ChevronDown, Cpu } from "lucide-react";
+import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
@@ -84,23 +84,22 @@ export function HeroSection() {
           variants={fadeUp}
           className="mt-10 flex w-full max-w-md flex-col gap-3 sm:max-w-none sm:flex-row sm:justify-center"
         >
-          <Link href="/projects" className="w-full sm:w-auto">
+          <Link href="/contact" className="w-full sm:w-auto">
             <Button
               size="lg"
               className="h-12 w-full rounded-full px-8 font-bold shadow-md shadow-primary/10 transition-all hover:shadow-lg hover:shadow-primary/15 active:scale-[0.98] sm:w-auto"
             >
-              {t("cta_projects")}
-              <ArrowRight className="ml-2 h-4 w-4" />
+              {t("cta_primary")}
             </Button>
           </Link>
-          <Link href="/ai-lab" className="w-full sm:w-auto">
+          <Link href="/projects" className="w-full sm:w-auto">
             <Button
               variant="outline"
               size="lg"
               className="h-12 w-full rounded-full border-border/40 bg-background/50 px-8 font-semibold backdrop-blur-sm transition-all hover:bg-secondary/50 sm:w-auto"
             >
-              <Cpu className="mr-2 h-4 w-4 text-muted-foreground" />
-              {t("cta_lab")}
+              <ArrowRight className="mr-2 h-4 w-4 text-muted-foreground" />
+              {t("cta_secondary")}
             </Button>
           </Link>
         </motion.div>

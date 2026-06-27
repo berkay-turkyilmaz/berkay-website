@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
-import { buildLanguageAlternates } from "@/lib/seo/page-metadata";
+import { buildLanguageAlternates, openGraphImagePath } from "@/lib/seo/page-metadata";
 import "./globals.css";
 
 // --- FONT CONFIGURATION ---
@@ -67,7 +67,7 @@ export async function generateMetadata({
       siteName: "BERKAY",
       images: [
         {
-          url: "/opengraph-image",
+          url: openGraphImagePath(locale),
           width: 1200,
           height: 630,
           alt: t("og_alt"),

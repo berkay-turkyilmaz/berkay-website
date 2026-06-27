@@ -19,6 +19,8 @@ export type AiLabSidebarProps = {
   isSidebarOpen: boolean;
   isMobile: boolean;
   activeSidebarId: string;
+  /** When false, hides the "New Chat" button (non-chat routes) */
+  showNewChat?: boolean;
   chatHistory: ChatHistoryItem[];
   showHistory: boolean;
   onToggleHistory: () => void;
@@ -41,6 +43,7 @@ export function AiLabSidebar({
   isSidebarOpen,
   isMobile,
   activeSidebarId,
+  showNewChat = true,
   chatHistory,
   showHistory,
   onToggleHistory,
@@ -82,16 +85,16 @@ export function AiLabSidebar({
         )}
       >
         {isSidebarOpen ? (
-          <Link href="/" className="flex items-center gap-2.5 group min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
             <div
               className={cn(
                 "w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0",
-                "bg-ailab-glass-06 ring-1 ring-inset ring-ailab-border-muted",
-                "transition-all duration-300 ease-in-out",
-                "group-hover:bg-ailab-glass-10 group-hover:ring-ailab-border-emphasis group-hover:shadow-ailab-accent-sm"
+                "bg-gradient-to-br from-ailab-accent/20 to-ailab-accent/5",
+                "ring-1 ring-inset ring-ailab-accent/30",
+                "shadow-[0_0_12px_var(--color-ailab-accent-soft)]"
               )}
             >
-              <span className="text-xs font-bold text-ailab-muted">
+              <span className="text-xs font-black text-ailab-accent">
                 {AI_AGENT_NAME.slice(0, 1)}
               </span>
             </div>
@@ -101,7 +104,7 @@ export function AiLabSidebar({
               </p>
               <p className="text-[10px] font-mono text-ailab-muted truncate">AI Lab · R&D</p>
             </div>
-          </Link>
+          </div>
         ) : (
           <button
             type="button"
@@ -109,48 +112,52 @@ export function AiLabSidebar({
             title={t("sidebar.expand")}
             className={cn(
               "mx-auto flex items-center justify-center w-8 h-8 rounded-xl flex-shrink-0",
-              "bg-ailab-glass-06 ring-1 ring-inset ring-ailab-border-muted text-ailab-muted",
+              "bg-gradient-to-br from-ailab-accent/20 to-ailab-accent/5",
+              "ring-1 ring-inset ring-ailab-accent/30",
+              "shadow-[0_0_12px_var(--color-ailab-accent-soft)]",
               "transition-all duration-300 ease-in-out",
-              "hover:bg-ailab-glass-10 hover:text-ailab-text hover:ring-ailab-border-emphasis hover:shadow-ailab-accent-sm"
+              "hover:from-ailab-accent/30 hover:ring-ailab-accent/50 hover:shadow-[0_0_20px_var(--color-ailab-accent-soft)]"
             )}
           >
-            <span className="text-xs font-bold">{AI_AGENT_NAME.slice(0, 1)}</span>
+            <span className="text-xs font-black text-ailab-accent">{AI_AGENT_NAME.slice(0, 1)}</span>
           </button>
         )}
       </div>
 
-      <div className="flex-shrink-0 px-2 py-2">
-        {isSidebarOpen ? (
-          <button
-            type="button"
-            onClick={onNewChat}
-            className={cn(
-              "w-full flex items-center gap-2 h-9 px-3 rounded-xl text-xs font-medium",
-              "text-ailab-muted ring-1 ring-inset ring-ailab-border-muted bg-ailab-glass-04",
-              "transition-all duration-300 ease-in-out",
-              "hover:bg-ailab-glass-08 hover:text-ailab-text hover:ring-ailab-accent-soft hover:shadow-ailab-accent-sm",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
-            )}
-          >
-            <SquarePen strokeWidth={AILAB_SIDEBAR_ICON_STROKE} className="w-3.5 h-3.5 flex-shrink-0" />
-            <span>{t("sidebar.new_chat")}</span>
-          </button>
-        ) : (
-          <button
-            type="button"
-            onClick={onNewChat}
-            title={t("sidebar.new_chat")}
-            className={cn(
-              "w-full flex items-center justify-center h-9 rounded-xl text-ailab-muted",
-              "transition-all duration-300 ease-in-out",
-              "hover:bg-ailab-glass-06 hover:text-ailab-text hover:shadow-ailab-accent-sm",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
-            )}
-          >
-            <SquarePen strokeWidth={AILAB_SIDEBAR_ICON_STROKE} className="w-4 h-4" />
-          </button>
-        )}
-      </div>
+      {showNewChat && (
+        <div className="flex-shrink-0 px-2 py-2">
+          {isSidebarOpen ? (
+            <button
+              type="button"
+              onClick={onNewChat}
+              className={cn(
+                "w-full flex items-center gap-2 h-9 px-3 rounded-xl text-xs font-medium",
+                "text-ailab-muted ring-1 ring-inset ring-ailab-border-muted bg-ailab-glass-04",
+                "transition-all duration-300 ease-in-out",
+                "hover:bg-ailab-glass-08 hover:text-ailab-text hover:ring-ailab-accent-soft hover:shadow-ailab-accent-sm",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
+              )}
+            >
+              <SquarePen strokeWidth={AILAB_SIDEBAR_ICON_STROKE} className="w-3.5 h-3.5 flex-shrink-0" />
+              <span>{t("sidebar.new_chat")}</span>
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onNewChat}
+              title={t("sidebar.new_chat")}
+              className={cn(
+                "w-full flex items-center justify-center h-9 rounded-xl text-ailab-muted",
+                "transition-all duration-300 ease-in-out",
+                "hover:bg-ailab-glass-06 hover:text-ailab-text hover:shadow-ailab-accent-sm",
+                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
+              )}
+            >
+              <SquarePen strokeWidth={AILAB_SIDEBAR_ICON_STROKE} className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      )}
 
       <div className="flex-1 overflow-y-auto px-2 pb-2 overflow-x-hidden ailab-scrollbar min-h-0">
         {sections.map((section) => (

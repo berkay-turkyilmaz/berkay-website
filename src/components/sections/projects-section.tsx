@@ -11,6 +11,7 @@ import {
   Clock,
   Zap,
   ExternalLink,
+  ArrowRight,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PROJECTS, type ProjectStatus } from "@/data/projects";
@@ -22,7 +23,12 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
 
   const config = {
     live: {
-      icon: <span className="relative flex h-2 w-2 mr-1.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" /></span>,
+      icon: (
+        <span className="relative flex h-2 w-2 mr-1.5">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+        </span>
+      ),
       label: t("status_live"),
       cls: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
     },
@@ -54,98 +60,138 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
 
 interface ProjectCardProps {
   project: (typeof PROJECTS)[0];
-  featured?: boolean;
   index: number;
+  size?: "large" | "normal";
 }
 
-function ProjectCard({ project, featured = false, index }: ProjectCardProps) {
+function ProjectCard({ project, index, size = "normal" }: ProjectCardProps) {
   const t = useTranslations("ProjectsPage");
 
   const isInternal =
     project.link && (project.link.startsWith("/") || project.link.startsWith("#"));
 
-  const LinkWrapper = ({ children }: { children: React.ReactNode }) => {
-    if (!project.link) return <>{children}</>;
-    if (isInternal) {
-      return (
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        <Link href={project.link as any}>
-          {children}
-        </Link>
-      );
-    }
-    return (
-      <a href={project.link} target="_blank" rel="noopener noreferrer">
-        {children}
-      </a>
-    );
-  };
-
-  return (
-    <motion.div
+  const cardContent = (
+    <motion.article
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 16 }}
       transition={{ duration: 0.4, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
-      className={`group relative bg-card border border-border rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5 ${
-        featured ? "md:col-span-2" : ""
-      }`}
+      className="group relative bg-card border border-border rounded-2xl overflow-hidden transition-all duration-300 hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/5 h-full flex flex-col cursor-pointer"
     >
-      {/* Glow on hover */}
-      <div className="absolute inset-0 bg-primary/3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+      {/* Visual gradient header */}
+      <div
+        className={`relative bg-gradient-to-br ${project.gradient} overflow-hidden flex-shrink-0`}
+        style={{ height: size === "large" ? "200px" : "160px" }}
+      >
+        {/* Grid pattern overlay */}
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+            backgroundSize: "32px 32px",
+          }}
+        />
 
-      <div className={`p-6 sm:p-7 flex flex-col h-full ${featured ? "gap-5" : "gap-4"}`}>
-        {/* Top row: status + link */}
-        <div className="flex items-start justify-between gap-3">
-          <StatusBadge status={project.status} />
-          {project.link && (
-            <LinkWrapper>
-              <button
-                type="button"
-                className="p-2 bg-secondary hover:bg-primary hover:text-primary-foreground rounded-xl transition-all duration-200 text-muted-foreground shrink-0 group/icon"
-                aria-label={t("view_project")}
+        {/* Tech chips floated on gradient */}
+        <div className="absolute inset-0 flex items-center justify-center p-5">
+          <div className="flex flex-wrap gap-2 justify-center">
+            {project.tech.slice(0, 4).map((tech) => (
+              <span
+                key={tech}
+                className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/30 text-white/80 backdrop-blur-sm border border-white/10"
               >
-                {isInternal ? (
-                  <ArrowUpRight className="w-3.5 h-3.5 group-hover/icon:translate-x-0.5 group-hover/icon:-translate-y-0.5 transition-transform" />
-                ) : (
-                  <ExternalLink className="w-3.5 h-3.5 group-hover/icon:translate-x-0.5 group-hover/icon:-translate-y-0.5 transition-transform" />
-                )}
-              </button>
-            </LinkWrapper>
-          )}
+                {tech}
+              </span>
+            ))}
+            {project.tech.length > 4 && (
+              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/30 text-white/60 backdrop-blur-sm border border-white/10">
+                +{project.tech.length - 4}
+              </span>
+            )}
+          </div>
         </div>
 
+        {/* Year badge */}
+        <div className="absolute top-3 left-4">
+          <span className="text-[10px] font-bold tabular-nums text-white/50">
+            {project.year}
+          </span>
+        </div>
+
+        {/* Arrow icon on hover */}
+        <div className="absolute top-3 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-1 group-hover:translate-x-0">
+          {isInternal ? (
+            <ArrowUpRight className={`w-4 h-4 ${project.accentClass}`} />
+          ) : (
+            <ExternalLink className={`w-4 h-4 ${project.accentClass}`} />
+          )}
+        </div>
+      </div>
+
+      {/* Card body */}
+      <div className="flex flex-col flex-1 p-5 sm:p-6 gap-4">
+        {/* Status */}
+        <StatusBadge status={project.status} />
+
         {/* Title + description */}
-        <div className="flex-1 space-y-2.5">
+        <div className="flex-1 space-y-2">
           <h3
             className={`font-bold text-foreground group-hover:text-primary transition-colors leading-tight ${
-              featured ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"
+              size === "large" ? "text-xl sm:text-2xl" : "text-lg"
             }`}
           >
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(t as any)(project.titleKey)}
           </h3>
-          <p className="text-sm text-muted-foreground leading-relaxed group-hover:text-foreground/80 transition-colors">
+          <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
             {(t as any)(project.descriptionKey)}
           </p>
         </div>
 
-        {/* Tech badges */}
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-          {project.tech.map((tech) => (
-            <Badge
-              key={tech}
-              variant="outline"
-              className="text-[10px] font-semibold px-2 py-0.5 border-border/60 text-muted-foreground group-hover:border-primary/30 group-hover:text-primary/80 transition-colors"
-            >
-              {tech}
-            </Badge>
-          ))}
+        {/* Case study link */}
+        <div className="flex items-center justify-between pt-2 border-t border-border/40">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <Link href={`/projects/${project.slug}` as any}>
+            <span className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors flex items-center gap-1 group/cs">
+              Case study
+              <ArrowRight className="w-3 h-3 group-hover/cs:translate-x-0.5 transition-transform" />
+            </span>
+          </Link>
+
+          {project.link && (
+            <>
+              {isInternal ? (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                <Link href={project.link as any}>
+                  <button
+                    type="button"
+                    className={`p-2 hover:bg-primary/10 rounded-xl transition-all duration-200 ${project.accentClass} shrink-0`}
+                    aria-label={t("view_project")}
+                  >
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                  </button>
+                </Link>
+              ) : (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`p-2 hover:bg-primary/10 rounded-xl transition-all duration-200 ${project.accentClass} shrink-0`}
+                  aria-label={t("view_project")}
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              )}
+            </>
+          )}
         </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
+
+  return cardContent;
 }
 
 // ─── Filter Tabs ──────────────────────────────────────────────────────────────
@@ -214,8 +260,8 @@ export function ProjectsSection() {
   const filtered =
     filter === "all" ? PROJECTS : PROJECTS.filter((p) => p.status === filter);
 
-  const featuredVisible = filtered.filter((p) => p.featured);
-  const nonFeaturedVisible = filtered.filter((p) => !p.featured);
+  const featuredFiltered = filtered.filter((p) => p.featured);
+  const nonFeaturedFiltered = filtered.filter((p) => !p.featured);
 
   return (
     <section className="space-y-8">
@@ -229,37 +275,37 @@ export function ProjectsSection() {
       </div>
 
       <AnimatePresence mode="popLayout">
-        <div className="space-y-4">
-          {/* Featured row (2-column on md+) */}
-          {featuredVisible.length > 0 && (
+        <div className="space-y-5">
+          {/* Featured: first one large, rest normal in a row */}
+          {featuredFiltered.length > 0 && (
             <motion.div
               key={`featured-${filter}`}
               layout
-              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
             >
-              {featuredVisible.map((project, i) => (
+              {featuredFiltered.map((project, i) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
-                  featured={false}
+                  size={i === 0 ? "large" : "normal"}
                   index={i}
                 />
               ))}
             </motion.div>
           )}
 
-          {/* Non-featured row (3-column on lg+) */}
-          {nonFeaturedVisible.length > 0 && (
+          {/* Non-featured: smaller grid */}
+          {nonFeaturedFiltered.length > 0 && (
             <motion.div
               key={`regular-${filter}`}
               layout
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"
             >
-              {nonFeaturedVisible.map((project, i) => (
+              {nonFeaturedFiltered.map((project, i) => (
                 <ProjectCard
                   key={project.id}
                   project={project}
-                  index={featuredVisible.length + i}
+                  index={featuredFiltered.length + i}
                 />
               ))}
             </motion.div>

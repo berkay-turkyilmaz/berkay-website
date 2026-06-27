@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Settings, ChevronDown, LogOut } from "lucide-react";
+import { User, Settings, ChevronDown, ArrowUpLeft, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { WorkspaceSettings } from "../types";
 
@@ -111,14 +111,20 @@ export function AiLabUserMenu({
                 <Settings className="w-3.5 h-3.5 flex-shrink-0" />
                 <span className="text-xs font-medium">{t("settings")}</span>
               </button>
+            </div>
 
+            <div className="p-1 border-t border-ailab-border-muted mt-0.5">
               <Link
                 href="/"
                 onClick={() => setOpen(false)}
-                className="flex items-center gap-2.5 px-3 py-2 rounded-lg w-full text-ailab-text/65 transition-[background-color,color] duration-300 ease-out hover:bg-ailab-glass-07 hover:text-ailab-text/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
+                className="flex items-center gap-2.5 px-3 py-2 rounded-lg w-full text-ailab-muted transition-[background-color,color] duration-300 ease-out hover:bg-ailab-glass-06 hover:text-ailab-text/85 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
               >
-                <LogOut className="w-3.5 h-3.5 flex-shrink-0" />
-                <span className="text-xs font-medium">{t("back_home")}</span>
+                <ArrowUpLeft className="w-3.5 h-3.5 flex-shrink-0" />
+                <div className="flex-1">
+                  <span className="text-xs font-medium block">{t("back_home")}</span>
+                  <span className="text-[9px] text-ailab-muted/60">berkay.dev</span>
+                </div>
+                <Home className="w-3 h-3 text-ailab-muted/40 flex-shrink-0" />
               </Link>
             </div>
           </motion.div>

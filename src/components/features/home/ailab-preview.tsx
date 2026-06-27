@@ -3,7 +3,6 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
 import { motion } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
 import N8NCanvas from "@/components/features/home/n8n-canvas";
 
 export function AiLabPreview() {
@@ -28,10 +27,9 @@ export function AiLabPreview() {
         </div>
         <Link
           href="/ai-lab"
-          className="group inline-flex items-center gap-2.5 self-start rounded-full border border-border/60 bg-background px-5 py-2.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:border-primary/25 hover:bg-secondary/40 md:self-auto"
+          className="group inline-flex items-center gap-2 self-start rounded-full border border-border/60 bg-background px-5 py-2.5 text-sm font-bold text-foreground shadow-sm transition-all hover:border-primary/25 hover:bg-secondary/40 md:self-auto"
         >
           {t("cta_lab")}
-          <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </Link>
       </div>
 

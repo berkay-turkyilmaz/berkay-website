@@ -34,7 +34,7 @@ import type {
 } from "../types";
 import { useSpeech } from "../hooks/use-speech";
 import { XP_REWARDS } from "../constants";
-import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
+import { buildSmartDeck, buildWeightedTabooDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
 import { GAME_THEMES } from "../lib/game-themes";
 import { themeAccentText, themeBtnPrimary, themeChip, themeProgressBar, themeSurfaceBanner } from "../lib/theme-utils";
 import { ep } from "../styles";
@@ -134,7 +134,12 @@ export function TabooGameTab({
       difficulty === "all"
         ? `taboo-${category}`
         : `taboo-${category}-${difficulty}`;
-    return buildSmartDeck(pool, Math.min(roundSize, pool.length), deckKey);
+    const count = Math.min(roundSize, pool.length);
+    // When "all" difficulties selected, use weighted distribution (5% easy, 45% med, 50% hard)
+    if (difficulty === "all") {
+      return buildWeightedTabooDeck(pool, count, deckKey);
+    }
+    return buildSmartDeck(pool, count, deckKey);
   }, [filteredPool, roundSize, category, difficulty]);
 
   const dailySeenCount = useMemo(

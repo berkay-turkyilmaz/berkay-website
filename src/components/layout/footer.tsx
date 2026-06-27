@@ -1,7 +1,6 @@
 "use client";
 
-import { Github, Linkedin, Mail, Cpu, ArrowUpRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Github, Linkedin, Mail, Cpu } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { SiteLogo } from "@/components/layout/site-logo";
@@ -11,93 +10,101 @@ export function Footer() {
   const t = useTranslations("Footer");
   const tNav = useTranslations("Navigation");
 
-  const socialLinks = [
-    { icon: Github, href: siteConfig.github, label: "GitHub" },
-    { icon: Linkedin, href: siteConfig.linkedin, label: "LinkedIn" },
-    { icon: Mail, href: `mailto:${siteConfig.email}`, label: "Email" },
+  const siteLinks = [
+    { label: tNav("home"),     href: "/" },
+    { label: tNav("about"),    href: "/about" },
+    { label: tNav("projects"), href: "/projects" },
+    { label: tNav("blog"),     href: "/blog" },
+    { label: tNav("lab"),      href: "/ai-lab" },
+    { label: tNav("resume"),   href: "/resume" },
+    { label: tNav("contact"),  href: "/contact" },
   ];
 
-  // Site İçi Linkler
-  const siteLinks = [
-    { label: tNav("home"), href: "/" },
-    { label: tNav("projects"), href: "/projects" },
-    { label: tNav("blog"), href: "/blog" },
-    { label: tNav("lab"), href: "/ai-lab" },
-    { label: tNav("contact"), href: "/contact" },
+  const socialLinks = [
+    { icon: Github,   href: siteConfig.github,               label: "GitHub" },
+    { icon: Linkedin, href: siteConfig.linkedin,             label: "LinkedIn" },
+    { icon: Mail,     href: `mailto:${siteConfig.email}`,    label: "Email" },
   ];
 
   return (
-    <footer className="relative w-full border-t border-border/40 bg-background overflow-hidden">
-      
-      {/* Dekoratif Gradient Çizgi */}
-      <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+    <footer className="w-full border-t border-border/40 bg-background">
+      {/* Dekoratif üst çizgi */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
-      <div className="container mx-auto px-6 pt-16 pb-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8">
-          
-          {/* Sütun 1: Marka & Durum (4 birim) */}
-          <div className="md:col-span-5 space-y-6">
+      <div className="container mx-auto px-6 lg:px-12 py-12 lg:py-16">
+        {/* ── Ana Grid ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+
+          {/* Sütun 1: Marka */}
+          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
             <SiteLogo />
-            
-            <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
+            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
               {t("description")}
             </p>
-            
+            {/* Sosyal ikonlar */}
+            <div className="flex items-center gap-2 pt-1">
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
+                  <a
+                    key={social.label}
+                    href={social.href}
+                    target={social.href.startsWith("mailto") ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    aria-label={social.label}
+                    className="flex items-center justify-center w-9 h-9 rounded-xl border border-border/50 bg-secondary/30 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
+                  >
+                    <Icon className="w-4 h-4" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
 
-          {/* Sütun 2: Linkler (3 birim) */}
-          <div className="md:col-span-3 space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-foreground/80">{t("explore")}</h4>
-            <nav className="flex flex-col gap-3 text-sm text-muted-foreground font-medium">
+          {/* Sütun 2: Sistem Haritası */}
+          <div className="space-y-4">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+              {t("explore")}
+            </h4>
+            <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5">
               {siteLinks.map((item) => (
-                <Link 
-                  key={item.href} 
-                  href={item.href} 
-                  className="hover:text-primary hover:translate-x-1 transition-all flex items-center gap-1 group w-fit"
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors duration-150 truncate"
                 >
-                  {item.label} 
-                  <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
+                  {item.label}
                 </Link>
               ))}
             </nav>
           </div>
 
-          {/* Sütun 3: Sosyal & İletişim (4 birim) */}
-          <div className="md:col-span-4 space-y-6">
-            <h4 className="text-sm font-bold uppercase tracking-widest text-foreground/80">{t("stay_connected")}</h4>
-            
-            <div className="flex gap-3">
-              {socialLinks.map((social) => (
-                <a 
-                  key={social.label} 
-                  href={social.href} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  aria-label={social.label} // Erişilebilirlik için kritik
-                >
-                  <Button variant="outline" size="icon" className="h-10 w-10 rounded-xl hover:bg-primary hover:text-primary-foreground hover:-translate-y-1 transition-all shadow-sm border-border/50 bg-background">
-                    <social.icon className="h-4 w-4" />
-                  </Button>
-                </a>
-              ))}
-            </div>
-            
-            <p className="text-xs text-muted-foreground leading-relaxed">
-              {t("project_idea")} <br />
-              <a href={`mailto:${siteConfig.email}`} className="text-primary hover:underline font-semibold">
+          {/* Sütun 3: İletişim */}
+          <div className="space-y-4">
+            <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
+              {t("stay_connected")}
+            </h4>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {t("project_idea")}{" "}
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="text-primary font-semibold hover:underline underline-offset-2 break-all"
+              >
                 {siteConfig.email}
-              </a> {t("write_me")}.
+              </a>
             </p>
           </div>
         </div>
 
-        {/* Alt Bilgi */}
-        <div className="mt-16 pt-8 border-t border-border/40 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] font-bold text-muted-foreground uppercase tracking-[0.2em]">
-          <p>{t("copyright", { year: new Date().getFullYear() })}</p>
-          <div className="flex items-center gap-4">
-            <span className="flex items-center gap-2 hover:text-primary transition-colors cursor-default group">
-              {t("powered_by")} <Cpu className="h-3 w-3 group-hover:animate-pulse text-primary" /> {t("stack_label")}
-            </span>
+        {/* ── Alt Bar ── */}
+        <div className="mt-10 pt-6 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">
+            {t("copyright", { year: new Date().getFullYear() })}
+          </p>
+          <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">
+            <Cpu className="h-3 w-3 text-primary/70 shrink-0" />
+            <span>{t("powered_by")}</span>
+            <span className="text-primary/70">{t("stack_label")}</span>
           </div>
         </div>
       </div>

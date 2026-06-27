@@ -90,6 +90,9 @@ export function WorkspaceSettingsPanel({
     { value: "tr" as const, label: "TR" },
     { value: "en" as const, label: "EN" },
     { value: "de" as const, label: "DE" },
+    { value: "es" as const, label: "ES" },
+    { value: "fr" as const, label: "FR" },
+    { value: "ja" as const, label: "JA" },
   ];
 
   return (
@@ -233,7 +236,7 @@ export function WorkspaceSettingsPanel({
 
           <Group label={t("language")}>
             <Row>
-              <p className="mb-2 text-[11px] leading-relaxed text-ailab-muted">{t("language_bex_hint")}</p>
+              <p className="mb-2.5 text-[11px] leading-relaxed text-ailab-muted">{t("language_bex_hint")}</p>
               <div className="grid grid-cols-4 gap-1.5">
                 {langOptions.map((l) => {
                   const sel = settings.language === l.value;
@@ -241,7 +244,7 @@ export function WorkspaceSettingsPanel({
                     <button
                       key={l.value}
                       type="button"
-                      onClick={() => onUpdate({ language: l.value })}
+                      onClick={() => onUpdate({ language: l.value as typeof settings.language })}
                       className={cn(
                         "rounded-lg py-2.5 text-xs font-semibold transition-all ring-1 ring-inset",
                         sel
@@ -254,6 +257,30 @@ export function WorkspaceSettingsPanel({
                   );
                 })}
               </div>
+            </Row>
+          </Group>
+
+          <Group label={t("section_shortcuts")}>
+            <Row className="space-y-2">
+              {[
+                { label: t("shortcut_send"), keys: ["Enter"] },
+                { label: t("shortcut_newline"), keys: ["Shift", "Enter"] },
+                { label: t("shortcut_escape"), keys: ["Esc"] },
+              ].map((shortcut) => (
+                <div key={shortcut.label} className="flex items-center justify-between">
+                  <span className="text-xs text-ailab-muted">{shortcut.label}</span>
+                  <div className="flex items-center gap-1">
+                    {shortcut.keys.map((k, i) => (
+                      <span key={`${shortcut.label}-${k}`} className="flex items-center gap-1">
+                        {i > 0 && <span className="text-[10px] text-ailab-muted/50">+</span>}
+                        <kbd className="px-1.5 py-0.5 rounded-md text-[10px] font-mono font-semibold text-ailab-muted bg-ailab-glass-08 ring-1 ring-inset ring-ailab-border-muted">
+                          {k}
+                        </kbd>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </Row>
           </Group>
 
