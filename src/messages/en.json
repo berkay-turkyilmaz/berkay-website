@@ -1031,6 +1031,7 @@
       "play_again": "Play again",
       "back": "Menu",
       "score_label": "Score",
+      "current_letter": "Current letter",
       "streak": "{n} streak!",
       "stats": {
         "games": "Games",

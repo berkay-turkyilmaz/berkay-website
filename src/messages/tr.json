@@ -1031,6 +1031,7 @@
       "play_again": "Tekrar oyna",
       "back": "Menü",
       "score_label": "Skor",
+      "current_letter": "Sıradaki harf",
       "streak": "{n} seri!",
       "stats": {
         "games": "Oyun",

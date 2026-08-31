@@ -56,11 +56,13 @@ type Props = {
 };
 
 function letterBg(state: LetterState, isCurrent: boolean): string {
-  if (state === "correct") return "bg-emerald-500 text-white border-emerald-600 shadow-emerald-500/30";
-  if (state === "wrong") return "bg-rose-600 text-white border-rose-700";
-  if (state === "passed") return "bg-amber-400 text-amber-950 border-amber-500";
-  if (isCurrent) return "bg-blue-600 text-white border-blue-700 ring-2 ring-blue-300 scale-110 shadow-lg shadow-blue-500/40";
-  return "bg-rose-500 text-white border-rose-600";
+  if (state === "correct")
+    return "bg-emerald-500 text-white border-emerald-400/60 shadow-sm shadow-emerald-500/20";
+  if (state === "wrong") return "bg-rose-500/90 text-white border-rose-400/50";
+  if (state === "passed") return "bg-amber-50 text-amber-700 border-amber-200/80";
+  if (isCurrent)
+    return "bg-blue-600 text-white border-blue-500 shadow-lg shadow-blue-500/30 scale-[1.18] z-10";
+  return "bg-white/90 text-slate-400 border-slate-200/70 shadow-sm backdrop-blur-sm";
 }
 
 export function PassaparolaGameTab({
@@ -143,18 +145,18 @@ export function PassaparolaGameTab({
       nextDeferred: number[]
     ) => {
       if (nextQueuePos >= nextQueue.length) {
-      if (nextDeferred.length > 0) {
-        const first = nextDeferred[0]!;
-        setQueue([...nextDeferred]);
-        setDeferred([]);
-        setQueuePos(0);
-        setLetterStates(
-          nextStates.map((s, i) =>
-            i === first ? "active" : s === "active" ? "pending" : s
-          )
-        );
-        return;
-      }
+        if (nextDeferred.length > 0) {
+          const first = nextDeferred[0]!;
+          setQueue([...nextDeferred]);
+          setDeferred([]);
+          setQueuePos(0);
+          setLetterStates(
+            nextStates.map((s, i) =>
+              i === first ? "active" : s === "active" ? "pending" : s
+            )
+          );
+          return;
+        }
         endRound(nextStats, getMissed(nextStates));
         return;
       }
@@ -281,15 +283,15 @@ export function PassaparolaGameTab({
   };
 
   const clueText = useMemo(() => {
-    if (revealAnswer && feedback) {
-      return revealAnswer;
-    }
+    if (revealAnswer && feedback) return revealAnswer;
     if (!currentQuestion) return "";
-    const clue = isTr ? currentQuestion.clueTr : currentQuestion.clueEn;
-    return `${clue} —${currentQuestion.letter}—`;
+    return isTr ? currentQuestion.clueTr : currentQuestion.clueEn;
   }, [currentQuestion, isTr, revealAnswer, feedback]);
 
+  const activeLetter = currentQuestion?.letter ?? "A";
+
   const timerPct = Math.round((timeLeft / roundDuration) * 100);
+  const lettersDone = roundStats.correct + roundStats.wrong + roundStats.passed;
   const difficulties = ["all", "easy", "medium", "hard"] as const;
 
   if (phase === "setup") {
@@ -433,152 +435,214 @@ export function PassaparolaGameTab({
   }
 
   return (
-    <div className={cn(ep.gameFullscreen, "md:relative md:inset-auto")}>
-      <div className="flex-1 flex flex-col max-w-lg mx-auto w-full px-3 py-3 md:py-4 gap-3">
-        {/* Top bar */}
-        <div className="flex items-center justify-between gap-2 shrink-0">
+    <div className={cn(ep.gameFullscreen, "md:relative md:inset-auto bg-[#f1f5f9] md:bg-transparent")}>
+      <div className="flex-1 flex flex-col max-w-5xl mx-auto w-full px-4 sm:px-6 py-4 md:py-8 gap-6 md:gap-8">
+        {/* Header */}
+        <div className="flex items-center justify-between gap-3 shrink-0">
           <button
             type="button"
             onClick={quitToSetup}
-            className={cn(ep.clickable, "p-2 rounded-lg text-slate-500 hover:bg-slate-100")}
+            className={cn(
+              ep.clickable,
+              "flex items-center justify-center w-10 h-10 rounded-full bg-white/80 border border-slate-200/80 text-slate-500 hover:bg-white hover:text-slate-700 shadow-sm"
+            )}
             aria-label={t("quit")}
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
-          <div className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-            <Clock className="w-4 h-4 text-blue-600" />
-            <span className="tabular-nums">{timeLeft}s</span>
+
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/80 border border-slate-200/80 shadow-sm">
+              <Clock className={cn("w-3.5 h-3.5", timeLeft <= 15 ? "text-rose-500" : "text-blue-500")} />
+              <span
+                className={cn(
+                  "text-sm font-semibold tabular-nums",
+                  timeLeft <= 15 ? "text-rose-600" : "text-slate-700"
+                )}
+              >
+                {timeLeft}s
+              </span>
+            </div>
+            <span className={cn(themeStatBadge(PP_THEME), "shadow-sm")}>
+              {roundStats.correct}/26
+            </span>
           </div>
-          <span className={themeStatBadge(PP_THEME)}>
-            {roundStats.correct}/{26}
-          </span>
         </div>
 
-        <div className="h-1.5 rounded-full bg-slate-200 overflow-hidden shrink-0">
+        {/* Timer bar */}
+        <div className="h-1 rounded-full bg-slate-200/80 overflow-hidden shrink-0 -mt-2">
           <div
-            className={cn("h-full transition-all duration-1000", themeProgressBar(PP_THEME))}
+            className={cn(
+              "h-full transition-all duration-1000 ease-linear",
+              timeLeft <= 15 ? "bg-rose-500" : themeProgressBar(PP_THEME)
+            )}
             style={{ width: `${timerPct}%` }}
           />
         </div>
 
-        {/* Letter ring */}
-        <div className="relative flex-1 min-h-[220px] max-h-[min(52vw,320px)] mx-auto w-full aspect-square">
-          <div className="absolute inset-[8%] rounded-full border-2 border-dashed border-slate-200/80" />
-          {PASSAPAROLA_LETTERS.map((letter, i) => {
-            const pos = letterPosition(i);
-            const state = letterStates[i] ?? "pending";
-            const isCurrent = i === currentIndex && !feedback;
-            return (
-              <div
-                key={letter}
-                className="absolute -translate-x-1/2 -translate-y-1/2 transition-transform duration-200"
-                style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
-              >
+        {/* Main grid: wheel + panel */}
+        <div className="flex-1 grid md:grid-cols-[minmax(0,1fr)_minmax(280px,360px)] lg:grid-cols-[minmax(0,1fr)_380px] gap-8 md:gap-10 lg:gap-12 items-center min-h-0">
+          {/* Letter ring */}
+          <div className="relative w-full max-w-[min(100%,440px)] mx-auto aspect-square">
+            <div className="absolute inset-[6%] rounded-full bg-gradient-to-br from-white to-slate-50 border border-slate-200/60 shadow-[inset_0_2px_12px_rgba(15,23,42,0.04)]" />
+            <div className="absolute inset-[10%] rounded-full border border-dashed border-slate-200/50" />
+
+            {PASSAPAROLA_LETTERS.map((letter, i) => {
+              const pos = letterPosition(i, 26, 44);
+              const state = letterStates[i] ?? "pending";
+              const isCurrent = i === currentIndex && !feedback;
+              return (
                 <div
+                  key={letter}
+                  className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-300"
+                  style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
+                >
+                  <div
+                    className={cn(
+                      "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] md:text-xs font-bold border transition-all duration-300",
+                      letterBg(state, isCurrent)
+                    )}
+                  >
+                    {letter}
+                  </div>
+                </div>
+              );
+            })}
+
+            <div className="absolute inset-[30%] rounded-full bg-white/70 backdrop-blur-md border border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] flex flex-col items-center justify-center text-center">
+              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-0.5">
+                {t("score_label")}
+              </p>
+              <p className={cn("text-4xl font-black tabular-nums leading-none", themeAccentText(PP_THEME))}>
+                {roundStats.correct}
+              </p>
+              {streak > 1 && (
+                <p className="text-[11px] text-amber-600 font-semibold mt-2 px-2 py-0.5 rounded-full bg-amber-50">
+                  {t("streak", { n: streak })}
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Interaction panel */}
+          <div className="flex flex-col gap-4 md:gap-5 w-full max-w-md md:max-w-none mx-auto md:mx-0">
+            {/* Active letter + progress */}
+            <div className="flex items-center gap-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeLetter + (feedback ?? "")}
+                  initial={{ scale: 0.85, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.85, opacity: 0 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 28 }}
                   className={cn(
-                    "w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold border shadow-sm transition-all duration-200",
-                    letterBg(state, isCurrent)
+                    "w-16 h-16 sm:w-[4.5rem] sm:h-[4.5rem] rounded-2xl flex items-center justify-center text-3xl sm:text-4xl font-black shrink-0 shadow-lg",
+                    feedback === "correct"
+                      ? "bg-emerald-500 text-white shadow-emerald-500/25"
+                      : feedback === "wrong"
+                        ? "bg-rose-500 text-white shadow-rose-500/25"
+                        : "bg-blue-600 text-white shadow-blue-600/25"
                   )}
                 >
-                  {letter}
-                </div>
+                  {activeLetter}
+                </motion.div>
+              </AnimatePresence>
+              <div className="min-w-0 flex-1">
+                <p className="text-xs font-semibold uppercase tracking-widest text-slate-400 mb-1">
+                  {feedback === "correct"
+                    ? t("correct")
+                    : feedback === "wrong"
+                      ? t("wrong")
+                      : t("current_letter")}
+                </p>
+                <p className="text-sm text-slate-500 leading-snug tabular-nums">
+                  {lettersDone} / 26
+                </p>
               </div>
-            );
-          })}
-          <div className="absolute inset-[28%] rounded-full bg-gradient-to-br from-slate-100 to-slate-50 border border-slate-200 flex flex-col items-center justify-center text-center p-3">
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1">
-              {t("score_label")}
-            </p>
-            <p className={cn("text-3xl font-black tabular-nums", themeAccentText(PP_THEME))}>
-              {roundStats.correct}
-            </p>
-            {streak > 1 && (
-              <p className="text-xs text-amber-600 font-semibold mt-1">
-                {t("streak", { n: streak })}
-              </p>
-            )}
+            </div>
+
+            {/* Clue card */}
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentQuestion?.id ?? "empty"}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.25 }}
+                className={cn(
+                  "rounded-2xl border p-5 sm:p-6 shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition-colors duration-300",
+                  feedback === "correct"
+                    ? "bg-emerald-50 border-emerald-200/80"
+                    : feedback === "wrong"
+                      ? "bg-rose-50 border-rose-200/80"
+                      : "bg-white border-slate-200/80"
+                )}
+              >
+                <p
+                  className={cn(
+                    "text-base sm:text-lg leading-relaxed font-medium",
+                    feedback === "correct"
+                      ? "text-emerald-800 capitalize"
+                      : feedback === "wrong"
+                        ? "text-rose-800 capitalize"
+                        : "text-slate-700"
+                  )}
+                >
+                  {clueText}
+                </p>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Input card */}
+            <form
+              onSubmit={handleSubmit}
+              className="rounded-2xl bg-white border border-slate-200/80 p-4 sm:p-5 shadow-[0_12px_40px_rgba(15,23,42,0.05)] space-y-4 pb-[max(1rem,env(safe-area-inset-bottom))]"
+            >
+              <input
+                ref={inputRef}
+                type="text"
+                value={guess}
+                onChange={(e) => setGuess(e.target.value)}
+                disabled={!!feedback}
+                placeholder={t("input_placeholder")}
+                autoComplete="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                className={cn(
+                  "w-full px-4 py-3.5 rounded-xl bg-slate-50/80 border border-slate-200/80 text-base text-slate-800 placeholder:text-slate-400",
+                  "focus:outline-none focus:bg-white focus:border-blue-400 focus:ring-4 focus:ring-blue-500/10",
+                  "disabled:opacity-50 transition-all"
+                )}
+              />
+              <div className="flex gap-3">
+                <Pressable
+                  type="button"
+                  onClick={() => processResult("pass")}
+                  disabled={!!feedback}
+                  className={cn(
+                    ep.btnSecondary,
+                    "flex-1 py-3 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold text-slate-600 border-slate-200/80 hover:bg-slate-50"
+                  )}
+                >
+                  <SkipForward className="w-4 h-4 text-amber-600" />
+                  {t("pass")}
+                </Pressable>
+                <Pressable
+                  type="submit"
+                  disabled={!!feedback || !guess.trim()}
+                  className={cn(
+                    "flex-[1.2] py-3 rounded-xl flex items-center justify-center gap-2 text-sm font-semibold text-white",
+                    "bg-blue-600 hover:bg-blue-700 shadow-md shadow-blue-600/20",
+                    "disabled:opacity-40 disabled:shadow-none transition-all active:scale-[0.98]"
+                  )}
+                >
+                  <Check className="w-4 h-4" />
+                  {t("submit")}
+                </Pressable>
+              </div>
+            </form>
           </div>
         </div>
-
-        {/* Clue box */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentQuestion?.id ?? "empty"}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className={cn(
-              "rounded-2xl p-5 text-center shadow-lg shrink-0 transition-colors duration-300",
-              feedback === "correct"
-                ? "bg-emerald-600"
-                : feedback === "wrong"
-                  ? "bg-rose-600"
-                  : "bg-gradient-to-br from-blue-700 to-blue-900"
-            )}
-          >
-            <p
-              className={cn(
-                "text-lg sm:text-xl font-bold leading-snug",
-                feedback ? "text-white capitalize" : "text-amber-300"
-              )}
-            >
-              {clueText}
-            </p>
-            {feedback === "correct" && (
-              <p className="text-emerald-100 text-sm mt-2 flex items-center justify-center gap-1">
-                <Check className="w-4 h-4" /> {t("correct")}
-              </p>
-            )}
-            {feedback === "wrong" && (
-              <p className="text-rose-100 text-sm mt-2 flex items-center justify-center gap-1">
-                <X className="w-4 h-4" /> {t("wrong")}
-              </p>
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        {/* Input */}
-        <form onSubmit={handleSubmit} className="space-y-3 shrink-0 pb-[env(safe-area-inset-bottom)]">
-          <input
-            ref={inputRef}
-            type="text"
-            value={guess}
-            onChange={(e) => setGuess(e.target.value)}
-            disabled={!!feedback}
-            placeholder={t("input_placeholder")}
-            autoComplete="off"
-            autoCapitalize="off"
-            spellCheck={false}
-            className={cn(
-              "w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 text-base font-medium",
-              "focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20",
-              "disabled:opacity-60 disabled:bg-slate-50"
-            )}
-          />
-          <div className="grid grid-cols-2 gap-3">
-            <Pressable
-              type="button"
-              onClick={() => processResult("pass")}
-              disabled={!!feedback}
-              className={cn(
-                ep.btnSecondary,
-                "py-3.5 rounded-xl flex items-center justify-center gap-2 font-semibold border-amber-200 text-amber-800 hover:bg-amber-50"
-              )}
-            >
-              <SkipForward className="w-4 h-4" /> {t("pass")}
-            </Pressable>
-            <Pressable
-              type="submit"
-              disabled={!!feedback || !guess.trim()}
-              className={cn(
-                ep.btnPrimary,
-                "py-3.5 rounded-xl flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 shadow-blue-600/20"
-              )}
-            >
-              <Check className="w-4 h-4" /> {t("submit")}
-            </Pressable>
-          </div>
-        </form>
       </div>
     </div>
   );
