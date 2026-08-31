@@ -22,6 +22,7 @@ import type {
   HeadsUpRoundStats,
   CharadesRoundStats,
   CategoryBlitzRoundStats,
+  PassaparolaRoundStats,
   ExamMode,
 } from "../types";
 import { useEnglishProgress } from "../hooks/use-english-progress";
@@ -40,6 +41,7 @@ import { TabooGameTab } from "./taboo-game-tab";
 import { HeadsUpGameTab } from "./heads-up-game-tab";
 import { CharadesGameTab } from "./charades-game-tab";
 import { CategoryBlitzGameTab } from "./category-blitz-game-tab";
+import { PassaparolaGameTab } from "./passaparola-game-tab";
 import { GamesHubTab } from "./games-hub-tab";
 import { SettingsPanel } from "./settings-panel";
 
@@ -90,6 +92,7 @@ export function EnglishShell() {
     updateHeadsUpStats,
     updateCharadesStats,
     updateCategoryBlitzStats,
+    updatePassaparolaStats,
     updateProgress,
     resetProgress,
   } = useEnglishProgress();
@@ -158,6 +161,16 @@ export function EnglishShell() {
     });
   };
 
+  const handlePassaparolaRoundComplete = (stats: PassaparolaRoundStats) => {
+    const prev = progress.passaparolaStats;
+    updatePassaparolaStats({
+      gamesPlayed: prev.gamesPlayed + 1,
+      wordsCorrect: prev.wordsCorrect + stats.correct,
+      bestRound: Math.max(prev.bestRound, stats.correct),
+      bestStreak: Math.max(prev.bestStreak, stats.correct),
+    });
+  };
+
   const navigate = useCallback(
     (tab: EnglishTab) => {
       setShowMore(false);
@@ -188,6 +201,8 @@ export function EnglishShell() {
     updateSettings({ charadesRoundDuration });
   const updateCategoryBlitzDuration = (categoryBlitzRoundDuration: number) =>
     updateSettings({ categoryBlitzRoundDuration });
+  const updatePassaparolaDuration = (passaparolaRoundDuration: number) =>
+    updateSettings({ passaparolaRoundDuration });
 
   if (!loaded) {
     return (
@@ -319,6 +334,16 @@ export function EnglishShell() {
                 onRoundDurationChange={updateCategoryBlitzDuration}
                 stats={progress.categoryBlitzStats}
                 onRoundComplete={handleCategoryBlitzRoundComplete}
+                onXp={addXp}
+                onPlayingChange={setGamePlaying}
+              />
+            )}
+            {activeTab === "passaparola" && (
+              <PassaparolaGameTab
+                roundDuration={progress.settings.passaparolaRoundDuration}
+                onRoundDurationChange={updatePassaparolaDuration}
+                stats={progress.passaparolaStats}
+                onRoundComplete={handlePassaparolaRoundComplete}
                 onXp={addXp}
                 onPlayingChange={setGamePlaying}
               />

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { DEFAULT_PROGRESS, PROGRESS_STORAGE_KEY, XP_PER_LEVEL } from "../constants";
+import { DEFAULT_PROGRESS, LEGACY_PROGRESS_KEYS, PROGRESS_STORAGE_KEY, XP_PER_LEVEL } from "../constants";
 import type { EnglishProgress, ExamResult } from "../types";
 
 function todayKey(): string {
@@ -15,7 +15,16 @@ function calcLevel(xp: number): number {
 function loadProgress(): EnglishProgress {
   if (typeof window === "undefined") return DEFAULT_PROGRESS;
   try {
-    const raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    let raw = localStorage.getItem(PROGRESS_STORAGE_KEY);
+    if (!raw) {
+      for (const legacyKey of LEGACY_PROGRESS_KEYS) {
+        const legacy = localStorage.getItem(legacyKey);
+        if (legacy) {
+          raw = legacy;
+          break;
+        }
+      }
+    }
     if (!raw) return DEFAULT_PROGRESS;
     const parsed = JSON.parse(raw) as Partial<EnglishProgress>;
     return {
@@ -30,6 +39,10 @@ function loadProgress(): EnglishProgress {
         ...(parsed.categoryBlitzStats ??
           (parsed as { emojiCluesStats?: EnglishProgress["categoryBlitzStats"] }).emojiCluesStats),
       },
+      passaparolaStats: {
+        ...DEFAULT_PROGRESS.passaparolaStats,
+        ...parsed.passaparolaStats,
+      },
       settings: {
         ...DEFAULT_PROGRESS.settings,
         ...parsed.settings,
@@ -38,6 +51,9 @@ function loadProgress(): EnglishProgress {
           (parsed.settings as { emojiCluesRoundDuration?: number } | undefined)
             ?.emojiCluesRoundDuration ??
           DEFAULT_PROGRESS.settings.categoryBlitzRoundDuration,
+        passaparolaRoundDuration:
+          parsed.settings?.passaparolaRoundDuration ??
+          DEFAULT_PROGRESS.settings.passaparolaRoundDuration,
       },
     };
   } catch {
@@ -256,6 +272,20 @@ export function useEnglishProgress() {
     []
   );
 
+  const updatePassaparolaStats = useCallback(
+    (patch: Partial<EnglishProgress["passaparolaStats"]>) => {
+      setProgress((prev) => {
+        const next = {
+          ...prev,
+          passaparolaStats: { ...prev.passaparolaStats, ...patch },
+        };
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
+        return next;
+      });
+    },
+    []
+  );
+
   return {
     progress,
     loaded,
@@ -272,6 +302,7 @@ export function useEnglishProgress() {
     updateHeadsUpStats,
     updateCharadesStats,
     updateCategoryBlitzStats,
+    updatePassaparolaStats,
     resetProgress,
   };
 }

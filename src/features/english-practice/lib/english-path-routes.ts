@@ -8,6 +8,7 @@ const SEGMENT_TO_TAB: Record<string, EnglishTab> = {
   "games/heads-up": "heads_up",
   "games/charades": "charades",
   "games/category-blitz": "category_blitz",
+  "games/passaparola": "passaparola",
   flashcards: "flashcards",
   grammar: "grammar",
   prepositions: "prepositions",
@@ -22,6 +23,7 @@ const TAB_TO_SEGMENT: Partial<Record<EnglishTab, string>> = {
   heads_up: "games/heads-up",
   charades: "games/charades",
   category_blitz: "games/category-blitz",
+  passaparola: "games/passaparola",
   flashcards: "flashcards",
   grammar: "grammar",
   prepositions: "prepositions",
@@ -47,4 +49,5 @@ export const ENGLISH_PATH_GAME_SLUGS = [
   "heads-up",
   "charades",
   "category-blitz",
+  "passaparola",
 ] as const;

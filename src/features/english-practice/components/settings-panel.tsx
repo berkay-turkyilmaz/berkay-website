@@ -102,6 +102,14 @@ export function SettingsPanel({ settings, onUpdate, onReset, onClose }: Props) {
               max={60}
               step={5}
             />
+            <GameTimerSlider
+              label={t("passaparola_timer")}
+              value={settings.passaparolaRoundDuration}
+              onChange={(passaparolaRoundDuration) => onUpdate({ passaparolaRoundDuration })}
+              min={60}
+              max={300}
+              step={30}
+            />
             <p className="text-xs text-slate-400 leading-relaxed">{t("game_timers_hint")}</p>
           </div>
 

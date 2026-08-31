@@ -9,7 +9,8 @@ export type EnglishTab =
   | "taboo"
   | "heads_up"
   | "charades"
-  | "category_blitz";
+  | "category_blitz"
+  | "passaparola";
 
 export type FlashcardCategory =
   | "daily"
@@ -228,6 +229,25 @@ export interface CategoryBlitzRoundStats {
   total: number;
 }
 
+export type PassaparolaDifficulty = "easy" | "medium" | "hard";
+
+export interface PassaparolaQuestion {
+  id: string;
+  letter: string;
+  clueTr: string;
+  clueEn: string;
+  answer: string;
+  acceptableAnswers?: string[];
+  difficulty: PassaparolaDifficulty;
+}
+
+export interface PassaparolaRoundStats {
+  correct: number;
+  passed: number;
+  wrong: number;
+  total: number;
+}
+
 export interface EnglishProgress {
   xp: number;
   level: number;
@@ -261,6 +281,12 @@ export interface EnglishProgress {
     bestRound: number;
     bestStreak: number;
   };
+  passaparolaStats: {
+    gamesPlayed: number;
+    wordsCorrect: number;
+    bestRound: number;
+    bestStreak: number;
+  };
   settings: {
     speechRate: number;
     examQuestionCount: number;
@@ -269,5 +295,6 @@ export interface EnglishProgress {
     headsUpRoundDuration: number;
     charadesRoundDuration: number;
     categoryBlitzRoundDuration: number;
+    passaparolaRoundDuration: number;
   };
 }

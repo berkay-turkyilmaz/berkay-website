@@ -594,6 +594,7 @@
       "heads_up": "Heads Up",
       "charades": "Charades",
       "category_blitz": "Category Blitz",
+      "passaparola": "Passaparola",
       "games": "Oyunlar",
       "learn": "Öğren",
       "all_games": "Tüm oyunlar",
@@ -643,26 +644,29 @@
         "taboo": { "title": "Tabu Oyunu", "desc": "200+ kelime · ünlüler, filmler, günlük İngilizce — yasaklı kelimeleri kullanmadan anlat!" },
         "heads_up": { "title": "Heads Up", "desc": "Ünlüler, filmler ve günlük kelimeler — telefonu tut, arkadaşların anlatsın." },
         "charades": { "title": "Charades", "desc": "120+ kelime · film, spor, ünlü — konuşmadan canlandır!" },
-        "category_blitz": { "title": "Category Blitz", "desc": "Scattergories tarzı — harf + kategori, takımınla İngilizce kelime üret!" }
+        "category_blitz": { "title": "Category Blitz", "desc": "Scattergories tarzı — harf + kategori, takımınla İngilizce kelime üret!" },
+        "passaparola": { "title": "Passaparola", "desc": "A–Z alfabe çarkı — Türkçe ipucu, İngilizce cevap!" }
       }
     },
     "games_hub": {
       "title": "Sınıf Oyunları",
-      "subtitle": "Arkadaşlarınla oynayabileceğin 4 farklı kelime oyunu. Birini seç ve başla!",
+      "subtitle": "Arkadaşlarınla oynayabileceğin 5 farklı kelime oyunu. Birini seç ve başla!",
       "play": "Oyna",
       "tip": "Arkadaşlarınla birlikte oynamak için en eğlenceli yol!",
-      "deck_why": "Her oyunun içeriği farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Category Blitz'te harf + kategori kombinasyonları kullanılır.",
+      "deck_why": "Her oyunun içeriği farklıdır: Tabu'da yasaklı kelime listesi, Charades'de canlandırılabilir kelimeler, Category Blitz'te harf + kategori, Passaparola'da A–Z alfabe çarkı kullanılır.",
       "deck_notes": {
         "taboo": "{count} kart · kolay/orta/zor · ünlüler ve filmler dahil.",
         "heads_up": "{count} kelime · günlük hayat, ünlüler ve sinema sekmeleri.",
         "charades": "{count} canlandırılabilir kelime · film, spor, hayvan.",
-        "category_blitz": "{count} kategori · harf + konu — sınıf ve takım modu."
+        "category_blitz": "{count} kategori · harf + konu — sınıf ve takım modu.",
+        "passaparola": "{count} ipucu · A–Z çark · kolay, orta ve zor seviye."
       },
       "cards": "kelime",
       "taboo": { "title": "Tabu", "desc": "Yasaklı kelimeleri kullanmadan İngilizce anlat." },
       "heads_up": { "title": "Heads Up", "desc": "Arkadaşların anlatır, sen tahmin et." },
       "charades": { "title": "Charades", "desc": "Sessizce canlandır, takımın tahmin etsin." },
-      "category_blitz": { "title": "Category Blitz", "desc": "Harf + kategori — takımınla İngilizce kelime üret." }
+      "category_blitz": { "title": "Category Blitz", "desc": "Harf + kategori — takımınla İngilizce kelime üret." },
+      "passaparola": { "title": "Passaparola", "desc": "Alfabe çarkında Türkçe ipucu — İngilizce cevap ver!" }
     },
     "flashcards": {
       "all": "Tümü",
@@ -998,6 +1002,42 @@
         "best": "Rekor"
       }
     },
+    "passaparola": {
+      "title": "Passaparola",
+      "subtitle": "TV'deki klasik alfabe oyunu — Türkçe ipucunu oku, o harfle başlayan İngilizce kelimeyi yaz.",
+      "how_title": "Nasıl oynanır?",
+      "how_1": "A'dan Z'ye harfler dairesel dizilir. A'dan başlayıp saat yönünde ilerlersin.",
+      "how_2": "Mavi kutudaki ipucunu oku. Gösterilen harfle başlayan İngilizce kelimeyi yaz.",
+      "how_3": "Bilmiyorsan Passaparola'ya bas — atladığın harflere Z'den sonra dönersin.",
+      "how_4": "Süreyi yen! Yeşil = doğru, sarı = pas, kırmızı = yanlış veya bekleyen.",
+      "all": "Karışık",
+      "diff": {
+        "easy": "Kolay (A1–A2)",
+        "medium": "Orta (B1)",
+        "hard": "Zor (B2)"
+      },
+      "timer": "Tur süresi",
+      "start": "Oyuna Başla",
+      "pass": "Passaparola",
+      "submit": "Gönder",
+      "input_placeholder": "İngilizce kelimeyi yaz…",
+      "correct": "Doğru!",
+      "wrong": "Yanlış",
+      "quit": "Çık",
+      "round_complete": "Süre doldu!",
+      "passed": "Pas",
+      "wrong_count": "Yanlış",
+      "review_title": "Kaçırdığın kelimeler",
+      "play_again": "Tekrar oyna",
+      "back": "Menü",
+      "score_label": "Skor",
+      "streak": "{n} seri!",
+      "stats": {
+        "games": "Oyun",
+        "words": "Doğru",
+        "best": "Rekor"
+      }
+    },
     "settings": {
       "title": "Ayarlar",
       "close": "Kapat",
@@ -1009,6 +1049,7 @@
       "heads_up_timer": "Heads Up — tur süresi",
       "charades_timer": "Charades — tur süresi",
       "category_blitz_timer": "Category Blitz — tur süresi",
+      "passaparola_timer": "Passaparola — tur süresi",
       "reset_progress": "İlerlemeyi sıfırla",
       "reset_confirm": "Tüm ilerleme silinecek. Emin misin?",
       "exit_lab": "Çıkış yap — AI Lab'e dön"

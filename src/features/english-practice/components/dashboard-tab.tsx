@@ -6,6 +6,7 @@ import {
   ArrowRight,
   BookOpen,
   Brain,
+  CircleDot,
   Drama,
   Flame,
   Gamepad2,
@@ -116,6 +117,14 @@ export function DashboardTab({ progress, onNavigate }: Props) {
       desc: t("modules.category_blitz.desc"),
       stat: `${GAME_DECK_STATS.category_blitz.count}`,
       themeId: "category_blitz",
+    },
+    {
+      id: "passaparola",
+      icon: CircleDot,
+      title: t("modules.passaparola.title"),
+      desc: t("modules.passaparola.desc"),
+      stat: `${GAME_DECK_STATS.passaparola.count}`,
+      themeId: "passaparola",
     },
   ];
 

@@ -9,6 +9,7 @@ import {
   BookOpen,
   Brain,
   ChevronDown,
+  CircleDot,
   Drama,
   Gamepad2,
   Settings,
@@ -37,6 +38,7 @@ const GAME_ITEMS: NavItem[] = [
   { id: "heads_up", icon: Smartphone, labelKey: "tabs.heads_up" },
   { id: "charades", icon: Drama, labelKey: "tabs.charades" },
   { id: "category_blitz", icon: Zap, labelKey: "tabs.category_blitz" },
+  { id: "passaparola", icon: CircleDot, labelKey: "tabs.passaparola" },
 ];
 
 const PRIMARY_ITEMS: NavItem[] = [

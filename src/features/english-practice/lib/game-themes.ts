@@ -1,6 +1,6 @@
 import type { EnglishTab } from "../types";
 
-export type GameThemeId = "taboo" | "heads_up" | "charades" | "category_blitz";
+export type GameThemeId = "taboo" | "heads_up" | "charades" | "category_blitz" | "passaparola";
 export type LearnThemeId = "flashcards" | "grammar" | "prepositions";
 
 export type ThemeTokens = {
@@ -59,6 +59,17 @@ export const GAME_THEMES: Record<GameThemeId, ThemeTokens> = {
     chipActive: "!bg-teal-600 !text-white !border-teal-600 shadow-sm",
     progress: "bg-teal-500",
     heroGlow: "rgba(13,148,136,0.22)",
+  },
+  passaparola: {
+    accent: "blue",
+    accentFg: "text-blue-700",
+    surface: "bg-blue-50",
+    border: "border-blue-200",
+    icon: "text-blue-600",
+    chip: "hover:border-blue-200 hover:text-blue-700",
+    chipActive: "!bg-blue-600 !text-white !border-blue-600 shadow-sm shadow-blue-600/20",
+    progress: "bg-blue-500",
+    heroGlow: "rgba(37,99,235,0.22)",
   },
 };
 

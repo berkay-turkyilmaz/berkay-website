@@ -2,6 +2,7 @@ import { TABOO_CARDS } from "./taboo-cards";
 import { HEADS_UP_CARDS } from "./heads-up-cards";
 import { CHARADES_CARDS } from "./charades-cards";
 import { CATEGORY_BLITZ_CATEGORIES } from "./category-blitz";
+import { PASSAPAROLA_QUESTIONS } from "./passaparola-questions";
 import { FLASHCARDS } from "./flashcards";
 
 export const GAME_DECK_STATS = {
@@ -20,6 +21,10 @@ export const GAME_DECK_STATS = {
   category_blitz: {
     count: CATEGORY_BLITZ_CATEGORIES.length,
     noteKey: "category_blitz" as const,
+  },
+  passaparola: {
+    count: PASSAPAROLA_QUESTIONS.length,
+    noteKey: "passaparola" as const,
   },
 } as const;
 

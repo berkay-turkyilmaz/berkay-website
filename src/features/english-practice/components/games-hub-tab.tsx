@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Drama, Gamepad2, Info, Smartphone, Zap } from "lucide-react";
+import { ArrowRight, CircleDot, Drama, Gamepad2, Info, Smartphone, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
@@ -20,6 +20,7 @@ const DECK_NOTE_KEYS: Record<GameThemeId, string> = {
   heads_up: "deck_notes.heads_up",
   charades: "deck_notes.charades",
   category_blitz: "deck_notes.category_blitz",
+  passaparola: "deck_notes.passaparola",
 };
 
 export function GamesHubTab({ onNavigate }: Props) {
@@ -53,6 +54,13 @@ export function GamesHubTab({ onNavigate }: Props) {
       title: t("category_blitz.title"),
       desc: t("category_blitz.desc"),
       stat: GAME_DECK_STATS.category_blitz.count,
+    },
+    {
+      id: "passaparola" as const,
+      icon: CircleDot,
+      title: t("passaparola.title"),
+      desc: t("passaparola.desc"),
+      stat: GAME_DECK_STATS.passaparola.count,
     },
   ];
 

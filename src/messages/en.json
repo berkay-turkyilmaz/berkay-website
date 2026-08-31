@@ -594,6 +594,7 @@
       "heads_up": "Heads Up",
       "charades": "Charades",
       "category_blitz": "Category Blitz",
+      "passaparola": "Passaparola",
       "games": "Games",
       "learn": "Learn",
       "all_games": "All games",
@@ -643,26 +644,29 @@
         "taboo": { "title": "Taboo Game", "desc": "Simple everyday words · describe without forbidden words!" },
         "heads_up": { "title": "Heads Up", "desc": "Hold the phone — friends describe, you guess." },
         "charades": { "title": "Charades", "desc": "Act without speaking — your team guesses!" },
-        "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team!" }
+        "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team!" },
+        "passaparola": { "title": "Passaparola", "desc": "A–Z alphabet wheel — Turkish clues, English answers!" }
       }
     },
     "games_hub": {
       "play": "Play",
       "tip": "The most fun way to learn with friends!",
-      "deck_why": "Each game has different content: Taboo uses forbidden-word lists, Charades uses mime-friendly words, Category Blitz uses letter + category combos.",
+      "deck_why": "Each game has different content: Taboo uses forbidden-word lists, Charades uses mime-friendly words, Category Blitz uses letter + category combos, Passaparola runs through the full alphabet.",
       "deck_notes": {
         "taboo": "{count} cards · easy/medium/hard · celebrities and movies included.",
         "heads_up": "{count} words · everyday life, celebrities and cinema tabs.",
         "charades": "{count} mime-friendly words · movies, sports, animals.",
-        "category_blitz": "{count} categories · letter + topic — solo, team and classroom modes."
+        "category_blitz": "{count} categories · letter + topic — solo, team and classroom modes.",
+        "passaparola": "{count} clues · A–Z wheel · easy, medium and hard levels."
       },
       "title": "Classroom Games",
-      "subtitle": "Four word games to play with friends. Pick one and start!",
+      "subtitle": "Five word games to play with friends. Pick one and start!",
       "cards": "words",
       "taboo": { "title": "Taboo", "desc": "Describe in English without forbidden words." },
       "heads_up": { "title": "Heads Up", "desc": "Friends describe, you guess." },
       "charades": { "title": "Charades", "desc": "Mime silently, team guesses." },
-      "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team." }
+      "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team." },
+      "passaparola": { "title": "Passaparola", "desc": "Turkish clues on the alphabet wheel — answer in English!" }
     },
     "flashcards": {
       "all": "All",
@@ -998,6 +1002,42 @@
         "best": "Best"
       }
     },
+    "passaparola": {
+      "title": "Passaparola",
+      "subtitle": "Classic TV-style alphabet game — read the Turkish clue, answer with an English word starting with that letter.",
+      "how_title": "How to play",
+      "how_1": "Letters A through Z are arranged in a circle. You start at A and move clockwise.",
+      "how_2": "Read the clue in the blue box. Type the English word that starts with the shown letter.",
+      "how_3": "Don't know it? Tap Passaparola to skip — you'll return to skipped letters after Z.",
+      "how_4": "Beat the timer! Green = correct, yellow = passed, red = wrong or still pending.",
+      "all": "Mixed",
+      "diff": {
+        "easy": "Easy (A1–A2)",
+        "medium": "Medium (B1)",
+        "hard": "Hard (B2)"
+      },
+      "timer": "Round timer",
+      "start": "Start Game",
+      "pass": "Passaparola",
+      "submit": "Submit",
+      "input_placeholder": "Type the English word…",
+      "correct": "Correct!",
+      "wrong": "Wrong",
+      "quit": "Quit",
+      "round_complete": "Time's up!",
+      "passed": "Passed",
+      "wrong_count": "Wrong",
+      "review_title": "Missed words",
+      "play_again": "Play again",
+      "back": "Menu",
+      "score_label": "Score",
+      "streak": "{n} streak!",
+      "stats": {
+        "games": "Games",
+        "words": "Correct",
+        "best": "Best"
+      }
+    },
     "emoji_clues": {
       "title": "Emoji Clues",
       "tagline": "Combine the emojis → find one English word. (Guess the Emoji logic)",
@@ -1062,6 +1102,7 @@
       "heads_up_timer": "Heads Up — round timer",
       "charades_timer": "Charades — round timer",
       "category_blitz_timer": "Category Blitz — round timer",
+      "passaparola_timer": "Passaparola — round timer",
       "reset_progress": "Reset progress",
       "reset_confirm": "All progress will be deleted. Are you sure?",
       "exit_lab": "Exit — return to AI Lab"
