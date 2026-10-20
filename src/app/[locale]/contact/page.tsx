@@ -29,6 +29,7 @@ const contactSchema = z.object({
   email: z.string().email(),
   subject: z.enum(["project", "ai", "consulting", "job", "other"]),
   message: z.string().min(20),
+  website: z.string().optional(),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -202,7 +203,7 @@ export default function ContactPage() {
 
               {/* Service cards */}
               <div className="space-y-2">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/50 mb-3">
+                <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3">
                   {t("services_title")}
                 </p>
                 {services.map((s) => (
@@ -222,7 +223,7 @@ export default function ContactPage() {
                       rel="noopener noreferrer"
                       className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group py-1"
                     >
-                      <Icon className="w-4 h-4 shrink-0 text-muted-foreground/50 group-hover:text-primary transition-colors" />
+                      <Icon className="w-4 h-4 shrink-0 text-muted-foreground/70 group-hover:text-primary transition-colors" />
                       <span className="font-mono text-xs group-hover:text-primary transition-colors truncate">
                         {link.display}
                       </span>
@@ -262,6 +263,14 @@ export default function ContactPage() {
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                    <input
+                      {...register("website")}
+                      type="text"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      aria-hidden="true"
+                      className="absolute -left-[9999px] h-0 w-0 opacity-0"
+                    />
                     {/* Name + Email row */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>

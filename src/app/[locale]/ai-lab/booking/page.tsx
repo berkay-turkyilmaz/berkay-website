@@ -17,7 +17,6 @@ import {
   ChevronRight,
   Check,
 } from "lucide-react";
-import { WEBHOOKS } from "@/lib/config/webhooks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -178,7 +177,7 @@ function MiniCalendar({
         {weekdays.map((d) => (
           <div
             key={d}
-            className="text-center text-[9px] font-bold text-muted-foreground/40 uppercase py-1"
+            className="text-center text-[11px] font-bold text-muted-foreground/70 uppercase py-1"
           >
             {d}
           </div>
@@ -216,11 +215,11 @@ function MiniCalendar({
       </div>
 
       <div className="flex items-center gap-4 mt-3 pt-3 border-t border-border/20">
-        <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/50">
+        <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70">
           <span className="w-2.5 h-2.5 rounded border border-primary/40 inline-block" />{" "}
           {todayLabel}
         </span>
-        <span className="flex items-center gap-1.5 text-[10px] text-muted-foreground/50">
+        <span className="flex items-center gap-1.5 text-[11px] text-muted-foreground/70">
           <span className="w-2.5 h-2.5 rounded bg-muted-foreground/15 inline-block" />{" "}
           {closedSundayLabel}
         </span>
@@ -269,14 +268,14 @@ function CustomSelect<T extends { value: string; label: string }>({
           w-full flex items-center justify-between px-4 py-3.5 rounded-xl border text-sm transition-all duration-200 text-left
           bg-secondary/20 border-border/40 hover:border-border/70 hover:bg-secondary/30
           ${open ? "border-primary/50 ring-2 ring-primary/20 bg-background/50" : ""}
-          ${selected ? "text-foreground" : "text-muted-foreground/40"}
+          ${selected ? "text-foreground" : "text-muted-foreground/70"}
         `}
       >
         <span className="truncate flex-1">
           {selected ? (renderSelected ? renderSelected(selected) : selected.label) : placeholder}
         </span>
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }}>
-          <ChevronDown className="w-4 h-4 text-muted-foreground/50 flex-shrink-0 ml-2" />
+          <ChevronDown className="w-4 h-4 text-muted-foreground/70 flex-shrink-0 ml-2" />
         </motion.span>
       </button>
 
@@ -328,7 +327,7 @@ function SectionLabel({
 }) {
   return (
     <div className="flex items-center gap-2.5 mb-4">
-      <span className="w-5 h-5 rounded-md bg-primary/10 text-primary flex items-center justify-center text-[10px] font-bold border border-primary/15 flex-shrink-0">
+      <span className="w-5 h-5 rounded-md bg-primary/10 text-primary flex items-center justify-center text-[11px] font-bold border border-primary/15 flex-shrink-0">
         {step}
       </span>
       <span className="flex items-center gap-1.5 text-[11px] font-bold text-muted-foreground/60 uppercase tracking-widest">
@@ -449,7 +448,7 @@ export default function BarberAppointment() {
     setIsSubmitting(true);
     setSubmitError("");
     try {
-      const res = await fetch(WEBHOOKS.booking, {
+      const res = await fetch("/api/booking", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -575,7 +574,7 @@ export default function BarberAppointment() {
                       exit={{ opacity: 0, height: 0 }}
                       className="overflow-hidden bg-primary/5 border border-primary/15 rounded-2xl p-4"
                     >
-                      <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-3">
+                      <p className="text-[11px] font-bold text-primary uppercase tracking-widest mb-3">
                         {t("summary_title")}
                       </p>
                       <div className="space-y-1.5">
@@ -615,7 +614,7 @@ export default function BarberAppointment() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <FieldWrapper label={t("fields.full_name")}>
                         <div className="relative">
-                          <User className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/35 pointer-events-none" />
+                          <User className="w-3.5 h-3.5 absolute left-3.5 top-1/2 -translate-y-1/2 text-muted-foreground/70 pointer-events-none" />
                           <input
                             type="text"
                             required
@@ -632,7 +631,7 @@ export default function BarberAppointment() {
                         <div className="relative">
                           <div className="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 pointer-events-none z-10">
                             <span className="text-sm">🇹🇷</span>
-                            <span className="text-xs text-muted-foreground/50 font-medium">+90</span>
+                            <span className="text-xs text-muted-foreground/70 font-medium">+90</span>
                             <span className="w-px h-3.5 bg-border/50 block" />
                           </div>
                           <input
@@ -751,7 +750,7 @@ export default function BarberAppointment() {
                               className="bg-secondary/10 border border-dashed border-border/30 rounded-xl p-6 flex flex-col items-center justify-center text-center min-h-[210px]"
                             >
                               <Calendar className="w-7 h-7 text-muted-foreground/15 mb-3" />
-                              <p className="text-xs text-muted-foreground/40 font-medium leading-relaxed">
+                              <p className="text-xs text-muted-foreground/70 font-medium leading-relaxed">
                                 {t("time.pick_date_first")}
                               </p>
                             </motion.div>
@@ -763,10 +762,10 @@ export default function BarberAppointment() {
                               className="bg-secondary/10 border border-border/25 rounded-xl p-4"
                             >
                               <div className="flex items-center justify-between mb-3">
-                                <span className="text-[11px] text-muted-foreground/50 font-medium">
+                                <span className="text-[11px] text-muted-foreground/70 font-medium">
                                   {displayDate(formData.date)}
                                 </span>
-                                <div className="flex items-center gap-3 text-[9px] text-muted-foreground/40">
+                                <div className="flex items-center gap-3 text-[11px] text-muted-foreground/70">
                                   <span className="flex items-center gap-1">
                                     <span className="w-2 h-2 rounded bg-secondary/50 border border-border/30 inline-block" />
                                     {t("time.booked")}
@@ -835,7 +834,7 @@ export default function BarberAppointment() {
                       className={`
                         w-full py-4 rounded-xl font-bold text-sm flex items-center justify-center gap-2.5 transition-all duration-300
                         ${isSubmitting || !canSubmit
-                          ? "bg-secondary/40 text-muted-foreground/40 border border-border/20 cursor-not-allowed"
+                          ? "bg-secondary/40 text-muted-foreground/70 border border-border/20 cursor-not-allowed"
                           : "bg-foreground text-background shadow-lg hover:shadow-xl hover:bg-foreground/90 cursor-pointer"
                         }
                       `}
@@ -849,7 +848,7 @@ export default function BarberAppointment() {
                         <span>{t("submit.label")}</span>
                       )}
                     </motion.button>
-                    <p className="text-center text-[11px] text-muted-foreground/35 mt-3">
+                    <p className="text-center text-[11px] text-muted-foreground/70 mt-3">
                       {t("submit.footnote")}
                     </p>
                   </div>

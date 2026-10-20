@@ -3,19 +3,19 @@ import { NextRequest } from "next/server";
 import { buildBexSystemPrompt } from "@/lib/agents/prompts/bex-chat";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
 import { normalizeBexLanguage } from "@/lib/ai/bex-language";
-import { createPlainTextStreamResponse } from "@/lib/ai/text-stream-response";
+import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { chatPostBodySchema } from "@/app/api/chat/schema";
 import { getApiError } from "@/lib/api/error-messages";
+import { checkRateLimit, RULES } from "@/lib/api/rate-limit";
+import { getClientIp, getRequestLang } from "@/lib/api/request";
 
 export const maxDuration = 60;
 
-function getLang(req: NextRequest): string {
-  const accept = req.headers.get("accept-language") ?? "";
-  return accept.startsWith("tr") ? "tr" : "en";
-}
-
 export async function POST(req: NextRequest) {
-  const lang = getLang(req);
+  const lang = getRequestLang(req);
+  if (!checkRateLimit(getClientIp(req), RULES.chat)) {
+    return Response.json({ error: getApiError(lang, "rate_limited") }, { status: 429 });
+  }
   try {
     let json: unknown;
     try {
@@ -29,7 +29,6 @@ export async function POST(req: NextRequest) {
       return Response.json(
         {
           error: getApiError(lang, "invalid_request"),
-          details: parsed.error.flatten(),
         },
         { status: 400 }
       );
@@ -47,7 +46,7 @@ export async function POST(req: NextRequest) {
 
     if (!process.env.GROQ_API_KEY?.trim()) {
       return Response.json(
-        { error: "GROQ_API_KEY is not configured on the server." },
+        { error: getApiError(lang, "api_error") },
         { status: 503 }
       );
     }
@@ -60,16 +59,19 @@ export async function POST(req: NextRequest) {
       normalizeBexLanguage(language)
     );
 
+    const errorBox: StreamErrorBox = { error: null };
     const result = streamText({
+      onError: ({ error }) => {
+        errorBox.error = error;
+      },
       model: resolveLanguageModel(provider, model),
       system: systemPrompt,
       messages,
       temperature,
+      maxOutputTokens: 2_048,
     });
 
-    return createPlainTextStreamResponse(result.textStream, {
-      logLabel: "BEX",
-    });
+    return createPlainTextStreamResponse(result.textStream, { logLabel: "BEX", errorBox });
   } catch (error) {
     console.error("[BEX General API Error]:", error);
     return new Response(

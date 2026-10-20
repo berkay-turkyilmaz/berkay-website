@@ -5,8 +5,32 @@ import * as zlib from "zlib";
 import { promisify } from "util";
 import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
 import { normalizeBexLanguage } from "@/lib/ai/bex-language";
-import { createPlainTextStreamResponse } from "@/lib/ai/text-stream-response";
+import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
+import { checkRateLimit, RULES } from "@/lib/api/rate-limit";
+import { getClientIp, getRequestLang } from "@/lib/api/request";
+import { z } from "zod";
+
+const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+const MAX_CHUNKS = 400;
+
+const pdfChatBodySchema = z.object({
+  messages: z
+    .array(
+      z.object({
+        role: z.enum(["user", "assistant"]),
+        content: z.string().max(12_000),
+      })
+    )
+    .min(1)
+    .max(40),
+  chunks: z.array(z.string().max(2_000)).min(1).max(MAX_CHUNKS),
+  fileName: z.string().trim().max(120).default("belge"),
+  model: z.string().max(120).default("llama-3.1-8b-instant"),
+  responseLength: z.enum(["short", "medium", "detailed"]).default("medium"),
+  temperature: z.number().min(0).max(2).default(0.4),
+  language: z.enum(["tr", "en", "de"]).catch("tr").default("tr"),
+});
 
 const inflate = promisify(zlib.inflate);
 const inflateRaw = promisify(zlib.inflateRaw);
@@ -235,13 +259,11 @@ Giriş cümlesi yazma.`.trim();
 
 // ─── Route ────────────────────────────────────────────────────────────────────
 
-function getPdfLang(req: NextRequest): string {
-  const accept = req.headers.get("accept-language") ?? "";
-  return accept.startsWith("tr") ? "tr" : "en";
-}
-
 export async function POST(req: NextRequest) {
-  const lang = getPdfLang(req);
+  const lang = getRequestLang(req);
+  if (!checkRateLimit(getClientIp(req), RULES.pdf)) {
+    return Response.json({ error: getApiError(lang, "rate_limited") }, { status: 429 });
+  }
   try {
     const contentType = req.headers.get("content-type") ?? "";
 
@@ -251,7 +273,7 @@ export async function POST(req: NextRequest) {
       const file = formData.get("file") as File | null;
 
       if (!file) return Response.json({ error: getApiError(lang, "invalid_request") }, { status: 400 });
-      if (file.size > 20 * 1024 * 1024) return Response.json({ error: getApiError(lang, "file_too_large") }, { status: 400 });
+      if (file.size > MAX_UPLOAD_BYTES) return Response.json({ error: getApiError(lang, "file_too_large") }, { status: 400 });
 
       const arrayBuffer = await file.arrayBuffer();
       let fullText = "";
@@ -262,7 +284,7 @@ export async function POST(req: NextRequest) {
 
         if (!fullText || fullText.trim().length < 30) {
           return Response.json(
-            { error: "PDF'den metin çıkarılamadı. Belge taranmış (görsel tabanlı) olabilir. Metin tabanlı PDF yükleyin." },
+            { error: lang === "tr" ? "PDF'den metin çıkarılamadı. Belge taranmış (görsel tabanlı) olabilir. Metin tabanlı PDF yükleyin." : "Could not extract text from the PDF. It may be a scanned document; upload a text-based PDF." },
             { status: 422 }
           );
         }
@@ -276,14 +298,14 @@ export async function POST(req: NextRequest) {
         .replace(/[ \t]{2,}/g, " ")
         .trim();
 
-      const chunks = chunkText(clean);
+      const chunks = chunkText(clean).slice(0, MAX_CHUNKS);
 
       return Response.json({
         ok: true,
         fileName: file.name,
         chunks,
         totalChunks: chunks.length,
-        totalChars: clean.length,
+        totalChars: Math.min(clean.length, MAX_CHUNKS * (CHUNK_SIZE - CHUNK_OVERLAP)),
       });
     }
 
@@ -291,45 +313,47 @@ export async function POST(req: NextRequest) {
     if (contentType.includes("application/json")) {
       if (!process.env.GROQ_API_KEY?.trim()) {
         return Response.json(
-          { error: "GROQ_API_KEY is not configured on the server." },
+          { error: getApiError(lang, "api_error") },
           { status: 503 }
         );
       }
 
-      const {
-        messages = [],
-        chunks = [] as string[],
-        fileName = "belge",
-        model = "llama-3.1-8b-instant",
-        responseLength = "medium",
-        temperature = 0.4,
-        language = "tr",
-      } = await req.json();
+      let json: unknown;
+      try {
+        json = await req.json();
+      } catch {
+        return Response.json({ error: getApiError(lang, "invalid_json") }, { status: 400 });
+      }
 
-      const lang = normalizeBexLanguage(
-        language === "en" || language === "de" || language === "tr" ? language : "tr"
-      );
-
-      if (!chunks?.length) {
+      const parsed = pdfChatBodySchema.safeParse(json);
+      if (!parsed.success) {
         return Response.json({ error: getApiError(lang, "invalid_request") }, { status: 400 });
       }
+
+      const { messages, chunks, fileName, model, responseLength, temperature } = parsed.data;
+      const docLang = normalizeBexLanguage(parsed.data.language);
 
       const modelId = (GROQ_CHAT_MODEL_IDS as readonly string[]).includes(model)
         ? model
         : "llama-3.1-8b-instant";
 
-      const lastUser = [...messages].reverse().find((m: { role: string }) => m.role === "user");
+      const lastUser = [...messages].reverse().find((m) => m.role === "user");
       const relevant = retrieveTopChunks(chunks, lastUser?.content ?? "");
-      const system = buildSystemPrompt(relevant, chunks.length, fileName, responseLength, lang);
+      const system = buildSystemPrompt(relevant, chunks.length, fileName, responseLength, docLang);
 
-      const result = streamText({
+      const errorBox: StreamErrorBox = { error: null };
+    const result = streamText({
+      onError: ({ error }) => {
+        errorBox.error = error;
+      },
         model: resolveLanguageModel("groq", modelId as (typeof GROQ_CHAT_MODEL_IDS)[number]),
         system,
         messages,
         temperature,
+        maxOutputTokens: 2_048,
       });
 
-      return createPlainTextStreamResponse(result.textStream, { logLabel: "BEX PDF" });
+      return createPlainTextStreamResponse(result.textStream, { logLabel: "BEX PDF", errorBox });
     }
 
     return new Response("Unsupported content type", { status: 415 });

@@ -5,11 +5,17 @@ const chatRole = z.enum(["user", "assistant", "system"]);
 
 export const chatMessageSchema = z.object({
   role: chatRole,
-  content: z.string().max(100_000),
+  content: z.string().max(12_000),
 });
 
 export const chatPostBodySchema = z.object({
-  messages: z.array(chatMessageSchema).min(1).max(80),
+  messages: z
+    .array(chatMessageSchema)
+    .min(1)
+    .max(40)
+    .refine((msgs) => msgs.reduce((n, m) => n + m.content.length, 0) <= 40_000, {
+      message: "Conversation too long",
+    }),
   mode: z.enum(["terminal", "pdf", "engineer"]).default("terminal"),
   model: z
     .string()

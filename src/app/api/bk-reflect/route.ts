@@ -5,12 +5,21 @@ import {
   buildBkReflectUserMessage,
 } from "@/lib/agents/prompts/bk-reflect";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
-import { createPlainTextStreamResponse } from "@/lib/ai/text-stream-response";
+import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { bkReflectBodySchema } from "@/app/api/bk-reflect/schema";
+import { getApiError } from "@/lib/api/error-messages";
+import { checkRateLimit, RULES } from "@/lib/api/rate-limit";
+import { getClientIp, getRequestLang } from "@/lib/api/request";
 
 export const maxDuration = 45;
 
 export async function POST(req: NextRequest) {
+  if (!checkRateLimit(getClientIp(req), RULES.reflect)) {
+    return Response.json(
+      { error: getApiError(getRequestLang(req), "rate_limited") },
+      { status: 429 }
+    );
+  }
   try {
     let json: unknown;
     try {
@@ -36,7 +45,11 @@ export async function POST(req: NextRequest) {
 
     const { reference, verseText, question } = parsed.data;
 
+    const errorBox: StreamErrorBox = { error: null };
     const result = streamText({
+      onError: ({ error }) => {
+        errorBox.error = error;
+      },
       model: resolveLanguageModel("groq", "llama-3.3-70b-versatile"),
       system: buildBkReflectSystemPrompt(),
       messages: [
@@ -46,11 +59,10 @@ export async function POST(req: NextRequest) {
         },
       ],
       temperature: 0.35,
+      maxOutputTokens: 1_500,
     });
 
-    return createPlainTextStreamResponse(result.textStream, {
-      logLabel: "BK Reflect",
-    });
+    return createPlainTextStreamResponse(result.textStream, { logLabel: "BK Reflect", errorBox });
   } catch (err) {
     console.error("[BK Reflect Route]:", err);
     return Response.json({ error: "Sunucu hatası" }, { status: 500 });
