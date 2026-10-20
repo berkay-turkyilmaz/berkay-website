@@ -154,6 +154,10 @@
       },
       "new_chat": "Yeni Sohbet",
       "expand": "Menüyü genişlet",
+      "collapse": "Menüyü daralt",
+      "rename_chat": "Sohbeti yeniden adlandır",
+      "delete_chat": "Sohbeti sil",
+      "history_empty": "Henüz kayıtlı sohbet yok.",
       "history": "Geçmiş",
       "history_search": "Ara...",
       "settings": "Ayarlar",
@@ -167,6 +171,7 @@
     "chat": {
       "terminal_empty_title": "BEX hazır.",
       "terminal_empty_desc": "Next.js, Supabase, n8n otomasyonu veya Berkay'ın projeleri hakkında her şeyi sorabilirsin.",
+      "doc_reupload_hint": "Bu sohbet \"{name}\" belgesi hakkındaydı. Soru sormaya devam etmek için dosyayı (ataç simgesi) tekrar yükle.",
       "pdf_empty_title": "Döküman Analizörü",
       "pdf_empty_desc": "PDF, TXT veya MD dosyası bırak — BEX içeriği okuyup saniyeler içinde sorularını yanıtlar.",
       "engineer_empty_title": "Merhaba, ben BEX.",
@@ -595,6 +600,11 @@
       "charades": "Charades",
       "category_blitz": "Category Blitz",
       "passaparola": "Passaparola",
+      "word_match": "Kelime Eşleştir",
+      "word_scramble": "Harf Karması",
+      "hangman": "Adam Asmaca",
+      "listen_type": "Dinle & Yaz",
+      "word_sprint": "Kelime Sprinti",
       "games": "Oyunlar",
       "learn": "Öğren",
       "all_games": "Tüm oyunlar",
@@ -648,6 +658,78 @@
         "passaparola": { "title": "Passaparola", "desc": "A–Z alfabe çarkı — Türkçe ipucu, İngilizce cevap!" }
       }
     },
+    "vocab_games": {
+      "level_label": "Seviye",
+      "all_levels": "Hepsi",
+      "level_hint": "A1 başlangıç, C1 ileri düzeydir. Sayı, o seviyedeki kelime adedini gösterir.",
+      "start": "Başla",
+      "not_enough_words": "Bu seviyede yeterli kelime yok (en az {n})",
+      "best": "En iyi: {n}",
+      "played": "Oynanan: {n}",
+      "finished": "Tur bitti!",
+      "new_best": "Yeni rekor! 🎉",
+      "score": "Puan",
+      "correct": "Doğru",
+      "accuracy": "İsabet",
+      "xp_earned": "+{n} XP kazandın",
+      "change_level": "Seviye değiştir",
+      "play_again": "Tekrar oyna",
+      "progress": "Soru {n} / {total}",
+      "score_live": "{n} puan",
+      "hint": "İpucu",
+      "skip": "Geç",
+      "next": "Sonraki",
+      "finish": "Bitir",
+      "check": "Kontrol et",
+      "word_match": {
+        "title": "Kelime Eşleştir",
+        "desc": "Kartları çevir: her İngilizce kelimeyi Türkçe anlamıyla eşleştir. Ne kadar az hata, o kadar çok puan.",
+        "pairs": "Çift sayısı",
+        "found": "Bulunan: {done} / {total}",
+        "misses": "Hatalı deneme: {n}",
+        "hidden_tile": "Kapalı kart"
+      },
+      "word_scramble": {
+        "title": "Harf Karması",
+        "desc": "Karışık harfleri doğru sıraya diz. İpucu kullandıkça puan azalır.",
+        "clue": "Türkçe anlamı",
+        "letters": "{n} harf",
+        "tap_letters": "Harflere dokun",
+        "undo": "Geri al",
+        "reshuffle": "Karıştır"
+      },
+      "hangman": {
+        "title": "Adam Asmaca",
+        "desc": "Türkçe anlamdan kelimeyi bul. Yanlış harf bir hakkını götürür.",
+        "lives": "{n} hak kaldı",
+        "show_example": "Örnek cümleyi göster",
+        "won": "Harika, bildin!",
+        "lost": "Olmadı. Kelime: {word}",
+        "keyboard": "Harf klavyesi"
+      },
+      "listen_type": {
+        "title": "Dinle & Yaz",
+        "desc": "Kelimeyi dinle ve nasıl yazıldığını yaz. İlk denemede doğru bilirsen tam puan.",
+        "unsupported": "Tarayıcın sesli okumayı desteklemiyor; bu modda sadece Türkçe anlam gösterilir.",
+        "play": "Dinle",
+        "spell": "Harf harf",
+        "spell_hint": "Kelimeyi harf harf oku",
+        "correct": "Doğru! ✓",
+        "answer_was": "Doğrusu: {word}",
+        "try_again": "Neredeyse! Bir kez daha dene.",
+        "input_label": "Duyduğun kelimeyi yaz",
+        "placeholder": "Duyduğun kelimeyi yaz…"
+      },
+      "word_sprint": {
+        "title": "Kelime Sprinti",
+        "desc": "Süre dolmadan olabildiğince çok kelimeyi bil. Arka arkaya doğrular bonus puan getirir.",
+        "duration": "Süre",
+        "time_left": "{n} saniye kaldı",
+        "streak": "{n} seri 🔥",
+        "to_turkish": "Türkçesi nedir?",
+        "to_english": "İngilizcesi nedir?"
+      }
+    },
     "games_hub": {
       "title": "Sınıf Oyunları",
       "subtitle": "Arkadaşlarınla oynayabileceğin 5 farklı kelime oyunu. Birini seç ve başla!",
@@ -666,7 +748,31 @@
       "heads_up": { "title": "Heads Up", "desc": "Arkadaşların anlatır, sen tahmin et." },
       "charades": { "title": "Charades", "desc": "Sessizce canlandır, takımın tahmin etsin." },
       "category_blitz": { "title": "Category Blitz", "desc": "Harf + kategori — takımınla İngilizce kelime üret." },
-      "passaparola": { "title": "Passaparola", "desc": "Alfabe çarkında Türkçe ipucu — İngilizce cevap ver!" }
+      "passaparola": { "title": "Passaparola", "desc": "Alfabe çarkında Türkçe ipucu — İngilizce cevap ver!" },
+      "vocab_title": "Kelime Oyunları",
+      "vocab_subtitle": "Tek başına oyna, seviyeni seç (A1–C1). {count} kelimeyle çalışır, her cevap tekrar sistemini besler.",
+      "vocab": {
+        "word_match": {
+          "title": "Kelime Eşleştir",
+          "desc": "Kartları çevir, İngilizce kelimeyi Türkçe karşılığıyla eşleştir."
+        },
+        "word_scramble": {
+          "title": "Harf Karması",
+          "desc": "Karışık harflerden kelimeyi bul; ipucu Türkçe anlamı."
+        },
+        "hangman": {
+          "title": "Adam Asmaca",
+          "desc": "Harf harf tahmin et; 6 hakkın var."
+        },
+        "listen_type": {
+          "title": "Dinle & Yaz",
+          "desc": "Kelimeyi dinle ve doğru yazımını yaz."
+        },
+        "word_sprint": {
+          "title": "Kelime Sprinti",
+          "desc": "Süreye karşı çoktan seçmeli; seri yaptıkça bonus kazan."
+        }
+      }
     },
     "flashcards": {
       "all": "Tümü",
@@ -678,6 +784,7 @@
       "need_practice": "Daha çalış",
       "remove_weak": "Bayrağı kaldır",
       "mode_all": "Tüm kartlar",
+      "mode_due": "Bugün tekrar",
       "mode_learning": "Öğreniyorum",
       "mode_weak": "Çalışmam lazım",
       "no_cards": "Kart bulunamadı",
@@ -702,7 +809,11 @@
       "health": "Sağlık",
       "environment": "Çevre",
       "business": "İş Dünyası",
-      "academic": "Akademik"
+      "academic": "Akademik",
+      "home": "Ev",
+      "school": "Okul",
+      "shopping": "Alışveriş",
+      "nature": "Doğa"
     },
     "game_categories": {
       "taboo": {
@@ -774,6 +885,7 @@
     "exam": {
       "title": "Seviye Sınavı",
       "intro": "Tür seç, {count} soruluk sınavına başla. Her mod farklı soru stili kullanır.",
+      "pick_level": "Seviye seç",
       "pick_mode": "Sınav türü",
       "pool": "soru",
       "start": "Sınava Başla",
@@ -851,7 +963,7 @@
       "category": "Kategori",
       "difficulty": "Zorluk",
       "all": "Tümü",
-      "diff": { "easy": "Kolay", "medium": "Orta", "hard": "Zor" },
+      "diff": { "easy": "Kolay (A1–A2)", "medium": "Orta (B1)", "hard": "Zor (B2–C1)" },
       "round_size": "Tur kart sayısı",
       "show_meaning": "Türkçe anlamı göster",
       "hide_meaning": "Türkçe anlamı gizle",
@@ -902,9 +1014,9 @@
       "how_3": "Bildin mi? Yeşil · Pas? Sarı · Süre bitince tur biter.",
       "all": "Tümü",
       "diff": {
-        "easy": "Kolay",
-        "medium": "Orta",
-        "hard": "Zor"
+        "easy": "Kolay (A1–A2)",
+        "medium": "Orta (B1)",
+        "hard": "Zor (B2–C1)"
       },
       "cards": "kelime",
       "seen_today": "bugün görüldü",
@@ -938,9 +1050,9 @@
       "how_3": "Takım doğru tahmin edince yeşil, pas geçmek için sarı.",
       "all": "Tümü",
       "diff": {
-        "easy": "Kolay",
-        "medium": "Orta",
-        "hard": "Zor"
+        "easy": "Kolay (A1–A2)",
+        "medium": "Orta (B1)",
+        "hard": "Zor (B2–C1)"
       },
       "cards": "kelime",
       "seen_today": "bugün görüldü",
@@ -974,9 +1086,9 @@
       },
       "all": "Tümü",
       "diff": {
-        "easy": "Kolay",
-        "medium": "Orta",
-        "hard": "Zor"
+        "easy": "Kolay (A1–A2)",
+        "medium": "Orta (B1)",
+        "hard": "Zor (B2–C1)"
       },
       "timer": "Tur süresi",
       "rounds": "Tur sayısı",

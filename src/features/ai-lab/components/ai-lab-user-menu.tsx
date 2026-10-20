@@ -50,7 +50,7 @@ export function AiLabUserMenu({
       >
         <div className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 bg-ailab-glass-09 ring-1 ring-inset ring-ailab-border-spinner">
           {initials ? (
-            <span className="text-[10px] font-bold text-ailab-text/80">{initials}</span>
+            <span className="text-[11px] font-bold text-ailab-text/80">{initials}</span>
           ) : (
             <User className="w-3.5 h-3.5 text-ailab-text/55" />
           )}
@@ -61,7 +61,7 @@ export function AiLabUserMenu({
               <p className="text-xs font-semibold truncate text-ailab-text/75">
                 {settings.displayName || t("guest_user")}
               </p>
-              <p className="text-[9px] truncate text-ailab-text/45">{t("user_status")}</p>
+              <p className="text-[11px] truncate text-ailab-text/45">{t("user_status")}</p>
             </div>
             <motion.div
               animate={{ rotate: open ? 180 : 0 }}
@@ -95,7 +95,7 @@ export function AiLabUserMenu({
                 <p className="text-xs font-semibold text-ailab-text/92">
                   {settings.displayName || t("guest_user")}
                 </p>
-                <p className="text-[9px] text-ailab-text/50">{t("user_status")}</p>
+                <p className="text-[11px] text-ailab-text/50">{t("user_status")}</p>
               </div>
             </div>
 
@@ -122,7 +122,7 @@ export function AiLabUserMenu({
                 <ArrowUpLeft className="w-3.5 h-3.5 flex-shrink-0" />
                 <div className="flex-1">
                   <span className="text-xs font-medium block">{t("back_home")}</span>
-                  <span className="text-[9px] text-ailab-muted/60">berkay.dev</span>
+                  <span className="text-[11px] text-ailab-muted/60">berkay.dev</span>
                 </div>
                 <Home className="w-3 h-3 text-ailab-muted/40 flex-shrink-0" />
               </Link>

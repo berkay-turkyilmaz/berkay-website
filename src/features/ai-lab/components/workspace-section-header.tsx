@@ -11,7 +11,7 @@ export function WorkspaceSectionHeader({
   label: string;
   inline?: boolean;
 }) {
-  const cls = "text-[10px] font-bold uppercase tracking-widest text-ailab-text/50";
+  const cls = "text-[11px] font-bold uppercase tracking-widest text-ailab-text/50";
   if (inline) {
     return (
       <div className="flex items-center gap-2">

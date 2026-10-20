@@ -154,6 +154,10 @@
       },
       "new_chat": "New Chat",
       "expand": "Expand menu",
+      "collapse": "Collapse menu",
+      "rename_chat": "Rename chat",
+      "delete_chat": "Delete chat",
+      "history_empty": "No saved chats yet.",
       "history": "History",
       "history_search": "Search...",
       "settings": "Settings",
@@ -167,6 +171,7 @@
     "chat": {
       "terminal_empty_title": "BEX ready.",
       "terminal_empty_desc": "Ask anything about Next.js, Supabase, n8n automations, or Berkay's projects.",
+      "doc_reupload_hint": "This chat was about \"{name}\". Attach the file again (paperclip) to keep asking questions about it.",
       "pdf_empty_title": "Document Analyzer",
       "pdf_empty_desc": "Drop a PDF, TXT or MD file — BEX reads the content and answers your questions in seconds.",
       "engineer_empty_title": "Hello, I'm BEX.",
@@ -595,6 +600,11 @@
       "charades": "Charades",
       "category_blitz": "Category Blitz",
       "passaparola": "Passaparola",
+      "word_match": "Word Match",
+      "word_scramble": "Word Scramble",
+      "hangman": "Hangman",
+      "listen_type": "Listen & Type",
+      "word_sprint": "Word Sprint",
       "games": "Games",
       "learn": "Learn",
       "all_games": "All games",
@@ -648,6 +658,78 @@
         "passaparola": { "title": "Passaparola", "desc": "A–Z alphabet wheel — Turkish clues, English answers!" }
       }
     },
+    "vocab_games": {
+      "level_label": "Level",
+      "all_levels": "All",
+      "level_hint": "A1 is beginner, C1 is advanced. The number shows how many words each level has.",
+      "start": "Start",
+      "not_enough_words": "Not enough words at this level (need {n})",
+      "best": "Best: {n}",
+      "played": "Played: {n}",
+      "finished": "Round complete!",
+      "new_best": "New best! 🎉",
+      "score": "Score",
+      "correct": "Correct",
+      "accuracy": "Accuracy",
+      "xp_earned": "+{n} XP earned",
+      "change_level": "Change level",
+      "play_again": "Play again",
+      "progress": "Question {n} / {total}",
+      "score_live": "{n} pts",
+      "hint": "Hint",
+      "skip": "Skip",
+      "next": "Next",
+      "finish": "Finish",
+      "check": "Check",
+      "word_match": {
+        "title": "Word Match",
+        "desc": "Flip the cards: pair every English word with its Turkish meaning. Fewer misses means more points.",
+        "pairs": "Number of pairs",
+        "found": "Found: {done} / {total}",
+        "misses": "Misses: {n}",
+        "hidden_tile": "Hidden card"
+      },
+      "word_scramble": {
+        "title": "Word Scramble",
+        "desc": "Put the scrambled letters in the right order. Using hints lowers your points.",
+        "clue": "Turkish meaning",
+        "letters": "{n} letters",
+        "tap_letters": "Tap the letters",
+        "undo": "Undo",
+        "reshuffle": "Shuffle"
+      },
+      "hangman": {
+        "title": "Hangman",
+        "desc": "Find the word from its Turkish meaning. Each wrong letter costs a life.",
+        "lives": "{n} lives left",
+        "show_example": "Show example sentence",
+        "won": "Great, you got it!",
+        "lost": "Not this time. The word was: {word}",
+        "keyboard": "Letter keyboard"
+      },
+      "listen_type": {
+        "title": "Listen & Type",
+        "desc": "Listen to the word and type its spelling. Get it right on the first try for full points.",
+        "unsupported": "Your browser does not support speech; this mode will show the Turkish meaning instead.",
+        "play": "Listen",
+        "spell": "Spell it",
+        "spell_hint": "Hear the word letter by letter",
+        "correct": "Correct! ✓",
+        "answer_was": "The answer was: {word}",
+        "try_again": "Almost! Try once more.",
+        "input_label": "Type the word you heard",
+        "placeholder": "Type the word you heard…"
+      },
+      "word_sprint": {
+        "title": "Word Sprint",
+        "desc": "Answer as many words as you can before time runs out. Streaks give bonus points.",
+        "duration": "Duration",
+        "time_left": "{n} seconds left",
+        "streak": "{n} streak 🔥",
+        "to_turkish": "What is it in Turkish?",
+        "to_english": "What is it in English?"
+      }
+    },
     "games_hub": {
       "play": "Play",
       "tip": "The most fun way to learn with friends!",
@@ -666,7 +748,31 @@
       "heads_up": { "title": "Heads Up", "desc": "Friends describe, you guess." },
       "charades": { "title": "Charades", "desc": "Mime silently, team guesses." },
       "category_blitz": { "title": "Category Blitz", "desc": "Letter + category — produce English words with your team." },
-      "passaparola": { "title": "Passaparola", "desc": "Turkish clues on the alphabet wheel — answer in English!" }
+      "passaparola": { "title": "Passaparola", "desc": "Turkish clues on the alphabet wheel — answer in English!" },
+      "vocab_title": "Vocabulary games",
+      "vocab_subtitle": "Play solo and pick your level (A1–C1). Works with {count} words and feeds your review schedule.",
+      "vocab": {
+        "word_match": {
+          "title": "Word Match",
+          "desc": "Flip cards and pair each English word with its Turkish meaning."
+        },
+        "word_scramble": {
+          "title": "Word Scramble",
+          "desc": "Unscramble the letters; the Turkish meaning is your clue."
+        },
+        "hangman": {
+          "title": "Hangman",
+          "desc": "Guess letter by letter; you have 6 lives."
+        },
+        "listen_type": {
+          "title": "Listen & Type",
+          "desc": "Listen to the word and type how it is spelled."
+        },
+        "word_sprint": {
+          "title": "Word Sprint",
+          "desc": "Beat the clock with multiple choice; streaks earn bonus points."
+        }
+      }
     },
     "flashcards": {
       "all": "All",
@@ -678,6 +784,7 @@
       "need_practice": "Need practice",
       "remove_weak": "Remove flag",
       "mode_all": "All cards",
+      "mode_due": "Due today",
       "mode_learning": "Still learning",
       "mode_weak": "Need practice",
       "no_cards": "No cards found",
@@ -702,7 +809,11 @@
       "health": "Health",
       "environment": "Environment",
       "business": "Business",
-      "academic": "Academic"
+      "academic": "Academic",
+      "home": "Home",
+      "school": "School",
+      "shopping": "Shopping",
+      "nature": "Nature"
     },
     "game_categories": {
       "taboo": {
@@ -774,6 +885,7 @@
     "exam": {
       "title": "Level Exam",
       "intro": "Pick a mode and start a {count}-question exam. Each mode uses different question styles.",
+      "pick_level": "Choose level",
       "pick_mode": "Exam type",
       "pool": "questions",
       "start": "Start Exam",
@@ -851,7 +963,7 @@
       "category": "Category",
       "difficulty": "Difficulty",
       "all": "All",
-      "diff": { "easy": "Easy", "medium": "Medium", "hard": "Hard" },
+      "diff": { "easy": "Easy (A1–A2)", "medium": "Medium (B1)", "hard": "Hard (B2–C1)" },
       "round_size": "Cards per round",
       "show_meaning": "Show Turkish meaning",
       "hide_meaning": "Hide Turkish meaning",
@@ -902,9 +1014,9 @@
       "how_3": "Got it? Green · Pass? Yellow · Round ends when time runs out.",
       "all": "All",
       "diff": {
-        "easy": "Easy",
-        "medium": "Medium",
-        "hard": "Hard"
+        "easy": "Easy (A1–A2)",
+        "medium": "Medium (B1)",
+        "hard": "Hard (B2–C1)"
       },
       "cards": "words",
       "seen_today": "seen today",
@@ -938,9 +1050,9 @@
       "how_3": "Team guessed right? Green · Pass? Yellow.",
       "all": "All",
       "diff": {
-        "easy": "Easy",
-        "medium": "Medium",
-        "hard": "Hard"
+        "easy": "Easy (A1–A2)",
+        "medium": "Medium (B1)",
+        "hard": "Hard (B2–C1)"
       },
       "cards": "words",
       "seen_today": "seen today",
@@ -974,9 +1086,9 @@
       },
       "all": "All",
       "diff": {
-        "easy": "Easy",
-        "medium": "Medium",
-        "hard": "Hard"
+        "easy": "Easy (A1–A2)",
+        "medium": "Medium (B1)",
+        "hard": "Hard (B2–C1)"
       },
       "timer": "Round timer",
       "rounds": "Number of rounds",

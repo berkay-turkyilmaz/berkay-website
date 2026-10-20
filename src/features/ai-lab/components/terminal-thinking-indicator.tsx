@@ -7,13 +7,13 @@ export function TerminalThinkingIndicator({ label }: { label: string }) {
   return (
     <div className="flex gap-3">
       <div className="mt-0.5 flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-ailab-glass-07 ring-1 ring-inset ring-ailab-border-strong">
-        <span className="text-[9px] font-bold leading-none text-ailab-text/55">
+        <span className="text-[11px] font-bold leading-none text-ailab-text/55">
           {AI_AGENT_NAME.slice(0, 1)}
         </span>
       </div>
       <div className="flex min-w-0 flex-col gap-2 pt-0.5">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-          <span className="text-[10px] font-semibold tracking-wide text-ailab-text/45">
+          <span className="text-[11px] font-semibold tracking-wide text-ailab-text/45">
             {AI_AGENT_NAME}
           </span>
           <span className="text-[11px] italic text-ailab-text/50">{label}</span>

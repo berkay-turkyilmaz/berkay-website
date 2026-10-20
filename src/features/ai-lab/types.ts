@@ -12,14 +12,6 @@ export interface WorkspaceSettings {
   displayName: string;
 }
 
-export interface ChatHistoryItem {
-  id: string;
-  mode: ChatMode;
-  title: string;
-  timestamp: number;
-  messages: BexChatMessage[];
-}
-
 /** Sidebar rows that open workspace settings / future API screen (no route). */
 export type SidebarNavAction = "settings" | "api_config";
 

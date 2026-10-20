@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
-import * as d3 from "d3";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain,
@@ -21,241 +20,16 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
-type ChunkRole =
-  | "subject"
-  | "predicate"
-  | "context"
-  | "evidence"
-  | "connector"
-  | "conclusion";
-
-type Chunk = {
-  id: number;
-  text: string;
-  role: ChunkRole;
-  weight: number;
-  pos_dominant: string;
-  reasoning: string;
-  related: number[];
-  token_count: number;
-  redundancy: number;
-};
-
-type AnalysisResult = {
-  chunks: Chunk[];
-  totalTokens: number;
-  contextWindowSize: number;
-  redundantChunks: number[];
-  compressionPotential: number;
-};
-
-type ViewMode = "heatmap" | "graph" | "split";
-
-// ─── Constants ────────────────────────────────────────────────────────────────
-
-const ROLE_COLORS: Record<ChunkRole, string> = {
-  subject: "#60a5fa",
-  predicate: "#34d399",
-  context: "#a78bfa",
-  evidence: "#fbbf24",
-  connector: "#94a3b8",
-  conclusion: "#f472b6",
-};
-
-const SAMPLE_TEXT_BODIES = {
-  tr: {
-    technical:
-      "React, Facebook tarafından geliştirilen açık kaynaklı bir JavaScript kütüphanesidir. Kullanıcı arayüzleri oluşturmak için component tabanlı bir mimari kullanır. Virtual DOM sayesinde gerçek DOM manipülasyonunu minimize eder. Bu yaklaşım, büyük ölçekli uygulamalarda performans avantajı sağlar. State yönetimi için useState ve useReducer hook'ları kullanılabilir. Ayrıca useEffect ile side effect'ler yönetilebilir.",
-    academic:
-      "Yapay zeka, insan zekasını taklit eden bilgisayar sistemleri geliştirme bilimidir. Makine öğrenmesi, bu alanın en önemli alt dallarından birini oluşturmaktadır. Derin öğrenme algoritmaları, büyük veri setleri üzerinde örüntü tanıma konusunda üstün başarı sergilemiştir. Doğal dil işleme teknolojileri ise insan-bilgisayar etkileşimini köklü biçimde dönüştürmektedir.",
-    blog: "Next.js ile modern web uygulamaları geliştirmek hiç bu kadar kolay olmamıştı. App Router ile birlikte server components devreye girdi. Bu değişiklik, hem performansı hem de geliştirici deneyimini iyileştirdi. Streaming ve Suspense desteği ile kullanıcılar içeriği daha hızlı görüyor. Vercel deployment entegrasyonu da işleri son derece basitleştiriyor.",
-  },
-  en: {
-    technical:
-      "React is an open-source JavaScript library developed by Facebook. It uses a component-based architecture to build user interfaces. The Virtual DOM minimizes direct DOM manipulation. This approach delivers performance benefits in large-scale applications. useState and useReducer hooks can manage state, and useEffect handles side effects.",
-    academic:
-      "Artificial intelligence is the science of building computer systems that mimic human intelligence. Machine learning is one of its most important subfields. Deep learning algorithms have excelled at pattern recognition on large datasets. Natural language processing is fundamentally transforming human-computer interaction.",
-    blog: "Building modern web apps with Next.js has never been easier. The App Router introduced server components. This change improved both performance and developer experience. Streaming and Suspense let users see content faster. Vercel deployment integration simplifies operations even further.",
-  },
-} as const;
-
-// ─── Weight → Color helper ────────────────────────────────────────────────────
-
-function weightToColor(weight: number, opacity = 1): string {
-  if (weight > 0.75) return `rgba(239,68,68,${opacity})`;
-  if (weight > 0.5) return `rgba(249,115,22,${opacity})`;
-  if (weight > 0.25) return `rgba(234,179,8,${opacity})`;
-  return `rgba(100,116,139,${opacity})`;
-}
-
-// ─── D3 Force Graph ───────────────────────────────────────────────────────────
-
-function ForceGraph({
-  chunks,
-  activeChunk,
-  onHover,
-}: {
-  chunks: Chunk[];
-  activeChunk: number | null;
-  onHover: (id: number | null) => void;
-}) {
-  const svgRef = useRef<SVGSVGElement>(null);
-  const simulationRef = useRef<d3.Simulation<d3.SimulationNodeDatum, undefined> | null>(null);
-
-  useEffect(() => {
-    if (!svgRef.current || chunks.length === 0) return;
-
-    const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove();
-
-    const width = svgRef.current.clientWidth || 600;
-    const height = svgRef.current.clientHeight || 400;
-
-    // Build nodes & edges
-    const nodes = chunks.map((c) => ({
-      ...c,
-      x: width / 2 + (Math.random() - 0.5) * 200,
-      y: height / 2 + (Math.random() - 0.5) * 200,
-    }));
-
-    const links: { source: number; target: number; strength: number }[] = [];
-    chunks.forEach((c) => {
-      c.related.forEach((rel) => {
-        if (rel < chunks.length) {
-          links.push({ source: c.id, target: rel, strength: 0.5 });
-        }
-      });
-    });
-
-    // Defs: glow filter
-    const defs = svg.append("defs");
-    const filter = defs
-      .append("filter")
-      .attr("id", "glow")
-      .attr("x", "-50%")
-      .attr("y", "-50%")
-      .attr("width", "200%")
-      .attr("height", "200%");
-    filter
-      .append("feGaussianBlur")
-      .attr("stdDeviation", "3")
-      .attr("result", "coloredBlur");
-    const feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode").attr("in", "coloredBlur");
-    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-
-    // Container
-    const g = svg.append("g");
-
-    // Zoom
-    svg.call(
-      d3.zoom<SVGSVGElement, unknown>().on("zoom", (event) => {
-        g.attr("transform", event.transform);
-      })
-    );
-
-    // Links
-    const link = g
-      .append("g")
-      .selectAll("line")
-      .data(links)
-      .join("line")
-      .attr("stroke", "#334155")
-      .attr("stroke-width", (d) => d.strength * 2)
-      .attr("stroke-dasharray", "4 2")
-      .attr("opacity", 0.6);
-
-    // Nodes
-    const node = g
-      .append("g")
-      .selectAll("g")
-      .data(nodes)
-      .join("g")
-      .attr("cursor", "pointer")
-      .on("mouseenter", (_event, d) => onHover(d.id))
-      .on("mouseleave", () => onHover(null));
-
-    // Node circle
-    node
-      .append("circle")
-      .attr("r", (d) => 14 + d.weight * 22)
-      .attr("fill", (d) => weightToColor(d.weight, 0.15))
-      .attr("stroke", (d) =>
-        activeChunk === d.id
-          ? "#f8fafc"
-          : ROLE_COLORS[d.role as ChunkRole] || "#94a3b8"
-      )
-      .attr("stroke-width", (d) => (activeChunk === d.id ? 2.5 : 1.5))
-      .attr("filter", (d) => (d.weight > 0.7 ? "url(#glow)" : "none"));
-
-    // Weight label
-    node
-      .append("text")
-      .text((d) => Math.round(d.weight * 100) + "%")
-      .attr("text-anchor", "middle")
-      .attr("dy", "0.35em")
-      .attr("fill", "#f8fafc")
-      .attr("font-size", "10px")
-      .attr("font-weight", "700")
-      .attr("pointer-events", "none");
-
-    // Chunk id badge
-    node
-      .append("text")
-      .text((d) => `#${d.id + 1}`)
-      .attr("text-anchor", "middle")
-      .attr("dy", (d) => -(14 + d.weight * 22 + 6))
-      .attr("fill", "#94a3b8")
-      .attr("font-size", "9px")
-      .attr("pointer-events", "none");
-
-    // Simulation
-    const simulation = d3
-      .forceSimulation(nodes as d3.SimulationNodeDatum[])
-      .force(
-        "link",
-        d3
-          .forceLink(links)
-          .id((d: d3.SimulationNodeDatum) => (d as Chunk).id)
-          .distance(120)
-      )
-      .force("charge", d3.forceManyBody().strength(-180))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force(
-        "collision",
-        d3.forceCollide((d: d3.SimulationNodeDatum) => 18 + (d as Chunk).weight * 24)
-      );
-
-    simulationRef.current = simulation;
-
-    simulation.on("tick", () => {
-      link
-        .attr("x1", (d) => (d.source as unknown as { x: number }).x)
-        .attr("y1", (d) => (d.source as unknown as { y: number }).y)
-        .attr("x2", (d) => (d.target as unknown as { x: number }).x)
-        .attr("y2", (d) => (d.target as unknown as { y: number }).y);
-
-      node.attr(
-        "transform",
-        (d) => `translate(${(d as { x: number }).x},${(d as { y: number }).y})`
-      );
-    });
-
-    return () => {
-      simulation.stop();
-    };
-  }, [chunks, activeChunk, onHover]);
-
-  return (
-    <svg
-      ref={svgRef}
-      className="w-full h-full"
-      style={{ background: "transparent" }}
-    />
-  );
-}
+import {
+  ROLE_COLORS,
+  SAMPLE_TEXT_BODIES,
+  weightToColor,
+  type AnalysisResult,
+  type Chunk,
+  type ChunkRole,
+  type ViewMode,
+} from "./deep-analyzer-model";
+import { ForceGraph } from "./deep-analyzer-force-graph";
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
@@ -432,7 +206,7 @@ export default function DeepAnalyzerPanel() {
             </div>
             <div>
               <h1 className="text-sm font-bold text-ailab-text tracking-tight">{t("title")}</h1>
-              <p className="text-[10px] text-ailab-muted font-mono uppercase tracking-widest">
+              <p className="text-[11px] text-ailab-muted font-mono uppercase tracking-widest">
                 {t("subtitle")}
               </p>
             </div>
@@ -510,7 +284,7 @@ export default function DeepAnalyzerPanel() {
                 </div>
                 <div>
                   <p className="text-xs font-medium text-ailab-text">{t("upload_title")}</p>
-                  <p className="text-[10px] text-ailab-muted mt-0.5">{t("upload_hint")}</p>
+                  <p className="text-[11px] text-ailab-muted mt-0.5">{t("upload_hint")}</p>
                 </div>
               </div>
             </button>
@@ -523,7 +297,7 @@ export default function DeepAnalyzerPanel() {
                 rows={6}
                 className="w-full bg-ailab-glass-06 border border-ailab-border-subtle rounded-2xl px-5 py-4 text-sm text-ailab-text placeholder:text-ailab-muted focus:outline-none focus:ring-2 focus:ring-ailab-accent/40 focus:border-ailab-accent/35 resize-none transition-all"
               />
-              <div className="absolute bottom-3 right-3 text-[10px] text-ailab-muted font-mono">
+              <div className="absolute bottom-3 right-3 text-[11px] text-ailab-muted font-mono">
                 {t("token_estimate", {
                   n: Math.round(inputText.split(" ").length * 1.3),
                 })}
@@ -586,7 +360,7 @@ export default function DeepAnalyzerPanel() {
                   transition={{ duration: 0.8, ease: "easeOut" }}
                 />
               </div>
-              <div className="mt-2 text-[10px] text-ailab-muted">
+              <div className="mt-2 text-[11px] text-ailab-muted">
                 {t("context_fill", { pct: contextFill.toFixed(1) })}
               </div>
             </div>
@@ -626,7 +400,7 @@ export default function DeepAnalyzerPanel() {
 
                   {/* Role legend */}
                   <div className="bg-ailab-glass-06 border border-ailab-border-subtle rounded-2xl p-4">
-                    <div className="text-[10px] font-bold text-ailab-muted uppercase tracking-widest mb-3">
+                    <div className="text-[11px] font-bold text-ailab-muted uppercase tracking-widest mb-3">
                       {t("chunk_roles")}
                     </div>
                     <div className="space-y-1.5">
@@ -740,7 +514,7 @@ export default function DeepAnalyzerPanel() {
                   <div className="flex items-center gap-2 mb-5">
                     <Layers className="w-4 h-4 text-ailab-muted" />
                     <h2 className="text-sm font-bold text-ailab-text">{t("heatmap_title")}</h2>
-                    <span className="text-[10px] text-ailab-muted ml-auto">
+                    <span className="text-[11px] text-ailab-muted ml-auto">
                       {t("heatmap_hint")}
                     </span>
                   </div>
@@ -777,7 +551,7 @@ export default function DeepAnalyzerPanel() {
                           }}
                         >
                           <span
-                            className="absolute -top-1.5 -left-1 text-[8px] font-mono font-bold rounded px-0.5"
+                            className="absolute -top-1.5 -left-1 text-[11px] font-mono font-bold rounded px-0.5"
                             style={{
                               color: ROLE_COLORS[chunk.role] || "#94a3b8",
                               backgroundColor: "#0f172a",
@@ -799,7 +573,7 @@ export default function DeepAnalyzerPanel() {
                   <div className="flex items-center gap-2 mb-4">
                     <Network className="w-4 h-4 text-ailab-muted" />
                     <h2 className="text-sm font-bold text-ailab-text">{t("graph_title")}</h2>
-                    <span className="text-[10px] text-ailab-muted ml-auto">
+                    <span className="text-[11px] text-ailab-muted ml-auto">
                       {t("graph_hint")}
                     </span>
                   </div>
@@ -848,7 +622,7 @@ export default function DeepAnalyzerPanel() {
                             {t("chunk_label", { n: activeChunkData.id + 1 })}
                           </span>
                           <span
-                            className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                            className="text-[11px] font-bold px-2 py-0.5 rounded-full"
                             style={{
                               backgroundColor:
                                 ROLE_COLORS[activeChunkData.role] + "20",
@@ -857,11 +631,11 @@ export default function DeepAnalyzerPanel() {
                           >
                             {roleLabels[activeChunkData.role]}
                           </span>
-                          <span className="text-[10px] bg-ailab-glass-08 text-ailab-muted px-2 py-0.5 rounded-full font-mono">
+                          <span className="text-[11px] bg-ailab-glass-08 text-ailab-muted px-2 py-0.5 rounded-full font-mono">
                             {t("token_estimate", { n: activeChunkData.token_count })}
                           </span>
                           <span
-                            className="text-[10px] px-2 py-0.5 rounded-full font-bold"
+                            className="text-[11px] px-2 py-0.5 rounded-full font-bold"
                             style={{
                               backgroundColor: weightToColor(
                                 activeChunkData.weight,
@@ -874,7 +648,7 @@ export default function DeepAnalyzerPanel() {
                           </span>
                         </div>
                         <p className="text-sm text-ailab-text mb-3 leading-relaxed">
-                          "{activeChunkData.text}"
+                          &ldquo;{activeChunkData.text}&rdquo;
                         </p>
                         <div className="flex items-center gap-1.5 text-xs text-ailab-muted">
                           <ChevronRight className="w-3 h-3" />
@@ -882,12 +656,12 @@ export default function DeepAnalyzerPanel() {
                         </div>
                         {activeChunkData.related.length > 0 && (
                           <div className="mt-2 flex items-center gap-2">
-                            <span className="text-[10px] text-ailab-muted">{t("related")}</span>
+                            <span className="text-[11px] text-ailab-muted">{t("related")}</span>
                             {activeChunkData.related.map((r) => (
                               <button
                                 key={r}
                                 onClick={() => setActiveChunk(r)}
-                                className="text-[10px] px-2 py-0.5 bg-ailab-glass-08 hover:bg-ailab-glass-10 text-ailab-muted hover:text-ailab-text rounded font-mono transition-colors"
+                                className="text-[11px] px-2 py-0.5 bg-ailab-glass-08 hover:bg-ailab-glass-10 text-ailab-muted hover:text-ailab-text rounded font-mono transition-colors"
                               >
                                 #{r + 1}
                               </button>
@@ -913,7 +687,7 @@ export default function DeepAnalyzerPanel() {
                         {tableHeaders.map((h) => (
                             <th
                               key={h}
-                              className="px-4 py-3 text-left text-[10px] font-bold text-ailab-muted uppercase tracking-widest"
+                              className="px-4 py-3 text-left text-[11px] font-bold text-ailab-muted uppercase tracking-widest"
                             >
                               {h}
                             </th>
@@ -945,7 +719,7 @@ export default function DeepAnalyzerPanel() {
                           </td>
                           <td className="px-4 py-3">
                             <span
-                              className="px-2 py-0.5 rounded-full text-[10px] font-bold"
+                              className="px-2 py-0.5 rounded-full text-[11px] font-bold"
                               style={{
                                 backgroundColor:
                                   ROLE_COLORS[chunk.role] + "20",

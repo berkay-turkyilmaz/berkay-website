@@ -31,7 +31,7 @@ export function TerminalCodeBlock({
           "bg-ailab-glass-05 border-b border-ailab-border-muted"
         )}
       >
-        <span className="text-[10px] font-mono uppercase tracking-widest text-ailab-text/50">{language}</span>
+        <span className="text-[11px] font-mono uppercase tracking-widest text-ailab-text/50">{language}</span>
         <button
           type="button"
           onClick={() => {
@@ -40,7 +40,7 @@ export function TerminalCodeBlock({
             setTimeout(() => setCopied(false), 2000);
           }}
           className={cn(
-            "flex items-center gap-1.5 text-[10px]",
+            "flex items-center gap-1.5 text-[11px]",
             "text-ailab-text/55 transition-[color,opacity] duration-300 ease-out",
             "hover:text-ailab-accent focus-visible:outline-none focus-visible:text-ailab-accent"
           )}

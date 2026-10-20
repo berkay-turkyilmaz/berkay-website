@@ -58,7 +58,7 @@ export const TerminalMessageBubble = memo(function TerminalMessageBubble({
           >
             {content}
           </div>
-          <p className="text-[10px] text-right pr-1 text-ailab-muted font-mono tracking-wide">{userLabel}</p>
+          <p className="text-[11px] text-right pr-1 text-ailab-muted font-mono tracking-wide">{userLabel}</p>
         </div>
         <div
           className={cn(
@@ -95,7 +95,7 @@ export const TerminalMessageBubble = memo(function TerminalMessageBubble({
           <AlertCircle className="w-3.5 h-3.5 text-red-300" />
         </div>
         <div className="flex-1 min-w-0">
-          <div className="text-[10px] font-mono mb-1.5 text-ailab-muted">
+          <div className="text-[11px] font-mono mb-1.5 text-ailab-muted">
             {AI_AGENT_NAME} · {assistantLabel}
           </div>
           <div
@@ -125,10 +125,10 @@ export const TerminalMessageBubble = memo(function TerminalMessageBubble({
           "bg-ailab-glass-07 ring-1 ring-inset ring-ailab-border-muted"
         )}
       >
-        <span className="text-[10px] font-bold text-ailab-muted">{AI_AGENT_NAME.slice(0, 1)}</span>
+        <span className="text-[11px] font-bold text-ailab-muted">{AI_AGENT_NAME.slice(0, 1)}</span>
       </div>
       <div className="flex-1 min-w-0 space-y-2">
-        <div className="text-[10px] font-mono tracking-wide text-ailab-muted">
+        <div className="text-[11px] font-mono tracking-wide text-ailab-muted">
           {AI_AGENT_NAME} · {assistantLabel}
         </div>
 
@@ -161,7 +161,7 @@ export const TerminalMessageBubble = memo(function TerminalMessageBubble({
               setTimeout(() => setCopied(false), 2000);
             }}
             className={cn(
-              "flex items-center gap-1 text-[10px] opacity-0 group-hover:opacity-100",
+              "flex items-center gap-1 text-[11px] opacity-0 group-hover:opacity-100",
               "text-ailab-muted transition-[opacity,color] duration-300 ease-out",
               "hover:text-ailab-accent focus-visible:opacity-100 focus-visible:outline-none focus-visible:text-ailab-accent"
             )}

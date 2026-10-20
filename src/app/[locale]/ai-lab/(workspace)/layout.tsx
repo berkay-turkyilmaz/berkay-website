@@ -14,7 +14,7 @@ export async function generateMetadata({
 
   return createPageMetadata({
     locale,
-    path: "/ai-lab",
+    path: "/ai-lab/chat",
     title: t("ai_lab_title"),
     description: t("ai_lab_description"),
   });

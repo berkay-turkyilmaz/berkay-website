@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { X, Check, Trash2 } from "lucide-react";
@@ -17,7 +17,7 @@ function Group({
 }) {
   return (
     <div className="space-y-2">
-      <p className="px-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-ailab-muted">
+      <p className="px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-ailab-muted">
         {label}
       </p>
       <div className="overflow-hidden rounded-xl ring-1 ring-inset ring-ailab-border-subtle divide-y divide-ailab-border-muted bg-ailab-glass-04">
@@ -66,18 +66,47 @@ export function WorkspaceSettingsPanel({
     setNameValue(settings.displayName);
   }, [settings.displayName]);
 
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const onCloseRef = useRef(onClose);
   useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
+  // Modal behaviour: Escape closes, Tab stays inside, focus returns to the opener.
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    const dialog = dialogRef.current;
+    dialog?.querySelector<HTMLElement>("button, input, [href], select, textarea")?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onCloseRef.current();
+        return;
+      }
+      if (e.key !== "Tab" || !dialog) return;
+      const focusable = dialog.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [href], [tabindex]:not([tabindex="-1"])'
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
+    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
+      document.body.style.overflow = prevOverflow;
+      opener?.focus?.();
     };
-  }, [onClose]);
+  }, []);
 
   const lengthOptions = [
     { value: "short" as const, label: t("length_short") },
@@ -104,6 +133,7 @@ export function WorkspaceSettingsPanel({
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <motion.div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby="ailab-settings-title"
@@ -177,7 +207,7 @@ export function WorkspaceSettingsPanel({
                     <p className="text-[11px] text-ailab-muted">{t(m.descKey as never)}</p>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    <span className="font-mono text-[10px] text-ailab-muted">{t(m.speedKey as never)}</span>
+                    <span className="font-mono text-[11px] text-ailab-muted">{t(m.speedKey as never)}</span>
                     {sel && <Check className="h-4 w-4 text-ailab-accent" strokeWidth={2.5} />}
                   </div>
                 </button>
@@ -227,7 +257,7 @@ export function WorkspaceSettingsPanel({
                   background: `linear-gradient(to right, var(--color-ailab-accent-soft) ${settings.temperature * 100}%, var(--color-ailab-border-muted) ${settings.temperature * 100}%)`,
                 }}
               />
-              <div className="mt-1.5 flex justify-between text-[10px] text-ailab-muted">
+              <div className="mt-1.5 flex justify-between text-[11px] text-ailab-muted">
                 <span>{t("creativity_precise")}</span>
                 <span>{t("creativity_creative")}</span>
               </div>
@@ -272,8 +302,8 @@ export function WorkspaceSettingsPanel({
                   <div className="flex items-center gap-1">
                     {shortcut.keys.map((k, i) => (
                       <span key={`${shortcut.label}-${k}`} className="flex items-center gap-1">
-                        {i > 0 && <span className="text-[10px] text-ailab-muted/50">+</span>}
-                        <kbd className="px-1.5 py-0.5 rounded-md text-[10px] font-mono font-semibold text-ailab-muted bg-ailab-glass-08 ring-1 ring-inset ring-ailab-border-muted">
+                        {i > 0 && <span className="text-[11px] text-ailab-muted/50">+</span>}
+                        <kbd className="px-1.5 py-0.5 rounded-md text-[11px] font-mono font-semibold text-ailab-muted bg-ailab-glass-08 ring-1 ring-inset ring-ailab-border-muted">
                           {k}
                         </kbd>
                       </span>
@@ -303,7 +333,7 @@ export function WorkspaceSettingsPanel({
               {cleared ? <Check className="h-4 w-4" /> : <Trash2 className="h-4 w-4" />}
               {cleared ? t("cleared") : t("clear_chat")}
             </button>
-            <p className="mt-2 text-center text-[10px] text-ailab-muted">{t("danger_clear_hint")}</p>
+            <p className="mt-2 text-center text-[11px] text-ailab-muted">{t("danger_clear_hint")}</p>
           </div>
         </div>
       </motion.div>

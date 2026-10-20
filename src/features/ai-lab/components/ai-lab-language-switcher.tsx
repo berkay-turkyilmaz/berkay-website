@@ -98,7 +98,7 @@ export function AiLabLanguageSwitcher() {
             )}
           >
             <div className="mb-1 border-b border-ailab-border-muted px-2.5 py-1.5">
-              <span className="text-[9px] font-bold uppercase tracking-widest text-ailab-text/50">
+              <span className="text-[11px] font-bold uppercase tracking-widest text-ailab-text/50">
                 {t("ui_language")}
               </span>
             </div>

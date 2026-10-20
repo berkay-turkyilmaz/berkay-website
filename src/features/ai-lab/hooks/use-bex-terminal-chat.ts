@@ -3,33 +3,32 @@
 import {
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
 import { useTranslations } from "next-intl";
-import { SESSION_KEYS, normalizeChatMode } from "../constants";
 import type { BexChatMessage, ChatMode, UploadedDoc, WorkspaceSettings } from "../types";
+import { getChat, migrateLegacyChats, saveChat, type ChatKind } from "../lib/chat-store";
 import { useAgentWorkflow } from "./use-agent-workflow";
 
 export interface UseBexTerminalChatOptions {
-  mode: ChatMode;
+  kind: ChatKind;
+  /** Id from the URL. Unknown ids simply start a fresh chat under that id. */
+  chatId: string;
   settings?: WorkspaceSettings;
   /** When false (default), stream starts immediately — no AgentStateFlow. */
   enableAgentWorkflow?: boolean;
 }
 
 export function useBexTerminalChat({
-  mode,
+  kind,
+  chatId,
   settings,
   enableAgentWorkflow = false,
 }: UseBexTerminalChatOptions) {
   const t = useTranslations("AiLabPage.chat");
 
-  const safeMode: ChatMode = (["terminal", "pdf", "engineer"] as ChatMode[]).includes(mode)
-    ? normalizeChatMode(mode)
-    : "engineer";
-  const sessionKey = SESSION_KEYS[safeMode];
+  const safeMode: ChatMode = kind === "document" ? "pdf" : "engineer";
 
   const modeConfig = {
     terminal: {
@@ -74,7 +73,8 @@ export function useBexTerminalChat({
 
   const [mounted, setMounted] = useState(false);
   const [messages, setMessages] = useState<BexChatMessage[]>([]);
-  const [activeSessionKey, setActiveSessionKey] = useState<string>("");
+  const [savedDocName, setSavedDocName] = useState<string | null>(null);
+  const loadedMessagesRef = useRef<BexChatMessage[] | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
@@ -89,34 +89,26 @@ export function useBexTerminalChat({
   const abortRef = useRef<AbortController | null>(null);
   const { workflowUi, runWorkflow, completeExitAnimation } = useAgentWorkflow();
 
+  // Load the saved conversation for this id (after the one-time v1 -> v2 migration).
   useEffect(() => {
+    migrateLegacyChats();
+    const saved = getChat(chatId);
+    if (saved && saved.kind === kind) {
+      loadedMessagesRef.current = saved.messages;
+      setMessages(saved.messages);
+      setSavedDocName(saved.docName ?? null);
+    }
     setMounted(true);
-    try {
-      const saved = sessionStorage.getItem(sessionKey);
-      setMessages(saved ? JSON.parse(saved) : []);
-    } catch {
-      setMessages([]);
-    }
+  }, [chatId, kind]);
 
-    setActiveSessionKey(sessionKey);
-
-    if (safeMode !== "pdf") {
-      setUploadedDoc(null);
-      setUploadError(null);
-    }
-  }, [sessionKey, safeMode]);
-
+  // Persist once a reply finished (not on every streamed chunk).
   useEffect(() => {
-    if (!mounted) return;
-    if (activeSessionKey === sessionKey) {
-      sessionStorage.setItem(sessionKey, JSON.stringify(messages));
-    }
-  }, [messages, activeSessionKey, sessionKey, mounted]);
+    if (!mounted || isLoading || messages.length === 0) return;
+    if (messages === loadedMessagesRef.current) return; // just opened, nothing new to save
+    saveChat({ id: chatId, kind, messages, docName: uploadedDoc?.name });
+  }, [messages, isLoading, mounted, chatId, kind, uploadedDoc?.name]);
 
-  const displayMessages = useMemo(
-    () => (activeSessionKey === sessionKey ? messages : []),
-    [activeSessionKey, sessionKey, messages]
-  );
+  const displayMessages = messages;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -130,18 +122,6 @@ export function useBexTerminalChat({
     el.addEventListener("scroll", h);
     return () => el.removeEventListener("scroll", h);
   }, []);
-
-  useEffect(() => {
-    (window as Window & { bexClear?: () => void }).bexClear = () => {
-      setMessages([]);
-      setUploadedDoc(null);
-      setUploadError(null);
-      sessionStorage.removeItem(sessionKey);
-    };
-    return () => {
-      delete (window as Window & { bexClear?: () => void }).bexClear;
-    };
-  }, [sessionKey]);
 
   const handleFile = useCallback(async (file: File) => {
     if (file.size > 20 * 1024 * 1024) {
@@ -355,6 +335,7 @@ export function useBexTerminalChat({
     fileInputRef,
     showScrollBtn,
     uploadedDoc,
+    savedDocName,
     setUploadedDoc,
     isUploading,
     uploadError,

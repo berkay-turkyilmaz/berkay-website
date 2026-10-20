@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import TextareaAutosize from "react-textarea-autosize";
 import { Send, Square, ChevronDown, Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { ChatMode, WorkspaceSettings } from "../types";
+import type { WorkspaceSettings } from "../types";
+import type { ChatKind } from "../lib/chat-store";
 import { AI_AGENT_NAME } from "../constants";
 import { useBexTerminalChat } from "../hooks/use-bex-terminal-chat";
 import { TerminalThinkingIndicator } from "./terminal-thinking-indicator";
@@ -14,13 +15,15 @@ import { TerminalDocChip } from "./terminal-doc-chip";
 
 interface TerminalChatProps {
   settings?: WorkspaceSettings;
-  mode: ChatMode;
+  kind: ChatKind;
+  chatId: string;
   enableAgentWorkflow?: boolean;
 }
 
 export default function TerminalChat({
   settings,
-  mode,
+  kind,
+  chatId,
   enableAgentWorkflow = false,
 }: TerminalChatProps) {
   const {
@@ -43,6 +46,7 @@ export default function TerminalChat({
     fileInputRef,
     showScrollBtn,
     uploadedDoc,
+    savedDocName,
     setUploadedDoc,
     isUploading,
     uploadError,
@@ -52,7 +56,7 @@ export default function TerminalChat({
     scrollToEnd,
     workflowUi,
     completeExitAnimation,
-  } = useBexTerminalChat({ mode, settings, enableAgentWorkflow });
+  } = useBexTerminalChat({ kind, chatId, settings, enableAgentWorkflow });
 
   const visibleMessages = displayMessages.filter((m) => {
     if (m.role === "assistant" && m.content === "") {
@@ -81,7 +85,7 @@ export default function TerminalChat({
               )}
             >
               <div className="flex w-8 flex-shrink-0 items-center justify-center">
-                <span className="text-[10px] font-bold text-ailab-muted">{AI_AGENT_NAME.slice(0, 1)}</span>
+                <span className="text-[11px] font-bold text-ailab-muted">{AI_AGENT_NAME.slice(0, 1)}</span>
               </div>
               <div className="flex-1 py-2 px-1 text-sm text-ailab-muted">{config.placeholder}</div>
               <div className="p-2 rounded-xl flex-shrink-0 w-9 h-9 bg-ailab-glass-08" />
@@ -156,7 +160,7 @@ export default function TerminalChat({
                     </div>
                     <div>
                       <p className="text-sm font-bold tracking-[0.1em] text-ailab-text">{AI_AGENT_NAME}</p>
-                      <p className="text-[10px] text-ailab-muted font-mono uppercase tracking-widest mt-0.5">
+                      <p className="text-[11px] text-ailab-muted font-mono uppercase tracking-widest mt-0.5">
                         {t("engineer_status")}
                       </p>
                     </div>
@@ -289,11 +293,16 @@ export default function TerminalChat({
                     setUploadError(null);
                   }}
                 />
-                <span className="text-[10px] text-ailab-muted">{t("uploaded_label")}</span>
+                <span className="text-[11px] text-ailab-muted">{t("uploaded_label")}</span>
               </motion.div>
             )}
           </AnimatePresence>
 
+          {safeMode === "pdf" && !uploadedDoc && displayMessages.length > 0 && (
+            <p className="mb-2 rounded-xl bg-ailab-glass-06 px-3 py-2 text-xs text-ailab-muted ring-1 ring-inset ring-ailab-border-muted">
+              {t("doc_reupload_hint", { name: savedDocName ?? "—" })}
+            </p>
+          )}
           <div
             className={cn(
               "rounded-2xl p-2 sm:p-2.5",
@@ -388,10 +397,10 @@ export default function TerminalChat({
           </div>
 
           <div className="hidden sm:flex items-center justify-between mt-2.5 px-1">
-            <p className="text-[10px] tracking-wider text-ailab-muted font-medium [font-variant:small-caps]">
+            <p className="text-[11px] tracking-wider text-ailab-muted font-medium [font-variant:small-caps]">
               {t("footer_warning")}
             </p>
-            <p className="text-[10px] text-ailab-muted/60 font-mono">
+            <p className="text-[11px] text-ailab-muted/60 font-mono">
               {t("keyboard_hint")}
             </p>
           </div>

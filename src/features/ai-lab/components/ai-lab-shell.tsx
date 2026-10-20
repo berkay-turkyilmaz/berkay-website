@@ -15,17 +15,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, PanelLeft, Settings } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { MODEL_OPTIONS, SESSION_KEYS, HISTORY_KEY, DEFAULT_SETTINGS, normalizeChatMode } from "../constants";
-import type { BexChatMessage, ChatHistoryItem, ChatMode, SidebarItem, WorkspaceSettings } from "../types";
+import { useMediaQuery } from "@/lib/hooks";
+import { MODEL_OPTIONS, DEFAULT_SETTINGS } from "../constants";
+import type { SidebarItem, WorkspaceSettings } from "../types";
 import {
-  AILAB_ROUTES,
   AILAB_SIDEBAR_SECTIONS,
+  chatPath,
   flattenSidebarItems,
   getActiveSidebarItemId,
-  getChatRouteForMode,
-  isAiLabWorkspaceHome,
-  pathnameSuffixMatches,
+  getChatIdFromPath,
+  getChatKindFromPath,
 } from "../config/sidebar-navigation";
+import {
+  deleteAllChats,
+  deleteChat,
+  migrateLegacyChats,
+  newChatId,
+  renameChat,
+  type ChatKind,
+  type StoredChat,
+} from "../lib/chat-store";
+import { useChatStore } from "../hooks/use-chat-store";
 import { useWorkspaceSettings } from "../hooks/use-workspace-settings";
 import { AiLabLanguageSwitcher } from "./ai-lab-language-switcher";
 import { WorkspaceSettingsPanel } from "./workspace-settings-panel";
@@ -36,10 +46,6 @@ export type AiLabShellContextValue = {
   resolvedLanguage: WorkspaceSettings["language"] | string;
   updateSettings: ReturnType<typeof useWorkspaceSettings>["updateSettings"];
   settingsLoaded: boolean;
-  activeMode: ChatMode;
-  enableAgentWorkflow: boolean;
-  /** Changes when a history thread is restored — remounts chat panel. */
-  chatSessionKey: string;
 };
 
 const AiLabShellContext = createContext<AiLabShellContextValue | null>(null);
@@ -50,6 +56,13 @@ export function useAiLabShell(): AiLabShellContextValue {
   return ctx;
 }
 
+const SUPPORTED_REPLY_LANGUAGES = ["tr", "de", "es", "fr", "ja"] as const;
+
+function resolveReplyLanguage(setting: WorkspaceSettings["language"], locale: string): string {
+  if (setting !== "auto") return setting;
+  return SUPPORTED_REPLY_LANGUAGES.find((l) => locale.startsWith(l)) ?? "en";
+}
+
 export function AiLabShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -58,124 +71,59 @@ export function AiLabShell({ children }: { children: ReactNode }) {
   const locale = useLocale();
   const { settings, updateSettings, settingsLoaded } = useWorkspaceSettings();
 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [activeMode, setActiveMode] = useState<ChatMode>("engineer");
-  const [enableAgentWorkflow, setEnableAgentWorkflow] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  // The user's explicit choice only counts for the viewport size it was made in.
+  const [sidebarPref, setSidebarPref] = useState<{ mobile: boolean; open: boolean } | null>(null);
+  const isSidebarOpen =
+    sidebarPref && sidebarPref.mobile === isMobile ? sidebarPref.open : !isMobile;
+  const setIsSidebarOpen = useCallback(
+    (open: boolean) => setSidebarPref({ mobile: isMobile, open }),
+    [isMobile]
+  );
+
   const [showSettings, setShowSettings] = useState(false);
-  const [chatHistory, setChatHistory] = useState<ChatHistoryItem[]>([]);
   const [historySearch, setHistorySearch] = useState("");
-  const [showHistory, setShowHistory] = useState(false);
-  const [activeChatId, setActiveChatId] = useState<string | null>(null);
-  const [chatSessionKey, setChatSessionKey] = useState("live");
+  const [showHistory, setShowHistory] = useState(true);
+
+  const chats = useChatStore();
 
   useEffect(() => {
-    const mobile = window.innerWidth < 768;
-    setIsMobile(mobile);
-    setIsSidebarOpen(!mobile);
+    migrateLegacyChats();
   }, []);
 
-  useEffect(() => {
-    const onResize = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      if (mobile) setIsSidebarOpen(false);
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, []);
+  const chatKind = getChatKindFromPath(pathname);
+  const activeChatId = getChatIdFromPath(pathname);
 
-  useEffect(() => {
-    const history = localStorage.getItem(HISTORY_KEY);
-    if (history) {
-      try {
-        setChatHistory(JSON.parse(history));
-      } catch {
-        /* ignore */
-      }
-    }
-  }, []);
+  const openNewChat = useCallback(
+    (kind: ChatKind) => {
+      router.push(chatPath(kind, newChatId()) as Parameters<typeof router.push>[0]);
+      if (isMobile) setIsSidebarOpen(false);
+    },
+    [router, isMobile, setIsSidebarOpen]
+  );
 
-  useEffect(() => {
-    if (isAiLabWorkspaceHome(pathname)) {
-      setActiveMode("engineer");
-      setEnableAgentWorkflow(false);
-      return;
-    }
-    if (pathnameSuffixMatches(pathname, AILAB_ROUTES.sandbox)) {
-      setActiveMode("pdf");
-      setEnableAgentWorkflow(false);
-      return;
-    }
-    if (pathnameSuffixMatches(pathname, AILAB_ROUTES.deepAnalyzer)) {
-      setActiveMode("engineer");
-      setEnableAgentWorkflow(false);
-    }
-  }, [pathname]);
+  const openChat = useCallback(
+    (chat: StoredChat) => {
+      router.push(chatPath(chat.kind, chat.id) as Parameters<typeof router.push>[0]);
+      if (isMobile) setIsSidebarOpen(false);
+    },
+    [router, isMobile, setIsSidebarOpen]
+  );
 
-  const clearHistory = useCallback(() => {
-    const w = window as Window & { bexClear?: () => void };
-    if (w.bexClear) w.bexClear();
-    else sessionStorage.removeItem(SESSION_KEYS[activeMode]);
-    setActiveChatId(null);
-    setChatSessionKey(`cleared-${Date.now()}`);
-  }, [activeMode]);
+  const removeChat = useCallback(
+    (chat: StoredChat) => {
+      deleteChat(chat.id);
+      if (chat.id === activeChatId) openNewChat(chat.kind);
+    },
+    [activeChatId, openNewChat]
+  );
 
-  const startNewChat = useCallback(() => {
-    const msgs = sessionStorage.getItem(SESSION_KEYS[activeMode]);
-    if (msgs) {
-      try {
-        const parsed = JSON.parse(msgs) as BexChatMessage[];
-        const firstUser = parsed.find((m) => m.role === "user");
-        if (firstUser && parsed.length > 0) {
-          const item: ChatHistoryItem = {
-            id: Date.now().toString(),
-            mode: normalizeChatMode(activeMode),
-            title:
-              firstUser.content.slice(0, 45) + (firstUser.content.length > 45 ? "…" : ""),
-            timestamp: Date.now(),
-            messages: parsed,
-          };
-          setChatHistory((prev) => {
-            const next = [item, ...prev].slice(0, 50);
-            localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
-            return next;
-          });
-        }
-      } catch {
-        /* ignore */
-      }
-    }
-    clearHistory();
-    setActiveChatId(null);
-    setChatSessionKey(`new-${Date.now()}`);
-    if (pathnameSuffixMatches(pathname, AILAB_ROUTES.deepAnalyzer)) {
-      router.push(AILAB_ROUTES.agentConsole as Parameters<typeof router.push>[0]);
-    }
-  }, [activeMode, clearHistory, pathname, router]);
+  const clearAllChats = useCallback(() => {
+    deleteAllChats();
+    if (chatKind) openNewChat(chatKind);
+  }, [chatKind, openNewChat]);
 
-  const deleteHistoryItem = useCallback((id: string) => {
-    setChatHistory((prev) => {
-      const next = prev.filter((h) => h.id !== id);
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(next));
-      return next;
-    });
-  }, []);
-
-  const resolvedLanguage: WorkspaceSettings["language"] | string =
-    settings.language === "auto"
-      ? locale.startsWith("de")
-        ? "de"
-        : locale.startsWith("tr")
-          ? "tr"
-          : locale.startsWith("es")
-            ? "es"
-            : locale.startsWith("fr")
-              ? "fr"
-              : locale.startsWith("ja")
-                ? "ja"
-                : "en"
-      : settings.language;
+  const resolvedLanguage = resolveReplyLanguage(settings.language, locale);
 
   const flatNav = flattenSidebarItems(AILAB_SIDEBAR_SECTIONS);
   const activeSidebarId = getActiveSidebarItemId(pathname);
@@ -188,29 +136,27 @@ export function AiLabShell({ children }: { children: ReactNode }) {
       if (isMobile) setIsSidebarOpen(false);
       return;
     }
-    if (item.type === "link" && item.href) {
-      if (item.href.startsWith("http://") || item.href.startsWith("https://")) {
-        window.open(item.href, "_blank", "noopener,noreferrer");
-      } else if (item.isOutbound) {
-        const prefix = locale === "tr" ? "" : `/${locale}`;
-        window.open(`${prefix}${item.href}`, "_blank", "noopener,noreferrer");
-      } else {
-        router.push(item.href as Parameters<typeof router.push>[0]);
-      }
-      setShowHistory(false);
-      if (isMobile) setIsSidebarOpen(false);
+    if (item.type !== "link" || !item.href) return;
+
+    if (item.href.startsWith("http://") || item.href.startsWith("https://")) {
+      window.open(item.href, "_blank", "noopener,noreferrer");
+    } else if (item.isOutbound) {
+      const prefix = locale === "tr" ? "" : `/${locale}`;
+      window.open(`${prefix}${item.href}`, "_blank", "noopener,noreferrer");
+    } else if (item.id === "chat" || item.id === "documents") {
+      // Sidebar rows for chat surfaces always start a fresh, addressable chat.
+      openNewChat(item.id === "chat" ? "chat" : "document");
       return;
+    } else {
+      router.push(item.href as Parameters<typeof router.push>[0]);
     }
-    if (item.type === "tool" && item.chatMode) {
-      setShowHistory(false);
-      if (isMobile) setIsSidebarOpen(false);
-      router.push(getChatRouteForMode(item.chatMode) as Parameters<typeof router.push>[0]);
-    }
+    if (isMobile) setIsSidebarOpen(false);
   };
 
-  const filteredHistory = chatHistory.filter(
-    (h) => !historySearch || h.title.toLowerCase().includes(historySearch.toLowerCase())
-  );
+  const filteredHistory = useMemo(() => {
+    const q = historySearch.trim().toLowerCase();
+    return q ? chats.filter((c) => c.title.toLowerCase().includes(q)) : chats;
+  }, [chats, historySearch]);
 
   const shellContext = useMemo<AiLabShellContextValue>(
     () => ({
@@ -218,19 +164,8 @@ export function AiLabShell({ children }: { children: ReactNode }) {
       resolvedLanguage,
       updateSettings,
       settingsLoaded,
-      activeMode,
-      enableAgentWorkflow,
-      chatSessionKey,
     }),
-    [
-      settings,
-      settingsLoaded,
-      resolvedLanguage,
-      updateSettings,
-      activeMode,
-      enableAgentWorkflow,
-      chatSessionKey,
-    ]
+    [settings, settingsLoaded, resolvedLanguage, updateSettings]
   );
 
   return (
@@ -242,7 +177,7 @@ export function AiLabShell({ children }: { children: ReactNode }) {
               settings={settings}
               onUpdate={updateSettings}
               onClose={() => setShowSettings(false)}
-              onClearHistory={clearHistory}
+              onClearHistory={clearAllChats}
             />
           )}
         </AnimatePresence>
@@ -265,36 +200,18 @@ export function AiLabShell({ children }: { children: ReactNode }) {
           isSidebarOpen={isSidebarOpen}
           isMobile={isMobile}
           activeSidebarId={activeSidebarId}
-          showNewChat={
-            isAiLabWorkspaceHome(pathname) ||
-            pathnameSuffixMatches(pathname, AILAB_ROUTES.sandbox)
-          }
-          chatHistory={chatHistory}
+          showNewChat={chatKind !== null}
+          chatHistory={chats}
           showHistory={showHistory}
           onToggleHistory={() => setShowHistory((v) => !v)}
           historySearch={historySearch}
           onHistorySearchChange={setHistorySearch}
           filteredHistory={filteredHistory}
           activeChatId={activeChatId}
-          onHistoryItemClick={(item) => {
-            const mode = normalizeChatMode(item.mode);
-            setActiveMode(mode);
-            setEnableAgentWorkflow(false);
-            setActiveChatId(item.id);
-            if (item.messages?.length) {
-              sessionStorage.setItem(
-                SESSION_KEYS[mode],
-                JSON.stringify(item.messages)
-              );
-              setChatSessionKey(`restore-${item.id}`);
-            }
-            const target = getChatRouteForMode(mode);
-            if (!pathnameSuffixMatches(pathname, target)) {
-              router.push(target as Parameters<typeof router.push>[0]);
-            }
-          }}
-          onHistoryItemDelete={deleteHistoryItem}
-          onNewChat={startNewChat}
+          onHistoryItemClick={openChat}
+          onHistoryItemDelete={removeChat}
+          onHistoryItemRename={(chat, title) => renameChat(chat.id, title)}
+          onNewChat={() => openNewChat(chatKind ?? "chat")}
           onNavItemClick={handleNavItemClick}
           onExpandSidebar={() => setIsSidebarOpen(true)}
           settings={settingsLoaded ? settings : DEFAULT_SETTINGS}
@@ -309,13 +226,13 @@ export function AiLabShell({ children }: { children: ReactNode }) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                aria-label={isSidebarOpen ? t("sidebar.collapse") : t("sidebar.expand")}
+                aria-expanded={isSidebarOpen}
                 className="p-1.5 rounded-lg text-ailab-text/50 transition-[color,background-color] duration-300 ease-out hover:text-ailab-text/80 hover:bg-ailab-glass-06 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ailab-accent/45"
               >
                 <PanelLeft className="w-4 h-4" />
               </motion.button>
-
               <div className="h-3 w-px bg-ailab-border" />
-
               {/* Back to portfolio — visible on mobile, hidden on md+ (sidebar user menu handles it) */}
               <Link
                 href="/"
@@ -329,7 +246,6 @@ export function AiLabShell({ children }: { children: ReactNode }) {
                 <ArrowLeft className="w-3 h-3" />
                 <span>{t("sidebar.back_home_short")}</span>
               </Link>
-
               <AnimatePresence mode="wait">
                 <motion.span
                   key={activeSidebarId}
@@ -359,19 +275,16 @@ export function AiLabShell({ children }: { children: ReactNode }) {
                 <ArrowLeft className="w-3 h-3" />
                 <span>{t("sidebar.back_home")}</span>
               </Link>
-
               <div className="hidden md:flex items-center gap-1.5 px-2 py-1 rounded-lg bg-ailab-glass-04 ring-1 ring-inset ring-ailab-border-muted transition-[box-shadow] duration-300 ease-out">
                 <div className="w-1.5 h-1.5 rounded-full bg-ailab-accent shadow-ailab-accent-dot" />
-                <span className="text-[10px] font-mono text-ailab-text/55 max-w-[120px] truncate">
+                <span className="text-[11px] font-mono text-ailab-text/55 max-w-[120px] truncate">
                   {(() => {
                     const m = MODEL_OPTIONS.find((o) => o.value === settings.model);
                     return m ? tSettings(m.labelKey as never) : "Llama 3.1 8B";
                   })()}
                 </span>
               </div>
-
               <AiLabLanguageSwitcher />
-
               <button
                 type="button"
                 onClick={() => setShowSettings(true)}

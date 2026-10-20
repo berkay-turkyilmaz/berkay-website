@@ -47,7 +47,7 @@ export const AgentStateFlow = memo(function AgentStateFlow({
         "px-3 py-3 space-y-2.5"
       )}
     >
-      <p className="text-[10px] font-mono uppercase tracking-[0.12em] text-ailab-muted">{t("workflow_panel_title")}</p>
+      <p className="text-[11px] font-mono uppercase tracking-[0.12em] text-ailab-muted">{t("workflow_panel_title")}</p>
       <ul className="space-y-2">
         {state.steps.map((step) => (
           <li key={step.id} className="flex items-start gap-2.5 min-h-[22px]">

@@ -23,7 +23,7 @@ export function TerminalDocChip({ doc, onRemove }: { doc: UploadedDoc; onRemove:
 
       <div className="min-w-0">
         <div className="text-[11px] font-medium truncate max-w-[200px] text-ailab-text/80">{doc.name}</div>
-        <div className="text-[9px] text-ailab-text/50">{meta}</div>
+        <div className="text-[11px] text-ailab-text/50">{meta}</div>
       </div>
       <button
         type="button"

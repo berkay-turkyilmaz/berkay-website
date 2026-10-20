@@ -1,11 +1,11 @@
 "use client";
 
-import { Link } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, SquarePen, ChevronRight, Search } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { ChatHistoryItem, SidebarItem, SidebarSection, WorkspaceSettings } from "../types";
+import type { SidebarItem, SidebarSection, WorkspaceSettings } from "../types";
+import type { StoredChat } from "../lib/chat-store";
 import { AI_AGENT_NAME } from "../constants";
 import { AILAB_SIDEBAR_ICON_STROKE, AILAB_SIDEBAR_SECTIONS } from "../config/sidebar-navigation";
 import { ChatHistoryItem as ChatHistoryRowView } from "./chat-history-item";
@@ -21,15 +21,16 @@ export type AiLabSidebarProps = {
   activeSidebarId: string;
   /** When false, hides the "New Chat" button (non-chat routes) */
   showNewChat?: boolean;
-  chatHistory: ChatHistoryItem[];
+  chatHistory: StoredChat[];
   showHistory: boolean;
   onToggleHistory: () => void;
   historySearch: string;
   onHistorySearchChange: (value: string) => void;
-  filteredHistory: ChatHistoryItem[];
+  filteredHistory: StoredChat[];
   activeChatId: string | null;
-  onHistoryItemClick: (item: ChatHistoryItem) => void;
-  onHistoryItemDelete: (id: string) => void;
+  onHistoryItemClick: (item: StoredChat) => void;
+  onHistoryItemDelete: (item: StoredChat) => void;
+  onHistoryItemRename: (item: StoredChat, title: string) => void;
   onNewChat: () => void;
   onNavItemClick: (item: SidebarItem) => void;
   onExpandSidebar: () => void;
@@ -53,6 +54,7 @@ export function AiLabSidebar({
   activeChatId,
   onHistoryItemClick,
   onHistoryItemDelete,
+  onHistoryItemRename,
   onNewChat,
   onNavItemClick,
   onExpandSidebar,
@@ -102,7 +104,7 @@ export function AiLabSidebar({
               <p className="font-semibold text-[11px] tracking-widest text-ailab-text [letter-spacing:0.14em] truncate">
                 {AI_AGENT_NAME}
               </p>
-              <p className="text-[10px] font-mono text-ailab-muted truncate">AI Lab · R&D</p>
+              <p className="text-[11px] font-mono text-ailab-muted truncate">AI Lab · R&D</p>
             </div>
           </div>
         ) : (
@@ -163,7 +165,7 @@ export function AiLabSidebar({
         {sections.map((section) => (
           <div key={section.categoryKey} className="mb-4 last:mb-2">
             {isSidebarOpen && (
-              <div className="px-2 mb-1.5 text-[9px] font-bold uppercase tracking-[0.16em] text-ailab-muted">
+              <div className="px-2 mb-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-ailab-muted">
                 {t(section.categoryKey as never)}
               </div>
             )}
@@ -217,7 +219,7 @@ export function AiLabSidebar({
                             />
                           )}
                         </div>
-                        <div className="text-[9px] truncate mt-0.5 text-ailab-muted leading-snug">
+                        <div className="text-[11px] truncate mt-0.5 text-ailab-muted leading-snug">
                           {t(item.descKey as never)}
                         </div>
                       </div>
@@ -229,7 +231,7 @@ export function AiLabSidebar({
           </div>
         ))}
 
-        {isSidebarOpen && chatHistory.length > 0 && (
+        {isSidebarOpen && (
           <div className="pt-1">
             <div className="border-t border-ailab-border-muted mb-2 mx-0.5" />
             <button
@@ -241,7 +243,7 @@ export function AiLabSidebar({
                 "hover:text-ailab-text hover:bg-ailab-glass-05"
               )}
             >
-              <span className="text-[9px] font-bold uppercase tracking-[0.14em]">{t("sidebar.history")}</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.14em]">{t("sidebar.history")}</span>
               <motion.div animate={{ rotate: showHistory ? 90 : 0 }} transition={{ duration: 0.2, ease: asideTransition.ease }}>
                 <ChevronRight strokeWidth={AILAB_SIDEBAR_ICON_STROKE} className="w-3 h-3" />
               </motion.div>
@@ -274,17 +276,18 @@ export function AiLabSidebar({
                       />
                     </div>
                   )}
-                  <div className="space-y-0.5 max-h-44 overflow-y-auto ailab-scrollbar pr-0.5">
+                  {filteredHistory.length === 0 && (
+                    <p className="px-2 py-1.5 text-[11px] text-ailab-muted">{t("sidebar.history_empty")}</p>
+                  )}
+                  <div className="space-y-0.5 max-h-56 overflow-y-auto ailab-scrollbar pr-0.5">
                     {filteredHistory.map((item) => (
                       <ChatHistoryRowView
                         key={item.id}
                         item={item}
                         isActive={item.id === activeChatId}
                         onClick={() => onHistoryItemClick(item)}
-                        onDelete={(e) => {
-                          e.stopPropagation();
-                          onHistoryItemDelete(item.id);
-                        }}
+                        onDelete={() => onHistoryItemDelete(item)}
+                        onRename={(title) => onHistoryItemRename(item, title)}
                       />
                     ))}
                   </div>

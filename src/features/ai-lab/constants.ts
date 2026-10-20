@@ -1,6 +1,6 @@
 import type { GroqChatModelId } from "@/lib/ai/groq-models";
 
-import type { ChatMode, WorkspaceSettings } from "./types";
+import type { WorkspaceSettings } from "./types";
 
 
 
@@ -88,22 +88,6 @@ export const LANGUAGES = [
 
 
 
-export const SESSION_KEYS: Record<ChatMode, string> = {
-
-  terminal: "bex-chat-terminal",
-
-  pdf: "bex-chat-pdf",
-
-  engineer: "bex-chat-engineer",
-
-};
 
 
-
-export const HISTORY_KEY = "bex-chat-history";
-
-/** Maps legacy terminal mode to engineer for storage and routing. */
-export function normalizeChatMode(mode: ChatMode): ChatMode {
-  return mode === "terminal" ? "engineer" : mode;
-}
 
