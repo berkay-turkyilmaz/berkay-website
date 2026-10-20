@@ -8,435 +8,428 @@ export type BlogPostContent = {
   hasAudio: boolean;
 };
 
+type Localized = { title: string; excerpt: string; content: string; readTime: string };
+
+type PostSource = {
+  date: string;
+  category: BlogPostContent["category"];
+  tr: Localized;
+  en: Localized;
+};
+
+/**
+ * First-person notes from building this site and its side projects.
+ * Content is trusted HTML written here (not user input); it is rendered with the `.article` styles.
+ */
+const POSTS: Record<string, PostSource> = {
+  "static-rendering-next-intl": {
+    date: "2026-10-06",
+    category: "architecture",
+    tr: {
+      title: "Tüm sayfalarım dinamik çıkıyordu: next-intl ile statik üretim",
+      excerpt: "Build çıktısında her sayfanın dinamik görünmesinin nedeni ve setRequestLocale ile nasıl düzeldiği.",
+      readTime: "5 dk",
+      content: `
+<p class="lead">Sitenin build çıktısına bakınca bir şey dikkatimi çekti: ana sayfa, blog, hakkımda, hepsi dinamik (ƒ) işaretliydi. İçerikleri değişmiyordu, yani her istekte boşuna sunucuda üretiliyorlardı.</p>
+
+<h2>Neden dinamik oluyordu?</h2>
+<p>next-intl, bir sayfanın hangi dilde render edileceğini anlamak için varsayılan olarak istek başlıklarını okur. Başlık okuyan bir sayfa Next.js için dinamiktir. Dil bilgisini sayfaya başka bir yoldan vermediğim sürece hiçbir sayfa statik olamıyordu.</p>
+
+<h2>Çözüm iki parça</h2>
+<p>Birincisi, hangi dillerin üretileceğini söylemek. İkincisi, her layout ve sayfada dili açıkça ayarlamak:</p>
+<pre><code>// app/[locale]/layout.tsx
+export function generateStaticParams() {
+  return routing.locales.map((locale) =&gt; ({ locale }));
+}
+
+export default async function LocaleLayout({ children, params }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  // ...
+}</code></pre>
+<p>Sunucuda çeviri okuyan her sayfada da aynı <code>setRequestLocale(locale)</code> çağrısı gerekiyor. Layout'ta çağırmak tek başına yetmiyor, çünkü sayfalar ve layout'lar birbirinden bağımsız render olabilir.</p>
+
+<h2>Sonuç</h2>
+<p>Build çıktısı değişti: sayfalar yerine her dil için ayrı ayrı üretilmiş statik yollar listelenmeye başladı (toplam iki yüzün biraz üstünde sayfa). Sayfalar artık Vercel'in önbelleğinden hazır HTML olarak geliyor.</p>
+
+<h2>Yolda bulduğum ikinci hata</h2>
+<p>Next.js 16'da <code>middleware</code> dosyasının adı <code>proxy</code> oldu. Dosyayı taşırken eşleştirme kuralımı da gözden geçirdim ve eski kuralın aslında çalışmadığını gördüm: noktalı yolları dışlamak için yazdığım kaçış karakteri işlenirken kayboluyordu, kural da hiçbir yolu eşleştirmiyordu. Denemelerim sırasında yerelde önek almayan Türkçe alt sayfalar bir süre 404 verdi; eski kuralın amacıma hizmet etmediği kesindi. Yeni kural daha basit:</p>
+<pre><code>matcher: [
+  "/",
+  "/(tr|en|de|es|fr|ar|ja)/:path*",
+  "/((?!_next|_vercel|api|icon$|apple-icon$)[^.]*)",
+]</code></pre>
+<blockquote><p>Dersim: Build çıktısını okumak, performans testinden önce gelir. Tek bakışta çok şey söylüyor.</p></blockquote>
+`,
+    },
+    en: {
+      title: "All my pages were dynamic: static rendering with next-intl",
+      excerpt: "Why every page showed up as dynamic in the build output, and how setRequestLocale fixed it.",
+      readTime: "5 min",
+      content: `
+<p class="lead">Looking at this site's build output, something stood out: the home page, the blog, the about page, all of them were marked dynamic (ƒ). Their content never changes, so they were being rendered on the server for every request for no reason.</p>
+
+<h2>Why were they dynamic?</h2>
+<p>To know which language a page should render in, next-intl reads the request headers by default. A page that reads headers is dynamic as far as Next.js is concerned. Unless I handed the locale to the page some other way, no page could be static.</p>
+
+<h2>The fix has two parts</h2>
+<p>First, tell Next.js which locales to generate. Second, set the locale explicitly in every layout and page:</p>
+<pre><code>// app/[locale]/layout.tsx
+export function generateStaticParams() {
+  return routing.locales.map((locale) =&gt; ({ locale }));
+}
+
+export default async function LocaleLayout({ children, params }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  // ...
+}</code></pre>
+<p>Every page that reads translations on the server needs the same <code>setRequestLocale(locale)</code> call. Calling it in the layout alone is not enough, because pages and layouts can render independently.</p>
+
+<h2>The result</h2>
+<p>The build output changed: instead of dynamic routes, it now lists statically generated paths for each locale (a little over two hundred pages in total). The pages are served from Vercel's cache as ready-made HTML.</p>
+
+<h2>A second bug I found on the way</h2>
+<p>In Next.js 16 the <code>middleware</code> file was renamed <code>proxy</code>. While moving it I reviewed my matcher and found the old rule never actually worked: the escape character I wrote to exclude dotted paths was lost during processing, so the rule matched nothing. While testing locally, Turkish pages (which have no locale prefix) returned 404 for a while; it was clear the old rule didn't serve my purpose. The new rule is simpler:</p>
+<pre><code>matcher: [
+  "/",
+  "/(tr|en|de|es|fr|ar|ja)/:path*",
+  "/((?!_next|_vercel|api|icon$|apple-icon$)[^.]*)",
+]</code></pre>
+<blockquote><p>My takeaway: reading the build output comes before performance testing. It tells you a lot at a glance.</p></blockquote>
+`,
+    },
+  },
+
+  "fewer-languages": {
+    date: "2026-10-09",
+    category: "architecture",
+    tr: {
+      title: "Yedi dil yerine iki dil: yarım çeviri bir özellik değil, borçtur",
+      excerpt: "Sitenin yedi dili vardı ama beşi çoğunlukla İngilizce gösteriyordu. Neden ikiye indirdim?",
+      readTime: "4 dk",
+      content: `
+<p class="lead">Sitem yedi dilde yayındaydı: Türkçe, İngilizce, Almanca, İspanyolca, Fransızca, Arapça ve Japonca. Kulağa etkileyici geliyor. Gerçek şu ki son beşinin çeviri dosyaları İngilizce dosyanın dörtte biri kadardı; geri kalanı İngilizce'ye düşüyordu.</p>
+
+<h2>Ne vardı?</h2>
+<p>Çeviri dosyalarının boyutuna bakmak yeterliydi: Türkçe ve İngilizce yaklaşık 65 KB, diğer beş dil yaklaşık 20 KB. Eksik anahtarlar İngilizce ile doldurulduğu için sayfalar açılıyordu, ama Almanca bir sayfanın büyük kısmı İngilizce'ydi.</p>
+
+<h2>Neden sorun?</h2>
+<ul>
+<li><strong>Arama motoru için:</strong> Sitemap ve hreflang etiketleri yedi dili tam çeviri gibi ilan ediyordu. Aslında aynı İngilizce içeriğin yedi kopyasıydı.</li>
+<li><strong>Ziyaretçi için:</strong> Almanca seçen biri yarı Almanca, yarı İngilizce bir site görüyordu. Bu, hiç çeviri olmamasından daha amatör görünüyor.</li>
+<li><strong>Bana yük olarak:</strong> Her yeni metin için yedi dili hatırlamam gerekiyordu.</li>
+</ul>
+
+<h2>Ne yaptım?</h2>
+<p>Dilleri silmedim, ama aramaya yalnızca iki dili açtım. Sitemap, hreflang ve canonical sadece Türkçe ve İngilizce için üretiliyor. Diğer diller çalışmaya devam ediyor ama <code>noindex</code> alıyor:</p>
+<pre><code>export const INDEXED_LOCALES = ["tr", "en"] as const;
+
+...(isIndexedLocale(locale)
+  ? {}
+  : { robots: { index: false, follow: true } })</code></pre>
+<p>Bir dilin çevirisi tamamlandığında listeye eklemek yeterli olacak.</p>
+<blockquote><p>Yarım çeviri bir özellik değil, borçtur. Ya bitir, ya da vaat etme.</p></blockquote>
+`,
+    },
+    en: {
+      title: "Two languages instead of seven: a half translation is debt, not a feature",
+      excerpt: "My site had seven languages but five of them mostly showed English. Why I cut it down to two for search.",
+      readTime: "4 min",
+      content: `
+<p class="lead">My site was live in seven languages: Turkish, English, German, Spanish, French, Arabic and Japanese. It sounds impressive. In truth the translation files for the last five were a quarter the size of the English one; the rest fell back to English.</p>
+
+<h2>What was there?</h2>
+<p>The file sizes told the story: Turkish and English were around 65 KB, the other five around 20 KB. Missing keys were filled from English, so pages opened fine, but most of a German page was English.</p>
+
+<h2>Why is that a problem?</h2>
+<ul>
+<li><strong>For search engines:</strong> The sitemap and hreflang tags advertised seven languages as full translations. In reality they were seven copies of the same English content.</li>
+<li><strong>For visitors:</strong> Someone picking German saw a half German, half English site. That looks more amateur than having no translation at all.</li>
+<li><strong>For me:</strong> Every new piece of copy meant remembering seven languages.</li>
+</ul>
+
+<h2>What I did</h2>
+<p>I didn't delete the languages, but I only opened two of them to search. The sitemap, hreflang and canonical are generated only for Turkish and English. The other locales keep working but get <code>noindex</code>:</p>
+<pre><code>export const INDEXED_LOCALES = ["tr", "en"] as const;
+
+...(isIndexedLocale(locale)
+  ? {}
+  : { robots: { index: false, follow: true } })</code></pre>
+<p>When a language's translation is finished, adding it to the list is all it takes.</p>
+<blockquote><p>A half translation is debt, not a feature. Either finish it or don't promise it.</p></blockquote>
+`,
+    },
+  },
+
+  "streaming-errors-ai-sdk": {
+    date: "2026-10-12",
+    category: "ai",
+    tr: {
+      title: "Sohbet kutusu boş kaldı: yapay zekâ akışında sessizce yutulan hatalar",
+      excerpt: "Groq'tan gelen hata kullanıcıya hiç ulaşmıyordu; sohbette sadece boş bir balon kalıyordu.",
+      readTime: "5 dk",
+      content: `
+<p class="lead">AI Lab'daki asistana mesaj yazdım, cevap boş geldi. Ağ isteği 200 dönüyordu, konsolda hata yoktu. Sunucu günlüğüne baktığımda asıl hata oradaydı: Groq, seçtiğim modele erişimimin olmadığını söylüyordu. Kullanıcı bunun hiçbirini görmüyordu.</p>
+
+<h2>Neden görünmüyordu?</h2>
+<p>Vercel AI SDK'nın <code>streamText</code> fonksiyonunda sağlayıcı hataları, metin akışı (<code>textStream</code>) üzerinden fırlatılmıyor. Akış sadece boş bitiyor ve hata ayrı bir yoldan, <code>onError</code> geri çağrısıyla bildiriliyor. Ben yalnızca akışı dinlediğim için hata benim için yoktu.</p>
+
+<h2>Çözüm: hatayı bir kutuda topla</h2>
+<p>Hatayı <code>onError</code> ile yakalayıp akışı yazan kodla paylaşıyorum. Akış hiç metin üretmeden biterse ve kutuda bir hata varsa, istemciye açık bir işaretçi gönderiyorum:</p>
+<pre><code>const errorBox = { error: null as unknown };
+
+const result = streamText({
+  model,
+  messages,
+  onError: ({ error }) =&gt; {
+    errorBox.error = error;
+  },
+});
+
+// akış yazılırken:
+if (!sentText &amp;&amp; errorBox.error) {
+  controller.enqueue(encoder.encode("__ERR_EXTRACT__:Model kullanılamıyor"));
+}</code></pre>
+<p>İstemci bu işaretçiyi görünce baloncuğa gerçek bir hata mesajı yazıyor.</p>
+
+<h2>Ham hatayı göstermedim</h2>
+<p>İlk düşüncem sağlayıcının hata metnini olduğu gibi göstermekti. Vazgeçtim: bu metinler model adlarını, hesap bilgilerini ve iç ayrıntıları taşıyabiliyor. Kullanıcıya genel bir mesaj, ayrıntıyı sunucu günlüğüne bıraktım.</p>
+<blockquote><p>Dersim: Akış tabanlı bir arayüzde "boş cevap" bir hata durumudur. Onu ayrıca tasarlamazsan kullanıcı için hiçbir şey söylemez.</p></blockquote>
+`,
+    },
+    en: {
+      title: "The chat bubble stayed empty: errors silently swallowed in AI streaming",
+      excerpt: "The error from Groq never reached the user; the chat just showed an empty bubble.",
+      readTime: "5 min",
+      content: `
+<p class="lead">I typed a message to the assistant in AI Lab and the reply came back empty. The network request returned 200 and the console had no errors. The real error was in the server log: Groq said I had no access to the model I'd picked. The user saw none of that.</p>
+
+<h2>Why was it invisible?</h2>
+<p>In the Vercel AI SDK's <code>streamText</code>, provider errors are not thrown through the text stream (<code>textStream</code>). The stream just ends empty and the error is reported separately through the <code>onError</code> callback. Since I only listened to the stream, the error didn't exist as far as my code was concerned.</p>
+
+<h2>The fix: collect the error in a box</h2>
+<p>I catch the error in <code>onError</code> and share it with the code that writes the stream. If the stream ends without producing any text and the box holds an error, I send the client an explicit marker:</p>
+<pre><code>const errorBox = { error: null as unknown };
+
+const result = streamText({
+  model,
+  messages,
+  onError: ({ error }) =&gt; {
+    errorBox.error = error;
+  },
+});
+
+// while writing the stream:
+if (!sentText &amp;&amp; errorBox.error) {
+  controller.enqueue(encoder.encode("__ERR_EXTRACT__:Model unavailable"));
+}</code></pre>
+<p>When the client sees the marker, it writes a real error message into the bubble.</p>
+
+<h2>I didn't show the raw error</h2>
+<p>My first thought was to show the provider's error text as is. I dropped that: those messages can carry model names, account details and internals. The user gets a generic message and the details stay in the server log.</p>
+<blockquote><p>My takeaway: in a streaming UI, an "empty answer" is an error state. If you don't design for it, it tells the user nothing.</p></blockquote>
+`,
+    },
+  },
+
+  "protecting-ai-endpoints": {
+    date: "2026-10-15",
+    category: "ai",
+    tr: {
+      title: "Herkese açık bir yapay zekâ uç noktasını nasıl korudum",
+      excerpt: "Hız sınırı, girdi sınırı ve sunucuda duran anahtar: küçük bir sitede yapılabilecek makul önlemler.",
+      readTime: "6 dk",
+      content: `
+<p class="lead">Sitemdeki asistan herkese açık ve her mesaj Groq'a giden bir istek demek. Giriş yok, hesap yok. Bu, birinin betikle istek yağdırıp kotamı tüketebileceği anlamına geliyordu. Bir inceleme sırasında bunu kendi kodumda fark ettim.</p>
+
+<h2>Ne eksikti?</h2>
+<ul>
+<li>İstek sayısına sınır yoktu.</li>
+<li>Mesaj boyutuna neredeyse sınır yoktu: mesaj başına yüz bin karakter, seksen mesaj.</li>
+<li>PDF sohbetinin JSON dalı hiç doğrulanmıyordu.</li>
+</ul>
+
+<h2>Yaptıklarım</h2>
+<h3>1. Hız sınırı</h3>
+<p>Bellekte tutulan kayan pencere sınırlayıcısı, IP başına dakikada kaç istek yapılabileceğini belirliyor:</p>
+<pre><code>const hits = (buckets.get(key) ?? []).filter(
+  (t) =&gt; now - t &lt; windowMs
+);
+if (hits.length &gt;= limit) return false;
+hits.push(now);</code></pre>
+<p>Dürüst olmam gerekirse bunun sınırı var: sunucusuz ortamda her örnek kendi belleğine sahip, yani bu sınırlayıcı ilk savunma hattı. Kalıcı koruma için Redis gibi paylaşımlı bir depo gerekir.</p>
+
+<h3>2. Girdi sınırları</h3>
+<p>Mesaj başına on iki bin, konuşma başına kırk bin karakter ve en fazla kırk mesaj kabul ediyorum. Model çıktısına da üst sınır koydum. Zod şemaları fazlasını reddediyor.</p>
+
+<h3>3. Anahtar yalnızca sunucuda</h3>
+<p>Groq anahtarı hiçbir <code>NEXT_PUBLIC_</code> değişkeninde yok; istemci paketine girmesi mümkün değil.</p>
+
+<h3>4. Sağlayıcı tarafında harcama sınırı</h3>
+<p>Kod ne kadar iyi olursa olsun, son savunma hattı Groq panelindeki harcama limiti. Onu da ayarlamayı listeme yazdım.</p>
+<blockquote><p>Küçük bir site için mükemmel koruma yok; amaç, kötüye kullanımı pahalı ve zahmetli hale getirmek.</p></blockquote>
+`,
+    },
+    en: {
+      title: "How I protected a public AI endpoint",
+      excerpt: "Rate limits, input limits and a server-only key: reasonable measures for a small site.",
+      readTime: "6 min",
+      content: `
+<p class="lead">The assistant on my site is public and every message is a request to Groq. There's no login and no account. That meant someone could hammer it with a script and burn through my quota. I noticed this in my own code during a review.</p>
+
+<h2>What was missing?</h2>
+<ul>
+<li>No limit on the number of requests.</li>
+<li>Almost no limit on message size: a hundred thousand characters per message, eighty messages.</li>
+<li>The JSON branch of the PDF chat wasn't validated at all.</li>
+</ul>
+
+<h2>What I did</h2>
+<h3>1. Rate limiting</h3>
+<p>An in-memory sliding-window limiter decides how many requests an IP can make per minute:</p>
+<pre><code>const hits = (buckets.get(key) ?? []).filter(
+  (t) =&gt; now - t &lt; windowMs
+);
+if (hits.length &gt;= limit) return false;
+hits.push(now);</code></pre>
+<p>To be honest, it has limits: in a serverless environment every instance has its own memory, so this limiter is a first line of defence. Durable protection needs a shared store like Redis.</p>
+
+<h3>2. Input limits</h3>
+<p>I accept twelve thousand characters per message, forty thousand per conversation and at most forty messages. I also capped the model's output. Zod schemas reject anything beyond that.</p>
+
+<h3>3. The key stays on the server</h3>
+<p>The Groq key isn't in any <code>NEXT_PUBLIC_</code> variable, so it can't end up in the client bundle.</p>
+
+<h3>4. A spending limit at the provider</h3>
+<p>However good the code is, the last line of defence is the spending limit in the Groq dashboard. Setting that is on my list too.</p>
+<blockquote><p>There is no perfect protection for a small site; the goal is to make abuse expensive and annoying.</p></blockquote>
+`,
+    },
+  },
+
+  "hide-n8n-webhooks": {
+    date: "2026-10-18",
+    category: "automation",
+    tr: {
+      title: "n8n webhook adresini tarayıcıdan saklamak",
+      excerpt: "Formlar n8n'e doğrudan tarayıcıdan gidiyordu. Neden bir sunucu uç noktasının arkasına aldım?",
+      readTime: "5 dk",
+      content: `
+<p class="lead">n8n ile yaptığım randevu ve iletişim akışlarının webhook adresi istemci kodunda duruyordu. Tarayıcı doğrudan oraya POST atıyordu. Çalışıyordu ama adres herkesin görebildiği bir yerdeydi.</p>
+
+<h2>Sorun ne?</h2>
+<p>Bir webhook adresi bir tür gizli anahtar gibidir: onu bilen herkes iş akışını tetikleyebilir. Adres sayfa kaynağında yazıyorsa, spam göndermek için sadece adresi kopyalamak yeterli. Üstelik adres bir sunucunun IP'sini de içeriyordu.</p>
+
+<h2>Yeni akış</h2>
+<p>Form artık kendi sitemdeki bir uç noktaya gidiyor. Uç nokta önce isteği doğrulayıp sonra n8n'e iletiyor:</p>
+<pre><code>1. Tarayıcı  →  /api/contact
+2. Sunucu: hız sınırı, zod doğrulaması, honeypot
+3. Sunucu  →  n8n webhook (adres yalnızca sunucuda)
+4. n8n başarısızsa istemciye 502 dön</code></pre>
+
+<h3>Dikkat ettiğim ayrıntılar</h3>
+<ul>
+<li><strong>Honeypot:</strong> Formda insanların görmediği bir alan var. Doluysa bir bot olduğunu varsayıp sessizce "başarılı" dönüyorum; bot tekrar denemiyor.</li>
+<li><strong>Zaman aşımı:</strong> n8n'e giden istek sekiz saniye sonra kesiliyor. Yoksa takılan bir webhook formu da kilitleyebilir.</li>
+<li><strong>Dürüst hata:</strong> Eski sürüm mesajı sadece günlüğe yazıp kullanıcıya "gönderildi" diyordu. Yani iletişim formu aslında hiçbir şey göndermiyordu. Şimdi teslim edilemezse form hata gösteriyor.</li>
+<li><strong>Adres ortam değişkeninde:</strong> Webhook adresleri <code>NEXT_PUBLIC_</code> olmayan değişkenlerde, yani tarayıcıya hiç gönderilmiyor.</li>
+</ul>
+<blockquote><p>En can sıkıcı hata, hiçbir şeyin ters gitmediğini söyleyen bir arayüzdü. Başarı mesajını sadece gerçek başarıdan sonra göstermek gerekiyor.</p></blockquote>
+`,
+    },
+    en: {
+      title: "Hiding the n8n webhook URL from the browser",
+      excerpt: "The forms posted to n8n straight from the browser. Why I put a server endpoint in front of it.",
+      readTime: "5 min",
+      content: `
+<p class="lead">The webhook address for my n8n booking and contact flows was sitting in client code. The browser posted straight to it. It worked, but the address was somewhere everyone could see.</p>
+
+<h2>What's the problem?</h2>
+<p>A webhook URL is a kind of secret key: anyone who knows it can trigger the workflow. If the address is in the page source, spamming it is as easy as copying it. It also contained a server's IP address.</p>
+
+<h2>The new flow</h2>
+<p>The form now goes to an endpoint on my own site. The endpoint validates the request first, then forwards it to n8n:</p>
+<pre><code>1. Browser  →  /api/contact
+2. Server: rate limit, zod validation, honeypot
+3. Server  →  n8n webhook (address only on the server)
+4. If n8n fails, return 502 to the client</code></pre>
+
+<h3>Details I paid attention to</h3>
+<ul>
+<li><strong>Honeypot:</strong> The form has a field humans never see. If it's filled, I assume a bot and quietly return "success"; the bot doesn't retry.</li>
+<li><strong>Timeout:</strong> The request to n8n is cut after eight seconds. Otherwise a hanging webhook could lock up the form too.</li>
+<li><strong>Honest errors:</strong> The old version only wrote the message to a log and told the user "sent". So the contact form wasn't actually sending anything. Now if delivery fails, the form shows an error.</li>
+<li><strong>Address in an environment variable:</strong> The webhook addresses live in non-<code>NEXT_PUBLIC_</code> variables, so they are never sent to the browser.</li>
+</ul>
+<blockquote><p>The most annoying bug was an interface telling me nothing was wrong. Show the success message only after real success.</p></blockquote>
+`,
+    },
+  },
+
+  "english-path-spaced-repetition": {
+    date: "2026-10-20",
+    category: "architecture",
+    tr: {
+      title: "İngilizce çalışma aracım: sunucusuz ilerleme ve aralıklı tekrar",
+      excerpt: "EnglishPath'te hesap yok, veritabanı yok. İlerleme tarayıcıda, tekrar zamanları Leitner kutularıyla.",
+      readTime: "6 dk",
+      content: `
+<p class="lead">İngilizce öğrenirken kendime bir çalışma aracı yaptım: kelime kartları, oyunlar ve sınav. Kural koydum: hesap olmayacak, sunucuda veri tutulmayacak. Her şey tarayıcıda kalıyor.</p>
+
+<h2>İlerleme nerede duruyor?</h2>
+<p>Tek bir nesne, tek bir <code>localStorage</code> anahtarı altında: puan, seri, bildiğin kelimeler, sınav sonuçları, her kartın tekrar durumu. Anahtarın içinde sürüm var (<code>englishpath-progress-v6</code>). Yapıyı her değiştirdiğimde eski sürümden okuyup yenisine çeviriyorum; kullanıcı hiçbir şey kaybetmiyor.</p>
+
+<h2>Aralıklı tekrar</h2>
+<p>Basit bir Leitner sistemi kullanıyorum. Her kart 1 ile 5 arasında bir kutuda duruyor. Doğru cevap bir üst kutuya taşıyor, yanlış cevap en başa döndürüyor. Kutuya göre bir sonraki tekrar günü hesaplanıyor:</p>
+<pre><code>const SRS_INTERVAL_DAYS = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16 };</code></pre>
+<p>Yani bilmediğin kelime hemen geri geliyor, iyi bildiğin kelime iki haftadan fazla sonra. Oyunlar da bu sistemi besliyor: bir kelimeyi oyunda yanlış yapmak, onu tekrar kuyruğuna geri koyuyor.</p>
+
+<h2>Kelime verisi</h2>
+<p>Yaklaşık 680 kelimeyi A1'den C1'e seviyelendirdim, her birinde Türkçe karşılık, telaffuz ve örnek cümle var. Aynı kelime iki yerde geçerse, düşük seviyeli olan kazanıyor; birleştirme sırasında başlığa göre tekilleştiriyorum.</p>
+
+<h3>Veriyi denetlemek</h3>
+<p>Eski kart destelerini küçük bir betikle taradım ve gerçek hatalar buldum: Taboo'da dört, Charades'te altı yinelenen kart, Passaparola'da cevabı harfine uymayan bir soru. Elle yazılan verinin bakımı, kodun bakımından zor.</p>
+<blockquote><p>Hesapsız bir araç tasarlamak, neyin gerçekten sunucuya ihtiyaç duyduğunu sorgulatıyor. Çoğu zaman cevap: hiçbir şeyin.</p></blockquote>
+`,
+    },
+    en: {
+      title: "My English study tool: serverless progress and spaced repetition",
+      excerpt: "EnglishPath has no accounts and no database. Progress lives in the browser, review times in Leitner boxes.",
+      readTime: "6 min",
+      content: `
+<p class="lead">While learning English I built myself a study tool: flashcards, games and an exam. I set a rule: no accounts, no data on a server. Everything stays in the browser.</p>
+
+<h2>Where does progress live?</h2>
+<p>One object under one <code>localStorage</code> key: points, streak, known words, exam results and each card's review state. The key carries a version (<code>englishpath-progress-v6</code>). Whenever I change the shape, I read from the old version and convert it, so users never lose anything.</p>
+
+<h2>Spaced repetition</h2>
+<p>I use a simple Leitner system. Each card sits in a box from 1 to 5. A correct answer moves it up a box, a wrong answer sends it back to the start. The next review day is computed from the box:</p>
+<pre><code>const SRS_INTERVAL_DAYS = { 1: 0, 2: 1, 3: 3, 4: 7, 5: 16 };</code></pre>
+<p>So a word you don't know comes back immediately and a word you know well comes back after more than two weeks. The games feed this system too: getting a word wrong in a game puts it back in the review queue.</p>
+
+<h2>The word data</h2>
+<p>I levelled about 680 words from A1 to C1, each with a Turkish meaning, pronunciation and example sentence. If the same word appears twice, the lower level wins; I de-duplicate by headword while merging.</p>
+
+<h3>Auditing the data</h3>
+<p>I scanned the old card decks with a small script and found real mistakes: four duplicate cards in Taboo, six in Charades and a Passaparola question whose answer didn't match its letter. Hand-written data is harder to maintain than code.</p>
+<blockquote><p>Designing a tool without accounts makes you question what really needs a server. Most of the time the answer is: nothing.</p></blockquote>
+`,
+    },
+  },
+};
+
 export function getBlogPostContent(slug: string, locale: string): BlogPostContent | null {
-  const isTr = locale === "tr";
-
-  const posts: Record<string, BlogPostContent> = {
-    "nextjs-portfolio-guide": {
-      title: isTr
-        ? "Next.js 16 ve Modern Portfolyo Mimarisi"
-        : "Next.js 16 & Modern Portfolio Architecture",
-      excerpt: isTr
-        ? "Tailwind v4, i18n ve Server Actions kullanarak global standartlarda bir yazılım portfolyosu nasıl hazırlanır?"
-        : "How to build a global standard software portfolio using Tailwind v4, i18n, and Server Actions?",
-      content: isTr
-        ? `
-          <p class="lead">Modern web geliştirme dünyasında, bir portfolyo sadece projelerinizi listelediğiniz bir yer değildir; aynı zamanda yazdığınız kodun kalitesini sergilediğiniz yaşayan bir üründür.</p>
-          
-          <h2>Neden Next.js 16?</h2>
-          <p>React ekosisteminin amiral gemisi olan Next.js, App Router yapısı ile sunucu ve istemci bileşenlerini hibrit bir şekilde kullanmamıza olanak tanır. Bu, SEO performansını maksimize eder ve kullanıcı deneyimini optimize eder.</p>
-          
-          <h3>Sesli Deneyim</h3>
-          <p>Bu makaleyi okumak yerine dinleyebilirsiniz. Ses, tarayıcınızın yerleşik konuşma motoruyla üretilir; sesin kalitesi cihazınıza ve tarayıcınıza göre değişebilir.</p>
-          
-          <h2>Mimari Kararlar</h2>
-          <p>İyi bir mimari sadece koddan ibaret değildir; aynı zamanda sürdürülebilirlik ve ölçeklenebilirlik demektir. TypeScript ile tip güvenliği, modüler yapı ile bakım kolaylığı sağlarız.</p>
-          
-          <blockquote>
-            <p>"Kod yazmak kolaydır, iyi kod yazmak ise sanattır."</p>
-          </blockquote>
-          
-          <p>Modern web uygulamaları için performans, erişilebilirlik ve kullanıcı deneyimi üçgeninde dengeli bir yaklaşım gereklidir.</p>
-        `
-        : `
-          <p class="lead">In the world of modern web development, a portfolio is not just a place to list your projects; it is a living product where you showcase the quality of your code.</p>
-          
-          <h2>Why Next.js 16?</h2>
-          <p>As the flagship of the React ecosystem, Next.js allows us to use server and client components in a hybrid way with its App Router structure. This maximizes SEO performance and optimizes user experience.</p>
-          
-          <h3>Audio Experience</h3>
-          <p>You can listen to this article instead of reading it. The audio is generated by your browser's built-in speech engine, so voice quality depends on your device and browser.</p>
-          
-          <h2>Architectural Decisions</h2>
-          <p>Good architecture is not just about code; it's about sustainability and scalability. We ensure type safety with TypeScript and maintainability with modular structure.</p>
-          
-          <blockquote>
-            <p>"Writing code is easy, writing good code is an art."</p>
-          </blockquote>
-        `,
-      date: "2026-01-31",
-      readTime: isTr ? "8 Dakika" : "8 Min",
-      category: "architecture",
-      hasAudio: true,
-    },
-    "ai-automation-guide": {
-      title: isTr
-        ? "Yapay Zeka Destekli Otomasyonlar"
-        : "AI-Powered Workflow Automation",
-      excerpt: isTr
-        ? "n8n ve webhook entegrasyonları kullanarak manuel iş süreçlerini otonom sistemlere dönüştürme rehberi."
-        : "A practical guide to turning manual workflows into autonomous systems with n8n and webhooks.",
-      content: isTr
-        ? `
-          <p class="lead">İş süreçlerinin büyük kısmı hâlâ manuel veri girişi, e-posta takibi ve tekrarlayan onay adımlarından oluşur. n8n gibi görsel otomasyon araçları bu döngüyü kırmak için güçlü bir başlangıç noktası sunar.</p>
-
-          <h2>n8n Neden?</h2>
-          <p>n8n, self-hosted çalışabilen açık kaynaklı bir iş akışı motorudur. Webhook tetikleyicileri, HTTP istekleri ve LLM düğümleri ile uçtan uca otomasyon kurmak mümkündür.</p>
-
-          <h2>Tipik Mimari</h2>
-          <p>Form gönderimi → n8n webhook → veri doğrulama → veritabanı kaydı → Slack/e-posta bildirimi akışı, portföy ve SaaS projelerinde sık kullanılan bir kalıptır.</p>
-
-          <h3>LLM Entegrasyonu</h3>
-          <p>Groq veya benzeri hızlı inference sağlayıcıları, gelen metni sınıflandırmak, özetlemek veya yönlendirmek için workflow ortasına eklenebilir. Kritik nokta: ham model çıktısını doğrudan üretim aksiyonuna bağlamamak.</p>
-
-          <blockquote>
-            <p>"Otomasyon, insan yerine geçmez; tekrarlayan işi insanın önünden alır."</p>
-          </blockquote>
-
-          <p>Webhook URL'lerini ortam değişkenlerinde tutmak, timeout ve fallback stratejileri tanımlamak üretim sistemleri için vazgeçilmezdir.</p>
-        `
-        : `
-          <p class="lead">Most business workflows still rely on manual data entry, email follow-ups, and repetitive approval steps. Visual automation tools like n8n offer a strong starting point to break that cycle.</p>
-
-          <h2>Why n8n?</h2>
-          <p>n8n is an open-source workflow engine that can run self-hosted. With webhook triggers, HTTP nodes, and LLM integrations, you can build end-to-end automation pipelines.</p>
-
-          <h2>Typical Architecture</h2>
-          <p>Form submission → n8n webhook → validation → database write → Slack/email notification is a common pattern in portfolio and SaaS projects.</p>
-
-          <h3>LLM Integration</h3>
-          <p>Fast inference providers such as Groq can classify, summarize, or route incoming text inside a workflow. The key is not wiring raw model output directly to production actions without guardrails.</p>
-
-          <blockquote>
-            <p>"Automation does not replace people; it removes repetitive work from their path."</p>
-          </blockquote>
-
-          <p>Keep webhook URLs in environment variables and define timeouts plus fallback strategies for production systems.</p>
-        `,
-      date: "2026-01-28",
-      readTime: isTr ? "5 Dakika" : "5 Min",
-      category: "ai",
-      hasAudio: false,
-    },
-    "n8n-workflow-automation": {
-      title: isTr
-        ? "n8n ile İş Akışı Otomasyonu: Sıfırdan Production'a"
-        : "n8n Workflow Automation: From Zero to Production",
-      excerpt: isTr
-        ? "n8n'i self-host etmekten Google Workspace, Supabase ve webhook entegrasyonlarına kadar gerçek dünya otomasyon senaryoları."
-        : "From self-hosting n8n to real-world automation scenarios with Google Workspace, Supabase, and webhook integrations.",
-      content: isTr
-        ? `
-          <p class="lead">İş süreçlerindeki tekrar eden adımlar, mühendis zamanının en büyük düşmanıdır. n8n bu düşmana karşı görsel, self-hosted ve ücretsiz bir cephe kurar.</p>
-
-          <h2>n8n Nedir?</h2>
-          <p>n8n, 400'den fazla entegrasyona sahip açık kaynaklı bir workflow otomasyon motorudur. Zapier'e benzer ancak kod yazabilir, kendi sunucunuzda çalıştırabilir ve sınırsız workflow kurabilirsiniz.</p>
-
-          <h2>Neden Self-Host?</h2>
-          <p>Cloud versiyonun aksine self-hosted n8n, hassas verileri kendi altyapınızda işlemenizi sağlar. Docker ile kurulum 5 dakika sürer; Vercel ya da Railway üzerinde de çalışır.</p>
-
-          <h2>İlk Workflow: Webhook → Supabase</h2>
-          <p>En basit pattern şudur: bir HTTP webhook tetikleyicisi, gelen JSON'u validate edip Supabase tablosuna yazar. n8n'in Set ve IF node'ları ile koşullu iş mantığı eklemek sadece sürükle-bırak işidir.</p>
-
-          <h3>Webhook Tetikleyiciler</h3>
-          <p>n8n webhook node'u hem GET hem POST destekler. URL'i bir form, Stripe event'i veya başka bir servis için endpoint olarak kullanabilirsiniz. Test modunda gerçek zamanlı payload görebilirsiniz.</p>
-
-          <h2>Hata Yönetimi</h2>
-          <p>Her kritik node'a Error Trigger workflow bağlayın. Bir node başarısız olduğunda Slack veya e-posta bildirimi göndermek için 2 node yeterlidir. Retry on Fail seçeneğini de ihmal etmeyin.</p>
-
-          <h2>Production Checklist</h2>
-          <ul>
-            <li>Webhook URL'leri environment variable'da tutun</li>
-            <li>Timeout değerlerini manuel ayarlayın (varsayılan çok düşük olabilir)</li>
-            <li>Credentials şifrelenmiş olarak saklanır; yedekleme planı yapın</li>
-            <li>Monitoring için execution log retention süresini artırın</li>
-          </ul>
-        `
-        : `
-          <p class="lead">Repetitive steps in business processes are the biggest enemy of engineering time. n8n builds a visual, self-hosted, and free frontline against this enemy.</p>
-
-          <h2>What is n8n?</h2>
-          <p>n8n is an open-source workflow automation engine with over 400 integrations. Similar to Zapier but you can write code, run it on your own server, and create unlimited workflows.</p>
-
-          <h2>Why Self-Host?</h2>
-          <p>Unlike the cloud version, self-hosted n8n lets you process sensitive data on your own infrastructure. Setup with Docker takes 5 minutes; it also runs on Vercel or Railway.</p>
-
-          <h2>First Workflow: Webhook → Supabase</h2>
-          <p>The simplest pattern: an HTTP webhook trigger validates incoming JSON and writes it to a Supabase table. Adding conditional business logic with n8n's Set and IF nodes is pure drag-and-drop.</p>
-
-          <h3>Webhook Triggers</h3>
-          <p>n8n webhook nodes support both GET and POST. Use the URL as an endpoint for a form, Stripe event, or any other service. In test mode you can see real-time payloads.</p>
-
-          <h2>Error Handling</h2>
-          <p>Attach an Error Trigger workflow to every critical node. Sending a Slack or email notification when a node fails requires just 2 nodes. Don't overlook the Retry on Fail option either.</p>
-
-          <h2>Production Checklist</h2>
-          <ul>
-            <li>Store webhook URLs in environment variables</li>
-            <li>Set timeout values manually — defaults can be too low</li>
-            <li>Credentials are stored encrypted; make a backup plan</li>
-            <li>Increase execution log retention for monitoring</li>
-          </ul>
-        `,
-      date: "2026-02-05",
-      readTime: isTr ? "7 Dakika" : "7 Min",
-      category: "automation",
-      hasAudio: false,
-    },
-    "supabase-fullstack-architecture": {
-      title: isTr
-        ? "Supabase ile Full-Stack Mimari: Auth, RLS ve Realtime"
-        : "Full-Stack Architecture with Supabase: Auth, RLS & Realtime",
-      excerpt: isTr
-        ? "Supabase'i sadece bir database olarak değil, tam bir backend altyapısı olarak kullanmak. Row Level Security, Edge Functions ve Realtime subscription'lar."
-        : "Using Supabase not just as a database but as a complete backend infrastructure. Row Level Security, Edge Functions, and Realtime subscriptions.",
-      content: isTr
-        ? `
-          <p class="lead">Supabase, Firebase'in açık kaynaklı alternatifi olarak başladı; ancak PostgreSQL tabanlı yapısı ve SQL-first yaklaşımıyla çok daha güçlü bir backend altyapısına dönüştü.</p>
-
-          <h2>Supabase vs Firebase</h2>
-          <p>Firebase NoSQL kullanır ve sizi vendor lock-in'e iter. Supabase PostgreSQL üzerinde çalışır; tam SQL gücüne, join'lere ve ACID transaction'lara sahipsiniz. Üstelik self-host edilebilir.</p>
-
-          <h2>Row Level Security Pattern'leri</h2>
-          <p>RLS, güvenliği veritabanı katmanına taşır. Her tablo için policy yazarsınız: <code>auth.uid() = user_id</code> gibi basit ifadeler, her kullanıcının yalnızca kendi verilerine erişmesini garanti eder. Uygulama katmanında unutulan guard'lar artık sorun olmaz.</p>
-
-          <h2>Auth + RBAC</h2>
-          <p>Supabase Auth JWT token'larında custom claim ekler. Bunu RLS policy'leriyle birleştirerek rol tabanlı erişim kontrolü kurabilirsiniz: admin, editor, viewer rolleri sadece SQL policy'leriyle yönetilir.</p>
-
-          <h3>Edge Functions Use Case'leri</h3>
-          <p>Stripe webhook'u işlemek, harici API çağrısı yapmak veya hassas iş mantığını istemciden gizlemek için Edge Functions mükemmeldir. Deno tabanlıdır ve cold start neredeyse sıfırdır.</p>
-
-          <h2>Realtime Subscription'lar</h2>
-          <p>Postgres'in logical replication özelliği üzerine inşa edilmiş Realtime sistemi, tablo değişikliklerini WebSocket üzerinden anlık iletir. Chat uygulamaları, canlı dashboard'lar ve işbirliği araçları için idealdir.</p>
-
-          <blockquote><p>"Bir backend yazmak için önce storage, auth ve realtime'ı çözmeniz gerekir. Supabase bunu kutudan çıkar çıkmaz verir."</p></blockquote>
-        `
-        : `
-          <p class="lead">Supabase started as an open-source Firebase alternative; but its PostgreSQL-based structure and SQL-first approach transformed it into a far more powerful backend infrastructure.</p>
-
-          <h2>Supabase vs Firebase</h2>
-          <p>Firebase uses NoSQL and pushes you toward vendor lock-in. Supabase runs on PostgreSQL; you have full SQL power, joins, and ACID transactions. Plus it's self-hostable.</p>
-
-          <h2>Row Level Security Patterns</h2>
-          <p>RLS moves security to the database layer. You write policies per table: simple expressions like <code>auth.uid() = user_id</code> guarantee each user only accesses their own data. Forgotten guards in the application layer are no longer a problem.</p>
-
-          <h2>Auth + RBAC</h2>
-          <p>Supabase Auth adds custom claims to JWT tokens. Combine this with RLS policies to build role-based access control: admin, editor, viewer roles managed purely with SQL policies.</p>
-
-          <h3>Edge Functions Use Cases</h3>
-          <p>Edge Functions are perfect for processing Stripe webhooks, making external API calls, or hiding sensitive business logic from the client. They're Deno-based with near-zero cold start.</p>
-
-          <h2>Realtime Subscriptions</h2>
-          <p>Built on PostgreSQL's logical replication, the Realtime system delivers table changes instantly over WebSockets. Ideal for chat applications, live dashboards, and collaboration tools.</p>
-
-          <blockquote><p>"To build a backend you first need to solve storage, auth, and realtime. Supabase delivers all three out of the box."</p></blockquote>
-        `,
-      date: "2026-02-10",
-      readTime: isTr ? "9 Dakika" : "9 Min",
-      category: "architecture",
-      hasAudio: false,
-    },
-    "typescript-type-safe-api": {
-      title: isTr
-        ? "TypeScript ile Type-Safe API Tasarımı"
-        : "Type-Safe API Design with TypeScript",
-      excerpt: isTr
-        ? "Zod ile runtime validation, tRPC alternatifi olarak API route tip güvenliği ve ortak hata yönetimi pattern'leri."
-        : "Runtime validation with Zod, API route type safety as a tRPC alternative, and shared error handling patterns.",
-      content: isTr
-        ? `
-          <p class="lead">TypeScript derleme zamanında tip güvenliği sağlar; ancak API sınırında runtime'da da aynı garantiyi vermek istersiniz. Zod bu köprüyü kurar.</p>
-
-          <h2>Neden Type-Safe API?</h2>
-          <p>Frontend ve backend ayrı compile edilir. Backend'in döndürdüğü shape'i frontend <code>as</code> ile varsayarsa, runtime'da patlayan özellikler kaçınılmazdır. Paylaşılan tip tanımları ve runtime validation bu riski ortadan kaldırır.</p>
-
-          <h2>Zod Schema Tasarımı</h2>
-          <p>Her API input ve output için Zod schema yazın. Schema'dan TypeScript tipi türetin: <code>z.infer&lt;typeof schema&gt;</code>. Artık tek gerçek kaynağınız vardır; tipi ayrıca yazmaya gerek yoktur.</p>
-
-          <h2>API Route Wrapper</h2>
-          <p>Next.js route handler'larını bir <code>createApiHandler</code> wrapper'a alın. Wrapper input'u parse eder, hataları standardize eder ve <code>ApiResponse&lt;T&gt;</code> döner. Boilerplate sıfıra iner.</p>
-
-          <h2>Hata Tipleri</h2>
-          <p>Union discriminated type ile hata modeli kurun: <code>{ success: true; data: T } | { success: false; error: ApiError }</code>. Frontend her durumu exhaustive olarak handle edebilir.</p>
-
-          <h2>Pratik Örnek</h2>
-          <pre><code>const bodySchema = z.object({ email: z.string().email(), message: z.string().min(10) });
-type Body = z.infer&lt;typeof bodySchema&gt;;</code></pre>
-          <p>Tek satır değişiklikle validation ve tip türetimi birleşir. Zod'un <code>.safeParse()</code> metodu hata fırlatmaz; sonucu kontrol edip işleyin.</p>
-        `
-        : `
-          <p class="lead">TypeScript provides type safety at compile time; but you also want the same guarantees at runtime on the API boundary. Zod builds that bridge.</p>
-
-          <h2>Why Type-Safe API?</h2>
-          <p>Frontend and backend compile separately. If the frontend assumes the shape returned by the backend via <code>as</code>, exploding properties at runtime are inevitable. Shared type definitions and runtime validation eliminate this risk.</p>
-
-          <h2>Zod Schema Design</h2>
-          <p>Write a Zod schema for every API input and output. Derive the TypeScript type from the schema: <code>z.infer&lt;typeof schema&gt;</code>. Now you have a single source of truth — no need to write the type separately.</p>
-
-          <h2>API Route Wrapper</h2>
-          <p>Wrap Next.js route handlers in a <code>createApiHandler</code>. The wrapper parses input, standardizes errors, and returns <code>ApiResponse&lt;T&gt;</code>. Boilerplate drops to zero.</p>
-
-          <h2>Error Types</h2>
-          <p>Build your error model with a discriminated union: <code>{ success: true; data: T } | { success: false; error: ApiError }</code>. The frontend can exhaustively handle every case.</p>
-
-          <h2>Practical Example</h2>
-          <pre><code>const bodySchema = z.object({ email: z.string().email(), message: z.string().min(10) });
-type Body = z.infer&lt;typeof bodySchema&gt;;</code></pre>
-          <p>A single line combines validation and type derivation. Zod's <code>.safeParse()</code> method doesn't throw; check the result and process it.</p>
-        `,
-      date: "2026-02-15",
-      readTime: isTr ? "6 Dakika" : "6 Min",
-      category: "architecture",
-      hasAudio: false,
-    },
-    "groq-streaming-llm-integration": {
-      title: isTr
-        ? "Groq API ile Streaming LLM Entegrasyonu"
-        : "Streaming LLM Integration with Groq API",
-      excerpt: isTr
-        ? "Groq'un ultra-düşük latency API'si ile Next.js'de token-by-token streaming, abort controller ve kullanıcı deneyimi optimizasyonu."
-        : "Token-by-token streaming in Next.js with Groq's ultra-low latency API, abort controller, and UX optimization.",
-      content: isTr
-        ? `
-          <p class="lead">GPT-4 beklerken ekranın başında donup kalmak zorunda değilsiniz. Groq, Llama 3.1 modellerini saniyede 800+ token ile sunar. Bu hızı streaming'le birleştirince kullanıcı deneyimi dramatik biçimde değişir.</p>
-
-          <h2>Groq Neden Hızlı?</h2>
-          <p>Groq, NVIDIA GPU yerine kendi LPU (Language Processing Unit) donanımını kullanır. Matrix çarpımlarını farklı mimaride paralelize eder; sonuç: GPT-4'ün 20-50 katı token üretim hızı.</p>
-
-          <h2>Streaming API Kurulumu</h2>
-          <p>Next.js App Router'da <code>ReadableStream</code> ile streaming response döndürürsünüz. Groq SDK'nın <code>stream: true</code> seçeneği async iterator üretir; her chunk'ı response'a yazarsınız.</p>
-
-          <h2>Server-Sent Events</h2>
-          <p>İstemci tarafında <code>fetch</code> ile stream okuyan bir hook yazın. <code>response.body.getReader()</code>, gelen chunk'ları decode edip state'e ekler. React'ın batching'i sayesinde gereksiz render olmaz.</p>
-
-          <h3>Abort Controller</h3>
-          <p>Kullanıcı "Durdur" butonuna bastığında <code>AbortController.abort()</code> hem fetch'i hem de Groq stream'ini keser. Server tarafında da <code>signal</code>'i Groq çağrısına iletmek sunucu kaynağını korur.</p>
-
-          <h2>UX Loading State'leri</h2>
-          <p>Streaming sırasında cursor animasyonu, token sayacı ve "yazıyor..." göstergesi kullanıcıya sistem çalışıyor hissi verir. İlk token gelene kadar geçen süre (TTFT) kullanıcı algısının anahtarıdır.</p>
-        `
-        : `
-          <p class="lead">You don't have to freeze at your screen waiting for GPT-4. Groq serves Llama 3.1 models at 800+ tokens per second. Combine that speed with streaming and user experience changes dramatically.</p>
-
-          <h2>Why is Groq Fast?</h2>
-          <p>Groq uses its own LPU (Language Processing Unit) hardware instead of NVIDIA GPUs. It parallelizes matrix multiplications in a different architecture; result: 20-50x the token generation speed of GPT-4.</p>
-
-          <h2>Streaming API Setup</h2>
-          <p>In Next.js App Router you return a streaming response using <code>ReadableStream</code>. Groq SDK's <code>stream: true</code> option produces an async iterator; you write each chunk to the response.</p>
-
-          <h2>Server-Sent Events</h2>
-          <p>Write a hook on the client side that reads the stream with <code>fetch</code>. <code>response.body.getReader()</code> decodes incoming chunks and appends them to state. React's batching prevents unnecessary re-renders.</p>
-
-          <h3>Abort Controller</h3>
-          <p>When the user presses "Stop", <code>AbortController.abort()</code> cancels both the fetch and the Groq stream. Passing the <code>signal</code> to the Groq call on the server side also protects server resources.</p>
-
-          <h2>UX Loading States</h2>
-          <p>A cursor animation, token counter, and "typing..." indicator during streaming give users the feeling the system is working. Time to First Token (TTFT) is the key to user perception.</p>
-        `,
-      date: "2026-02-20",
-      readTime: isTr ? "8 Dakika" : "8 Min",
-      category: "ai",
-      hasAudio: false,
-    },
-    "vercel-edge-runtime-guide": {
-      title: isTr
-        ? "Vercel Edge Runtime: Ne Zaman, Neden, Nasıl"
-        : "Vercel Edge Runtime: When, Why, and How",
-      excerpt: isTr
-        ? "Edge Runtime vs Node.js Runtime seçimi, cold start problemleri, Edge Middleware kullanım senaryoları ve gerçek benchmark'lar."
-        : "Choosing Edge Runtime vs Node.js Runtime, cold start problems, Edge Middleware use cases, and real benchmarks.",
-      content: isTr
-        ? `
-          <p class="lead">Edge Runtime, kodunuzu kullanıcıya en yakın sunucuda çalıştırır. Ama her şeyi Edge'e taşımak hata olur — kısıtlamaları ve avantajları anlamak kritik.</p>
-
-          <h2>Edge Runtime Kısıtlamaları</h2>
-          <p>Edge Runtime, tam Node.js API'sini çalıştırmaz. <code>fs</code>, <code>child_process</code> ve native modüller kullanılamaz. Bundle boyutu 4 MB ile sınırlı. Bu kısıtlamalar, hangi kodu Edge'e alabileceğinizi belirler.</p>
-
-          <h2>Ne Zaman Kullan?</h2>
-          <p>Edge Runtime şu durumlar için idealdir: auth token doğrulama, A/B test yönlendirmesi, geo-based redirect, rate limiting ve basit JSON transform'ları. Veritabanı bağlantısı gerektiren ağır işlemler için Node.js runtime kullanın.</p>
-
-          <h2>Middleware Mimarisi</h2>
-          <p>Next.js Middleware her request'ten önce Edge'de çalışır. Auth cookie'sini burada doğrulayarak korunan sayfaları server'a ulaşmadan redirect edebilirsiniz. Performans artışı önemlidir.</p>
-
-          <h2>Benchmark Karşılaştırması</h2>
-          <p>Basit auth middleware için Edge ~5ms, Node.js ~50ms yanıt süresi verir. Ancak cold start Edge için de mevcuttur — sık çağrılmayan endpoint'lerde fark kapanır. Üretim trafiğinde ölçün, tahmin etmeyin.</p>
-        `
-        : `
-          <p class="lead">Edge Runtime runs your code on the server closest to the user. But moving everything to Edge is a mistake — understanding its constraints and advantages is critical.</p>
-
-          <h2>Edge Runtime Constraints</h2>
-          <p>Edge Runtime doesn't run the full Node.js API. <code>fs</code>, <code>child_process</code>, and native modules are unavailable. Bundle size is limited to 4 MB. These constraints determine which code you can move to Edge.</p>
-
-          <h2>When to Use It?</h2>
-          <p>Edge Runtime is ideal for: auth token verification, A/B test routing, geo-based redirects, rate limiting, and simple JSON transforms. Use Node.js runtime for heavy operations requiring database connections.</p>
-
-          <h2>Middleware Architecture</h2>
-          <p>Next.js Middleware runs at Edge before every request. Validating auth cookies here lets you redirect protected pages before they reach the server. The performance gain is significant.</p>
-
-          <h2>Benchmark Comparison</h2>
-          <p>For simple auth middleware: Edge ~5ms, Node.js ~50ms response time. However cold starts exist for Edge too — the gap closes for infrequently called endpoints. Measure in production traffic, don't guess.</p>
-        `,
-      date: "2026-02-25",
-      readTime: isTr ? "5 Dakika" : "5 Min",
-      category: "architecture",
-      hasAudio: false,
-    },
-    "nextjs-i18n-nextintl-guide": {
-      title: isTr
-        ? "Next.js App Router'da i18n: next-intl ile Prodüksiyon Rehberi"
-        : "i18n in Next.js App Router: Production Guide with next-intl",
-      excerpt: isTr
-        ? "next-intl ile App Router i18n kurulumu, statik sayfa üretimi, locale-aware SEO metadata ve çeviri workflow'u."
-        : "Setting up App Router i18n with next-intl, static page generation, locale-aware SEO metadata, and translation workflow.",
-      content: isTr
-        ? `
-          <p class="lead">Çok dilli bir Next.js uygulaması yazmak, doğru araç ve mimari kararlar olmadan hızla karmaşıklaşır. next-intl, App Router ile uyumlu ve TypeScript-first yaklaşımıyla bu karmaşıklığı yönetir.</p>
-
-          <h2>Neden next-intl?</h2>
-          <p>next-intl, App Router'ın async/await yapısıyla tam uyumludur. Server Component'lerde <code>getTranslations()</code>, Client Component'lerde <code>useTranslations()</code> hook'u ile çalışır. ICU mesaj formatını destekler.</p>
-
-          <h2>Dosya Yapısı</h2>
-          <p><code>src/messages/</code> klasörü altında her dil için JSON: <code>tr.json</code>, <code>en.json</code>, <code>de.json</code> vb. Namespace'ler ile büyük projelerde organize tutun: <code>Navigation</code>, <code>HomePage</code>, <code>BlogHub</code> gibi.</p>
-
-          <h2>Middleware Kurulumu</h2>
-          <p><code>createMiddleware(routing)</code> ile locale tespiti ve yönlendirme otomatik yapılır. <code>routing.ts</code> dosyasında dilleri ve varsayılan dili tanımlarsınız. <code>[locale]</code> route grubu tüm sayfalara locale prefix ekler.</p>
-
-          <h2>generateStaticParams ile SSG</h2>
-          <p>Her sayfa için <code>generateStaticParams</code> fonksiyonu, tüm locale kombinasyonlarını üretir. Blog slugları ve locale'leri çapraz çarparak statik sayfalar build zamanında oluşturulur — sıfır runtime overhead.</p>
-
-          <h2>Metadata Lokalizasyonu</h2>
-          <p><code>generateMetadata</code> async fonksiyonunda <code>getTranslations()</code> ile locale'e göre title ve description üretin. hreflang link'leri için <code>alternates.languages</code>'ı tüm locale'ler için doldurun.</p>
-
-          <h2>Çeviri Yönetimi İpuçları</h2>
-          <ul>
-            <li>Türkçe'yi kaynak dil olarak kullanıyorsanız, en.json'ı da eksiksiz tutun</li>
-            <li>Eksik key'ler için fallback locale tanımlayın (<code>request.ts</code>'de merge)</li>
-            <li>TypeScript ile key autocomplete için <code>createNavigation</code> type helper'larını kullanın</li>
-            <li>CI'da <code>next build</code> ile eksik çeviri key'lerini yakalayın</li>
-          </ul>
-        `
-        : `
-          <p class="lead">Building a multilingual Next.js app without the right tools and architectural decisions quickly becomes complex. next-intl manages this complexity with a TypeScript-first approach compatible with App Router.</p>
-
-          <h2>Why next-intl?</h2>
-          <p>next-intl is fully compatible with App Router's async/await structure. It works with <code>getTranslations()</code> in Server Components and <code>useTranslations()</code> hook in Client Components. It supports ICU message format.</p>
-
-          <h2>File Structure</h2>
-          <p>JSON for each language under <code>src/messages/</code>: <code>tr.json</code>, <code>en.json</code>, <code>de.json</code>, etc. Keep large projects organized with namespaces: <code>Navigation</code>, <code>HomePage</code>, <code>BlogHub</code>, etc.</p>
-
-          <h2>Middleware Setup</h2>
-          <p><code>createMiddleware(routing)</code> handles locale detection and routing automatically. Define languages and the default language in <code>routing.ts</code>. The <code>[locale]</code> route group adds a locale prefix to all pages.</p>
-
-          <h2>SSG with generateStaticParams</h2>
-          <p>The <code>generateStaticParams</code> function for each page produces all locale combinations. Cross-multiplying blog slugs and locales builds static pages at build time — zero runtime overhead.</p>
-
-          <h2>Metadata Localization</h2>
-          <p>In the <code>generateMetadata</code> async function, use <code>getTranslations()</code> to generate locale-aware title and description. Fill <code>alternates.languages</code> for all locales for hreflang links.</p>
-
-          <h2>Translation Management Tips</h2>
-          <ul>
-            <li>If Turkish is your source language, keep en.json complete too</li>
-            <li>Define a fallback locale for missing keys (merge in <code>request.ts</code>)</li>
-            <li>Use <code>createNavigation</code> type helpers for key autocomplete with TypeScript</li>
-            <li>Catch missing translation keys with <code>next build</code> in CI</li>
-          </ul>
-        `,
-      date: "2026-03-01",
-      readTime: isTr ? "10 Dakika" : "10 Min",
-      category: "architecture",
-      hasAudio: false,
-    },
+  const source = POSTS[slug];
+  if (!source) return null;
+  const l = locale === "tr" ? source.tr : source.en;
+  return {
+    title: l.title,
+    excerpt: l.excerpt,
+    content: l.content.trim(),
+    date: source.date,
+    readTime: l.readTime,
+    category: source.category,
+    hasAudio: false,
   };
-
-  return posts[slug] ?? null;
 }
