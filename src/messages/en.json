@@ -690,6 +690,7 @@
       "tagline": "Small, real things made in Istanbul while learning.",
       "pages": "Pages",
       "elsewhere": "Elsewhere",
+      "email": "Email",
       "github_label": "GitHub",
       "github_cta": "All my code lives here",
       "opens_new_tab": "Opens in a new tab"
@@ -1364,6 +1365,13 @@
     "cta": "Get in touch"
   },
   "BookingPage": {
+    "hero": {
+      "kicker": "Booking demo",
+      "title": "The chair is ready. Pick your time.",
+      "lead": "Choose a service, a barber and a slot, and the confirmation arrives by SMS. This is a demo: not a real business, just a booking flow wired to an n8n webhook.",
+      "demo": "Demo",
+      "back": "Back to project"
+    },
     "brand": {
       "title": "Barber Shop",
       "location": "Ataşehir, Istanbul"

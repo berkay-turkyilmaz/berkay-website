@@ -3,6 +3,8 @@
 import React, { useState, useMemo, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
+import { BarberArt } from "@/components/brand/barber-art";
 import {
   Calendar,
   Clock,
@@ -16,6 +18,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Check,
+  ArrowLeft,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -488,8 +491,34 @@ export default function BarberAppointment() {
   ];
 
   return (
-    <div className="w-full min-h-full py-6 px-4 sm:px-6 lg:px-10 flex items-start justify-center">
-      <div className="max-w-6xl w-full">
+    <div className="barber min-h-screen min-h-[100dvh] w-full">
+      <header className="border-b border-border">
+        <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6 lg:px-10">
+          <Link
+            href="/projects/booking-demo"
+            className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-primary"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> {t("hero.back")}
+          </Link>
+          <span className="rounded-full border border-primary/40 px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+            {t("hero.demo")}
+          </span>
+        </div>
+      </header>
+
+      <section className="mx-auto grid max-w-6xl items-center gap-6 px-4 pb-4 pt-10 sm:px-6 md:grid-cols-[1.2fr_1fr] md:pt-14 lg:px-10">
+        <div>
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary">{t("hero.kicker")}</p>
+          <p className="mt-4 font-display text-[clamp(2.4rem,6vw,4.4rem)] leading-[1.02] tracking-[-0.02em] text-foreground">
+            {t("hero.title")}
+          </p>
+          <p className="mt-5 max-w-lg text-sm leading-relaxed text-muted-foreground sm:text-base">{t("hero.lead")}</p>
+        </div>
+        <BarberArt className="mx-auto hidden h-auto w-full max-w-[340px] md:block" />
+      </section>
+
+      <div className="mx-auto flex w-full max-w-6xl items-start justify-center px-4 pb-16 pt-6 sm:px-6 lg:px-10">
+      <div className="w-full">
         <AnimatePresence mode="wait">
           {isSuccess ? (
             <motion.div
@@ -857,6 +886,7 @@ export default function BarberAppointment() {
             </motion.div>
           )}
         </AnimatePresence>
+      </div>
       </div>
     </div>
   );

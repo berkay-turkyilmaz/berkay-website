@@ -690,6 +690,7 @@
     "tagline": "İstanbul'dan, öğrenirken yapılmış küçük ve gerçek işler.",
     "pages": "Sayfalar",
     "elsewhere": "Başka yerlerde",
+    "email": "E-posta",
     "github_label": "GitHub",
     "github_cta": "Tüm kodlarım burada",
     "opens_new_tab": "Yeni sekmede açılır"
@@ -1311,6 +1312,13 @@
     "cta": "İletişime geç"
   },
   "BookingPage": {
+    "hero": {
+      "kicker": "Rezervasyon demosu",
+      "title": "Koltuk hazır, saat senin.",
+      "lead": "Hizmeti, ustayı ve saati seç; onay SMS ile gelsin. Bu bir demo: gerçek bir işletme değil, n8n webhook’u ile çalışan bir rezervasyon akışı.",
+      "demo": "Demo",
+      "back": "Projeye dön"
+    },
     "brand": {
       "title": "Barber Shop",
       "location": "Ataşehir, İstanbul"

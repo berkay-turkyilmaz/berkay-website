@@ -488,3 +488,64 @@ button:disabled,
 .article pre code { padding: 0; background: transparent; }
 .article img { border-radius: 6px; }
 .article hr { border: 0; border-top: 1px solid hsl(var(--border)); }
+
+/* EnglishPath: defter kağıdı (nokta ızgara) */
+.ep-paper {
+  background-image:
+    radial-gradient(ellipse 70% 50% at 50% -15%, rgba(79, 70, 229, 0.09), transparent),
+    radial-gradient(circle, rgba(30, 27, 75, 0.09) 1px, transparent 1.4px);
+  background-size: auto, 22px 22px;
+}
+/* Sarı işaretleyici vurgusu */
+.ep-marker {
+  background: linear-gradient(transparent 58%, rgba(251, 191, 36, 0.85) 58%, rgba(251, 191, 36, 0.85) 92%, transparent 92%);
+  padding: 0 0.15em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+@keyframes ep-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-6px) rotate(var(--r, 0deg)); }
+}
+.ep-float { animation: ep-float 6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .ep-float { animation: none; } }
+.ep-marker-dark {
+  background: linear-gradient(transparent 62%, rgba(251, 191, 36, 0.42) 62%, rgba(251, 191, 36, 0.42) 94%, transparent 94%);
+}
+
+/* Rezervasyon demosu: koyu yeşil + pirinç (berber kimliği) */
+.barber {
+  --background: 160 26% 6%;
+  --foreground: 42 36% 92%;
+  --card: 160 22% 9%;
+  --card-foreground: 42 36% 92%;
+  --primary: 41 52% 56%;
+  --primary-foreground: 160 26% 6%;
+  --secondary: 160 16% 15%;
+  --secondary-foreground: 42 36% 92%;
+  --muted: 160 14% 13%;
+  --muted-foreground: 42 12% 66%;
+  --accent: 160 16% 17%;
+  --accent-foreground: 42 36% 92%;
+  --border: 42 30% 70% / 0.22;
+  --ring: 41 52% 56%;
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-border: hsl(var(--border));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-ring: hsl(var(--ring));
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  background-image:
+    radial-gradient(ellipse 60% 40% at 80% -10%, rgba(201, 162, 77, 0.14), transparent),
+    repeating-linear-gradient(135deg, rgba(244, 239, 228, 0.025) 0 2px, transparent 2px 14px);
+}
