@@ -38,4 +38,5 @@ export const RULES = {
   analyze: { name: "analyze", limit: 20, windowMs: 60_000 },
   contact: { name: "contact", limit: 1, windowMs: 5 * 60_000 },
   booking: { name: "booking", limit: 3, windowMs: 10 * 60_000 },
+  models: { name: "models", limit: 30, windowMs: 60_000 },
 } as const satisfies Record<string, RateLimitRule>;

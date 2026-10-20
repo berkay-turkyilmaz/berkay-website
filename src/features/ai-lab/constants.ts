@@ -1,4 +1,3 @@
-import type { GroqChatModelId } from "@/lib/ai/groq-models";
 
 import type { WorkspaceSettings } from "./types";
 
@@ -12,7 +11,7 @@ export const AI_AGENT_NAME = "BEX";
 
 export const DEFAULT_SETTINGS: WorkspaceSettings = {
 
-  model: "llama-3.1-8b-instant",
+  model: "openai/gpt-oss-20b",
 
   responseLength: "medium",
 
@@ -28,45 +27,18 @@ export const DEFAULT_SETTINGS: WorkspaceSettings = {
 
 
 
-/** Model list — labels/descriptions resolved via AiLabPage.settings.models i18n keys. */
+/** Hand-written labels for known models (keys under AiLabPage.settings.models). Others show their id. */
+export const KNOWN_MODELS: Record<string, { key: string }> = {
+  "llama-3.1-8b-instant": { key: "llama_8b" },
+  "llama-3.3-70b-versatile": { key: "llama_70b" },
+  "openai/gpt-oss-20b": { key: "gpt_oss_20b" },
+  "openai/gpt-oss-120b": { key: "gpt_oss_120b" },
+};
 
-export const MODEL_OPTIONS: {
-
-  value: GroqChatModelId;
-
-  labelKey: string;
-
-  descKey: string;
-
-  speedKey: string;
-
-}[] = [
-
-  {
-
-    value: "llama-3.1-8b-instant",
-
-    labelKey: "models.llama_8b_label",
-
-    descKey: "models.llama_8b_desc",
-
-    speedKey: "models.llama_8b_speed",
-
-  },
-
-  {
-
-    value: "llama-3.3-70b-versatile",
-
-    labelKey: "models.llama_70b_label",
-
-    descKey: "models.llama_70b_desc",
-
-    speedKey: "models.llama_70b_speed",
-
-  },
-
-];
+/** "openai/gpt-oss-20b" -> "gpt-oss-20b" for models without a hand-written label. */
+export function prettyModelId(id: string): string {
+  return id.split("/").pop() ?? id;
+}
 
 
 

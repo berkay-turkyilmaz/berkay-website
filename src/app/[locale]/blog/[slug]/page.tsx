@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { ContactBand } from "@/components/home/contact-band";
+import { ScopedIntl } from "@/lib/i18n/scoped-intl";
 import { ShareArticleButton } from "@/components/features/blog/share-article-button";
 import { AudioPlayer } from "@/components/features/blog/audio-player";
 import { Link, routing } from "@/i18n/routing";
@@ -112,7 +113,9 @@ export default async function BlogDetail({ params }: { params: Promise<{ slug: s
             {post.hasAudio && (
               <div className="rise mt-10" style={{ "--d": 4 } as React.CSSProperties}>
                 <Suspense fallback={<div className="h-40 animate-pulse rounded-[6px] bg-secondary" />}>
-                  <AudioPlayer title={post.title} text={cleanText} />
+                  <ScopedIntl namespaces={["BlogDetail"]}>
+                    <AudioPlayer title={post.title} text={cleanText} />
+                  </ScopedIntl>
                 </Suspense>
               </div>
             )}

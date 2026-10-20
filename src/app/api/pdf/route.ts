@@ -3,7 +3,7 @@ import { NextRequest } from "next/server";
 import { getApiError } from "@/lib/api/error-messages";
 import * as zlib from "zlib";
 import { promisify } from "util";
-import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
+import { resolveModel } from "@/lib/ai/groq-status";
 import { normalizeBexLanguage } from "@/lib/ai/bex-language";
 import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
@@ -333,9 +333,13 @@ export async function POST(req: NextRequest) {
       const { messages, chunks, fileName, model, responseLength, temperature } = parsed.data;
       const docLang = normalizeBexLanguage(parsed.data.language);
 
-      const modelId = (GROQ_CHAT_MODEL_IDS as readonly string[]).includes(model)
-        ? model
-        : "llama-3.1-8b-instant";
+      const resolved = await resolveModel(model);
+      if (!resolved.ok) {
+        return Response.json(
+          { error: getApiError(lang, "model_unavailable"), code: resolved.state },
+          { status: 503 }
+        );
+      }
 
       const lastUser = [...messages].reverse().find((m) => m.role === "user");
       const relevant = retrieveTopChunks(chunks, lastUser?.content ?? "");
@@ -346,7 +350,7 @@ export async function POST(req: NextRequest) {
       onError: ({ error }) => {
         errorBox.error = error;
       },
-        model: resolveLanguageModel("groq", modelId as (typeof GROQ_CHAT_MODEL_IDS)[number]),
+        model: resolveLanguageModel("groq", resolved.model),
         system,
         messages,
         temperature,

@@ -205,7 +205,7 @@ export default function DeepAnalyzerPanel() {
               <Brain className="w-5 h-5 text-ailab-text" />
             </div>
             <div>
-              <h1 className="text-sm font-bold text-ailab-text tracking-tight">{t("title")}</h1>
+              <h1 className="font-display text-xl font-normal text-ailab-text tracking-[-0.01em]">{t("title")}</h1>
               <p className="text-[11px] text-ailab-muted font-mono uppercase tracking-widest">
                 {t("subtitle")}
               </p>

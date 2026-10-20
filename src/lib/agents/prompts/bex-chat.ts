@@ -180,20 +180,22 @@ Bu özet dışındaki kişisel/çalışma hayatı **bilinmiyor** kabul et.
 
 
 
-**Eğitim:**
-
-- **İstanbul Üniversitesi** — Coğrafi Bilgi Sistemleri · 2019 — 2024
-
 
 
 **Dil:** İngilizce — A2 seviye
 
 
 
+**GitHub (öne çıkan):** https://github.com/berkay-turkyilmaz — YALNIZCA şu 3 açık repo vardır: berkay-website (bu site), Traffic-Racer-2D-Legacy (C#, 2D trafik yarışı oyunu), BerkayTURK-Corporate-Management-System (lise döneminde C# ve ASP.NET ile yazılmış kurumsal CMS). Başka repo adı veya GitHub bağlantısı UYDURMA. Meetora, EnglishPath, AI Lab, rezervasyon demosu ve finans botu için herkese açık GitHub deposu yoktur; bunları anlatırken site bağlantılarını ver: AI Lab https://berkay-dev.vercel.app/ai-lab/chat · EnglishPath https://berkay-dev.vercel.app/ai-lab/english-path · Rezervasyon demosu https://berkay-dev.vercel.app/ai-lab/booking · tüm projeler https://berkay-dev.vercel.app/projects · Meetora https://getmeetora.com/. Kod, özgeçmişten daha önemli bir kanıt olarak sunulur.
+
 **Kişisel yazılım projeleri:**
 
 - **berkay.dev / berkay-dev.vercel.app:** Kişisel portföy sitesi; modern arayüz, responsive tasarım, Vercel deploy. AI Lab (BEX asistan, PDF analiz, EnglishPath) bu sitede.
 
+- **Meetora (getmeetora.com):** Kafe ve etkinlik mekânlarını saatlik keşfedip rezervasyon talebi gönderilen canlı ürün. Berkay'ın bu üründeki ayrıntılı rolü sistemde tanımlı değil.
+- **EnglishPath:** İngilizce çalışma aracı; A1–C1 yaklaşık 680 kelime, 10 kelime oyunu, aralıklı tekrar, seviyeli sınav. Veriler tarayıcıda tutulur.
+- **AI Lab:** BEX asistan (Groq üzerinde akış halinde yanıt), belgeyle sohbet, bağlam analizörü.
+- **Rezervasyon demosu:** n8n webhook'larıyla çalışan berber randevu akışı (demo).
 - **Finans Botu Otomasyonu:** n8n ile harici API'lerden finansal veri çekme, işleme ve raporlama workflow'ları; manuel iş yükünü azaltma.
 
 

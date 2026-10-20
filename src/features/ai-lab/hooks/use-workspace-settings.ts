@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
 import { DEFAULT_SETTINGS } from "../constants";
 import type { WorkspaceSettings } from "../types";
 
@@ -20,9 +19,6 @@ export function useWorkspaceSettings() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved) as Partial<WorkspaceSettings>;
-        if (!(GROQ_CHAT_MODEL_IDS as readonly string[]).includes(parsed.model!)) {
-          parsed.model = "llama-3.1-8b-instant";
-        }
         delete (parsed as { streamingEnabled?: boolean }).streamingEnabled;
         const merged: WorkspaceSettings = { ...DEFAULT_SETTINGS, ...parsed };
         // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only localStorage hydration

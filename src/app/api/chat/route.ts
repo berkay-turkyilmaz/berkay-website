@@ -2,6 +2,7 @@ import { streamText } from "ai";
 import { NextRequest } from "next/server";
 import { buildBexSystemPrompt } from "@/lib/agents/prompts/bex-chat";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
+import { resolveModel } from "@/lib/ai/groq-status";
 import { normalizeBexLanguage } from "@/lib/ai/bex-language";
 import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { chatPostBodySchema } from "@/app/api/chat/schema";
@@ -44,9 +45,10 @@ export async function POST(req: NextRequest) {
       provider,
     } = parsed.data;
 
-    if (!process.env.GROQ_API_KEY?.trim()) {
+    const resolved = await resolveModel(model);
+    if (!resolved.ok) {
       return Response.json(
-        { error: getApiError(lang, "api_error") },
+        { error: getApiError(lang, "model_unavailable"), code: resolved.state },
         { status: 503 }
       );
     }
@@ -64,7 +66,7 @@ export async function POST(req: NextRequest) {
       onError: ({ error }) => {
         errorBox.error = error;
       },
-      model: resolveLanguageModel(provider, model),
+      model: resolveLanguageModel(provider, resolved.model),
       system: systemPrompt,
       messages,
       temperature,

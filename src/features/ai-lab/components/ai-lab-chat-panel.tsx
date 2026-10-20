@@ -7,7 +7,7 @@ import { isValidChatId, type ChatKind } from "../lib/chat-store";
 
 /** Chat surface for `/ai-lab/chat/[id]` and `/ai-lab/documents/[id]`. */
 export function AiLabChatPanel({ kind, chatId }: { kind: ChatKind; chatId: string }) {
-  const { settings, resolvedLanguage } = useAiLabShell();
+  const { settings, resolvedLanguage, modelState } = useAiLabShell();
 
   if (!isValidChatId(chatId)) return <AiLabNewChatRedirect kind={kind} />;
 
@@ -20,6 +20,7 @@ export function AiLabChatPanel({ kind, chatId }: { kind: ChatKind; chatId: strin
       }}
       kind={kind}
       chatId={chatId}
+      serviceDown={modelState !== "ok" && modelState !== "loading"}
     />
   );
 }

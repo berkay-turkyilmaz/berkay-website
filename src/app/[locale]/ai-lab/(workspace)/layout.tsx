@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { AiLabShell } from "@/features/ai-lab/components/ai-lab-shell";
 import { createPageMetadata } from "@/lib/seo/page-metadata";
+import { ScopedIntl } from "@/lib/i18n/scoped-intl";
 
 export async function generateMetadata({
   params,
@@ -21,5 +22,9 @@ export async function generateMetadata({
 }
 
 export default function AiLabWorkspaceLayout({ children }: { children: ReactNode }) {
-  return <AiLabShell>{children}</AiLabShell>;
+  return (
+    <ScopedIntl namespaces={["AiLabPage"]}>
+      <AiLabShell>{children}</AiLabShell>
+    </ScopedIntl>
+  );
 }

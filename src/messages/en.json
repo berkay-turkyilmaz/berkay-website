@@ -269,9 +269,9 @@
         "deep_analyzer": "Context Analyzer",
         "deep_analyzer_desc": "Token heatmap & graph",
         "english": "EnglishPath",
-        "english_desc": "AI language learning",
-        "booking": "Booking SaaS",
-        "booking_desc": "Appointment system",
+        "english_desc": "A1–C1 vocabulary and games",
+        "booking": "Booking demo",
+        "booking_desc": "n8n appointment flow",
         "meetora": "Meetora",
         "meetora_desc": "Event venue booking"
       },
@@ -294,6 +294,8 @@
     "chat": {
       "terminal_empty_title": "BEX ready.",
       "terminal_empty_desc": "Ask anything about Next.js, Supabase, n8n automations, or Berkay's projects.",
+      "service_offline": "BEX offline",
+      "service_down": "The AI service is not responding right now. Document chat and the analyzer use the same service; try again in a bit.",
       "doc_reupload_hint": "This chat was about \"{name}\". Attach the file again (paperclip) to keep asking questions about it.",
       "pdf_empty_title": "Document Analyzer",
       "pdf_empty_desc": "Drop a PDF, TXT or MD file — BEX reads the content and answers your questions in seconds.",
@@ -342,7 +344,7 @@
       "suggested_engineer_1": "Who is Berkay and what does he do professionally?",
       "suggested_engineer_2": "Tell me about Berkay's experience at Türk Telekom",
       "suggested_engineer_3": "What side projects and automation work has Berkay done?",
-      "suggested_engineer_4": "What is Berkay's education and tech stack?"
+      "suggested_engineer_4": "What public projects does Berkay have on GitHub?"
     },
     "settings": {
       "title": "Settings",
@@ -373,6 +375,8 @@
       "display_name_placeholder": "Your name...",
       "save": "Save",
       "model": "AI Model",
+      "models_loading": "Loading models…",
+      "models_unavailable": "No model is available right now.",
       "response_length": "Response Length",
       "length_short": "Short",
       "length_short_desc": "Summary",
@@ -401,7 +405,11 @@
         "llama_8b_speed": "~200 t/s",
         "llama_70b_label": "Llama 3.3 70B",
         "llama_70b_desc": "Deeper analysis for complex questions",
-        "llama_70b_speed": "~80 t/s"
+        "llama_70b_speed": "~80 t/s",
+        "gpt_oss_20b_label": "GPT-OSS 20B",
+        "gpt_oss_20b_desc": "Fast and light, for everyday questions",
+        "gpt_oss_120b_label": "GPT-OSS 120B",
+        "gpt_oss_120b_desc": "Larger model, deeper analysis"
       }
     },
     "header": {
@@ -1601,7 +1609,7 @@
     "service_3_desc": "Review of existing systems, bottleneck analysis, tech stack decisions.",
     "form_title": "Send a Message",
     "form_name_label": "Your name",
-    "form_name_placeholder": "Berkay Türkyılmaz",
+    "form_name_placeholder": "Your name",
     "form_email_label": "Your email address",
     "form_email_placeholder": "example@company.com",
     "form_subject_label": "What would you like to talk about?",

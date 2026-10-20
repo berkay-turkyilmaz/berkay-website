@@ -1,12 +1,12 @@
 import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
-import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import type { Metadata, Viewport } from "next";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { NextIntlClientProvider } from "next-intl";
+import { ScopedIntl } from "@/lib/i18n/scoped-intl";
 import { buildLanguageAlternates, isIndexedLocale, openGraphImagePath } from "@/lib/seo/page-metadata";
 import { siteConfig } from "@/data/site-config";
 import "./globals.css";
@@ -119,7 +119,6 @@ export default async function LocaleLayout({
     notFound();
   }
   setRequestLocale(locale);
-  const messages = await getMessages();
 
   return (
     <html lang={locale} dir={locale === "ar" ? "rtl" : "ltr"} suppressHydrationWarning>
@@ -136,7 +135,7 @@ export default async function LocaleLayout({
           selection:text-primary
         `}
       >
-        <NextIntlClientProvider messages={messages}>
+        <ScopedIntl>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -154,7 +153,7 @@ export default async function LocaleLayout({
               theme="system"
             /> 
           </ThemeProvider>
-        </NextIntlClientProvider>
+        </ScopedIntl>
       </body>
     </html>
   );

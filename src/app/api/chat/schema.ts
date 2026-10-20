@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { GROQ_CHAT_MODEL_IDS } from "@/lib/ai/groq-models";
+import { isChatModelId } from "@/lib/ai/groq-models";
 
 const chatRole = z.enum(["user", "assistant", "system"]);
 
@@ -17,12 +17,7 @@ export const chatPostBodySchema = z.object({
       message: "Conversation too long",
     }),
   mode: z.enum(["terminal", "pdf", "engineer"]).default("terminal"),
-  model: z
-    .string()
-    .max(120)
-    .refine((id) => (GROQ_CHAT_MODEL_IDS as readonly string[]).includes(id), {
-      message: "Unsupported model id",
-    }),
+  model: z.string().max(120).refine(isChatModelId, { message: "Unsupported model id" }),
   responseLength: z.enum(["short", "medium", "detailed"]).default("medium"),
   temperature: z.number().min(0).max(2).default(0.5),
   language: z.enum(["tr", "en", "de", "auto"]).default("tr"),

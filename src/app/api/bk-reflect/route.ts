@@ -5,6 +5,7 @@ import {
   buildBkReflectUserMessage,
 } from "@/lib/agents/prompts/bk-reflect";
 import { resolveLanguageModel } from "@/lib/ai/provider-registry";
+import { resolveModel } from "@/lib/ai/groq-status";
 import { createPlainTextStreamResponse, type StreamErrorBox } from "@/lib/ai/text-stream-response";
 import { bkReflectBodySchema } from "@/app/api/bk-reflect/schema";
 import { getApiError } from "@/lib/api/error-messages";
@@ -36,11 +37,9 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!process.env.GROQ_API_KEY?.trim()) {
-      return Response.json(
-        { error: "Yorumlama servisi şu an kullanılamıyor." },
-        { status: 503 }
-      );
+    const resolved = await resolveModel("llama-3.3-70b-versatile");
+    if (!resolved.ok) {
+      return Response.json({ error: "Yorumlama servisi şu an kullanılamıyor." }, { status: 503 });
     }
 
     const { reference, verseText, question } = parsed.data;
@@ -50,7 +49,7 @@ export async function POST(req: NextRequest) {
       onError: ({ error }) => {
         errorBox.error = error;
       },
-      model: resolveLanguageModel("groq", "llama-3.3-70b-versatile"),
+      model: resolveLanguageModel("groq", resolved.model),
       system: buildBkReflectSystemPrompt(),
       messages: [
         {

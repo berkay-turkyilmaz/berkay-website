@@ -16,7 +16,8 @@ import { ArrowLeft, PanelLeft, Settings } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/lib/hooks";
-import { MODEL_OPTIONS, DEFAULT_SETTINGS } from "../constants";
+import { DEFAULT_SETTINGS, KNOWN_MODELS, prettyModelId } from "../constants";
+import { useAvailableModels, type ModelState } from "../hooks/use-available-models";
 import type { SidebarItem, WorkspaceSettings } from "../types";
 import {
   AILAB_SIDEBAR_SECTIONS,
@@ -46,6 +47,9 @@ export type AiLabShellContextValue = {
   resolvedLanguage: WorkspaceSettings["language"] | string;
   updateSettings: ReturnType<typeof useWorkspaceSettings>["updateSettings"];
   settingsLoaded: boolean;
+  /** Whether the server's AI key can currently serve chat models. */
+  modelState: ModelState;
+  models: string[];
 };
 
 const AiLabShellContext = createContext<AiLabShellContextValue | null>(null);
@@ -70,6 +74,9 @@ export function AiLabShell({ children }: { children: ReactNode }) {
   const tSettings = useTranslations("AiLabPage.settings");
   const locale = useLocale();
   const { settings, updateSettings, settingsLoaded } = useWorkspaceSettings();
+  const avail = useAvailableModels();
+  // A saved model the key can no longer use falls back to the best available one.
+  const effectiveModel = avail.models.includes(settings.model) ? settings.model : (avail.models[0] ?? settings.model);
 
   const isMobile = useMediaQuery("(max-width: 767px)");
   // The user's explicit choice only counts for the viewport size it was made in.
@@ -160,12 +167,14 @@ export function AiLabShell({ children }: { children: ReactNode }) {
 
   const shellContext = useMemo<AiLabShellContextValue>(
     () => ({
-      settings: settingsLoaded ? settings : DEFAULT_SETTINGS,
+      settings: { ...(settingsLoaded ? settings : DEFAULT_SETTINGS), model: effectiveModel },
       resolvedLanguage,
       updateSettings,
       settingsLoaded,
+      modelState: avail.state,
+      models: avail.models,
     }),
-    [settings, settingsLoaded, resolvedLanguage, updateSettings]
+    [settings, settingsLoaded, resolvedLanguage, updateSettings, effectiveModel, avail.state, avail.models]
   );
 
   return (
@@ -174,7 +183,9 @@ export function AiLabShell({ children }: { children: ReactNode }) {
         <AnimatePresence>
           {showSettings && (
             <WorkspaceSettingsPanel
-              settings={settings}
+              settings={{ ...settings, model: effectiveModel }}
+              models={avail.models}
+              modelState={avail.state}
               onUpdate={updateSettings}
               onClose={() => setShowSettings(false)}
               onClearHistory={clearAllChats}
@@ -279,8 +290,9 @@ export function AiLabShell({ children }: { children: ReactNode }) {
                 <div className="w-1.5 h-1.5 rounded-full bg-ailab-accent shadow-ailab-accent-dot" />
                 <span className="text-[11px] font-mono text-ailab-text/55 max-w-[120px] truncate">
                   {(() => {
-                    const m = MODEL_OPTIONS.find((o) => o.value === settings.model);
-                    return m ? tSettings(m.labelKey as never) : "Llama 3.1 8B";
+                    if (avail.state !== "ok" && avail.state !== "loading") return t("chat.service_offline");
+                    const known = KNOWN_MODELS[effectiveModel];
+                    return known ? tSettings(`models.${known.key}_label` as never) : prettyModelId(effectiveModel);
                   })()}
                 </span>
               </div>

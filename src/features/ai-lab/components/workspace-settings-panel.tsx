@@ -5,7 +5,8 @@ import { useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { X, Check, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MODEL_OPTIONS } from "../constants";
+import { KNOWN_MODELS, prettyModelId } from "../constants";
+import type { ModelState } from "../hooks/use-available-models";
 import type { WorkspaceSettings } from "../types";
 
 function Group({
@@ -39,11 +40,15 @@ function Row({
 
 export function WorkspaceSettingsPanel({
   settings,
+  models,
+  modelState,
   onUpdate,
   onClose,
   onClearHistory,
 }: {
   settings: WorkspaceSettings;
+  models: string[];
+  modelState: ModelState;
   onUpdate: (s: Partial<WorkspaceSettings>) => void;
   onClose: () => void;
   onClearHistory: () => void;
@@ -189,7 +194,13 @@ export function WorkspaceSettingsPanel({
           </Group>
 
           <Group label={t("model")}>
-            {MODEL_OPTIONS.map((m) => {
+            {models.length === 0 && (
+              <p className="px-3.5 py-3 text-xs text-ailab-muted sm:px-4">
+                {modelState === "loading" ? t("models_loading") : t("models_unavailable")}
+              </p>
+            )}
+            {models.map((id) => {
+              const m = { value: id, known: KNOWN_MODELS[id] };
               const sel = settings.model === m.value;
               return (
                 <button
@@ -203,11 +214,12 @@ export function WorkspaceSettingsPanel({
                   )}
                 >
                   <div className="min-w-0">
-                    <p className="text-sm font-medium text-ailab-text">{t(m.labelKey as never)}</p>
-                    <p className="text-[11px] text-ailab-muted">{t(m.descKey as never)}</p>
+                    <p className="text-sm font-medium text-ailab-text">
+                      {m.known ? t(`models.${m.known.key}_label` as never) : prettyModelId(m.value)}
+                    </p>
+                    {m.known && <p className="text-[11px] text-ailab-muted">{t(`models.${m.known.key}_desc` as never)}</p>}
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
-                    <span className="font-mono text-[11px] text-ailab-muted">{t(m.speedKey as never)}</span>
                     {sel && <Check className="h-4 w-4 text-ailab-accent" strokeWidth={2.5} />}
                   </div>
                 </button>

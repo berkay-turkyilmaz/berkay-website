@@ -17,6 +17,8 @@ interface TerminalChatProps {
   settings?: WorkspaceSettings;
   kind: ChatKind;
   chatId: string;
+  /** True when the server's AI key cannot serve any chat model right now. */
+  serviceDown?: boolean;
   enableAgentWorkflow?: boolean;
 }
 
@@ -24,6 +26,7 @@ export default function TerminalChat({
   settings,
   kind,
   chatId,
+  serviceDown = false,
   enableAgentWorkflow = false,
 }: TerminalChatProps) {
   const {
@@ -170,7 +173,7 @@ export default function TerminalChat({
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.1 }}
-                    className="text-2xl md:text-3xl font-bold mb-2.5 text-ailab-text tracking-tight"
+                    className="font-display text-4xl md:text-5xl font-normal mb-3 text-ailab-text tracking-[-0.02em] leading-[1.05]"
                   >
                     {config.emptyTitle}
                   </motion.h2>
@@ -298,6 +301,14 @@ export default function TerminalChat({
             )}
           </AnimatePresence>
 
+          {serviceDown && (
+            <p
+              role="status"
+              className="mb-2 rounded-xl bg-ailab-danger-bg px-3 py-2 text-xs text-ailab-danger-fg ring-1 ring-inset ring-ailab-danger-border"
+            >
+              {t("service_down")}
+            </p>
+          )}
           {safeMode === "pdf" && !uploadedDoc && displayMessages.length > 0 && (
             <p className="mb-2 rounded-xl bg-ailab-glass-06 px-3 py-2 text-xs text-ailab-muted ring-1 ring-inset ring-ailab-border-muted">
               {t("doc_reupload_hint", { name: savedDocName ?? "—" })}

@@ -75,13 +75,6 @@ export default async function ResumePage({ params }: { params: Promise<{ locale:
               <h2 className={label}>{t("language_title")}</h2>
               <p className="mt-4 text-sm text-muted-foreground">{t("language_value")}</p>
             </div>
-
-            <div>
-              <h2 className={label}>{t("education_title")}</h2>
-              <p className="mt-4 text-sm font-medium text-foreground">{t("edu_1_degree")}</p>
-              <p className="text-sm text-muted-foreground">{t("edu_1_school")}</p>
-              <p className="mt-1 font-mono text-[11px] text-muted-foreground">{t("edu_1_period")}</p>
-            </div>
           </aside>
 
           <div className="space-y-14">

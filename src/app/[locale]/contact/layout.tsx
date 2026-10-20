@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { createPageMetadata } from "@/lib/seo/page-metadata";
+import { ScopedIntl } from "@/lib/i18n/scoped-intl";
 
 export async function generateMetadata({
   params,
@@ -19,5 +20,5 @@ export async function generateMetadata({
 }
 
 export default function ContactLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return <ScopedIntl namespaces={["ContactMe", "ContactPage"]}>{children}</ScopedIntl>;
 }

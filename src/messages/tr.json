@@ -269,9 +269,9 @@
         "deep_analyzer": "Bağlam Analizörü",
         "deep_analyzer_desc": "Token ısı haritası ve grafik",
         "english": "EnglishPath",
-        "english_desc": "AI dil öğrenimi",
-        "booking": "Booking SaaS",
-        "booking_desc": "Randevu sistemi",
+        "english_desc": "A1–C1 kelime ve oyunlar",
+        "booking": "Rezervasyon demosu",
+        "booking_desc": "n8n randevu akışı",
         "meetora": "Meetora",
         "meetora_desc": "Etkinlik mekanı rezervasyonu"
       },
@@ -294,6 +294,8 @@
     "chat": {
       "terminal_empty_title": "BEX hazır.",
       "terminal_empty_desc": "Next.js, Supabase, n8n otomasyonu veya Berkay'ın projeleri hakkında her şeyi sorabilirsin.",
+      "service_offline": "BEX çevrimdışı",
+      "service_down": "Yapay zekâ servisi şu an yanıt vermiyor. Belge sohbeti ve analizör de aynı servisi kullanır; biraz sonra tekrar dene.",
       "doc_reupload_hint": "Bu sohbet \"{name}\" belgesi hakkındaydı. Soru sormaya devam etmek için dosyayı (ataç simgesi) tekrar yükle.",
       "pdf_empty_title": "Döküman Analizörü",
       "pdf_empty_desc": "PDF, TXT veya MD dosyası bırak — BEX içeriği okuyup saniyeler içinde sorularını yanıtlar.",
@@ -342,7 +344,7 @@
       "suggested_engineer_1": "Berkay kimdir, profesyonel olarak ne yapar?",
       "suggested_engineer_2": "Berkay'ın Türk Telekom'daki deneyimini anlat",
       "suggested_engineer_3": "Berkay'ın yan projeleri ve otomasyon çalışmaları neler?",
-      "suggested_engineer_4": "Berkay'ın eğitimi ve tech stack'i nedir?"
+      "suggested_engineer_4": "Berkay'in GitHub'daki açık projeleri neler?"
     },
     "settings": {
       "title": "Ayarlar",
@@ -373,6 +375,8 @@
       "display_name_placeholder": "Adınız...",
       "save": "Kaydet",
       "model": "AI Modeli",
+      "models_loading": "Modeller yükleniyor…",
+      "models_unavailable": "Şu an kullanılabilir model yok.",
       "response_length": "Yanıt Uzunluğu",
       "length_short": "Kısa",
       "length_short_desc": "Özet",
@@ -401,7 +405,11 @@
         "llama_8b_speed": "~200 t/s",
         "llama_70b_label": "Llama 3.3 70B",
         "llama_70b_desc": "Daha derin analiz ve karmaşık sorular",
-        "llama_70b_speed": "~80 t/s"
+        "llama_70b_speed": "~80 t/s",
+        "gpt_oss_20b_label": "GPT-OSS 20B",
+        "gpt_oss_20b_desc": "Hızlı ve hafif; günlük sorular için",
+        "gpt_oss_120b_label": "GPT-OSS 120B",
+        "gpt_oss_120b_desc": "Daha büyük model; daha derin analiz"
       }
     },
     "header": {
@@ -1548,7 +1556,7 @@
     "service_3_desc": "Mevcut sisteminizi gözden geçirme, bottleneck analizi, tech stack kararları.",
     "form_title": "Mesaj Gönderin",
     "form_name_label": "Adınız",
-    "form_name_placeholder": "Berkay Türkyılmaz",
+    "form_name_placeholder": "Adın Soyadın",
     "form_email_label": "E-posta adresiniz",
     "form_email_placeholder": "ornek@sirket.com",
     "form_subject_label": "Ne hakkında konuşmak istiyorsunuz?",
