@@ -1,6 +1,8 @@
 import type { EnglishTab } from "../types";
 
-export type GameThemeId = "taboo" | "heads_up" | "charades" | "category_blitz" | "passaparola";
+export type ClassroomGameThemeId = "taboo" | "heads_up" | "charades" | "category_blitz" | "passaparola";
+export type VocabGameThemeId = "word_match" | "word_scramble" | "hangman" | "listen_type" | "word_sprint";
+export type GameThemeId = ClassroomGameThemeId | VocabGameThemeId;
 export type LearnThemeId = "flashcards" | "grammar" | "prepositions";
 
 export type ThemeTokens = {
@@ -70,6 +72,61 @@ export const GAME_THEMES: Record<GameThemeId, ThemeTokens> = {
     chipActive: "!bg-blue-600 !text-white !border-blue-600 shadow-sm shadow-blue-600/20",
     progress: "bg-blue-500",
     heroGlow: "rgba(37,99,235,0.22)",
+  },
+  word_match: {
+    accent: "emerald",
+    accentFg: "text-emerald-700",
+    surface: "bg-emerald-50",
+    border: "border-emerald-200",
+    icon: "text-emerald-600",
+    chip: "hover:border-emerald-200 hover:text-emerald-700",
+    chipActive: "!bg-emerald-600 !text-white !border-emerald-600 shadow-sm",
+    progress: "bg-emerald-500",
+    heroGlow: "rgba(16,185,129,0.22)",
+  },
+  word_scramble: {
+    accent: "sky",
+    accentFg: "text-sky-700",
+    surface: "bg-sky-50",
+    border: "border-sky-200",
+    icon: "text-sky-600",
+    chip: "hover:border-sky-200 hover:text-sky-700",
+    chipActive: "!bg-sky-600 !text-white !border-sky-600 shadow-sm",
+    progress: "bg-sky-500",
+    heroGlow: "rgba(14,165,233,0.22)",
+  },
+  hangman: {
+    accent: "indigo",
+    accentFg: "text-indigo-700",
+    surface: "bg-indigo-50",
+    border: "border-indigo-200",
+    icon: "text-indigo-600",
+    chip: "hover:border-indigo-200 hover:text-indigo-700",
+    chipActive: "!bg-indigo-600 !text-white !border-indigo-600 shadow-sm",
+    progress: "bg-indigo-500",
+    heroGlow: "rgba(99,102,241,0.22)",
+  },
+  listen_type: {
+    accent: "violet",
+    accentFg: "text-violet-700",
+    surface: "bg-violet-50",
+    border: "border-violet-200",
+    icon: "text-violet-600",
+    chip: "hover:border-violet-200 hover:text-violet-700",
+    chipActive: "!bg-violet-600 !text-white !border-violet-600 shadow-sm",
+    progress: "bg-violet-500",
+    heroGlow: "rgba(139,92,246,0.22)",
+  },
+  word_sprint: {
+    accent: "amber",
+    accentFg: "text-amber-700",
+    surface: "bg-amber-50",
+    border: "border-amber-200",
+    icon: "text-amber-600",
+    chip: "hover:border-amber-200 hover:text-amber-700",
+    chipActive: "!bg-amber-600 !text-white !border-amber-600 shadow-sm",
+    progress: "bg-amber-500",
+    heroGlow: "rgba(245,158,11,0.22)",
   },
 };
 

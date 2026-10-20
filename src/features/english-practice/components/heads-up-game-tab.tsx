@@ -10,7 +10,6 @@ import {
   Play,
   RotateCcw,
   SkipForward,
-  Smartphone,
   Trophy,
   X,
 } from "lucide-react";
@@ -19,8 +18,6 @@ import { cn } from "@/lib/utils";
 import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
 import { GAME_THEMES } from "../lib/game-themes";
 import {
-  themeAccentText,
-  themeBtnPrimary,
   themeChip,
   themeProgressBar,
 } from "../lib/theme-utils";
@@ -74,12 +71,13 @@ export function HeadsUpGameTab({
     passed: 0,
     total: 0,
   });
-  const [fullscreen, setFullscreen] = useState(false);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const roundStatsRef = useRef(roundStats);
   const endedRef = useRef(false);
 
-  roundStatsRef.current = roundStats;
+  useEffect(() => {
+    roundStatsRef.current = roundStats;
+  });
 
   useEffect(() => {
     onPlayingChange?.(phase === "playing");
@@ -197,9 +195,8 @@ export function HeadsUpGameTab({
   const enterFullscreen = async () => {
     try {
       await document.documentElement.requestFullscreen();
-      setFullscreen(true);
     } catch {
-      setFullscreen(true);
+      /* fullscreen is optional */
     }
   };
 
@@ -419,7 +416,7 @@ export function HeadsUpGameTab({
         </AnimatePresence>
       </div>
 
-      <p className="text-center text-[10px] text-slate-400 px-4 mb-2">
+      <p className="text-center text-[11px] text-slate-400 px-4 mb-2">
         {index + 1} / {deck.length} · {t("tilt_hint")}
       </p>
 
@@ -456,7 +453,7 @@ function MiniStat({ label, value }: { label: string; value: number }) {
   return (
     <div className={cn(ep.card, "p-3")}>
       <p className="text-xl font-black text-slate-800">{value}</p>
-      <p className="text-[9px] uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-[11px] uppercase tracking-wide text-slate-400">{label}</p>
     </div>
   );
 }

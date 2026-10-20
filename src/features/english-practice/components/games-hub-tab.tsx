@@ -1,12 +1,13 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, CircleDot, Drama, Gamepad2, Info, Smartphone, Zap } from "lucide-react";
+import { ArrowRight, CircleDot, Drama, Ear, Gamepad2, Info, Layers, Shuffle, Smartphone, Spline, Zap } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
 import { GAME_DECK_STATS } from "../data/deck-info";
-import { GAME_THEMES, type GameThemeId } from "../lib/game-themes";
+import { GAME_THEMES, type ClassroomGameThemeId, type VocabGameThemeId } from "../lib/game-themes";
+import { FLASHCARDS } from "../data/flashcards";
 import { themeAccentText, themeIconBox, themeStatBadge } from "../lib/theme-utils";
 import { ep } from "../styles";
 import { FadeUp } from "./motion-primitives";
@@ -15,7 +16,7 @@ type Props = {
   onNavigate: (tab: EnglishTab) => void;
 };
 
-const DECK_NOTE_KEYS: Record<GameThemeId, string> = {
+const DECK_NOTE_KEYS: Record<ClassroomGameThemeId, string> = {
   taboo: "deck_notes.taboo",
   heads_up: "deck_notes.heads_up",
   charades: "deck_notes.charades",
@@ -62,6 +63,14 @@ export function GamesHubTab({ onNavigate }: Props) {
       desc: t("passaparola.desc"),
       stat: GAME_DECK_STATS.passaparola.count,
     },
+  ];
+
+  const vocabGames: { id: VocabGameThemeId; icon: typeof Layers }[] = [
+    { id: "word_match", icon: Layers },
+    { id: "word_scramble", icon: Shuffle },
+    { id: "hangman", icon: Spline },
+    { id: "listen_type", icon: Ear },
+    { id: "word_sprint", icon: Zap },
   ];
 
   return (
@@ -112,6 +121,53 @@ export function GamesHubTab({ onNavigate }: Props) {
                     <p className="text-xs text-slate-400 leading-snug mb-3">
                       {t(DECK_NOTE_KEYS[game.id], { count: game.stat })}
                     </p>
+                    <span className={cn("inline-flex items-center gap-1 text-sm font-semibold", themeAccentText(theme))}>
+                      {t("play")} <ArrowRight className="w-4 h-4" aria-hidden />
+                    </span>
+                  </div>
+                </div>
+              </motion.button>
+            </FadeUp>
+          );
+        })}
+      </div>
+
+      <FadeUp delay={0.1}>
+        <div className="pt-4 text-center space-y-1">
+          <h2 className="text-xl font-bold text-slate-900 tracking-tight">{t("vocab_title")}</h2>
+          <p className="text-slate-500 text-sm max-w-md mx-auto">
+            {t("vocab_subtitle", { count: FLASHCARDS.length })}
+          </p>
+        </div>
+      </FadeUp>
+
+      <div className="space-y-3">
+        {vocabGames.map((game, i) => {
+          const Icon = game.icon;
+          const theme = GAME_THEMES[game.id];
+          return (
+            <FadeUp key={game.id} delay={0.12 + i * 0.05}>
+              <motion.button
+                type="button"
+                whileTap={{ scale: 0.99 }}
+                onClick={() => onNavigate(game.id)}
+                className={cn(
+                  ep.card,
+                  ep.clickable,
+                  "w-full text-left p-5 border transition-all duration-200 hover:shadow-lg hover:-translate-y-0.5",
+                  theme.border
+                )}
+              >
+                <div className="flex items-start gap-4">
+                  <div className={cn("w-11 h-11 shrink-0", themeIconBox(theme))}>
+                    <Icon className="w-5 h-5" aria-hidden />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-start justify-between gap-3 mb-1">
+                      <h3 className="text-base font-semibold text-slate-900">{t(`vocab.${game.id}.title`)}</h3>
+                      <span className={themeStatBadge(theme)}>A1–C1</span>
+                    </div>
+                    <p className="text-slate-500 text-sm leading-relaxed mb-3">{t(`vocab.${game.id}.desc`)}</p>
                     <span className={cn("inline-flex items-center gap-1 text-sm font-semibold", themeAccentText(theme))}>
                       {t("play")} <ArrowRight className="w-4 h-4" aria-hidden />
                     </span>

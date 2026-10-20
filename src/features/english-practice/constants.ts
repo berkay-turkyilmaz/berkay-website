@@ -42,7 +42,11 @@ export const DEFAULT_PROGRESS: EnglishProgress = {
     bestRound: 0,
     bestStreak: 0,
   },
+  vocabGames: {},
+  srs: {},
   settings: {
+    examLevel: "all",
+    vocabLevel: "A1",
     speechRate: 0.95,
     examQuestionCount: 10,
     examMode: "mixed",
@@ -65,5 +69,7 @@ export const XP_REWARDS = {
   charadesCorrect: 10,
   categoryBlitzCorrect: 10,
   passaparolaCorrect: 15,
+  vocabGameCorrect: 8,
+  vocabGameFinish: 20,
   dailyStreak: 50,
 } as const;

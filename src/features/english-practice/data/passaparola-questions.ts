@@ -43,7 +43,7 @@ export const PASSAPAROLA_QUESTIONS: PassaparolaQuestion[] = [
   { id: "pp-m-j", letter: "J", clueTr: "Başkasının sahip olduklarına kıskanç olmak.", clueEn: "Wanting what someone else has.", answer: "jealous", difficulty: "medium" },
   { id: "pp-m-k", letter: "K", clueTr: "Öğrenilmiş bilgi ve gerçekler.", clueEn: "Facts and information you have learned.", answer: "knowledge", difficulty: "medium" },
   { id: "pp-m-l", letter: "L", clueTr: "Seyahatte taşınan bavul ve çantalar.", clueEn: "Bags you take when you travel.", answer: "luggage", difficulty: "medium" },
-  { id: "pp-m-m", letter: "M", clueTr: "Pazarlık etmek, anlaşmaya çalışmak.", clueEn: "To discuss terms to reach an agreement.", answer: "negotiate", difficulty: "medium" },
+  { id: "pp-m-m", letter: "M", clueTr: "Bir ekibi, işi veya projeyi yönetmek.", clueEn: "To be in charge of a team, business or project.", answer: "manage", difficulty: "medium" },
   { id: "pp-m-n", letter: "N", clueTr: "Yan dairede veya evde oturan komşu.", clueEn: "Someone who lives next to you.", answer: "neighbour", difficulty: "medium", acceptableAnswers: ["neighbor"] },
   { id: "pp-m-o", letter: "O", clueTr: "İyi bir şans, elverişli durum.", clueEn: "A good chance to do something.", answer: "opportunity", difficulty: "medium" },
   { id: "pp-m-p", letter: "P", clueTr: "Slidelarla yapılan konuşma veya sunum.", clueEn: "A formal talk given to an audience.", answer: "presentation", difficulty: "medium" },

@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
-  Drama,
   Eye,
   EyeOff,
   Play,
@@ -18,7 +17,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { buildSmartDeck, getDailySeenCount, markCardSeen } from "../lib/deck-shuffle";
 import { GAME_THEMES } from "../lib/game-themes";
-import { themeAccentText, themeChip, themeProgressBar } from "../lib/theme-utils";
+import { themeChip, themeProgressBar } from "../lib/theme-utils";
 import { CHARADES_CARDS, CHARADES_CATEGORY_LABELS } from "../data/charades-cards";
 import type { CharadesCategory, CharadesRoundStats, TabooDifficulty } from "../types";
 import { ep } from "../styles";
@@ -72,7 +71,9 @@ export function CharadesGameTab({
   const roundStatsRef = useRef(roundStats);
   const endedRef = useRef(false);
 
-  roundStatsRef.current = roundStats;
+  useEffect(() => {
+    roundStatsRef.current = roundStats;
+  });
 
   useEffect(() => {
     onPlayingChange?.(phase === "playing");
@@ -403,7 +404,7 @@ export function CharadesGameTab({
         </AnimatePresence>
       </div>
 
-      <p className="text-center text-[10px] text-slate-400 px-4 mb-2">
+      <p className="text-center text-[11px] text-slate-400 px-4 mb-2">
         {index + 1} / {deck.length} · {t("team_guesses")}
       </p>
 
@@ -436,7 +437,7 @@ function MiniStat({ label, value }: { label: string; value: number }) {
   return (
     <div className={cn(ep.card, "p-3")}>
       <p className="text-xl font-black text-slate-800">{value}</p>
-      <p className="text-[9px] uppercase tracking-wide text-slate-400">{label}</p>
+      <p className="text-[11px] uppercase tracking-wide text-slate-400">{label}</p>
     </div>
   );
 }

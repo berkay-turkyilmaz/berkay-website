@@ -2,7 +2,7 @@ import {
   PASSAPAROLA_LETTERS,
   PASSAPAROLA_QUESTIONS,
 } from "../data/passaparola-questions";
-import type { PassaparolaDifficulty, PassaparolaQuestion, PassaparolaRoundStats } from "../types";
+import type { PassaparolaDifficulty, PassaparolaQuestion } from "../types";
 
 export type LetterState = "pending" | "active" | "correct" | "passed" | "wrong";
 

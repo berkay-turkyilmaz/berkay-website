@@ -6,7 +6,6 @@ import {
   AlertTriangle,
   Ban,
   Check,
-  ChevronRight,
   Clock,
   Eye,
   EyeOff,
@@ -103,8 +102,10 @@ export function TabooGameTab({
   const statsRef = useRef(stats);
   const partyScoresRef = useRef(partyScores);
 
-  statsRef.current = stats;
-  partyScoresRef.current = partyScores;
+  useEffect(() => {
+    statsRef.current = stats;
+    partyScoresRef.current = partyScores;
+  });
 
   const filteredPool = useMemo(() => {
     return TABOO_CARDS.filter((c) => {
@@ -698,7 +699,7 @@ function StatBox({ label, value }: { label: string; value: string | number }) {
   return (
     <div className={cn(ep.card, "p-3")}>
       <p className="text-lg font-black text-slate-800">{value}</p>
-      <p className="text-[10px] text-slate-400 uppercase tracking-wide">{label}</p>
+      <p className="text-[11px] text-slate-400 uppercase tracking-wide">{label}</p>
     </div>
   );
 }

@@ -215,7 +215,7 @@ export function PassaparolaGameTab({
       if (!currentQuestion || currentIndex === undefined || feedback) return;
 
       const nextStates = [...letterStates];
-      let nextStats = { ...roundStats };
+      const nextStats = { ...roundStats };
       let nextDeferred = [...deferred];
 
       if (kind === "correct") {
@@ -357,7 +357,7 @@ export function PassaparolaGameTab({
           ].map((s) => (
             <div key={s.label} className={cn(ep.card, "p-3")}>
               <p className="text-lg font-bold text-slate-800 tabular-nums">{s.value}</p>
-              <p className="text-[10px] uppercase tracking-wide text-slate-400">{s.label}</p>
+              <p className="text-[11px] uppercase tracking-wide text-slate-400">{s.label}</p>
             </div>
           ))}
         </div>
@@ -499,7 +499,7 @@ export function PassaparolaGameTab({
                 >
                   <div
                     className={cn(
-                      "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[9px] sm:text-[10px] md:text-xs font-bold border transition-all duration-300",
+                      "w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full flex items-center justify-center text-[11px] sm:text-[11px] md:text-xs font-bold border transition-all duration-300",
                       letterBg(state, isCurrent)
                     )}
                   >
@@ -510,7 +510,7 @@ export function PassaparolaGameTab({
             })}
 
             <div className="absolute inset-[30%] rounded-full bg-white/70 backdrop-blur-md border border-white/80 shadow-[0_8px_32px_rgba(15,23,42,0.06)] flex flex-col items-center justify-center text-center">
-              <p className="text-[10px] uppercase tracking-[0.2em] text-slate-400 mb-0.5">
+              <p className="text-[11px] uppercase tracking-[0.2em] text-slate-400 mb-0.5">
                 {t("score_label")}
               </p>
               <p className={cn("text-4xl font-black tabular-nums leading-none", themeAccentText(PP_THEME))}>

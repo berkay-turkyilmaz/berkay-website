@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { DEFAULT_PROGRESS, LEGACY_PROGRESS_KEYS, PROGRESS_STORAGE_KEY, XP_PER_LEVEL } from "../constants";
-import type { EnglishProgress, ExamResult } from "../types";
+import type { EnglishProgress, ExamResult, VocabGameId } from "../types";
+import { nextDueDate } from "../lib/vocab";
 
 function todayKey(): string {
   return new Date().toISOString().slice(0, 10);
@@ -43,6 +44,8 @@ function loadProgress(): EnglishProgress {
         ...DEFAULT_PROGRESS.passaparolaStats,
         ...parsed.passaparolaStats,
       },
+      vocabGames: { ...DEFAULT_PROGRESS.vocabGames, ...parsed.vocabGames },
+      srs: { ...DEFAULT_PROGRESS.srs, ...parsed.srs },
       settings: {
         ...DEFAULT_PROGRESS.settings,
         ...parsed.settings,
@@ -226,6 +229,37 @@ export function useEnglishProgress() {
     []
   );
 
+  const recordVocabGame = useCallback(
+    (id: VocabGameId, score: number) => {
+      setProgress((prev) => {
+        const old = prev.vocabGames[id] ?? { gamesPlayed: 0, best: 0 };
+        const next = {
+          ...prev,
+          vocabGames: {
+            ...prev.vocabGames,
+            [id]: { gamesPlayed: old.gamesPlayed + 1, best: Math.max(old.best, score) },
+          },
+        };
+        localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
+        return next;
+      });
+    },
+    []
+  );
+
+  /** Leitner update: right answers move up a box, wrong answers fall back to box 1. */
+  const reviewCard = useCallback((cardId: string, correct: boolean) => {
+    setProgress((prev) => {
+      const box = correct ? Math.min(5, (prev.srs[cardId]?.box ?? 1) + 1) : 1;
+      const next = {
+        ...prev,
+        srs: { ...prev.srs, [cardId]: { box, due: nextDueDate(box) } },
+      };
+      localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  }, []);
+
   const resetProgress = useCallback(() => {
     persist(DEFAULT_PROGRESS);
   }, [persist]);
@@ -303,6 +337,8 @@ export function useEnglishProgress() {
     updateCharadesStats,
     updateCategoryBlitzStats,
     updatePassaparolaStats,
+    recordVocabGame,
+    reviewCard,
     resetProgress,
   };
 }

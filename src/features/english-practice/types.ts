@@ -10,7 +10,12 @@ export type EnglishTab =
   | "heads_up"
   | "charades"
   | "category_blitz"
-  | "passaparola";
+  | "passaparola"
+  | "word_match"
+  | "word_scramble"
+  | "hangman"
+  | "listen_type"
+  | "word_sprint";
 
 export type FlashcardCategory =
   | "daily"
@@ -29,10 +34,15 @@ export type FlashcardCategory =
   | "health"
   | "environment"
   | "business"
-  | "academic";
+  | "academic"
+  | "home"
+  | "school"
+  | "shopping"
+  | "nature";
 
 /** CEFR level for each flashcard */
-export type FlashcardLevel = "A1" | "A2" | "B1" | "B2";
+export const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1"] as const;
+export type FlashcardLevel = (typeof CEFR_LEVELS)[number];
 
 export interface Flashcard {
   id: string;
@@ -74,6 +84,8 @@ export interface ExamQuestion {
   answer: string;
   acceptableAnswers?: string[];
   explanation: string;
+  /** CEFR level of the question. */
+  level?: FlashcardLevel;
 }
 
 export interface ExamResult {
@@ -248,6 +260,23 @@ export interface PassaparolaRoundStats {
   total: number;
 }
 
+/** Leitner-style review state for one vocabulary card. */
+export interface SrsEntry {
+  /** 1 (new / failed) to 5 (well known). */
+  box: number;
+  /** ISO date (YYYY-MM-DD) when the card is due again. */
+  due: string;
+}
+
+export type VocabGameId = "word_match" | "word_scramble" | "hangman" | "listen_type" | "word_sprint";
+
+export interface VocabGameStats {
+  gamesPlayed: number;
+  best: number;
+}
+
+export type VocabLevelFilter = FlashcardLevel | "all";
+
 export interface EnglishProgress {
   xp: number;
   level: number;
@@ -287,7 +316,15 @@ export interface EnglishProgress {
     bestRound: number;
     bestStreak: number;
   };
+  /** Solo vocabulary games (match, scramble, hangman, listen & type, sprint). */
+  vocabGames: Partial<Record<VocabGameId, VocabGameStats>>;
+  /** Spaced-repetition state keyed by flashcard id. */
+  srs: Record<string, SrsEntry>;
   settings: {
+    /** CEFR level for the exam question pool. */
+    examLevel: VocabLevelFilter;
+    /** CEFR level used by vocabulary games and flashcard reviews. */
+    vocabLevel: VocabLevelFilter;
     speechRate: number;
     examQuestionCount: number;
     examMode: ExamMode;

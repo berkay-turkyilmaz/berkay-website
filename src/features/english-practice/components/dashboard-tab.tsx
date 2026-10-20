@@ -378,7 +378,7 @@ function HeroStat({ label, value }: { label: string; value: number }) {
   return (
     <div className="bg-white/10 rounded-xl px-3 py-2.5 text-center border border-white/10 backdrop-blur-[2px]">
       <p className="text-lg font-bold tabular-nums">{value}</p>
-      <p className="text-[10px] uppercase tracking-wide text-slate-300 leading-tight mt-0.5 line-clamp-2">
+      <p className="text-[11px] uppercase tracking-wide text-slate-300 leading-tight mt-0.5 line-clamp-2">
         {label}
       </p>
     </div>
@@ -430,7 +430,7 @@ function ModuleCard({
           </div>
           <span
             className={cn(
-              "text-[10px] font-semibold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity",
+              "text-[11px] font-semibold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity",
               theme?.accentFg ?? "text-teal-700"
             )}
           >

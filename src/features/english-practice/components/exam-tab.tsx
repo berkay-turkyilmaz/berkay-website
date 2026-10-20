@@ -7,7 +7,9 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { countQuestionsForMode, pickExamQuestions } from "../data/exam-questions";
 import { isAnswerCorrect } from "../lib/exam-scoring";
-import type { ExamMode, ExamQuestion } from "../types";
+import type { ExamMode, ExamQuestion, VocabLevelFilter } from "../types";
+import { LevelPicker } from "./vocab-game-kit";
+import { LEARN_THEMES } from "../lib/game-themes";
 import { XP_REWARDS } from "../constants";
 import { ep } from "../styles";
 import { EXAM_QUESTION_POOL } from "../data/exam-questions";
@@ -16,12 +18,19 @@ type Props = {
   questionCount: number;
   examMode: ExamMode;
   onExamModeChange: (mode: ExamMode) => void;
+  examLevel: VocabLevelFilter;
+  onExamLevelChange: (level: VocabLevelFilter) => void;
   onFinish: (score: number, total: number, durationSec: number, mode: ExamMode) => void;
   onXp: (amount: number) => void;
   onViewResults: () => void;
 };
 
 type Phase = "intro" | "active" | "review" | "done";
+
+const EXAM_LEVEL_COUNTS: Record<string, number> = EXAM_QUESTION_POOL.reduce<Record<string, number>>((acc, q) => {
+  if (q.level) acc[q.level] = (acc[q.level] ?? 0) + 1;
+  return acc;
+}, {});
 
 const EXAM_MODES: ExamMode[] = ["mixed", "multiple", "true_false", "tap", "fill", "translate"];
 
@@ -42,6 +51,8 @@ export function ExamTab({
   questionCount,
   examMode,
   onExamModeChange,
+  examLevel,
+  onExamLevelChange,
   onFinish,
   onXp,
   onViewResults,
@@ -58,12 +69,12 @@ export function ExamTab({
   const [finalScore, setFinalScore] = useState({ score: 0, total: 0 });
   const [reviewRows, setReviewRows] = useState<ReviewRow[]>([]);
 
-  const poolSize = useMemo(() => countQuestionsForMode(activeMode), [activeMode]);
+  const poolSize = useMemo(() => countQuestionsForMode(activeMode, examLevel), [activeMode, examLevel]);
   const effectiveCount = Math.min(questionCount, poolSize);
 
   const start = () => {
     onExamModeChange(activeMode);
-    const picked = pickExamQuestions(questionCount, activeMode);
+    const picked = pickExamQuestions(questionCount, activeMode, examLevel);
     setQuestions(picked);
     setIndex(0);
     setAnswers({});
@@ -174,10 +185,15 @@ export function ExamTab({
         </div>
 
         <div>
+          <p className={cn(ep.sectionLabel, "mb-3 px-1")}>{t("pick_level")}</p>
+          <LevelPicker value={examLevel} onChange={onExamLevelChange} theme={LEARN_THEMES.grammar} counts={EXAM_LEVEL_COUNTS} />
+        </div>
+
+        <div>
           <p className={cn(ep.sectionLabel, "mb-3 px-1")}>{t("pick_mode")}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             {EXAM_MODES.map((mode) => {
-              const count = countQuestionsForMode(mode);
+              const count = countQuestionsForMode(mode, examLevel);
               const active = activeMode === mode;
               return (
                 <button
@@ -194,7 +210,7 @@ export function ExamTab({
                 >
                   <p className="font-semibold text-slate-800 text-sm">{t(`modes.${mode}`)}</p>
                   <p className="text-xs text-slate-500 mt-1 leading-snug">{t(`mode_desc.${mode}`)}</p>
-                  <p className="text-[10px] font-mono text-teal-600 mt-2 font-semibold">
+                  <p className="text-[11px] font-mono text-teal-600 mt-2 font-semibold">
                     {count} {t("pool")}
                   </p>
                 </button>
@@ -304,7 +320,7 @@ export function ExamTab({
                       <X className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
                     )}
                     <div className="min-w-0 flex-1">
-                      <span className="text-[10px] uppercase tracking-wide text-slate-400">
+                      <span className="text-[11px] uppercase tracking-wide text-slate-400">
                         {t(`types.${row.question.type}`)}
                       </span>
                       <p className="text-sm font-medium text-slate-800 mt-0.5">{row.question.prompt}</p>

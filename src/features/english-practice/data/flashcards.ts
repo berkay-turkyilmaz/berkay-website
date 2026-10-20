@@ -1,8 +1,9 @@
 import type { Flashcard } from "../types";
 import { FLASHCARDS_EXTENDED } from "./flashcards-extended";
+import { CEFR_VOCABULARY } from "./cefr";
 
 /** Core A1–A2 flashcards — daily basics */
-export const FLASHCARDS: Flashcard[] = [
+const BASE_FLASHCARDS: Flashcard[] = [
   // ── Daily Actions (A1) ──────────────────────────────────────────────────
   { id: "d1",  front: "Wake up",    back: "Uyanmak",          phonetic: "/weɪk ʌp/",       category: "daily",    example: "I wake up at seven.",               level: "A1" },
   { id: "d2",  front: "Go to bed",  back: "Yatmak",           phonetic: "/ɡəʊ tə bed/",    category: "daily",    example: "I go to bed at eleven.",            level: "A1" },
@@ -67,6 +68,26 @@ export const FLASHCARDS: Flashcard[] = [
   ...FLASHCARDS_EXTENDED,
 ];
 
+/**
+ * Master vocabulary list. The original decks win on conflicts; CEFR entries are added in
+ * level order (A1 first) and skipped when the same English headword already exists.
+ */
+function mergeUnique(...lists: Flashcard[][]): Flashcard[] {
+  const seen = new Set<string>();
+  const out: Flashcard[] = [];
+  for (const list of lists) {
+    for (const card of list) {
+      const key = card.front.trim().toLowerCase();
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(card);
+    }
+  }
+  return out;
+}
+
+export const FLASHCARDS: Flashcard[] = mergeUnique(BASE_FLASHCARDS, CEFR_VOCABULARY);
+
 export const FLASHCARD_CATEGORY_LABELS: Record<string, string> = {
   daily: "Daily Life",
   food: "Food & Drink",
@@ -85,4 +106,8 @@ export const FLASHCARD_CATEGORY_LABELS: Record<string, string> = {
   environment: "Environment",
   business: "Business",
   academic: "Academic",
+  home: "Home",
+  school: "School",
+  shopping: "Shopping",
+  nature: "Nature",
 };

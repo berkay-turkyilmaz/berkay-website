@@ -16,7 +16,8 @@ import {
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { FLASHCARDS, FLASHCARD_CATEGORY_LABELS } from "../data/flashcards";
-import type { Flashcard, FlashcardCategory, FlashcardLevel } from "../types";
+import type { Flashcard, FlashcardCategory, FlashcardLevel, SrsEntry } from "../types";
+import { isDue, todayKey } from "../lib/vocab";
 import { LEARN_THEMES, type ThemeTokens } from "../lib/game-themes";
 import { themeChip } from "../lib/theme-utils";
 import { useSpeech } from "../hooks/use-speech";
@@ -31,6 +32,7 @@ const LEVEL_COLORS: Record<FlashcardLevel, string> = {
   A2: "bg-teal-100 text-teal-700 border-teal-200",
   B1: "bg-blue-100 text-blue-700 border-blue-200",
   B2: "bg-violet-100 text-violet-700 border-violet-200",
+  C1: "bg-rose-100 text-rose-700 border-rose-200",
 };
 
 const LEVEL_LABELS: Record<FlashcardLevel, string> = {
@@ -38,9 +40,10 @@ const LEVEL_LABELS: Record<FlashcardLevel, string> = {
   A2: "A2 Elementary",
   B1: "B1 Intermediate",
   B2: "B2 Upper-Int",
+  C1: "C1 Advanced",
 };
 
-type StudyMode = "all" | "learning" | "weak";
+type StudyMode = "all" | "due" | "learning" | "weak";
 
 type Props = {
   mastered: string[];
@@ -50,9 +53,12 @@ type Props = {
   onMarkWeak: (id: string) => void;
   onUnmarkWeak: (id: string) => void;
   onXp: (amount: number) => void;
+  /** Spaced-repetition state (Leitner boxes) keyed by card id. */
+  srs: Record<string, SrsEntry>;
+  onReview: (id: string, correct: boolean) => void;
 };
 
-export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak, onUnmarkWeak, onXp }: Props) {
+export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak, onUnmarkWeak, onXp, srs, onReview }: Props) {
   const t = useTranslations("EnglishPath.flashcards");
   const tCat = useTranslations("EnglishPath.categories");
   const { speak } = useSpeech(speechRate);
@@ -75,11 +81,16 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
   }, [category, levelFilter]);
 
   const filtered = useMemo(() => {
-    let cards = baseFiltered;
-    if (studyMode === "learning") cards = cards.filter((c) => !mastered.includes(c.id));
-    if (studyMode === "weak") cards = cards.filter((c) => weak.includes(c.id));
-    return shuffled ? [...deck] : cards;
-  }, [baseFiltered, studyMode, mastered, weak, shuffled, deck]);
+    const today = todayKey();
+    const byMode = (cards: Flashcard[]) => {
+      if (studyMode === "due") return cards.filter((c) => isDue(srs[c.id], today));
+      if (studyMode === "learning") return cards.filter((c) => !mastered.includes(c.id));
+      if (studyMode === "weak") return cards.filter((c) => weak.includes(c.id));
+      return cards;
+    };
+    // A shuffled deck keeps its order but still respects the active study mode.
+    return byMode(shuffled ? deck : baseFiltered);
+  }, [baseFiltered, studyMode, mastered, weak, srs, shuffled, deck]);
 
   const card = filtered[index];
   const isMastered = card ? mastered.includes(card.id) : false;
@@ -92,6 +103,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
       A2: { total: 0, mastered: 0 },
       B1: { total: 0, mastered: 0 },
       B2: { total: 0, mastered: 0 },
+      C1: { total: 0, mastered: 0 },
     };
     FLASHCARDS.forEach((c) => {
       stats[c.level].total++;
@@ -100,6 +112,10 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
     return stats;
   }, [mastered]);
 
+  const dueCount = useMemo(() => {
+    const today = todayKey();
+    return baseFiltered.filter((c) => isDue(srs[c.id], today)).length;
+  }, [baseFiltered, srs]);
   const weakCount = useMemo(() => baseFiltered.filter((c) => weak.includes(c.id)).length, [baseFiltered, weak]);
   const learningCount = useMemo(() => baseFiltered.filter((c) => !mastered.includes(c.id)).length, [baseFiltered, mastered]);
 
@@ -134,6 +150,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
   const handleMaster = () => {
     if (!card || isMastered) return;
     onMaster(card.id);
+    onReview(card.id, true);
     onXp(XP_REWARDS.flashcardMastered);
     goNext();
   };
@@ -144,6 +161,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
       onUnmarkWeak(card.id);
     } else {
       onMarkWeak(card.id);
+      onReview(card.id, false);
     }
   };
 
@@ -165,6 +183,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
           levelFilter={levelFilter}
           studyMode={studyMode}
           weakCount={weakCount}
+          dueCount={dueCount}
           learningCount={learningCount}
           tCat={tCat}
           t={t}
@@ -222,6 +241,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
         levelFilter={levelFilter}
         studyMode={studyMode}
         weakCount={weakCount}
+        dueCount={dueCount}
         learningCount={learningCount}
         tCat={tCat}
         t={t}
@@ -274,10 +294,10 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
               <div className={cn(ep.card, "absolute inset-0 backface-hidden p-6 flex flex-col items-center justify-center text-center")}>
                 {/* Badges row */}
                 <div className="absolute top-4 left-4 flex items-center gap-2">
-                  <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded border", LEVEL_COLORS[card.level])}>
+                  <span className={cn("text-[11px] font-bold px-1.5 py-0.5 rounded border", LEVEL_COLORS[card.level])}>
                     {card.level}
                   </span>
-                  <span className="text-[10px] text-slate-400 uppercase tracking-wide">{card.category}</span>
+                  <span className="text-[11px] text-slate-400 uppercase tracking-wide">{card.category}</span>
                 </div>
                 {isMastered && (
                   <span className="absolute top-4 right-4 text-emerald-500">
@@ -293,7 +313,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
                 <div className="font-mono text-sm text-slate-600 bg-slate-100 px-3 py-1 rounded-lg border border-slate-200">
                   {card.phonetic}
                 </div>
-                <p className={cn("text-[10px] uppercase tracking-widest mt-6", ep.mutedSm)}>
+                <p className={cn("text-[11px] uppercase tracking-widest mt-6", ep.mutedSm)}>
                   {t("tap_flip")}
                 </p>
               </div>
@@ -303,7 +323,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
                 className="absolute inset-0 backface-hidden bg-gradient-to-br from-slate-700 to-teal-800 text-white rounded-[2rem] p-6 flex flex-col items-center justify-center text-center shadow-xl"
                 style={{ transform: "rotateY(180deg)" }}
               >
-                <span className={cn("text-[10px] font-bold px-1.5 py-0.5 rounded border mb-4", "bg-white/20 text-white border-white/30")}>
+                <span className={cn("text-[11px] font-bold px-1.5 py-0.5 rounded border mb-4", "bg-white/20 text-white border-white/30")}>
                   {LEVEL_LABELS[card.level]}
                 </span>
                 <div className="text-3xl font-bold mb-3">{card.back}</div>
@@ -402,6 +422,7 @@ function FilterBar({
   levelFilter,
   studyMode,
   weakCount,
+  dueCount,
   learningCount,
   tCat,
   t,
@@ -413,6 +434,7 @@ function FilterBar({
   levelFilter: FlashcardLevel | "all";
   studyMode: StudyMode;
   weakCount: number;
+  dueCount: number;
   learningCount: number;
   tCat: (key: string) => string;
   t: (key: string) => string;
@@ -423,11 +445,13 @@ function FilterBar({
     <div className="space-y-3">
       {/* Study mode pills */}
       <div className="flex gap-2">
-        {(["all", "learning", "weak"] as StudyMode[]).map((mode) => {
+        {(["all", "due", "learning", "weak"] as StudyMode[]).map((mode) => {
           const label =
             mode === "all"
               ? t("mode_all")
-              : mode === "learning"
+              : mode === "due"
+                ? `${t("mode_due")} (${dueCount})`
+                : mode === "learning"
                 ? `${t("mode_learning")} (${learningCount})`
                 : `${t("mode_weak")} (${weakCount})`;
           return (

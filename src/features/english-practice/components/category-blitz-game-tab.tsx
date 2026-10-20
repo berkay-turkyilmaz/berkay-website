@@ -4,7 +4,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Check,
-  ChevronRight,
   Clock,
   Lightbulb,
   Play,
@@ -31,7 +30,7 @@ import type {
 } from "../types";
 import { XP_REWARDS } from "../constants";
 import { GAME_THEMES } from "../lib/game-themes";
-import { themeAccentText, themeChip, themeProgressBar, themeStatBadge } from "../lib/theme-utils";
+import { themeChip } from "../lib/theme-utils";
 import { ep } from "../styles";
 import { GameTimerSlider } from "./game-timer-slider";
 import { FadeUp, Pressable } from "./motion-primitives";
@@ -158,13 +157,6 @@ export function CategoryBlitzGameTab({
     [onRoundComplete]
   );
 
-  useEffect(() => {
-    if (phase === "playing" && timeLeft === 0) {
-      handlePass();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [timeLeft, phase]);
-
   const advanceRound = (patch: Partial<CategoryBlitzRoundStats>) => {
     const next = { ...roundStats, ...patch };
     setRoundStats(next);
@@ -205,6 +197,13 @@ export function CategoryBlitzGameTab({
       roundsCompleted: roundStats.roundsCompleted + 1,
     });
   };
+
+  useEffect(() => {
+    if (phase === "playing" && timeLeft === 0) {
+      handlePass();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeLeft, phase]);
 
   const quitToSetup = () => {
     clearTimer();
@@ -473,7 +472,7 @@ function StatBox({ label, value }: { label: string; value: number }) {
   return (
     <div className={cn(ep.surfaceMuted, "p-3")}>
       <p className={cn("text-xl font-bold tabular-nums", CB_THEME.accentFg)}>{value}</p>
-      <p className="text-[10px] text-slate-500 mt-0.5">{label}</p>
+      <p className="text-[11px] text-slate-500 mt-0.5">{label}</p>
     </div>
   );
 }

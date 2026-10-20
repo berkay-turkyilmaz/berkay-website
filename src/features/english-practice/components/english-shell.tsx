@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -24,7 +24,9 @@ import type {
   CategoryBlitzRoundStats,
   PassaparolaRoundStats,
   ExamMode,
+  VocabGameId,
 } from "../types";
+import { XP_REWARDS } from "../constants";
 import { useEnglishProgress } from "../hooks/use-english-progress";
 import { englishPathHref, parseEnglishPathTab } from "../lib/english-path-routes";
 import { getThemeForTab } from "../lib/game-themes";
@@ -43,6 +45,12 @@ import { CharadesGameTab } from "./charades-game-tab";
 import { CategoryBlitzGameTab } from "./category-blitz-game-tab";
 import { PassaparolaGameTab } from "./passaparola-game-tab";
 import { GamesHubTab } from "./games-hub-tab";
+import { WordMatchGameTab } from "./word-match-game-tab";
+import { WordScrambleGameTab } from "./word-scramble-game-tab";
+import { HangmanGameTab } from "./hangman-game-tab";
+import { ListenTypeGameTab } from "./listen-type-game-tab";
+import { WordSprintGameTab } from "./word-sprint-game-tab";
+import type { VocabGameProps, VocabGameResult } from "./vocab-game-types";
 import { SettingsPanel } from "./settings-panel";
 
 const MOBILE_PRIMARY_TABS: { id: EnglishTab; icon: typeof Activity; labelKey: string }[] = [
@@ -94,8 +102,25 @@ export function EnglishShell() {
     updateCategoryBlitzStats,
     updatePassaparolaStats,
     updateProgress,
+    recordVocabGame,
+    reviewCard,
     resetProgress,
   } = useEnglishProgress();
+
+  const handleVocabGameFinish = (id: VocabGameId, result: VocabGameResult) => {
+    recordVocabGame(id, result.score);
+    addXp(result.correct * XP_REWARDS.vocabGameCorrect + XP_REWARDS.vocabGameFinish);
+  };
+
+  const vocabGameProps = (id: VocabGameId): VocabGameProps => ({
+    level: progress.settings.vocabLevel,
+    onLevelChange: (vocabLevel) => updateSettings({ vocabLevel }),
+    stats: progress.vocabGames[id],
+    speechRate: progress.settings.speechRate,
+    onFinish: handleVocabGameFinish,
+    onReview: reviewCard,
+    onPlayingChange: setGamePlaying,
+  });
 
   const handleTabooRoundComplete = (
     stats: TabooRoundStats,
@@ -171,13 +196,10 @@ export function EnglishShell() {
     });
   };
 
-  const navigate = useCallback(
-    (tab: EnglishTab) => {
-      setShowMore(false);
-      router.push(englishPathHref(tab) as Parameters<typeof router.push>[0]);
-    },
-    [router]
-  );
+  const navigate = (tab: EnglishTab) => {
+    setShowMore(false);
+    router.push(englishPathHref(tab) as Parameters<typeof router.push>[0]);
+  };
 
   const goHome = () => navigate("dashboard");
 
@@ -264,6 +286,8 @@ export function EnglishShell() {
                 onMarkWeak={markFlashcardWeak}
                 onUnmarkWeak={unmarkFlashcardWeak}
                 onXp={addXp}
+                srs={progress.srs}
+                onReview={reviewCard}
               />
             )}
             {activeTab === "grammar" && (
@@ -285,6 +309,8 @@ export function EnglishShell() {
                 questionCount={progress.settings.examQuestionCount}
                 examMode={progress.settings.examMode}
                 onExamModeChange={(examMode) => updateSettings({ examMode })}
+                examLevel={progress.settings.examLevel}
+                onExamLevelChange={(examLevel) => updateSettings({ examLevel })}
                 onFinish={handleExamFinish}
                 onXp={addXp}
                 onViewResults={() => navigate("results")}
@@ -348,6 +374,11 @@ export function EnglishShell() {
                 onPlayingChange={setGamePlaying}
               />
             )}
+            {activeTab === "word_match" && <WordMatchGameTab {...vocabGameProps("word_match")} />}
+            {activeTab === "word_scramble" && <WordScrambleGameTab {...vocabGameProps("word_scramble")} />}
+            {activeTab === "hangman" && <HangmanGameTab {...vocabGameProps("hangman")} />}
+            {activeTab === "listen_type" && <ListenTypeGameTab {...vocabGameProps("listen_type")} />}
+            {activeTab === "word_sprint" && <WordSprintGameTab {...vocabGameProps("word_sprint")} />}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -387,7 +418,7 @@ export function EnglishShell() {
                   >
                     <Icon className="w-5 h-5 shrink-0" />
                   </span>
-                  <span className="text-[10px] font-semibold leading-tight truncate max-w-full">
+                  <span className="text-[11px] font-semibold leading-tight truncate max-w-full">
                     {t(tab.labelKey)}
                   </span>
                 </button>
@@ -418,7 +449,7 @@ export function EnglishShell() {
               >
                 <MoreHorizontal className="w-5 h-5 shrink-0" />
               </span>
-              <span className="text-[10px] font-semibold leading-tight">{t("tabs.more")}</span>
+              <span className="text-[11px] font-semibold leading-tight">{t("tabs.more")}</span>
             </button>
           </div>
         </nav>

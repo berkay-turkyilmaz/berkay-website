@@ -17,6 +17,10 @@ import {
   Target,
   Trophy,
   Zap,
+  Ear,
+  Layers,
+  Shuffle,
+  Spline,
 } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
@@ -39,6 +43,11 @@ const GAME_ITEMS: NavItem[] = [
   { id: "charades", icon: Drama, labelKey: "tabs.charades" },
   { id: "category_blitz", icon: Zap, labelKey: "tabs.category_blitz" },
   { id: "passaparola", icon: CircleDot, labelKey: "tabs.passaparola" },
+  { id: "word_match", icon: Layers, labelKey: "tabs.word_match" },
+  { id: "word_scramble", icon: Shuffle, labelKey: "tabs.word_scramble" },
+  { id: "hangman", icon: Spline, labelKey: "tabs.hangman" },
+  { id: "listen_type", icon: Ear, labelKey: "tabs.listen_type" },
+  { id: "word_sprint", icon: Zap, labelKey: "tabs.word_sprint" },
 ];
 
 const PRIMARY_ITEMS: NavItem[] = [

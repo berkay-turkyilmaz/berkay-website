@@ -27,10 +27,8 @@ export const CHARADES_CARDS_EXTENDED: CharadesCard[] = [
   c("cm14", "Matrix", "movies", "Kurşun kaçırma", "hard"),
 
   // SHOWBIZ — actable concepts
-  c("cc01", "Playing guitar", "celebrities", "Gitar çalmak", "easy"),
   c("cc02", "Singing on stage", "celebrities", "Sahne şarkısı", "easy"),
   c("cc03", "Scoring a goal", "celebrities", "Gol sevinci", "easy"),
-  c("cc04", "Taking a selfie", "celebrities", "Selfie", "easy"),
   c("cc05", "Red carpet", "celebrities", "Kırmızı halı yürüyüşü", "medium"),
   c("cc06", "Winning an award", "celebrities", "Ödül kaldırmak", "medium"),
   c("cc07", "Paparazzi", "celebrities", "Fotoğraf çekmek", "hard"),
@@ -54,7 +52,6 @@ export const CHARADES_CARDS_EXTENDED: CharadesCard[] = [
   c("ca15", "Sneezing", "actions", "Hapşırık", "easy"),
 
   // MORE SPORTS
-  c("cs01", "Swimming", "sports", "Yüzme", "easy"),
   c("cs02", "Volleyball", "sports", "Voleybol", "medium"),
   c("cs03", "Golf", "sports", "Golf sopası", "medium"),
   c("cs04", "Archery", "sports", "Ok atmak", "hard"),
@@ -62,7 +59,6 @@ export const CHARADES_CARDS_EXTENDED: CharadesCard[] = [
 
   // MORE ANIMALS
   c("cn01", "Lion", "animals", "Kükreme", "easy"),
-  c("cn02", "Snake", "animals", "Sürünmek", "easy"),
   c("cn03", "Butterfly", "animals", "Kanat çırpma", "easy"),
   c("cn04", "Kangaroo", "animals", "Zıplamak", "medium"),
   c("cn05", "Penguin", "animals", "Waddle yürüyüş", "easy"),
@@ -71,8 +67,6 @@ export const CHARADES_CARDS_EXTENDED: CharadesCard[] = [
   c("cn08", "Bee", "animals", "Vızıldamak", "easy"),
 
   // B1/B2 mime-friendly
-  c("cn09", "Cooking", "actions", "Yemek pişirmek", "easy"),
-  c("cn10", "Typing", "actions", "Klavye", "easy"),
   c("cn11", "Photography", "actions", "Fotoğraf çekmek", "medium"),
   c("cn12", "Rock climbing", "sports", "Tırmanış", "hard"),
   c("cn13", "Yawning", "actions", "Esneme", "easy"),

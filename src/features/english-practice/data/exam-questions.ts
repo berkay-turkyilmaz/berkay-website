@@ -1,8 +1,9 @@
-import type { ExamMode, ExamQuestion, ExamQuestionType } from "../types";
+import type { ExamMode, ExamQuestion, ExamQuestionType, FlashcardLevel, VocabLevelFilter } from "../types";
+import { EXAM_QUESTIONS_CEFR } from "./exam-questions-cefr";
 import { fisherYatesShuffle } from "../lib/exam-scoring";
 import { EXAM_QUESTIONS_EXTENDED } from "./exam-questions-extended";
 
-export const EXAM_QUESTION_POOL: ExamQuestion[] = [
+const BASE_EXAM_QUESTIONS: ExamQuestion[] = [
   { id: "e1", type: "multiple", prompt: "She ___ to the gym three times a week.", options: ["go", "goes", "going", "gone"], answer: "goes", explanation: "Present simple, 3rd person: goes." },
   { id: "e2", type: "multiple", prompt: "I ___ never been to Japan.", options: ["have", "has", "am", "was"], answer: "have", explanation: "Present perfect with I → have." },
   { id: "e3", type: "fill", prompt: "Complete: They ___ (watch) a movie right now.", answer: "are watching", acceptableAnswers: ["are watching", "they are watching"], explanation: "Present continuous for now." },
@@ -53,6 +54,30 @@ export const EXAM_QUESTION_POOL: ExamQuestion[] = [
   ...EXAM_QUESTIONS_EXTENDED,
 ];
 
+/** CEFR level of the original questions (by id). Unlisted ids default to B1. */
+const BASE_LEVELS: Record<string, FlashcardLevel> = {
+  e1: "A1", e2: "A2", e3: "A1", e4: "A2", e5: "B1", e6: "A2", e7: "A2", e8: "A2", e9: "B1", e10: "A2",
+  e11: "B1", e12: "A2", e13: "A2", e14: "A2", e15: "A2", e16: "A2", e17: "B1", e18: "A2", e19: "B1", e20: "A2",
+  e21: "B1", e22: "B1", e23: "B1", e24: "A2", e25: "B1",
+  tf1: "A2", tf2: "A2", tf3: "A1", tf4: "A2", tf5: "A2", tf6: "A1", tf7: "A2", tf8: "B1", tf9: "A2", tf10: "A1",
+  tp1: "A1", tp2: "A2", tp3: "A1", tp4: "A2", tp5: "A1", tp6: "B1", tp7: "A2", tp8: "B1",
+  ex26: "B2", ex27: "B1", ex28: "B2", ex29: "B1", ex30: "B2", ex31: "B1", ex32: "B2", ex33: "B1", ex34: "B2", ex35: "A2",
+  tf11: "B1", tf12: "B1", tf13: "B2", tf14: "B2", tf15: "B2", tp9: "B1", tp10: "B1", tp11: "B2", tp12: "B2",
+  ex36: "B1", ex37: "B1", ex38: "A2", ex39: "B1", ex40: "B1", ex41: "B2", ex42: "B1", ex43: "B1", ex44: "B1", ex45: "B2",
+};
+
+export const EXAM_QUESTION_POOL: ExamQuestion[] = [
+  ...BASE_EXAM_QUESTIONS.map((q) => ({ ...q, level: q.level ?? BASE_LEVELS[q.id] ?? ("B1" as const) })),
+  ...EXAM_QUESTIONS_CEFR,
+];
+
+function poolFor(mode: ExamMode, level: VocabLevelFilter): ExamQuestion[] {
+  const allowed = MODE_TYPE_MAP[mode];
+  return EXAM_QUESTION_POOL.filter(
+    (q) => (allowed === "all" || allowed.includes(q.type)) && (level === "all" || q.level === level)
+  );
+}
+
 const MODE_TYPE_MAP: Record<ExamMode, ExamQuestionType[] | "all"> = {
   mixed: "all",
   multiple: ["multiple"],
@@ -62,19 +87,11 @@ const MODE_TYPE_MAP: Record<ExamMode, ExamQuestionType[] | "all"> = {
   tap: ["tap"],
 };
 
-export function pickExamQuestions(count: number, mode: ExamMode = "mixed"): ExamQuestion[] {
-  const allowed = MODE_TYPE_MAP[mode];
-  const pool =
-    allowed === "all"
-      ? EXAM_QUESTION_POOL
-      : EXAM_QUESTION_POOL.filter((q) => allowed.includes(q.type));
-
-  const shuffled = fisherYatesShuffle(pool);
+export function pickExamQuestions(count: number, mode: ExamMode = "mixed", level: VocabLevelFilter = "all"): ExamQuestion[] {
+  const shuffled = fisherYatesShuffle(poolFor(mode, level));
   return shuffled.slice(0, Math.min(count, shuffled.length));
 }
 
-export function countQuestionsForMode(mode: ExamMode): number {
-  const allowed = MODE_TYPE_MAP[mode];
-  if (allowed === "all") return EXAM_QUESTION_POOL.length;
-  return EXAM_QUESTION_POOL.filter((q) => allowed.includes(q.type)).length;
+export function countQuestionsForMode(mode: ExamMode, level: VocabLevelFilter = "all"): number {
+  return poolFor(mode, level).length;
 }

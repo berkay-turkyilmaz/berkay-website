@@ -82,7 +82,6 @@ export const TABOO_CARDS_EXTENDED: TabooCard[] = [
   // ADVANCED VOCABULARY
   c("adv01", "Artificial Intelligence", ["computer", "robot", "machine", "learn", "ChatGPT"], "technology", "Yapay zeka", "hard"),
   c("adv02", "Climate Change", ["global warming", "earth", "pollution", "temperature", "environment"], "technology", "İklim değişikliği", "hard"),
-  c("adv03", "Entrepreneur", ["business", "startup", "founder", "company", "risk"], "worklife", "Girişimci", "hard"),
   c("adv04", "Sustainability", ["environment", "green", "future", "recycle", "planet"], "technology", "Sürdürülebilirlik", "hard"),
   c("adv05", "Cryptocurrency", ["Bitcoin", "digital", "blockchain", "money", "wallet"], "technology", "Kripto para", "hard"),
   c("adv06", "Remote Work", ["home", "office", "online", "Zoom", "laptop"], "worklife", "Uzaktan çalışma", "medium"),
@@ -90,9 +89,7 @@ export const TABOO_CARDS_EXTENDED: TabooCard[] = [
   c("adv08", "Podcast", ["listen", "audio", "episode", "host", "Spotify"], "entertainment", "Podcast", "medium"),
 
   // B1/B2 classroom vocabulary
-  c("adv09", "Negotiation",  ["deal", "agree", "business", "price", "contract"],          "worklife",    "Pazarlık",          "hard"),
   c("adv10", "Presentation", ["slides", "speak", "audience", "PowerPoint", "meeting"],    "worklife",    "Sunum",             "medium"),
-  c("adv11", "Interview",    ["job", "questions", "employer", "CV", "hire"],              "worklife",    "Mülakat",           "medium"),
   c("adv12", "Neighbourhood",["area", "local", "street", "community", "near"],            "places",      "Mahalle",           "medium"),
   c("adv13", "Recycling",    ["waste", "bin", "plastic", "environment", "reuse"],         "places",      "Geri dönüşüm",      "medium"),
   c("adv14", "Volunteering", ["help", "charity", "free", "community", "work"],            "social",      "Gönüllülük",        "medium"),
@@ -171,7 +168,6 @@ export const TABOO_CARDS_EXTENDED: TabooCard[] = [
   c("fin01", "Inflation",     ["prices", "money", "rise", "economy", "value"],                "worklife", "Enflasyon",         "hard"),
   c("fin02", "Investment",    ["money", "stocks", "return", "risk", "future"],                 "worklife", "Yatırım",           "hard"),
   c("fin03", "Recession",     ["economy", "slow", "jobs", "money", "crisis"],                  "worklife", "Durgunluk",         "hard"),
-  c("fin04", "Cryptocurrency",["Bitcoin", "digital", "wallet", "blockchain", "invest"],        "technology","Kripto para",      "hard"),
   c("fin05", "Interest rate", ["bank", "loan", "money", "borrow", "percent"],                  "worklife", "Faiz oranı",        "hard"),
 
   // ── ARTS & CULTURE — hard ────────────────────────────────────────────────
