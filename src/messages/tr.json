@@ -1,25 +1,25 @@
 {
   "Metadata": {
-    "description": "Modern web teknolojileri, ölçeklenebilir arayüzler ve yapay zeka destekli otonom sistemler üreten yazılım mühendisi.",
-    "site_name": "BERKAY",
-    "site_title": "BERKAY | Yazılım Mühendisi & AI Mimarı",
-    "og_alt": "Berkay Türkyılmaz Portfolyo",
-    "og_image_headline": "Sıfırdan ürün çıkaran tam yığın mühendis.",
-    "og_image_tagline": "Next.js · Supabase · n8n · Groq LLM",
+    "description": "İstanbul'da Türk Telekom projelerinde kurumsal ölçekte arayüz geliştiren Frontend Developer. Yan projelerde Next.js, n8n ve yapay zekâ denemeleri.",
+    "site_name": "Berkay Türkyılmaz",
+    "site_title": "Berkay Türkyılmaz | Frontend Developer",
+    "og_alt": "Berkay Türkyılmaz, Frontend Developer",
+    "og_image_headline": "Kurumsal ölçekte arayüz geliştiriyorum.",
+    "og_image_tagline": "Frontend Developer · İstanbul",
     "projects_title": "Projeler",
     "projects_description": "Seçilmiş işler — Next.js uygulamaları, n8n otomasyonları ve ölçeklenebilir ürün mimarileri.",
     "blog_title": "Blog",
     "blog_description": "Web mimarisi, AI entegrasyonları ve otomasyon üzerine teknik yazılar.",
-    "contact_title": "İletişim | BERKAY",
-    "contact_description": "Proje geliştirme, AI entegrasyonu veya teknik danışmanlık için Berkay Türkyılmaz ile iletişime geçin.",
+    "contact_title": "İletişim",
+    "contact_description": "Berkay Türkyılmaz ile iş, iş birliği ya da proje için iletişime geçin.",
     "ai_lab_title": "AI Lab",
     "ai_lab_description": "Etkileşimli AI çalışma alanı — BEX asistan, doküman analizi, EnglishPath ve deneyler.",
     "english_path_title": "EnglishPath",
     "english_path_description": "Sınıf İngilizce oyunları, kelime çalışması, dilbilgisi ve seviye sınavları.",
     "booking_title": "Randevu Demo",
     "booking_description": "Etkileşimli berber randevu sistemi — n8n webhook entegrasyonu vitrini.",
-    "about_title": "Hakkımda | BERKAY",
-    "about_description": "Tam yığın mühendis profili, teknik yetkinlikler ve production ürünlerin arkasındaki stack.",
+    "about_title": "Hakkımda",
+    "about_description": "Frontend Developer profili: deneyim, çalışma şekli ve yan projeler.",
     "services_title": "Hizmetler | BERKAY",
     "services_description": "Kurucular ve girişimler için full-stack geliştirme, AI entegrasyonu ve teknik danışmanlık hizmetleri.",
     "resume_title": "CV | BERKAY",
@@ -40,7 +40,130 @@
     "resume": "CV",
     "github_aria": "GitHub profili",
     "menu_open": "Menüyü aç",
-    "menu_close": "Menüyü kapat"
+    "menu_close": "Menüyü kapat",
+    "skip": "İçeriğe geç",
+    "main": "Ana gezinme"
+  },
+  "Home": {
+    "hero": {
+      "eyebrow": "Frontend Developer",
+      "local_time": "İstanbul'da saat",
+      "title": "Kurumsal ölçekte <em>arayüz</em> geliştiriyorum. Kendi küçük ürünlerimi de <em>kuruyorum</em>.",
+      "lead": "Merhaba, ben Berkay. Türk Telekom projelerinde Figma'dan çıkan tasarımları hızlı, erişilebilir ve ölçeklenebilir arayüzlere çeviriyorum. Mesai dışında Next.js, n8n ve yapay zekâ ile denediğim şeyleri canlıya alıyorum.",
+      "cta_work": "Çalışmalarımı gör",
+      "cta_contact": "Bana yaz",
+      "cta_cv": "Özgeçmiş",
+      "fact_now_label": "Şu an",
+      "fact_now_value": "Türk Telekom'da Frontend Developer, Ekim 2022'den beri",
+      "fact_live_label": "Canlı yan projeler",
+      "fact_code_label": "Kod",
+      "fact_code_value": "GitHub'da {n} açık repo",
+      "photo_alt": "Sabah sisinde Boğaz Köprüsü, martı ve İstanbul silueti",
+      "photo_caption": "Boğaz, sabah"
+    },
+    "work": {
+      "eyebrow": "Seçilmiş işler",
+      "title": "Açıp kullanabileceğin işler.",
+      "intro": "Çoğu yan proje ya da öğrenirken yaptığım bir araç. Hangisi ne, açıkça yazdım.",
+      "all": "Tüm projeler",
+      "more": "Diğer denemeler",
+      "opens_new_tab": "Yeni sekmede açılır",
+      "meetora": {"title":"Meetora","kind":"Canlı ürün","desc":"Kafe ve etkinlik mekânlarını saatlik keşfedip talep gönderebildiğin platform: arama, filtreler ve güvenli online ödeme.","image_alt":"Meetora ana sayfası: etkinlik için mekân arama formu"},
+      "ai_lab": {
+        "title": "AI Lab",
+        "kind": "Deney",
+        "desc": "Groq ile akış halinde yanıt veren asistan (BEX), belgeyle sohbet ve metin analizörü. Hepsi tarayıcıda denenebilir.", "image_alt": "AI Lab bağlam analizörü arayüzü" },
+      "english": {
+        "title": "EnglishPath",
+        "kind": "Araç",
+        "desc": "A1'den C1'e kelime çalışma, on kelime oyunu, aralıklı tekrar ve seviyeli sınav. İngilizce öğrenirken kendim için yaptım.", "image_alt": "EnglishPath kelime oyunları sayfası" },
+      "booking": {
+        "title": "Rezervasyon demosu",
+        "kind": "Demo",
+        "desc": "n8n webhook'larıyla çalışan randevu akışı: form, doğrulama ve iş akışı."
+      },
+      "finance": {
+        "title": "Finans botu",
+        "kind": "Özel",
+        "desc": "Harici API'lerden finansal veri çekip işleyen ve raporlayan n8n iş akışları."
+      },
+      "site": {
+        "title": "Bu site",
+        "kind": "Sürekli yapım",
+        "desc": "Next.js 16, next-intl ve Tailwind 4 ile yazdığım; her şeyi denediğim kişisel alanım.", "image_alt": "Bu sitenin ana sayfası" }
+    },
+    "about": {
+      "eyebrow": "Hakkımda",
+      "title": "Haritalardan <em>arayüzlere</em>.",
+      "photo_alt": "Ahşap masada açık dizüstü bilgisayar, kahve ve defter",
+      "p_1": "Web'e 2017'de bir ajansta stajyer olarak girdim. O günden beri işim aynı: tasarımı alıp tarayıcıda sağlam çalışan, her ekranda düzgün duran bir şeye çevirmek.",
+      "p_2": "2022'den beri Türk Telekom (One Bilgi Sistemleri) için müşterilerin ve iç ekiplerin kullandığı web uygulamalarının frontend'ini yazıyorum. Jira'da Agile ekiplerle çalışıyor, backend tarafıyla veri entegrasyonlarını koordine ediyorum.",
+      "p_3": "İş dışında merak ettiğim şeyleri kendi ürünlerime çeviriyorum: n8n ile otomasyon, Groq ile yapay zekâ denemeleri, İngilizce çalışma aracım. Bu sitedeki her şey, öğrenirken yaptığım şeylerin izi.",
+      "notes": {
+        "location": {
+          "label": "Konum",
+          "value": "İstanbul, Türkiye"
+        },
+        "mode": {
+          "label": "Çalışma şekli",
+          "value": "Uzaktan ve hibrit"
+        },
+        "lang": {
+          "label": "Diller",
+          "value": "Türkçe, İngilizce (A2, gelişiyor)"
+        }
+      },
+      "principles_title": "Nasıl çalışırım",
+      "p1": {
+        "title": "Tasarıma sadık, her ekranda sağlam",
+        "desc": "Figma ve Zeplin teslimlerini birebir, tam responsive ve tarayıcılar arası uyumlu kodlarım."
+      },
+      "p2": {
+        "title": "Erişilebilir ve ölçeklenebilir",
+        "desc": "Yüksek trafikli kurumsal ürünlerde arayüzün herkes için çalışması ve büyümeye dayanması gerekir."
+      },
+      "p3": {
+        "title": "Ekiple birlikte",
+        "desc": "UX/UI ve backend ekipleriyle Agile süreçte, Jira üzerinden net iletişimle ilerlerim."
+      }
+    },
+    "experience": {
+      "eyebrow": "Deneyim",
+      "title": "Şimdiye kadar",
+      "toolbox": "Araç çantam",
+      "side_stack": "Yan projelerde"
+    },
+    "code": {
+      "eyebrow": "Kod",
+      "title": "Kodun <em>kendisi</em>.",
+      "intro": "GitHub'daki açık projelerim. Küçük ama dürüst: lisede yazdığım C# ve ASP.NET denemelerinden bu siteye uzanan yol.",
+      "repo_count": "{n} açık repo",
+      "fallback_description": "Bu sitenin kaynak kodu: Next.js 16, next-intl ve Tailwind 4.",
+      "contributions": "Son 12 ayda {n} katkı",
+      "opens_new_tab": "Yeni sekmede açılır"
+    },
+    "writing": {
+      "eyebrow": "Yazılar",
+      "title": "Öğrendiklerimi not alıyorum.",
+      "intro": "Kısa, uygulamalı notlar.",
+      "all": "Tüm yazılar"
+    },
+    "github": {
+      "title": "GitHub'da son hareketler",
+      "pushed": "commit gönderdi",
+      "created": "{kind} oluşturdu",
+      "starred": "yıldızladı",
+      "opens_new_tab": "Yeni sekmede açılır"
+    },
+    "contact": {
+      "eyebrow": "İletişim",
+      "title": "Bir fikrin ya da işin varsa <em>konuşalım</em>.",
+      "lead": "En hızlı yol e-posta. Yeni bir fırsat, iş birliği ya da sadece merhaba demek için yazabilirsin.",
+      "copy": "E-postayı kopyala",
+      "copied": "Kopyalandı",
+      "cv": "Özgeçmiş",
+      "form": "İletişim formu"
+    }
   },
   "HomePage": {
     "badge": "Freelance & danışmanlık için müsait",
@@ -564,7 +687,12 @@
     "write_me": "→",
     "powered_by": "MİMARİ ALTYAPI",
     "copyright": "© {year} BERKAY TURKYILMAZ.",
-    "stack_label": "NEXT.JS 16"
+    "stack_label": "NEXT.JS 16",
+    "tagline": "İstanbul'dan, öğrenirken yapılmış küçük ve gerçek işler.",
+    "pages": "Sayfalar",
+    "elsewhere": "Başka yerlerde",
+    "built_with": "Next.js ile yazıldı.",
+    "photos": "Fotoğraflar:"
   },
   "LanguageSwitcher": {
     "label": "Dil Modeli Değiştir"

@@ -1,4 +1,4 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
@@ -12,6 +12,14 @@ import { siteConfig } from "@/data/site-config";
 import "./globals.css";
 
 // --- FONT CONFIGURATION ---
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-display-src",
+  subsets: ["latin", "latin-ext"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+});
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -106,6 +114,7 @@ export default async function LocaleLayout({
         className={`
           ${geistSans.variable} 
           ${geistMono.variable} 
+          ${instrumentSerif.variable} 
           antialiased 
           min-h-screen 
           bg-background 

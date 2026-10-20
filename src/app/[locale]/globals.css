@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+/* Fonts reference next/font variables defined on <body>, so they must be inlined. */
+@theme inline {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-display: var(--font-display-src), "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+}
+
 @theme {
   /* Tailwind v4 Değişken Eşleşmeleri */
   --color-background: hsl(var(--background));
@@ -126,39 +133,39 @@
 
 @layer base {
   :root {
-    /* --- LIGHT MODE (Ferah ve Temiz) --- */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --border: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
+    /* --- LIGHT: warm paper, ink text, one vermilion accent --- */
+    --background: 40 30% 95%;
+    --foreground: 40 14% 10%;
+    --card: 42 40% 97.5%;
+    --card-foreground: 40 14% 10%;
+    --primary: 16 82% 40%;
+    --primary-foreground: 40 40% 98%;
+    --secondary: 38 22% 90%;
+    --secondary-foreground: 40 14% 10%;
+    --muted: 38 22% 90%;
+    --muted-foreground: 32 9% 36%;
+    --accent: 38 22% 90%;
+    --accent-foreground: 40 14% 10%;
+    --border: 36 16% 82%;
+    --ring: 16 82% 40%;
   }
 
   .dark {
-    /* --- DARK MODE (Derin Siyah ve Modern Zinc) --- */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    /* --- DARK: warm charcoal, never pure black --- */
+    --background: 30 9% 8%;
+    --foreground: 38 25% 92%;
+    --card: 30 8% 10.5%;
+    --card-foreground: 38 25% 92%;
+    --primary: 17 88% 62%;
+    --primary-foreground: 30 9% 8%;
+    --secondary: 30 7% 15%;
+    --secondary-foreground: 38 25% 92%;
+    --muted: 30 7% 15%;
+    --muted-foreground: 33 10% 70%;
+    --accent: 30 7% 15%;
+    --accent-foreground: 38 25% 92%;
+    --border: 30 7% 20%;
+    --ring: 17 88% 62%;
   }
 }
 
@@ -294,6 +301,7 @@ button:disabled,
     @apply border-border;
   }
   body {
+    font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
     background-color: hsl(var(--background));
     color: hsl(var(--foreground));
     transition: background-color 0.3s ease, color 0.3s ease; /* Mod geçişini yumuşatır */
@@ -305,8 +313,178 @@ button:disabled,
   100% { transform: translateY(-100%); visibility: hidden; }
 }
 .intro-curtain {
-  animation: intro-curtain 0.5s cubic-bezier(0.76, 0, 0.24, 1) 0.2s forwards;
+  animation: intro-curtain 0.45s cubic-bezier(0.76, 0, 0.24, 1) 0.1s forwards;
 }
 @media (prefers-reduced-motion: reduce) {
   .intro-curtain { display: none; }
 }
+
+/* ── Editorial motion ───────────────────────────────────────────────────── */
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes reveal-mask {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes drift {
+  from { transform: scale(1.08); }
+  to { transform: scale(1); }
+}
+/* Page-load entrance; --d is the stagger step. */
+.rise {
+  animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--d, 0) * 90ms);
+}
+.photo-reveal {
+  animation: reveal-mask 1.2s cubic-bezier(0.76, 0, 0.24, 1) 0.15s both;
+}
+.photo-drift {
+  animation: drift 2.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+/* Scroll reveal: progressive enhancement, content stays visible without support. */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: rise linear both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 30%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise, .reveal, .photo-reveal, .photo-drift { animation: none !important; }
+}
+
+/* ── Editorial interactions ─────────────────────────────────────────────── */
+.spotlight {
+  position: relative;
+  --mx: 50%;
+  --my: 50%;
+}
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: radial-gradient(420px circle at var(--mx) var(--my), hsl(var(--primary) / 0.1), transparent 65%);
+}
+@media (hover: hover) {
+  .spotlight:hover::before {
+    opacity: 1;
+  }
+}
+
+/* Marquee: pure CSS, pauses on hover, stopped for reduced motion. */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 48s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Scroll-linked parallax for images inside overflow-hidden frames. */
+@keyframes parallax-y {
+  from { transform: translateY(-3%) scale(1.07); }
+  to { transform: translateY(3%) scale(1.07); }
+}
+@supports (animation-timeline: view()) {
+  .parallax {
+    animation: parallax-y linear both;
+    animation-timeline: view();
+  }
+}
+
+/* Heatmap cells fade in column by column. */
+@keyframes cell-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: none; }
+}
+.cell-in {
+  animation: cell-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--c, 0) * 14ms);
+}
+
+/* Underline that draws itself on hover. */
+.link-draw {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.link-draw:hover {
+  background-size: 100% 1px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track, .parallax, .cell-in { animation: none !important; }
+}
+
+/* ── Article typography (blog posts render trusted HTML from lib/blog/content) ── */
+.article {
+  font-size: 1.125rem;
+  line-height: 1.8;
+  color: hsl(var(--foreground) / 0.9);
+}
+.article > * + * { margin-top: 1.4em; }
+.article .lead { font-size: 1.35rem; line-height: 1.6; color: hsl(var(--muted-foreground)); }
+.article h2 {
+  margin-top: 2.6em;
+  font-family: var(--font-display-src), Georgia, serif;
+  font-size: clamp(1.9rem, 3.6vw, 2.5rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: hsl(var(--foreground));
+}
+.article h3 {
+  margin-top: 2em;
+  font-family: var(--font-display-src), Georgia, serif;
+  font-size: 1.6rem;
+  line-height: 1.2;
+  color: hsl(var(--foreground));
+}
+.article a { color: hsl(var(--primary)); text-decoration: underline; text-underline-offset: 4px; text-decoration-color: hsl(var(--border)); }
+.article a:hover { text-decoration-color: hsl(var(--primary)); }
+.article strong { color: hsl(var(--foreground)); font-weight: 600; }
+.article ul, .article ol { padding-left: 1.4em; }
+.article ul { list-style: disc; }
+.article ol { list-style: decimal; }
+.article li { margin-top: 0.5em; }
+.article li::marker { color: hsl(var(--primary)); }
+.article blockquote {
+  border-left: 2px solid hsl(var(--primary));
+  padding-left: 1.4em;
+  font-family: var(--font-display-src), Georgia, serif;
+  font-style: italic;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+}
+.article code {
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.88em;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  background: hsl(var(--secondary));
+}
+.article pre {
+  overflow-x: auto;
+  padding: 1.25rem 1.5rem;
+  border-radius: 6px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  font-size: 0.9rem;
+  line-height: 1.7;
+}
+.article pre code { padding: 0; background: transparent; }
+.article img { border-radius: 6px; }
+.article hr { border: 0; border-top: 1px solid hsl(var(--border)); }

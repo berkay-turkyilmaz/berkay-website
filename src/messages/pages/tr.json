@@ -1,0 +1,164 @@
+{
+  "Work": {
+    "kinds": {
+      "live": "Canlı ürün",
+      "experiment": "Deney",
+      "tool": "Araç",
+      "demo": "Demo",
+      "private": "Özel",
+      "ongoing": "Sürekli yapım"
+    },
+    "labels": {
+      "what": "Ne bu?",
+      "highlights": "Neler var",
+      "notes": "Teknik notlar",
+      "stack": "Kullanılanlar",
+      "visit": "Projeyi aç",
+      "visit_external": "Siteyi aç",
+      "back": "Tüm projeler",
+      "next": "Sıradaki proje",
+      "year": "Yıl",
+      "type": "Tür",
+      "no_public": "Bu proje özel; herkese açık bir bağlantısı yok.",
+      "opens_new_tab": "Yeni sekmede açılır"
+    },
+    "items": {
+      "meetora": {
+        "title": "Meetora",
+        "summary": "Kafe ve etkinlik mekânlarını saatlik keşfedip talep gönderebildiğin platform.",
+        "image_alt": "Meetora ana sayfası: etkinlik için mekân arama formu",
+        "what": "Doğum günü, afterwork ya da brunch gibi bir etkinlik için mekân arayanlarla mekân sahiplerini buluşturan canlı bir ürün. Ürün getmeetora.com adresinde yayında.",
+        "highlights_title": "Üründe neler var",
+        "highlights": [
+          "Etkinlik türü, konum ve tarihe göre mekân arama.",
+          "Saatlik şeffaf fiyat ve hızlı rezervasyon talebi.",
+          "Güvenli online ödeme ve arkadaş getirme indirimi."
+        ],
+        "notes": [
+          "Ayrıntılı vaka çalışması hazırlanıyor; şimdilik canlı ürünü doğrudan inceleyebilirsin."
+        ]
+      },
+      "ai-lab": {
+        "title": "AI Lab",
+        "summary": "Groq ile akış halinde yanıt veren asistan, belgeyle sohbet ve metin analizörü.",
+        "image_alt": "AI Lab bağlam analizörü arayüzü",
+        "what": "BEX adlı bir asistanın, belgeyle sohbetin ve bir bağlam analizörünün bir arada durduğu deney alanı. Hepsi tarayıcıdan denenebilir; hesap gerekmiyor.",
+        "highlights": [
+          "Groq üzerindeki Llama modelleriyle akış halinde (streaming) yanıt.",
+          "Her sohbetin kendi adresi var; geçmiş yalnızca senin tarayıcında saklanır.",
+          "Belge sohbeti: PDF veya metin parçalara bölünür, soruya en ilgili bölümler modele verilir.",
+          "Analizör: metni parçalara ayırıp bağlam penceresindeki ağırlığını ısı haritası ve grafikle gösterir."
+        ],
+        "notes": [
+          "API uçlarında hız sınırı ve girdi sınırı var; Groq anahtarı yalnızca sunucuda durur.",
+          "Sağlayıcı katmanı tek dosyada, model değiştirmek için tek yeri düzenlemek yeterli."
+        ]
+      },
+      "english-path": {
+        "title": "EnglishPath",
+        "summary": "A1'den C1'e kelime çalışma, on kelime oyunu, aralıklı tekrar ve seviyeli sınav.",
+        "image_alt": "EnglishPath kelime oyunları sayfası",
+        "what": "İngilizce öğrenirken kendim için yaptığım çalışma aracı. Kelime kartları, oyunlar ve sınav aynı ilerleme kaydını paylaşıyor.",
+        "highlights": [
+          "A1'den C1'e yaklaşık 680 kelime; her birinde Türkçe karşılık, telaffuz ve örnek cümle.",
+          "On oyun: Taboo, Heads Up, Charades, Category Blitz, Passaparola ve beş tekil kelime oyunu.",
+          "Aralıklı tekrar: bildiğin kelime daha geç, bilmediğin hemen geri gelir.",
+          "Seviyeli sınav: A1–C1 arası 140'tan fazla soru."
+        ],
+        "notes": [
+          "İlerleme yalnızca tarayıcıda (localStorage) tutulur; hesap gerekmez.",
+          "Kelime listeleri elle yazıldı; aynı kelime iki seviyede geçerse düşük seviye kazanır."
+        ]
+      },
+      "booking-demo": {
+        "title": "Rezervasyon demosu",
+        "summary": "n8n webhook'larıyla çalışan randevu akışı: form, doğrulama ve iş akışı.",
+        "image_alt": "",
+        "what": "Bir berber salonu için randevu alma formu. Formun arkasında sunucu tarafında doğrulama ve bir n8n iş akışı çalışıyor.",
+        "highlights": [
+          "Hizmet, berber, tarih ve saat seçimi; Türkiye telefon biçimi doğrulaması.",
+          "Form bir sunucu uç noktasına gider; uç nokta doğrulayıp n8n webhook'una iletir.",
+          "İstek başına hız sınırı var."
+        ],
+        "notes": [
+          "Webhook adresi tarayıcıya hiç gönderilmez, yalnızca sunucuda durur.",
+          "Bu bir demo; gerçek bir salona bağlı değil."
+        ]
+      },
+      "finance-bot": {
+        "title": "Finans botu",
+        "summary": "Harici API'lerden finansal veri çekip işleyen ve raporlayan n8n iş akışları.",
+        "image_alt": "",
+        "what": "Manuel iş yükünü azaltmak için kurduğum otomatik veri akışları. Veriyi harici kaynaklardan çeker, işler ve rapor haline getirir.",
+        "highlights": [
+          "n8n ile tasarlanmış iş akışları.",
+          "Harici API'lerden veri çekme, dönüştürme ve raporlama."
+        ],
+        "notes": [
+          "Kişisel kullanım için olduğundan herkese açık bir bağlantısı ya da ekran görüntüsü yok."
+        ]
+      },
+      "this-site": {
+        "title": "Bu site",
+        "summary": "Next.js 16, next-intl ve Tailwind 4 ile yazdığım; her şeyi denediğim kişisel alanım.",
+        "image_alt": "Bu sitenin ana sayfası",
+        "what": "Şu an baktığın site. Hem tanıtım alanı hem de öğrendiklerimi denediğim yer.",
+        "highlights": [
+          "Next.js 16 App Router; sayfalar statik üretiliyor.",
+          "Türkçe ve İngilizce içerik; çevirisi tamamlanmayan diller arama motorlarına kapalı.",
+          "Açık ve koyu tema, hareket azaltma desteği, klavye ile gezinme.",
+          "İletişim ve rezervasyon formları sunucuda doğrulanır, hız sınırı vardır."
+        ],
+        "notes": [
+          "Kaynak kodu GitHub'da herkese açık.",
+          "Fotoğraflar Pexels'ten, ekran görüntüleri kendi projelerimden."
+        ]
+      }
+    }
+  },
+  "ProjectsIndex": {
+    "eyebrow": "Projeler",
+    "title": "Yaptığım <em>şeyler</em>.",
+    "lead": "Canlı ürün, deney, araç ve demo. Her birinin ne olduğunu ve neyi içerdiğini açıkça yazdım.",
+    "filter_all": "Tümü"
+  },
+  "AboutMe": {
+    "eyebrow": "Hakkımda",
+    "title": "Berkay, <em>İstanbul'dan</em>.",
+    "lead": "Frontend geliştiricisiyim. Tasarımı tarayıcıda sağlam çalışan bir şeye çeviriyor, boş zamanlarımda kendi ürünlerimi yapıyorum.",
+    "photo_alt": "Galata Kulesi, gün batımının ışığında",
+    "photo_caption": "Galata, İstanbul",
+    "story_title": "Kısaca hikâyem",
+    "cta_title": "Birlikte çalışalım mı?",
+    "cta_text": "Bir fırsat, iş birliği ya da sadece merhaba için yazabilirsin.",
+    "cta_button": "Bana yaz"
+  },
+  "ContactMe": {
+    "eyebrow": "İletişim",
+    "title": "Bir şey <em>konuşalım</em>.",
+    "lead": "En hızlı yol e-posta. Formu da kullanabilirsin; mesajın doğrudan bana ulaşır.",
+    "direct": "Doğrudan",
+    "elsewhere": "Başka yerlerde",
+    "photo_alt": "İstanbul'da bir vapur ve Galata Kulesi",
+    "form_title": "Mesaj bırak",
+    "copy": "E-postayı kopyala",
+    "copied": "Kopyalandı",
+    "success": "Mesajın bana ulaştı, teşekkürler. En kısa sürede dönmeye çalışacağım.",
+    "success_again": "Yeni mesaj gönder",
+    "submit": "Mesajı gönder",
+    "submitting": "Gönderiliyor…",
+    "error": "Mesaj gönderilemedi. Doğrudan e-posta atabilirsin:",
+    "err_name": "Lütfen adını yaz (en az 2 harf).",
+    "err_email": "Geçerli bir e-posta adresi yaz.",
+    "err_subject": "Bir konu seç.",
+    "err_message": "Mesajın en az 20 karakter olsun."
+  },
+  "BlogIndex": {
+    "eyebrow": "Yazılar",
+    "title": "Öğrendiklerimi <em>not alıyorum</em>.",
+    "lead": "Kısa, uygulamalı notlar.",
+    "photo_alt": "Pencere kenarında ahşap masada açık defter ve kalem",
+    "read": "Oku",
+    "all": "Tümü"
+  }
+}

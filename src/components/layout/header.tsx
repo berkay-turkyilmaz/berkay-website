@@ -1,201 +1,158 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
+import { ArrowUpRight, Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
-import { Github, Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
 import { SiteLogo } from "@/components/layout/site-logo";
+import { cn } from "@/lib/utils";
 
-const cn = (...classes: (string | undefined | null | false)[]) => 
-  classes.filter(Boolean).join(" ");
+const NAV_ITEMS = [
+  { key: "projects", href: "/projects" },
+  { key: "about", href: "/about" },
+  { key: "blog", href: "/blog" },
+  { key: "lab", href: "/ai-lab/chat" },
+  { key: "contact", href: "/contact" },
+] as const;
 
 export function Header() {
   const t = useTranslations("Navigation");
   const pathname = usePathname();
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Mobil menü açıkken scroll'u engelle
-  useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [mobileMenuOpen]);
+  const close = useCallback(() => setOpen(false), []);
 
-  const navItems = [
-    { key: "about", href: "/about" },
-    { key: "projects", href: "/projects" },
-    { key: "blog", href: "/blog" },
-    { key: "lab", href: "/ai-lab" },
-    { key: "contact", href: "/contact" },
-  ];
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && close();
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open, close]);
+
+  const isActive = (href: string) => {
+    const base = "/" + href.split("/")[1];
+    return pathname === href || pathname.startsWith(base);
+  };
 
   return (
     <>
+      <a
+        href="#main"
+        className="sr-only z-[200] rounded-md bg-foreground px-4 py-2 text-sm text-background focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+      >
+        {t("skip")}
+      </a>
+
       <header
         className={cn(
-          "fixed top-0 w-full z-[100] transition-all duration-300 border-b",
-          isScrolled
-            ? "bg-background/90 backdrop-blur-xl border-border/50 py-3 shadow-lg shadow-black/5"
-            : "bg-transparent border-transparent py-5"
+          "fixed inset-x-0 top-0 z-[100] border-b transition-[background-color,border-color,backdrop-filter] duration-300",
+          scrolled || open
+            ? "border-border bg-background/85 backdrop-blur-xl"
+            : "border-transparent bg-transparent"
         )}
       >
-        <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
-          
+        <div className="mx-auto flex h-16 w-full max-w-[1200px] items-center justify-between px-5 sm:px-8">
           <SiteLogo />
 
-          {/* --- MASAÜSTÜ NAVİGASYON --- */}
-          <nav className="hidden md:block">
-            <ul className="flex items-center gap-1 p-1.5 rounded-full bg-secondary/40 border border-border/50 backdrop-blur-md shadow-sm">
-              {navItems.map((item) => {
-                const isActive = item.href !== "/#contact" && pathname.startsWith(item.href);
-                
-                return (
-                  <li key={item.key} className="relative">
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "relative px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest transition-all block cursor-pointer select-none overflow-hidden",
-                        isActive 
-                          ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-md shadow-primary/30" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/70"
-                      )}
-                    >
-                      {/* Hover gradient efekti */}
-                      {!isActive && (
-                        <span className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 translate-x-[-100%] hover:translate-x-[100%] transition-transform duration-700" />
-                      )}
-                      <span className="relative z-10">{t(item.key)}</span>
-                    </Link>
-                  </li>
-                );
-              })}
+          <nav aria-label={t("main")} className="hidden md:block">
+            <ul className="flex items-center gap-8">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.key}>
+                  <Link
+                    href={item.href}
+                    aria-current={isActive(item.href) ? "page" : undefined}
+                    className={cn(
+                      "relative text-sm transition-colors duration-300 after:absolute after:inset-x-0 after:-bottom-1.5 after:h-px after:origin-left after:scale-x-0 after:bg-primary after:transition-transform after:duration-300 hover:text-foreground hover:after:scale-x-100",
+                      isActive(item.href) ? "text-foreground after:scale-x-100" : "text-muted-foreground"
+                    )}
+                  >
+                    {t(item.key)}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </nav>
 
-          {/* --- SAĞ TARAF --- */}
-          <div className="hidden md:flex items-center gap-2">
+          <div className="hidden items-center gap-1.5 md:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            
-            <div className="w-px h-6 bg-border/50 mx-1" />
-            
-            <Link 
-              href="https://github.com/berkay-turkyilmaz" 
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group p-2.5 rounded-full hover:bg-secondary/70 transition-all duration-300 text-muted-foreground hover:text-foreground cursor-pointer border border-transparent hover:border-border/50 hover:shadow-sm"
-              aria-label={t("github_aria")}
+            <Link
+              href="/resume"
+              className="ml-2 inline-flex h-9 items-center gap-1 rounded-full border border-border px-4 text-sm text-foreground transition-colors duration-300 hover:border-foreground"
             >
-              <Github className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+              {t("resume")}
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
             </Link>
           </div>
 
-          {/* --- MOBİL MENÜ BUTONU --- */}
           <button
-            className="md:hidden z-50 p-2 text-foreground hover:bg-secondary/50 rounded-lg transition-colors cursor-pointer"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            aria-label={mobileMenuOpen ? t("menu_close") : t("menu_open")}
+            type="button"
+            className="-mr-2 inline-flex h-11 w-11 items-center justify-center rounded-full text-foreground transition-colors hover:bg-secondary md:hidden"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? t("menu_close") : t("menu_open")}
           >
-            <AnimatePresence mode="wait">
-              {mobileMenuOpen ? (
-                <motion.div
-                  key="close"
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <X className="w-6 h-6" />
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="menu"
-                  initial={{ rotate: 90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: -90, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <Menu className="w-6 h-6" />
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
           </button>
         </div>
       </header>
 
-      {/* --- MOBİL MENÜ --- */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[90] bg-background/98 backdrop-blur-2xl md:hidden"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            <motion.div 
-              className="flex flex-col items-center justify-center h-full gap-8 px-6"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <nav className="flex flex-col items-center gap-6">
-                {navItems.map((item, index) => (
-                  <motion.div
-                    key={item.key}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.1 }}
+      {open && (
+        <div
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("main")}
+          className="fixed inset-0 z-[90] flex flex-col bg-background px-5 pb-10 pt-24 md:hidden"
+        >
+          <nav aria-label={t("main")} className="flex-1">
+            <ul className="divide-y divide-border border-y border-border">
+              {NAV_ITEMS.map((item, i) => (
+                <li key={item.key} className="rise" style={{ "--d": i } as React.CSSProperties}>
+                  <Link
+                    href={item.href}
+                    onClick={close}
+                    className="flex items-baseline justify-between py-5 font-display text-4xl tracking-[-0.02em] text-foreground"
                   >
-                    <Link
-                      href={item.href}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="text-4xl font-black tracking-tighter text-foreground hover:text-primary transition-colors duration-300 cursor-pointer hover:scale-105 inline-block"
-                    >
-                      {t(item.key)}
-                    </Link>
-                  </motion.div>
-                ))}
-              </nav>
-
-              <motion.div 
-                className="flex items-center gap-6 mt-8"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4 }}
-              >
-                <LanguageSwitcher />
-                <ThemeToggle />
-                <Link 
-                  href="https://github.com/berkay-turkyilmaz" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="p-3 bg-secondary/70 hover:bg-secondary rounded-full cursor-pointer transition-all hover:scale-110 border border-border/50"
-                  aria-label={t("github_aria")}
-                >
-                  <Github className="w-6 h-6" />
-                </Link>
-              </motion.div>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                    {t(item.key)}
+                    <span className="font-mono text-xs text-muted-foreground">0{i + 1}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <div className="mt-8 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+            <Link
+              href="/resume"
+              onClick={close}
+              className="inline-flex h-11 items-center gap-1 rounded-full bg-foreground px-5 text-sm font-medium text-background"
+            >
+              {t("resume")}
+              <ArrowUpRight className="h-4 w-4" aria-hidden />
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 }

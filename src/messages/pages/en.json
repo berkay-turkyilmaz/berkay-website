@@ -1,0 +1,164 @@
+{
+  "Work": {
+    "kinds": {
+      "live": "Live product",
+      "experiment": "Experiment",
+      "tool": "Tool",
+      "demo": "Demo",
+      "private": "Private",
+      "ongoing": "Always in progress"
+    },
+    "labels": {
+      "what": "What is it?",
+      "highlights": "What's in it",
+      "notes": "Technical notes",
+      "stack": "Built with",
+      "visit": "Open project",
+      "visit_external": "Open site",
+      "back": "All projects",
+      "next": "Next project",
+      "year": "Year",
+      "type": "Type",
+      "no_public": "This project is private; there is no public link.",
+      "opens_new_tab": "Opens in a new tab"
+    },
+    "items": {
+      "meetora": {
+        "title": "Meetora",
+        "summary": "A platform for discovering cafés and event venues by the hour and sending booking requests.",
+        "image_alt": "Meetora home page: venue search form for events",
+        "what": "A live product that connects people looking for a venue for a birthday, afterwork or brunch with venue owners. The product is live at getmeetora.com.",
+        "highlights_title": "What the product offers",
+        "highlights": [
+          "Venue search by event type, location and date.",
+          "Transparent hourly pricing and quick booking requests.",
+          "Secure online payment and a refer-a-friend discount."
+        ],
+        "notes": [
+          "A detailed case study is on the way; for now you can explore the live product directly."
+        ]
+      },
+      "ai-lab": {
+        "title": "AI Lab",
+        "summary": "A streaming assistant powered by Groq, chat with your documents and a text analyzer.",
+        "image_alt": "AI Lab context analyzer interface",
+        "what": "An experiment space holding an assistant called BEX, chat with documents and a context analyzer. All of it runs in the browser; no account needed.",
+        "highlights": [
+          "Streaming answers from Llama models on Groq.",
+          "Every chat has its own URL; history is stored only in your browser.",
+          "Document chat: PDFs or text are split into chunks and the most relevant parts are passed to the model.",
+          "Analyzer: splits text into chunks and shows their weight in the context window as a heatmap and graph."
+        ],
+        "notes": [
+          "API routes have rate and input limits; the Groq key lives only on the server.",
+          "The provider layer is a single file, so switching models means editing one place."
+        ]
+      },
+      "english-path": {
+        "title": "EnglishPath",
+        "summary": "Vocabulary from A1 to C1, ten word games, spaced repetition and level-based exams.",
+        "image_alt": "EnglishPath word games page",
+        "what": "A study tool I built for myself while learning English. Flashcards, games and exams share one progress record.",
+        "highlights": [
+          "About 680 words from A1 to C1, each with a Turkish meaning, pronunciation and example sentence.",
+          "Ten games: Taboo, Heads Up, Charades, Category Blitz, Passaparola and five solo word games.",
+          "Spaced repetition: words you know come back later, words you miss come back soon.",
+          "Level-based exam: more than 140 questions from A1 to C1."
+        ],
+        "notes": [
+          "Progress is kept only in the browser (localStorage); no account needed.",
+          "Word lists were written by hand; if a word appears at two levels, the lower level wins."
+        ]
+      },
+      "booking-demo": {
+        "title": "Booking demo",
+        "summary": "An appointment flow driven by n8n webhooks: form, validation and workflow.",
+        "image_alt": "",
+        "what": "An appointment form for a barber shop. Behind the form, server-side validation and an n8n workflow do the work.",
+        "highlights": [
+          "Service, barber, date and time selection; Turkish phone number validation.",
+          "The form posts to a server endpoint, which validates and forwards to the n8n webhook.",
+          "Requests are rate limited."
+        ],
+        "notes": [
+          "The webhook address is never sent to the browser; it stays on the server.",
+          "This is a demo, not connected to a real shop."
+        ]
+      },
+      "finance-bot": {
+        "title": "Finance bot",
+        "summary": "n8n workflows that pull financial data from external APIs, process it and report on it.",
+        "image_alt": "",
+        "what": "Automated data flows I set up to cut manual work. They pull data from external sources, process it and turn it into reports.",
+        "highlights": [
+          "Workflows designed in n8n.",
+          "Pulling, transforming and reporting data from external APIs."
+        ],
+        "notes": [
+          "It is for personal use, so there is no public link or screenshot."
+        ]
+      },
+      "this-site": {
+        "title": "This site",
+        "summary": "My personal space, built with Next.js 16, next-intl and Tailwind 4, where I try everything out.",
+        "image_alt": "This site's home page",
+        "what": "The site you're looking at. Both a showcase and the place where I try out what I learn.",
+        "highlights": [
+          "Next.js 16 App Router; pages are statically generated.",
+          "Turkish and English content; languages without finished translations are hidden from search engines.",
+          "Light and dark themes, reduced-motion support, keyboard navigation.",
+          "Contact and booking forms are validated on the server and rate limited."
+        ],
+        "notes": [
+          "The source code is public on GitHub.",
+          "Photos are from Pexels; screenshots are from my own projects."
+        ]
+      }
+    }
+  },
+  "ProjectsIndex": {
+    "eyebrow": "Projects",
+    "title": "Things I've <em>made</em>.",
+    "lead": "Live products, experiments, tools and demos. I've said plainly what each one is and what's in it.",
+    "filter_all": "All"
+  },
+  "AboutMe": {
+    "eyebrow": "About",
+    "title": "Berkay, <em>from Istanbul</em>.",
+    "lead": "I'm a frontend developer. I turn designs into things that work reliably in the browser, and in my spare time I build my own products.",
+    "photo_alt": "Galata Tower in the light of the setting sun",
+    "photo_caption": "Galata, Istanbul",
+    "story_title": "My story in short",
+    "cta_title": "Shall we work together?",
+    "cta_text": "Write for an opportunity, a collaboration, or just to say hello.",
+    "cta_button": "Write to me"
+  },
+  "ContactMe": {
+    "eyebrow": "Contact",
+    "title": "Let's <em>talk</em> about something.",
+    "lead": "E-mail is the fastest way. You can also use the form; your message reaches me directly.",
+    "direct": "Direct",
+    "elsewhere": "Elsewhere",
+    "photo_alt": "A ferry and Galata Tower in Istanbul",
+    "form_title": "Leave a message",
+    "copy": "Copy e-mail",
+    "copied": "Copied",
+    "success": "Your message reached me, thank you. I will try to reply as soon as I can.",
+    "success_again": "Send another message",
+    "submit": "Send message",
+    "submitting": "Sending…",
+    "error": "The message could not be sent. You can e-mail me directly:",
+    "err_name": "Please enter your name (at least 2 letters).",
+    "err_email": "Enter a valid e-mail address.",
+    "err_subject": "Choose a subject.",
+    "err_message": "Your message should be at least 20 characters."
+  },
+  "BlogIndex": {
+    "eyebrow": "Writing",
+    "title": "I take notes on <em>what I learn</em>.",
+    "lead": "Short, practical notes.",
+    "photo_alt": "An open notebook and pen on a wooden table by a window",
+    "read": "Read",
+    "all": "All"
+  }
+}

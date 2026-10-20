@@ -1,111 +1,97 @@
 "use client";
 
-import { Github, Linkedin, Mail, Cpu } from "lucide-react";
-import { Link } from "@/i18n/routing";
+import { ArrowUpRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/routing";
 import { SiteLogo } from "@/components/layout/site-logo";
 import { siteConfig } from "@/data/site-config";
+
+const PAGES = [
+  { key: "projects", href: "/projects" },
+  { key: "about", href: "/about" },
+  { key: "blog", href: "/blog" },
+  { key: "lab", href: "/ai-lab/chat" },
+  { key: "resume", href: "/resume" },
+  { key: "contact", href: "/contact" },
+] as const;
+
+const PHOTO_CREDITS = [
+  { name: "Zeynep Şahin", href: "https://www.pexels.com/photo/foggy-panorama-of-bosporus-and-15-july-martyrs-bridge-istanbul-turkey-19770635/" },
+  { name: "hkubrakisa", href: "https://www.pexels.com/photo/skyline-of-istanbul-viewed-from-the-bosphorus-strait-on-a-foggy-day-24863575/" },
+  { name: "dkomov", href: "https://www.pexels.com/photo/home-office-laptop-with-coffee-and-notebook-34803970/" },
+] as const;
 
 export function Footer() {
   const t = useTranslations("Footer");
   const tNav = useTranslations("Navigation");
 
-  const siteLinks = [
-    { label: tNav("home"),     href: "/" },
-    { label: tNav("about"),    href: "/about" },
-    { label: tNav("projects"), href: "/projects" },
-    { label: tNav("blog"),     href: "/blog" },
-    { label: tNav("lab"),      href: "/ai-lab" },
-    { label: tNav("resume"),   href: "/resume" },
-    { label: tNav("contact"),  href: "/contact" },
-  ];
-
-  const socialLinks = [
-    { icon: Github,   href: siteConfig.github,               label: "GitHub" },
-    { icon: Linkedin, href: siteConfig.linkedin,             label: "LinkedIn" },
-    { icon: Mail,     href: `mailto:${siteConfig.email}`,    label: "Email" },
-  ];
-
   return (
-    <footer className="w-full border-t border-border/40 bg-background">
-      {/* Dekoratif üst çizgi */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-
-      <div className="container mx-auto px-6 lg:px-12 py-12 lg:py-16">
-        {/* ── Ana Grid ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
-
-          {/* Sütun 1: Marka */}
-          <div className="space-y-4 sm:col-span-2 lg:col-span-1">
+    <footer className="w-full border-t border-border">
+      <div className="mx-auto w-full max-w-[1200px] px-5 py-14 sm:px-8 md:py-20">
+        <div className="grid gap-12 md:grid-cols-12 md:gap-8">
+          <div className="md:col-span-5">
             <SiteLogo />
-            <p className="text-sm text-muted-foreground leading-relaxed max-w-xs">
-              {t("description")}
-            </p>
-            {/* Sosyal ikonlar */}
-            <div className="flex items-center gap-2 pt-1">
-              {socialLinks.map((social) => {
-                const Icon = social.icon;
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target={social.href.startsWith("mailto") ? undefined : "_blank"}
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="flex items-center justify-center w-9 h-9 rounded-xl border border-border/50 bg-secondary/30 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/5 transition-all duration-200"
-                  >
-                    <Icon className="w-4 h-4" />
-                  </a>
-                );
-              })}
-            </div>
+            <p className="mt-5 max-w-sm text-sm leading-relaxed text-muted-foreground">{t("tagline")}</p>
           </div>
 
-          {/* Sütun 2: Sistem Haritası */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
-              {t("explore")}
-            </h4>
-            <nav className="grid grid-cols-2 gap-x-4 gap-y-2.5">
-              {siteLinks.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="text-sm text-muted-foreground font-medium hover:text-primary transition-colors duration-150 truncate"
-                >
-                  {item.label}
-                </Link>
+          <nav aria-label={t("pages")} className="md:col-span-3 md:col-start-7">
+            <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("pages")}</h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {PAGES.map((p) => (
+                <li key={p.key}>
+                  <Link href={p.href} className="text-foreground transition-colors hover:text-primary">
+                    {tNav(p.key)}
+                  </Link>
+                </li>
               ))}
-            </nav>
-          </div>
+            </ul>
+          </nav>
 
-          {/* Sütun 3: İletişim */}
-          <div className="space-y-4">
-            <h4 className="text-[11px] font-bold uppercase tracking-[0.18em] text-foreground/60">
-              {t("stay_connected")}
-            </h4>
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              {t("project_idea")}{" "}
-              <a
-                href={`mailto:${siteConfig.email}`}
-                className="text-primary font-semibold hover:underline underline-offset-2 break-all"
-              >
-                {siteConfig.email}
-              </a>
-            </p>
+          <div className="md:col-span-3">
+            <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("elsewhere")}</h2>
+            <ul className="mt-5 space-y-3 text-sm">
+              {[
+                { label: "GitHub", href: siteConfig.github },
+                { label: "LinkedIn", href: siteConfig.linkedin },
+                { label: siteConfig.email, href: `mailto:${siteConfig.email}` },
+              ].map((l) => (
+                <li key={l.label}>
+                  <a
+                    href={l.href}
+                    target={l.href.startsWith("mailto") ? undefined : "_blank"}
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-foreground transition-colors hover:text-primary"
+                  >
+                    {l.label}
+                    <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        {/* ── Alt Bar ── */}
-        <div className="mt-10 pt-6 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">
-            {t("copyright", { year: new Date().getFullYear() })}
+        <div className="mt-16 flex flex-col gap-3 border-t border-border pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <p>
+            © {new Date().getFullYear()} {siteConfig.fullName}. {t("built_with")}
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground/70">
-            <Cpu className="h-3 w-3 text-primary/70 shrink-0" />
-            <span>{t("powered_by")}</span>
-            <span className="text-primary/70">{t("stack_label")}</span>
-          </div>
+          <p>
+            {t("photos")}{" "}
+            {PHOTO_CREDITS.map((c, i) => (
+              <span key={c.name}>
+                <a
+                  href={c.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline decoration-border underline-offset-2 transition-colors hover:text-foreground"
+                >
+                  {c.name}
+                </a>
+                {i < PHOTO_CREDITS.length - 1 ? ", " : ""}
+              </span>
+            ))}{" "}
+            · Pexels
+          </p>
         </div>
       </div>
     </footer>

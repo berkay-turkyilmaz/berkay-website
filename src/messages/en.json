@@ -1,25 +1,25 @@
   {
     "Metadata": {
-      "description": "Software engineer architecting modern web technologies, scalable interfaces, and AI-driven autonomous systems.",
-      "site_name": "BERKAY",
-      "site_title": "BERKAY | Software Engineer & AI Architect",
-      "og_alt": "Berkay Türkyılmaz Portfolio",
-      "og_image_headline": "Full-stack engineer who ships products.",
-      "og_image_tagline": "Next.js · Supabase · n8n · Groq LLM",
+      "description": "Frontend Developer in Istanbul building interfaces at enterprise scale on Türk Telekom projects. Side projects with Next.js, n8n and AI.",
+      "site_name": "Berkay Türkyılmaz",
+      "site_title": "Berkay Türkyılmaz | Frontend Developer",
+      "og_alt": "Berkay Türkyılmaz, Frontend Developer",
+      "og_image_headline": "I build interfaces at enterprise scale.",
+      "og_image_tagline": "Frontend Developer · Istanbul",
       "projects_title": "Projects",
       "projects_description": "Selected works — Next.js apps, n8n automations, and scalable product architectures.",
       "blog_title": "Blog",
       "blog_description": "Technical articles on web architecture, AI integrations, and automation.",
-      "contact_title": "Contact | BERKAY",
-      "contact_description": "Get in touch with Berkay Türkyılmaz for full-stack development, AI integration, or technical consulting.",
+      "contact_title": "Contact",
+      "contact_description": "Get in touch with Berkay Türkyılmaz about a role, a collaboration or a project.",
       "ai_lab_title": "AI Lab",
       "ai_lab_description": "Interactive AI workspace — BEX assistant, document analysis, EnglishPath, and experiments.",
       "english_path_title": "EnglishPath",
       "english_path_description": "Classroom English games, vocabulary drills, grammar, and level exams.",
       "booking_title": "Booking Demo",
       "booking_description": "Interactive barber shop appointment system — n8n webhook integration showcase.",
-      "about_title": "About | BERKAY",
-      "about_description": "Full-stack engineer profile, technical skills, and the stack behind production-ready products.",
+      "about_title": "About",
+      "about_description": "Frontend Developer profile: experience, way of working and side projects.",
       "services_title": "Services | BERKAY",
       "services_description": "Full-stack development, AI integration, and technical consulting services for founders and startups.",
       "resume_title": "Resume | BERKAY",
@@ -40,7 +40,130 @@
       "resume": "Resume",
       "github_aria": "GitHub profile",
       "menu_open": "Open menu",
-      "menu_close": "Close menu"
+      "menu_close": "Close menu",
+      "skip": "Skip to content",
+      "main": "Main navigation"
+    },
+    "Home": {
+      "hero": {
+        "eyebrow": "Frontend Developer",
+        "local_time": "Istanbul time",
+        "title": "I build interfaces at enterprise scale, and small <em>products</em> of my own on the <em>side</em>.",
+        "lead": "Hi, I'm Berkay. On Türk Telekom projects I turn Figma designs into fast, accessible and scalable interfaces. Outside work I ship the things I try out with Next.js, n8n and AI.",
+        "cta_work": "See my work",
+        "cta_contact": "Write to me",
+        "cta_cv": "Résumé",
+        "fact_now_label": "Right now",
+        "fact_now_value": "Frontend Developer at Türk Telekom, since October 2022",
+        "fact_live_label": "Live side projects",
+        "fact_code_label": "Code",
+        "fact_code_value": "{n} public repos on GitHub",
+        "photo_alt": "The Bosphorus Bridge in morning haze with a seagull and the Istanbul skyline",
+        "photo_caption": "Bosphorus, morning"
+      },
+      "work": {
+        "eyebrow": "Selected work",
+        "title": "Things you can open and use.",
+        "intro": "Most are side projects or tools I built while learning. I've said plainly which is which.",
+        "all": "All projects",
+        "more": "More experiments",
+        "opens_new_tab": "Opens in a new tab",
+        "meetora": {"title":"Meetora","kind":"Live product","desc":"A platform for discovering cafés and event venues by the hour and sending booking requests: search, filters and secure online payment.","image_alt":"Meetora home page: venue search form for events"},
+        "ai_lab": {
+          "title": "AI Lab",
+          "kind": "Experiment",
+          "desc": "A streaming assistant (BEX) powered by Groq, chat with your documents and a text analyzer. All of it runs in the browser.", "image_alt": "AI Lab context analyzer interface" },
+        "english": {
+          "title": "EnglishPath",
+          "kind": "Tool",
+          "desc": "Vocabulary from A1 to C1, ten word games, spaced repetition and level-based exams. Built for myself while learning English.", "image_alt": "EnglishPath word games page" },
+        "booking": {
+          "title": "Booking demo",
+          "kind": "Demo",
+          "desc": "An appointment flow driven by n8n webhooks: form, validation and workflow."
+        },
+        "finance": {
+          "title": "Finance bot",
+          "kind": "Private",
+          "desc": "n8n workflows that pull financial data from external APIs, process it and report on it."
+        },
+        "site": {
+          "title": "This site",
+          "kind": "Always in progress",
+          "desc": "My personal space, built with Next.js 16, next-intl and Tailwind 4, where I try everything out.", "image_alt": "This site's home page" }
+      },
+      "about": {
+        "eyebrow": "About",
+        "title": "From maps to <em>interfaces</em>.",
+        "photo_alt": "An open laptop, a coffee cup and a notebook on a wooden desk",
+        "p_1": "I got into the web in 2017 as an intern at an agency. My job has been the same since: take a design and turn it into something that works reliably in the browser and looks right on every screen.",
+        "p_2": "Since 2022 I've been writing the frontend of web applications used by customers and internal teams at Türk Telekom (One Bilgi Sistemleri). I work with Agile teams in Jira and coordinate data integrations with the backend side.",
+        "p_3": "Outside work I turn whatever I'm curious about into my own products: automation with n8n, AI experiments with Groq, my English study tool. Everything on this site is a trace of things I made while learning.",
+        "notes": {
+          "location": {
+            "label": "Location",
+            "value": "Istanbul, Türkiye"
+          },
+          "mode": {
+            "label": "Way of working",
+            "value": "Remote and hybrid"
+          },
+          "lang": {
+            "label": "Languages",
+            "value": "Turkish, English (A2, improving)"
+          }
+        },
+        "principles_title": "How I work",
+        "p1": {
+          "title": "True to the design, solid on every screen",
+          "desc": "I code Figma and Zeplin handoffs faithfully, fully responsive and cross-browser compatible."
+        },
+        "p2": {
+          "title": "Accessible and scalable",
+          "desc": "In high-traffic enterprise products the interface has to work for everyone and hold up as it grows."
+        },
+        "p3": {
+          "title": "Together with the team",
+          "desc": "I work with UX/UI and backend teams in Agile, with clear communication through Jira."
+        }
+      },
+      "experience": {
+        "eyebrow": "Experience",
+        "title": "So far",
+        "toolbox": "Toolbox",
+        "side_stack": "On side projects"
+      },
+      "code": {
+        "eyebrow": "Code",
+        "title": "The code <em>itself</em>.",
+        "intro": "My public projects on GitHub. Small but honest: the path from the C# and ASP.NET experiments I wrote in high school to this site.",
+        "repo_count": "{n} public repos",
+        "fallback_description": "The source code of this site: Next.js 16, next-intl and Tailwind 4.",
+        "contributions": "{n} contributions in the last 12 months",
+        "opens_new_tab": "Opens in a new tab"
+      },
+      "writing": {
+        "eyebrow": "Writing",
+        "title": "I take notes on what I learn.",
+        "intro": "Short, practical notes.",
+        "all": "All posts"
+      },
+      "github": {
+        "title": "Recent on GitHub",
+        "pushed": "pushed commits",
+        "created": "created a {kind}",
+        "starred": "starred",
+        "opens_new_tab": "Opens in a new tab"
+      },
+      "contact": {
+        "eyebrow": "Contact",
+        "title": "If you have an idea or a role in mind, <em>let's talk</em>.",
+        "lead": "E-mail is the fastest way. Write for a new opportunity, a collaboration, or just to say hello.",
+        "copy": "Copy e-mail",
+        "copied": "Copied",
+        "cv": "Résumé",
+        "form": "Contact form"
+      }
     },
     "HomePage": {
       "badge": "Available for freelance & consulting",
@@ -564,7 +687,12 @@
       "write_me": "→",
       "powered_by": "ARCHITECTURE INFRASTRUCTURE",
       "copyright": "© {year} BERKAY TURKYILMAZ.",
-      "stack_label": "NEXT.JS 16"
+      "stack_label": "NEXT.JS 16",
+      "tagline": "Small, real things made in Istanbul while learning.",
+      "pages": "Pages",
+      "elsewhere": "Elsewhere",
+      "built_with": "Built with Next.js.",
+      "photos": "Photos:"
     },
     "LanguageSwitcher": {
       "label": "Change Language Model"

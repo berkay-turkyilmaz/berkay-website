@@ -1,29 +1,32 @@
 "use client";
 
 import { Link } from "@/i18n/routing";
-import { BRAND_NAME, LogoMark } from "@/components/brand/logo-mark";
+import { siteConfig } from "@/data/site-config";
 import { cn } from "@/lib/utils";
 
 type SiteLogoProps = {
   className?: string;
 };
 
+/** Typographic wordmark: serif name with a single accent dot. */
 export function SiteLogo({ className }: SiteLogoProps) {
   return (
     <Link
       href="/"
       className={cn(
-        "group relative z-50 flex items-center gap-2.5 outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-lg",
+        "group relative z-50 inline-flex items-baseline gap-0.5 rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-4 focus-visible:ring-offset-background",
         className
       )}
-      aria-label={BRAND_NAME}
+      aria-label={siteConfig.fullName}
     >
-      <LogoMark
-        size={34}
-        className="transition-transform duration-300 group-hover:scale-[1.05] group-active:scale-[0.98]"
-      />
-      <span className="font-black text-sm tracking-[0.18em] text-foreground transition-colors duration-300 group-hover:text-foreground/90 sm:text-[15px]">
-        {BRAND_NAME}
+      <span className="font-display text-[1.45rem] leading-none tracking-[-0.01em] text-foreground">
+        {siteConfig.fullName}
+      </span>
+      <span
+        className="font-display text-[1.45rem] leading-none text-primary transition-transform duration-300 group-hover:translate-y-[-2px]"
+        aria-hidden
+      >
+        .
       </span>
     </Link>
   );

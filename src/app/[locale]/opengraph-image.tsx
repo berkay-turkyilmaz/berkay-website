@@ -1,9 +1,14 @@
 import { ImageResponse } from "next/og";
 import { getTranslations } from "next-intl/server";
 
-export const alt = "BERKAY — Software Engineer & AI Architect";
+export const alt = "Berkay Türkyılmaz — Frontend Developer";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+const PAPER = "#F6F2EA";
+const INK = "#1B1915";
+const MUTED = "#6B625A";
+const ACCENT = "#BA3F12";
 
 export default async function OpenGraphImage({
   params,
@@ -21,90 +26,49 @@ export default async function OpenGraphImage({
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          padding: "72px",
-          background: "linear-gradient(135deg, #09090b 0%, #18181b 50%, #0f172a 100%)",
-          color: "#fafafa",
-          fontFamily: "system-ui, sans-serif",
+          justifyContent: "space-between",
+          padding: "72px 80px",
+          background: PAPER,
+          color: INK,
+          fontFamily: "Georgia, 'Times New Roman', serif",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            marginBottom: "32px",
-          }}
-        >
+        <div style={{ display: "flex", alignItems: "baseline", fontSize: 34 }}>
+          <span>Berkay Türkyılmaz</span>
+          <span style={{ color: ACCENT }}>.</span>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              width: "8px",
-              height: "8px",
-              borderRadius: "50%",
-              background: "#14b8a6",
-            }}
-          />
-          <span
-            style={{
-              fontSize: "18px",
-              fontWeight: 700,
-              letterSpacing: "0.3em",
-              color: "#14b8a6",
-              textTransform: "uppercase",
+              fontSize: 84,
+              lineHeight: 1.04,
+              letterSpacing: "-0.02em",
+              maxWidth: 980,
             }}
           >
-            BERKAY TÜRKYILMAZ
-          </span>
-        </div>
-
-        <div
-          style={{
-            fontSize: 58,
-            fontWeight: 900,
-            lineHeight: 1.1,
-            maxWidth: 900,
-            marginBottom: "24px",
-          }}
-        >
-          {t("og_image_headline")}
-        </div>
-
-        <div
-          style={{
-            fontSize: 26,
-            color: "#a1a1aa",
-            maxWidth: 700,
-            lineHeight: 1.5,
-            marginBottom: "40px",
-          }}
-        >
-          {t("og_image_tagline")}
+            {t("og_image_headline")}
+          </div>
+          <div
+            style={{
+              marginTop: 32,
+              fontSize: 28,
+              color: MUTED,
+              fontFamily: "system-ui, sans-serif",
+            }}
+          >
+            {t("og_image_tagline")}
+          </div>
         </div>
 
         <div
           style={{
             display: "flex",
-            alignItems: "center",
-            gap: "24px",
-            padding: "16px 24px",
-            background: "rgba(255,255,255,0.04)",
-            borderRadius: "12px",
-            border: "1px solid rgba(255,255,255,0.08)",
+            height: 6,
+            width: 120,
+            background: ACCENT,
           }}
-        >
-          {["Next.js 16", "TypeScript", "AI Systems", "7 Languages"].map((tag) => (
-            <span
-              key={tag}
-              style={{
-                fontSize: "16px",
-                color: "#71717a",
-                fontWeight: 600,
-              }}
-            >
-              {tag}
-            </span>
-          ))}
-        </div>
+        />
       </div>
     ),
     { ...size }
