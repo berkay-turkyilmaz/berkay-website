@@ -41,6 +41,7 @@
       "github_aria": "GitHub profile",
       "menu_open": "Open menu",
       "menu_close": "Close menu",
+    "opens_new_tab": "Opens in a new tab",
       "skip": "Skip to content",
       "main": "Main navigation"
     },
@@ -51,15 +52,14 @@
         "title": "I build interfaces at enterprise scale, and small <em>products</em> of my own on the <em>side</em>.",
         "lead": "Hi, I'm Berkay. On Türk Telekom projects I turn Figma designs into fast, accessible and scalable interfaces. Outside work I ship the things I try out with Next.js, n8n and AI.",
         "cta_work": "See my work",
-        "cta_contact": "Write to me",
+        "cta_contact": "My GitHub",
         "cta_cv": "Résumé",
         "fact_now_label": "Right now",
         "fact_now_value": "Frontend Developer at Türk Telekom, since October 2022",
         "fact_live_label": "Live side projects",
         "fact_code_label": "Code",
         "fact_code_value": "{n} public repos on GitHub",
-        "photo_alt": "The Bosphorus Bridge in morning haze with a seagull and the Istanbul skyline",
-        "photo_caption": "Bosphorus, morning"
+        "photo_alt": "The Bosphorus Bridge in morning haze with a seagull and the Istanbul skyline"
       },
       "work": {
         "eyebrow": "Selected work",
@@ -679,20 +679,12 @@
       }
     },
     "Footer": {
-      "description": "Full-stack engineering. AI integration. Real products.",
-      "system_status": "All Systems: Online & Stable",
-      "explore": "System Map",
-      "stay_connected": "Communication Networks",
-      "project_idea": "Have a project?",
-      "write_me": "→",
-      "powered_by": "ARCHITECTURE INFRASTRUCTURE",
-      "copyright": "© {year} BERKAY TURKYILMAZ.",
-      "stack_label": "NEXT.JS 16",
       "tagline": "Small, real things made in Istanbul while learning.",
       "pages": "Pages",
       "elsewhere": "Elsewhere",
-      "built_with": "Built with Next.js.",
-      "photos": "Photos:"
+      "github_label": "GitHub",
+      "github_cta": "All my code lives here",
+      "opens_new_tab": "Opens in a new tab"
     },
     "LanguageSwitcher": {
       "label": "Change Language Model"

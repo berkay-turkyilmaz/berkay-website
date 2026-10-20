@@ -36,9 +36,6 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
                 />
               </div>
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" aria-hidden />
-              <figcaption className="absolute inset-x-0 bottom-0 p-4 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90">
-                {t("photo_caption")}
-              </figcaption>
             </figure>
           }
         />

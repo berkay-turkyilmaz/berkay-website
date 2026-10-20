@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Github } from "lucide-react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { getGitHubProfile, GITHUB_URL } from "@/lib/github";
@@ -72,12 +72,16 @@ export async function Hero() {
               {t("cta_work")}
               <ArrowDown className="h-4 w-4 transition-transform duration-300 group-hover:translate-y-0.5" aria-hidden />
             </a>
-            <Link
-              href="/contact"
-              className="inline-flex h-12 items-center rounded-full border border-border px-6 text-sm font-medium text-foreground transition-colors duration-300 hover:border-foreground"
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex h-12 items-center gap-2 rounded-full border border-border px-6 text-sm font-medium text-foreground transition-colors duration-300 hover:border-foreground"
             >
+              <Github className="h-4 w-4" aria-hidden />
               {t("cta_contact")}
-            </Link>
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+            </a>
             <Link
               href="/resume"
               className="inline-flex h-12 items-center px-3 text-sm font-medium text-muted-foreground underline decoration-border underline-offset-[6px] transition-colors hover:text-foreground hover:decoration-foreground"
@@ -160,10 +164,6 @@ export async function Hero() {
               className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent"
               aria-hidden
             />
-            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between p-4 font-mono text-[11px] uppercase tracking-[0.18em] text-white/90">
-              <span>{t("photo_caption")}</span>
-              <span aria-hidden>41.04°N 29.04°E</span>
-            </figcaption>
           </div>
         </figure>
       </div>

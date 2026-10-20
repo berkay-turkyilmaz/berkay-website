@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { Link, usePathname } from "@/i18n/routing";
 import { useTranslations } from "next-intl";
-import { ArrowUpRight, Menu, X } from "lucide-react";
+import { ArrowUpRight, Github, Menu, X } from "lucide-react";
+import { siteConfig } from "@/data/site-config";
 import LanguageSwitcher from "@/components/ui/language-switcher";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { SiteLogo } from "@/components/layout/site-logo";
@@ -91,13 +92,17 @@ export function Header() {
           <div className="hidden items-center gap-1.5 md:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            <Link
-              href="/resume"
-              className="ml-2 inline-flex h-9 items-center gap-1 rounded-full border border-border px-4 text-sm text-foreground transition-colors duration-300 hover:border-foreground"
+            <a
+              href={siteConfig.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ml-2 inline-flex h-9 items-center gap-1.5 rounded-full bg-foreground px-4 text-sm font-medium text-background transition-transform duration-300 hover:-translate-y-0.5"
             >
-              {t("resume")}
+              <Github className="h-3.5 w-3.5" aria-hidden />
+              GitHub
               <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-            </Link>
+              <span className="sr-only">{t("opens_new_tab")}</span>
+            </a>
           </div>
 
           <button
@@ -142,14 +147,16 @@ export function Header() {
               <LanguageSwitcher />
               <ThemeToggle />
             </div>
-            <Link
-              href="/resume"
-              onClick={close}
-              className="inline-flex h-11 items-center gap-1 rounded-full bg-foreground px-5 text-sm font-medium text-background"
+            <a
+              href={siteConfig.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 items-center gap-1.5 rounded-full bg-foreground px-5 text-sm font-medium text-background"
             >
-              {t("resume")}
+              <Github className="h-4 w-4" aria-hidden />
+              GitHub
               <ArrowUpRight className="h-4 w-4" aria-hidden />
-            </Link>
+            </a>
           </div>
         </div>
       )}

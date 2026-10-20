@@ -1,33 +1,32 @@
 import { readFileSync, writeFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import sharp from "sharp";
 
+/** Renders public/icon.svg into a multi-size public/favicon.ico (PNG-compressed entries). */
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const svgPath = join(root, "public/icon.svg");
-const pngPath = join(root, "public/favicon-32.png");
-const icoPath = join(root, "public/favicon.ico");
+const svg = readFileSync(join(root, "public/icon.svg"));
+const sizes = [16, 32, 48];
 
-execFileSync(
-  "npx",
-  ["--yes", "@resvg/resvg-js-cli", svgPath, pngPath, "--fit-width", "32", "--fit-height", "32"],
-  { stdio: "inherit", shell: true }
-);
+const pngs = await Promise.all(sizes.map((s) => sharp(svg, { density: 384 }).resize(s, s).png().toBuffer()));
 
-const png = readFileSync(pngPath);
-const offset = 6 + 16;
 const header = Buffer.alloc(6);
 header.writeUInt16LE(0, 0);
 header.writeUInt16LE(1, 2);
-header.writeUInt16LE(1, 4);
+header.writeUInt16LE(sizes.length, 4);
 
-const entry = Buffer.alloc(16);
-entry[0] = 32;
-entry[1] = 32;
-entry.writeUInt16LE(1, 4);
-entry.writeUInt16LE(32, 6);
-entry.writeUInt32LE(png.length, 8);
-entry.writeUInt32LE(offset, 12);
+let offset = 6 + 16 * sizes.length;
+const entries = pngs.map((png, i) => {
+  const e = Buffer.alloc(16);
+  e[0] = sizes[i];
+  e[1] = sizes[i];
+  e.writeUInt16LE(1, 4);
+  e.writeUInt16LE(32, 6);
+  e.writeUInt32LE(png.length, 8);
+  e.writeUInt32LE(offset, 12);
+  offset += png.length;
+  return e;
+});
 
-writeFileSync(icoPath, Buffer.concat([header, entry, png]));
-console.log(`favicon.ico written (${header.length + entry.length + png.length} bytes)`);
+writeFileSync(join(root, "public/favicon.ico"), Buffer.concat([header, ...entries, ...pngs]));
+console.log(`favicon.ico written (${offset} bytes)`);

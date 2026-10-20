@@ -110,8 +110,7 @@
           "İletişim ve rezervasyon formları sunucuda doğrulanır, hız sınırı vardır."
         ],
         "notes": [
-          "Kaynak kodu GitHub'da herkese açık.",
-          "Fotoğraflar Pexels'ten, ekran görüntüleri kendi projelerimden."
+          "Kaynak kodu GitHub'da herkese açık."
         ]
       }
     }
@@ -127,7 +126,6 @@
     "title": "Berkay, <em>İstanbul'dan</em>.",
     "lead": "Frontend geliştiricisiyim. Tasarımı tarayıcıda sağlam çalışan bir şeye çeviriyor, boş zamanlarımda kendi ürünlerimi yapıyorum.",
     "photo_alt": "Galata Kulesi, gün batımının ışığında",
-    "photo_caption": "Galata, İstanbul",
     "story_title": "Kısaca hikâyem",
     "cta_title": "Birlikte çalışalım mı?",
     "cta_text": "Bir fırsat, iş birliği ya da sadece merhaba için yazabilirsin.",

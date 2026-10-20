@@ -110,8 +110,7 @@
           "Contact and booking forms are validated on the server and rate limited."
         ],
         "notes": [
-          "The source code is public on GitHub.",
-          "Photos are from Pexels; screenshots are from my own projects."
+          "The source code is public on GitHub."
         ]
       }
     }
@@ -127,7 +126,6 @@
     "title": "Berkay, <em>from Istanbul</em>.",
     "lead": "I'm a frontend developer. I turn designs into things that work reliably in the browser, and in my spare time I build my own products.",
     "photo_alt": "Galata Tower in the light of the setting sun",
-    "photo_caption": "Galata, Istanbul",
     "story_title": "My story in short",
     "cta_title": "Shall we work together?",
     "cta_text": "Write for an opportunity, a collaboration, or just to say hello.",

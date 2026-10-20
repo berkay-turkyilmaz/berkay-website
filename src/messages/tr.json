@@ -41,6 +41,7 @@
     "github_aria": "GitHub profili",
     "menu_open": "Menüyü aç",
     "menu_close": "Menüyü kapat",
+    "opens_new_tab": "Yeni sekmede açılır",
     "skip": "İçeriğe geç",
     "main": "Ana gezinme"
   },
@@ -51,15 +52,14 @@
       "title": "Kurumsal ölçekte <em>arayüz</em> geliştiriyorum. Kendi küçük ürünlerimi de <em>kuruyorum</em>.",
       "lead": "Merhaba, ben Berkay. Türk Telekom projelerinde Figma'dan çıkan tasarımları hızlı, erişilebilir ve ölçeklenebilir arayüzlere çeviriyorum. Mesai dışında Next.js, n8n ve yapay zekâ ile denediğim şeyleri canlıya alıyorum.",
       "cta_work": "Çalışmalarımı gör",
-      "cta_contact": "Bana yaz",
+      "cta_contact": "GitHub'ım",
       "cta_cv": "Özgeçmiş",
       "fact_now_label": "Şu an",
       "fact_now_value": "Türk Telekom'da Frontend Developer, Ekim 2022'den beri",
       "fact_live_label": "Canlı yan projeler",
       "fact_code_label": "Kod",
       "fact_code_value": "GitHub'da {n} açık repo",
-      "photo_alt": "Sabah sisinde Boğaz Köprüsü, martı ve İstanbul silueti",
-      "photo_caption": "Boğaz, sabah"
+      "photo_alt": "Sabah sisinde Boğaz Köprüsü, martı ve İstanbul silueti"
     },
     "work": {
       "eyebrow": "Seçilmiş işler",
@@ -679,20 +679,12 @@
     }
   },
   "Footer": {
-    "description": "Full-stack mühendislik. AI entegrasyonu. Gerçek ürünler.",
-    "system_status": "Tüm Sistemler: Çevrimiçi & Stabil",
-    "explore": "Sistem Haritası",
-    "stay_connected": "İletişim Ağları",
-    "project_idea": "Bir projeniz mi var?",
-    "write_me": "→",
-    "powered_by": "MİMARİ ALTYAPI",
-    "copyright": "© {year} BERKAY TURKYILMAZ.",
-    "stack_label": "NEXT.JS 16",
     "tagline": "İstanbul'dan, öğrenirken yapılmış küçük ve gerçek işler.",
     "pages": "Sayfalar",
     "elsewhere": "Başka yerlerde",
-    "built_with": "Next.js ile yazıldı.",
-    "photos": "Fotoğraflar:"
+    "github_label": "GitHub",
+    "github_cta": "Tüm kodlarım burada",
+    "opens_new_tab": "Yeni sekmede açılır"
   },
   "LanguageSwitcher": {
     "label": "Dil Modeli Değiştir"

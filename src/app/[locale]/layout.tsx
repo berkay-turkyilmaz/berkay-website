@@ -2,7 +2,7 @@ import { Geist, Geist_Mono, Instrument_Serif } from "next/font/google";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -30,6 +30,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F6F2EA" },
+    { media: "(prefers-color-scheme: dark)", color: "#161412" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
@@ -52,17 +61,21 @@ export async function generateMetadata({
       template: `%s | ${t("site_name")}`,
     },
     description: t("description"),
-    keywords: ["Next.js", "AI Architecture", "n8n", "React", "Frontend", "Enterprise Web"],
-    authors: [{ name: "Berkay Türkyılmaz" }],
+    keywords: ["Frontend Developer", "React", "TypeScript", "Next.js", "Istanbul", "portfolio"],
+    authors: [{ name: siteConfig.fullName, url: siteConfig.baseUrl }],
+    creator: siteConfig.fullName,
+    applicationName: siteConfig.fullName,
+    formatDetection: { telephone: false, email: false, address: false },
     alternates: buildLanguageAlternates("/", locale),
     ...(isIndexedLocale(locale) ? {} : { robots: { index: false, follow: true } }),
     icons: {
       icon: [
-        { url: "/favicon.ico", sizes: "any" },
+        { url: "/favicon.ico", sizes: "48x48" },
         { url: "/icon.svg", type: "image/svg+xml" },
       ],
       apple: [{ url: "/apple-icon", sizes: "180x180" }],
     },
+    twitter: { card: "summary_large_image" },
     openGraph: {
       type: "website",
       locale:
