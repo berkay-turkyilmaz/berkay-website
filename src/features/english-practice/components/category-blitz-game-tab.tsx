@@ -375,7 +375,7 @@ export function CategoryBlitzGameTab({
           key={letter}
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="w-24 h-24 rounded-2xl bg-teal-600 text-white flex items-center justify-center text-5xl font-black shadow-lg shadow-teal-600/25"
+          className="w-24 h-24 rounded-2xl bg-indigo-600 text-white flex items-center justify-center text-5xl font-black shadow-lg shadow-indigo-600/25"
         >
           {letter}
         </motion.div>

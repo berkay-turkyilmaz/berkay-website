@@ -211,7 +211,7 @@ export function HeadsUpGameTab({
       <div className="space-y-6 max-w-lg mx-auto pb-8">
         <FadeUp>
           <div className={cn(ep.heroGradient, "relative overflow-hidden rounded-2xl p-6 text-white text-center shadow-lg")}>
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(13,148,136,0.3),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(79,70,229,0.3),transparent_50%)]" />
             <motion.span
               className="text-4xl inline-block mb-2 relative"
               animate={{ y: [0, -6, 0] }}

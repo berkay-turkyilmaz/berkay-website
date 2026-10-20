@@ -28,9 +28,9 @@ export function GameTimerSlider({
   label,
 }: Props) {
   const t = useTranslations("EnglishPath.games");
-  const sliderAccent = accentClass ?? (theme ? themeTimerAccent(theme) : "accent-teal-600");
-  const clockClass = theme ? themeClockIcon(theme) : "text-teal-600";
-  const valueClass = theme ? theme.accentFg : "text-teal-700";
+  const sliderAccent = accentClass ?? (theme ? themeTimerAccent(theme) : "accent-indigo-600");
+  const clockClass = theme ? themeClockIcon(theme) : "text-indigo-600";
+  const valueClass = theme ? theme.accentFg : "text-indigo-700";
 
   return (
     <div className="space-y-2">

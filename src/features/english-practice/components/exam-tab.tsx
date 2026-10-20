@@ -173,7 +173,7 @@ export function ExamTab({
             </p>
             <div className="flex flex-wrap justify-center gap-3 mt-6">
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/15 text-xs font-medium">
-                <Sparkles className="w-3.5 h-3.5 text-teal-300" aria-hidden />
+                <Sparkles className="w-3.5 h-3.5 text-indigo-300" aria-hidden />
                 {EXAM_QUESTION_POOL.length} {t("pool_total")}
               </span>
               <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 border border-white/15 text-xs font-medium">
@@ -205,12 +205,12 @@ export function ExamTab({
                     ep.card,
                     ep.clickable,
                     "p-4 text-left transition-all disabled:opacity-40",
-                    active && "border-teal-400 ring-2 ring-teal-100 bg-teal-50/80"
+                    active && "border-indigo-400 ring-2 ring-indigo-100 bg-indigo-50/80"
                   )}
                 >
                   <p className="font-semibold text-slate-800 text-sm">{t(`modes.${mode}`)}</p>
                   <p className="text-xs text-slate-500 mt-1 leading-snug">{t(`mode_desc.${mode}`)}</p>
-                  <p className="text-[11px] font-mono text-teal-600 mt-2 font-semibold">
+                  <p className="text-[11px] font-mono text-indigo-600 mt-2 font-semibold">
                     {count} {t("pool")}
                   </p>
                 </button>
@@ -245,16 +245,16 @@ export function ExamTab({
           animate={{ scale: 1, opacity: 1 }}
           className={cn(ep.card, "p-6 sm:p-8 text-center overflow-hidden relative")}
         >
-          <div className="absolute inset-0 bg-gradient-to-br from-teal-50/80 via-white to-amber-50/40 pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-50/80 via-white to-amber-50/40 pointer-events-none" />
           <div className="relative">
             <Award
               className={cn(
                 "w-10 h-10 mx-auto mb-3",
-                pct >= 75 ? "text-amber-500" : pct >= 60 ? "text-teal-600" : "text-slate-400"
+                pct >= 75 ? "text-amber-500" : pct >= 60 ? "text-indigo-600" : "text-slate-400"
               )}
               aria-hidden
             />
-            <div className="text-5xl font-black text-teal-600 tabular-nums">%{pct}</div>
+            <div className="text-5xl font-black text-indigo-600 tabular-nums">%{pct}</div>
             <p className="text-base font-semibold text-slate-800 mt-2">{t(`grades.${gradeKey}`)}</p>
             <p className="text-sm text-slate-500 mt-1">
               {finalScore.score} / {finalScore.total} {t("correct_label")} · {t(`modes.${activeMode}`)}
@@ -264,7 +264,7 @@ export function ExamTab({
                 <Clock className="w-3.5 h-3.5" aria-hidden />
                 {durationMin}:{String(durationSec).padStart(2, "0")}
               </span>
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 font-medium">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-700 font-medium">
                 <Zap className="w-3.5 h-3.5" aria-hidden />
                 +{xpEarned} XP
               </span>
@@ -331,7 +331,7 @@ export function ExamTab({
                       {t("your_answer")}: <span className="text-rose-600">{row.given || "—"}</span>
                     </p>
                   )}
-                  <p className="text-xs text-teal-700 ml-6 mt-1 font-medium">
+                  <p className="text-xs text-indigo-700 ml-6 mt-1 font-medium">
                     {t("correct_answer")}: {row.question.answer}
                   </p>
                   <p className="text-xs text-slate-400 ml-6 mt-1">{row.question.explanation}</p>
@@ -376,7 +376,7 @@ export function ExamTab({
 
       <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
         <div
-          className="h-full bg-teal-500 transition-all duration-300"
+          className="h-full bg-indigo-500 transition-all duration-300"
           style={{ width: `${((index + 1) / questions.length) * 100}%` }}
         />
       </div>
@@ -402,8 +402,8 @@ export function ExamTab({
                     "text-left py-3.5 px-4 rounded-xl border font-medium transition-all",
                     isBinary && "text-center text-base sm:text-lg py-5",
                     selected
-                      ? "border-teal-500 bg-teal-50 text-teal-800 ring-2 ring-teal-100"
-                      : "border-slate-200 hover:border-teal-200 text-slate-700 bg-white"
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-800 ring-2 ring-indigo-100"
+                      : "border-slate-200 hover:border-indigo-200 text-slate-700 bg-white"
                   )}
                 >
                   {opt}
@@ -420,7 +420,7 @@ export function ExamTab({
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && submitAnswer()}
             placeholder={t("input_placeholder")}
-            className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-200"
+            className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-200"
             autoComplete="off"
           />
         )}

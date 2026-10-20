@@ -8,7 +8,7 @@ const BTN_PRIMARY: Record<string, string> = {
   rose: "bg-rose-600 hover:bg-rose-700 shadow-rose-600/20",
   violet: "bg-violet-600 hover:bg-violet-700 shadow-violet-600/20",
   amber: "bg-amber-500 hover:bg-amber-600 shadow-amber-500/20",
-  teal: "bg-teal-600 hover:bg-teal-700 shadow-teal-600/20",
+  cyan: "bg-cyan-600 hover:bg-cyan-700 shadow-cyan-600/20",
   indigo: "bg-indigo-600 hover:bg-indigo-700 shadow-indigo-600/20",
   sky: "bg-sky-600 hover:bg-sky-700 shadow-sky-600/20",
   emerald: "bg-emerald-600 hover:bg-emerald-700 shadow-emerald-600/20",
@@ -35,7 +35,7 @@ export function themeProgressBar(theme: ThemeTokens) {
 }
 
 export function themeBtnPrimary(theme: ThemeTokens) {
-  const colors = BTN_PRIMARY[theme.accent] ?? BTN_PRIMARY.teal;
+  const colors = BTN_PRIMARY[theme.accent] ?? BTN_PRIMARY.indigo;
   return cn(
     "cursor-pointer text-white font-semibold shadow-sm active:scale-[0.98] transition-all duration-150",
     colors
@@ -59,12 +59,12 @@ export function themeTimerAccent(theme: ThemeTokens) {
     rose: "accent-rose-600",
     violet: "accent-violet-600",
     amber: "accent-amber-500",
-    teal: "accent-teal-600",
+    cyan: "accent-cyan-600",
     indigo: "accent-indigo-600",
     sky: "accent-sky-600",
     emerald: "accent-emerald-600",
   };
-  return map[theme.accent] ?? "accent-teal-600";
+  return map[theme.accent] ?? "accent-indigo-600";
 }
 
 export function themeClockIcon(theme: ThemeTokens) {

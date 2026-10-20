@@ -84,7 +84,7 @@ export function GamesHubTab({ onNavigate }: Props) {
 
       <FadeUp delay={0.05}>
         <div className={cn(ep.surfaceMuted, "p-4 flex gap-3 text-sm text-slate-600")}>
-          <Info className="w-5 h-5 text-teal-600 shrink-0 mt-0.5" aria-hidden />
+          <Info className="w-5 h-5 text-indigo-600 shrink-0 mt-0.5" aria-hidden />
           <p className="leading-relaxed">{t("deck_why")}</p>
         </div>
       </FadeUp>

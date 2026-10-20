@@ -235,7 +235,7 @@ export function EnglishShell() {
         aria-label={t("a11y.loading")}
       >
         <div className={ep.pageMesh} />
-        <Activity className="w-8 h-8 animate-spin text-teal-600" aria-hidden />
+        <Activity className="w-8 h-8 animate-spin text-indigo-600" aria-hidden />
       </div>
     );
   }
@@ -407,13 +407,13 @@ export function EnglishShell() {
                   className={cn(
                     ep.clickable,
                     "flex flex-col items-center justify-center gap-0.5 transition-colors min-w-0 px-0.5",
-                    isActive ? (navStyle?.text ?? "text-teal-700") : "text-slate-400"
+                    isActive ? (navStyle?.text ?? "text-indigo-700") : "text-slate-400"
                   )}
                 >
                   <span
                     className={cn(
                       "flex items-center justify-center w-9 h-7 rounded-lg transition-colors",
-                      isActive && (navStyle?.bg ?? "bg-teal-50")
+                      isActive && (navStyle?.bg ?? "bg-indigo-50")
                     )}
                   >
                     <Icon className="w-5 h-5 shrink-0" />
@@ -434,7 +434,7 @@ export function EnglishShell() {
                   const moreActive = MORE_TABS.some((m) => m.id === activeTab);
                   if (!moreActive) return "text-slate-400";
                   const theme = getThemeForTab(activeTab);
-                  return theme ? themeNavActive(theme).text : "text-teal-700";
+                  return theme ? themeNavActive(theme).text : "text-indigo-700";
                 })()
               )}
             >
@@ -444,7 +444,7 @@ export function EnglishShell() {
                   MORE_TABS.some((m) => m.id === activeTab) &&
                     (getThemeForTab(activeTab)
                       ? themeNavActive(getThemeForTab(activeTab)!).bg
-                      : "bg-teal-50")
+                      : "bg-indigo-50")
                 )}
               >
                 <MoreHorizontal className="w-5 h-5 shrink-0" />
@@ -491,7 +491,7 @@ export function EnglishShell() {
                         "flex flex-col items-center gap-2 p-4 text-center font-semibold text-slate-700 text-sm min-h-[5.5rem] justify-center"
                       )}
                     >
-                      <Icon className="w-5 h-5 text-teal-600" />
+                      <Icon className="w-5 h-5 text-indigo-600" />
                       {t(tab.labelKey)}
                     </motion.button>
                   );

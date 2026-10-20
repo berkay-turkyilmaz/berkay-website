@@ -29,7 +29,7 @@ const FC_THEME = LEARN_THEMES.flashcards;
 /** Compact CEFR level badge */
 const LEVEL_COLORS: Record<FlashcardLevel, string> = {
   A1: "bg-emerald-100 text-emerald-700 border-emerald-200",
-  A2: "bg-teal-100 text-teal-700 border-teal-200",
+  A2: "bg-indigo-100 text-indigo-700 border-indigo-200",
   B1: "bg-blue-100 text-blue-700 border-blue-200",
   B2: "bg-violet-100 text-violet-700 border-violet-200",
   C1: "bg-rose-100 text-rose-700 border-rose-200",
@@ -213,7 +213,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
               className={cn(
                 "p-3 rounded-xl border text-left transition-all",
                 levelFilter === lv
-                  ? "ring-2 ring-teal-400 bg-teal-50 border-teal-200"
+                  ? "ring-2 ring-indigo-400 bg-indigo-50 border-indigo-200"
                   : "border-slate-200 bg-white/60 hover:bg-slate-50"
               )}
             >
@@ -223,7 +223,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
               </div>
               <div className="w-full bg-slate-200 rounded-full h-1.5 overflow-hidden">
                 <motion.div
-                  className="h-full bg-teal-500 rounded-full"
+                  className="h-full bg-indigo-500 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${pct}%` }}
                   transition={{ duration: 0.6 }}
@@ -265,7 +265,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
           className={cn(
             "flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-lg border transition-colors",
             shuffled
-              ? "bg-teal-50 border-teal-200 text-teal-700"
+              ? "bg-indigo-50 border-indigo-200 text-indigo-700"
               : "border-slate-200 text-slate-500 hover:bg-slate-50"
           )}
         >
@@ -320,7 +320,7 @@ export function FlashcardsTab({ mastered, weak, speechRate, onMaster, onMarkWeak
 
               {/* Back */}
               <div
-                className="absolute inset-0 backface-hidden bg-gradient-to-br from-slate-700 to-teal-800 text-white rounded-[2rem] p-6 flex flex-col items-center justify-center text-center shadow-xl"
+                className="absolute inset-0 backface-hidden bg-gradient-to-br from-slate-700 to-indigo-800 text-white rounded-[2rem] p-6 flex flex-col items-center justify-center text-center shadow-xl"
                 style={{ transform: "rotateY(180deg)" }}
               >
                 <span className={cn("text-[11px] font-bold px-1.5 py-0.5 rounded border mb-4", "bg-white/20 text-white border-white/30")}>
@@ -464,7 +464,7 @@ function FilterBar({
                 studyMode === mode
                   ? mode === "weak"
                     ? "bg-amber-100 text-amber-700 border-amber-300"
-                    : "bg-teal-100 text-teal-700 border-teal-300"
+                    : "bg-indigo-100 text-indigo-700 border-indigo-300"
                   : "border-slate-200 text-slate-500 hover:bg-slate-50"
               )}
             >

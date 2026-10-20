@@ -59,7 +59,7 @@ export function SettingsPanel({ settings, onUpdate, onReset, onClose }: Props) {
               step={0.05}
               value={settings.speechRate}
               onChange={(e) => onUpdate({ speechRate: Number(e.target.value) })}
-              className="w-full mt-2 accent-teal-600"
+              className="w-full mt-2 accent-indigo-600"
             />
           </div>
 
@@ -73,7 +73,7 @@ export function SettingsPanel({ settings, onUpdate, onReset, onClose }: Props) {
               max={25}
               value={settings.examQuestionCount}
               onChange={(e) => onUpdate({ examQuestionCount: Number(e.target.value) })}
-              className="w-full mt-2 accent-teal-600"
+              className="w-full mt-2 accent-indigo-600"
             />
           </div>
 

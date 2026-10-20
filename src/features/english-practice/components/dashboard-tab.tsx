@@ -19,6 +19,7 @@ import {
   Trophy,
   Zap,
 } from "lucide-react";
+import { EpHeroArt } from "./ep-art";
 import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import type { EnglishProgress, EnglishTab } from "../types";
@@ -169,18 +170,21 @@ export function DashboardTab({ progress, onNavigate }: Props) {
             "relative overflow-hidden rounded-2xl border border-slate-700/30 shadow-xl shadow-slate-900/10"
           )}
         >
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(13,148,136,0.28),transparent_45%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_90%,rgba(99,102,241,0.15),transparent_40%)]" />
-          <div className="relative p-6 sm:p-8 text-white">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_85%_15%,rgba(79,70,229,0.28),transparent_45%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_90%,rgba(251,191,36,0.14),transparent_40%)]" />
+          <EpHeroArt className="pointer-events-none absolute bottom-3 right-5 hidden h-[78%] w-auto xl:block" />
+          <div className="relative p-6 sm:p-8 text-white xl:pr-[430px]">
             <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Sparkles className="w-4 h-4 text-teal-300" aria-hidden />
+                  <Sparkles className="w-4 h-4 text-indigo-300" aria-hidden />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-300">
                     {t("welcome")}
                   </span>
                 </div>
-                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">{t("hero_title")}</h1>
+                <h1 className="font-display text-4xl sm:text-5xl leading-[1.02] tracking-[-0.02em]">
+                  <span className="ep-marker ep-marker-dark">{t("hero_title")}</span>
+                </h1>
                 <p className="text-slate-300 text-sm mt-1.5 max-w-md leading-relaxed">
                   {t("hero_subtitle")}
                 </p>
@@ -208,7 +212,7 @@ export function DashboardTab({ progress, onNavigate }: Props) {
               </div>
               <div className="h-2.5 bg-white/12 rounded-full overflow-hidden">
                 <motion.div
-                  className="h-full bg-gradient-to-r from-teal-400 to-emerald-400 rounded-full"
+                  className="h-full bg-gradient-to-r from-amber-300 to-amber-400 rounded-full"
                   initial={{ width: 0 }}
                   animate={{ width: `${xpPercent}%` }}
                   transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -241,7 +245,7 @@ export function DashboardTab({ progress, onNavigate }: Props) {
               <Pressable
                 type="button"
                 onClick={() => onNavigate(continueTab)}
-                className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold shadow-sm shadow-teal-600/20 hover:bg-teal-700 transition-colors"
+                className="shrink-0 inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-semibold shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 transition-colors"
               >
                 {t("open_module")}
                 <ArrowRight className="w-4 h-4" />
@@ -265,7 +269,7 @@ export function DashboardTab({ progress, onNavigate }: Props) {
               </div>
               <div className="flex justify-between">
                 <span>{t("mastery")}</span>
-                <span className="font-medium text-teal-700 tabular-nums">%{masteryPct}</span>
+                <span className="font-medium text-indigo-700 tabular-nums">%{masteryPct}</span>
               </div>
             </div>
           </div>
@@ -282,7 +286,7 @@ export function DashboardTab({ progress, onNavigate }: Props) {
             <button
               type="button"
               onClick={() => onNavigate("games")}
-              className="text-xs font-medium text-teal-700 hover:text-teal-800 transition-colors"
+              className="text-xs font-medium text-indigo-700 hover:text-indigo-800 transition-colors"
             >
               {t("view_all_games")}
             </button>
@@ -327,10 +331,10 @@ export function DashboardTab({ progress, onNavigate }: Props) {
           <div
             className={cn(
               ep.card,
-              "relative overflow-hidden p-6 border-teal-200/80 bg-gradient-to-br from-white to-teal-50/40"
+              "relative overflow-hidden p-6 border-indigo-200/80 bg-gradient-to-br from-white to-indigo-50/40"
             )}
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-teal-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="relative">
               <Trophy className="w-8 h-8 text-amber-500 mb-3" aria-hidden />
               <h3 className="text-lg font-semibold text-slate-900">{t("start_exam")}</h3>
@@ -357,7 +361,7 @@ export function DashboardTab({ progress, onNavigate }: Props) {
               <p className={cn(ep.sectionLabel, "mb-3")}>{t("recent_exam")}</p>
               <div className="flex items-end justify-between gap-4">
                 <div>
-                  <p className="text-4xl font-black text-teal-700 tabular-nums">%{latestPct}</p>
+                  <p className="text-4xl font-black text-indigo-700 tabular-nums">%{latestPct}</p>
                   <p className="text-sm font-medium text-slate-600 mt-1">
                     {t(`grades.${getGradeKey(latestPct)}`)}
                   </p>
@@ -431,7 +435,7 @@ function ModuleCard({
           <span
             className={cn(
               "text-[11px] font-semibold uppercase tracking-wide opacity-0 group-hover:opacity-100 transition-opacity",
-              theme?.accentFg ?? "text-teal-700"
+              theme?.accentFg ?? "text-indigo-700"
             )}
           >
             {openLabel} →
@@ -461,7 +465,7 @@ export function DashboardBadges({ progress }: { progress: EnglishProgress }) {
         <span className="tabular-nums">{progress.level}</span>
       </div>
       <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-slate-100 text-slate-600 border border-slate-200 font-semibold text-xs">
-        <Flame className="w-3.5 h-3.5 text-teal-600" aria-hidden />
+        <Flame className="w-3.5 h-3.5 text-indigo-600" aria-hidden />
         <span className="tabular-nums">{progress.streak}</span>
       </div>
     </div>

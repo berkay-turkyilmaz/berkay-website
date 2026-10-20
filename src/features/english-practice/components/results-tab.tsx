@@ -48,7 +48,7 @@ export function ResultsTab({ results, onClear, onStartExam }: Props) {
             </p>
             <p className={cn("text-sm mt-1", ep.muted)}>
               {r.mode && (
-                <span className="text-teal-600 font-medium">{t(`exam_modes.${r.mode}`)} · </span>
+                <span className="text-indigo-600 font-medium">{t(`exam_modes.${r.mode}`)} · </span>
               )}
               {Math.floor(r.durationSec / 60)}:{String(r.durationSec % 60).padStart(2, "0")} · {r.score}/{r.total}
             </p>

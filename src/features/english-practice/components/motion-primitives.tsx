@@ -51,8 +51,8 @@ export function Pressable({
 export function PulseDot({ className }: { className?: string }) {
   return (
     <span className={cn("relative flex h-2 w-2", className)}>
-      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-60" />
-      <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-500" />
+      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-60" />
+      <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500" />
     </span>
   );
 }

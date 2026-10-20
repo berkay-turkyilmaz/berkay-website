@@ -26,6 +26,7 @@ import { Link } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
 import type { EnglishTab } from "../types";
 import { ep } from "../styles";
+import { EpMark } from "./ep-art";
 import { DashboardBadges } from "./dashboard-tab";
 
 type NavItem = { id: EnglishTab; icon: typeof Activity; labelKey: string };
@@ -167,7 +168,7 @@ export function EnglishHeader({
             href="/ai-lab"
             className={cn(
               ep.clickable,
-              "inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-teal-700 transition-colors py-1"
+              "inline-flex items-center gap-1.5 text-xs font-medium text-slate-500 hover:text-indigo-700 transition-colors py-1"
             )}
           >
             <ArrowLeft className="w-3.5 h-3.5" aria-hidden />
@@ -185,11 +186,9 @@ export function EnglishHeader({
             )}
             title={t("go_panel")}
           >
-            <div className="w-9 h-9 bg-teal-600 rounded-lg flex items-center justify-center text-white font-bold text-sm shadow-sm">
-              E
-            </div>
+            <EpMark className="h-9 w-9 shrink-0 rounded-lg shadow-sm" />
             <div className="min-w-0 text-left hidden sm:block">
-              <p className="text-sm font-semibold text-slate-900 leading-tight truncate">
+              <p className="font-display text-lg text-indigo-950 leading-tight truncate">
                 {t("title")}
               </p>
               <p className="text-[11px] text-slate-400 font-medium truncate">{t("subtitle")}</p>
@@ -285,7 +284,7 @@ export function EnglishHeader({
               onClick={onOpenSettings}
               className={cn(
                 ep.clickable,
-                "p-2 text-slate-500 hover:text-teal-700 hover:bg-slate-50 rounded-lg border border-transparent hover:border-slate-200 transition-colors"
+                "p-2 text-slate-500 hover:text-indigo-700 hover:bg-slate-50 rounded-lg border border-transparent hover:border-slate-200 transition-colors"
               )}
               aria-label={t("settings.title")}
             >
