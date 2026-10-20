@@ -1,6 +1,7 @@
 "use client";
 
 import { Share2 } from "lucide-react";
+import { toast } from "sonner";
 import { useCallback } from "react";
 
 type Props = {
@@ -18,7 +19,7 @@ export function ShareArticleButton({ title, label, copiedLabel = "Link copied!" 
         return;
       }
       await navigator.clipboard.writeText(url);
-      alert(copiedLabel);
+      toast.success(copiedLabel);
     } catch {
       /* user cancelled share */
     }
@@ -28,7 +29,7 @@ export function ShareArticleButton({ title, label, copiedLabel = "Link copied!" 
     <button
       type="button"
       onClick={handleShare}
-      className="p-2.5 rounded-full text-muted-foreground hover:bg-secondary hover:text-primary transition-all border border-transparent hover:border-border/50"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-muted-foreground transition-colors duration-300 hover:border-foreground hover:text-foreground"
       title={label}
       aria-label={label}
     >

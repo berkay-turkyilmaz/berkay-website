@@ -1,27 +1,17 @@
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { getProjectBySlug, getProjectSlugs } from "@/data/projects";
-import { routing } from "@/i18n/routing";
-import { createPageMetadata } from "@/lib/seo/page-metadata";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Link } from "@/i18n/routing";
-import { Badge } from "@/components/ui/badge";
-import {
-  ArrowLeft,
-  ArrowUpRight,
-  CheckCircle2,
-  Clock,
-  Zap,
-  ExternalLink,
-  ArrowRight,
-} from "lucide-react";
-import type { Metadata } from "next";
+import { ContactBand } from "@/components/home/contact-band";
+import { Link, routing } from "@/i18n/routing";
+import { WORK, getWorkBySlug, getWorkSlugs } from "@/data/work";
+import { createPageMetadata } from "@/lib/seo/page-metadata";
 
 export function generateStaticParams() {
-  return getProjectSlugs().flatMap((slug) =>
-    routing.locales.map((locale) => ({ slug, locale }))
-  );
+  return getWorkSlugs().flatMap((slug) => routing.locales.map((locale) => ({ slug, locale })));
 }
 
 export async function generateMetadata({
@@ -30,298 +20,183 @@ export async function generateMetadata({
   params: Promise<{ slug: string; locale: string }>;
 }): Promise<Metadata> {
   const { slug, locale } = await params;
-  const project = getProjectBySlug(slug);
-  if (!project) return {};
-
-  const t = await getTranslations({ locale, namespace: "ProjectsPage" });
-  const title = (t as Parameters<typeof t>[0] extends string ? typeof t : never)(project.titleKey as Parameters<typeof t>[0]);
-
+  const item = getWorkBySlug(slug);
+  if (!item) return {};
+  const t = await getTranslations({ locale, namespace: "Work" });
   return createPageMetadata({
     locale,
     path: `/projects/${slug}`,
-    title: `${title} | BERKAY`,
-    description: (t as Parameters<typeof t>[0] extends string ? typeof t : never)(project.descriptionKey as Parameters<typeof t>[0]),
+    title: t(`items.${item.id}.title`),
+    description: t(`items.${item.id}.summary`),
   });
 }
 
-const statusConfig = {
-  live: {
-    icon: Zap,
-    cls: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20",
-  },
-  completed: {
-    icon: CheckCircle2,
-    cls: "bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20",
-  },
-  "in-progress": {
-    icon: Clock,
-    cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20",
-  },
-};
-
-export default async function ProjectCaseStudy({
-  params,
-}: {
-  params: Promise<{ slug: string; locale: string }>;
-}) {
+export default async function ProjectPage({ params }: { params: Promise<{ slug: string; locale: string }> }) {
   const { slug, locale } = await params;
-  const project = getProjectBySlug(slug);
+  setRequestLocale(locale);
+  const item = getWorkBySlug(slug);
+  if (!item) notFound();
 
-  if (!project) notFound();
+  const t = await getTranslations("Work");
+  const highlights = t.raw(`items.${item.id}.highlights`) as string[];
+  const notes = t.raw(`items.${item.id}.notes`) as string[];
+  const highlightsTitle = item.id === "meetora" ? t("items.meetora.highlights_title") : t("labels.highlights");
 
-  const t = await getTranslations({ locale, namespace: "ProjectsPage" });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const pt = (key: string) => (t as any)(key);
-
-  const title = pt(project.titleKey);
-  const description = pt(project.descriptionKey);
-  const tagline = pt(project.taglineKey);
-
-  // Map project id to short key used in i18n
-  const i18nKeyMap: Record<string, string> = {
-    "bex-assistant": "bex",
-    "portfolio-infra": "portfolio",
-    "booking-crm": "booking",
-    "saas-starter": "saas",
-    "pdf-analyzer": "pdf",
-  };
-  const i18nKey = i18nKeyMap[project.id] ?? project.id;
-
-  const StatusIcon = statusConfig[project.status].icon;
-  const statusCls = statusConfig[project.status].cls;
-
-  const isInternal = project.link?.startsWith("/");
-
-  // Find adjacent projects for navigation
-  const slugs = getProjectSlugs();
-  const currentIndex = slugs.indexOf(slug);
-  const nextSlug = slugs[(currentIndex + 1) % slugs.length];
-  const nextProject = getProjectBySlug(nextSlug);
+  const index = WORK.findIndex((w) => w.id === item.id);
+  const next = WORK[(index + 1) % WORK.length];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/20">
       <Header />
-
-      {/* ── Hero ── */}
-      <section
-        className={`relative pt-32 pb-20 md:pt-44 md:pb-28 bg-gradient-to-b ${project.gradient} overflow-hidden`}
-      >
-        {/* Decorative blobs */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(255,255,255,0.03),transparent_60%)] pointer-events-none" />
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border/50 to-transparent" />
-
-        <div className="container mx-auto px-6 lg:px-12 relative z-10">
-          {/* Back link */}
+      <main id="main">
+        <section aria-labelledby="project-title" className="mx-auto w-full max-w-[1200px] px-5 pb-12 pt-28 sm:px-8 md:pb-16 md:pt-36">
           <Link
             href="/projects"
-            className="group inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-muted-foreground hover:text-foreground transition-colors mb-10"
+            className="rise inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
           >
-            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
-            {pt("case_study.back_to_projects")}
+            <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
+            {t("labels.back")}
           </Link>
 
-          <div className="max-w-4xl space-y-6">
-            {/* Status + year badges */}
-            <div className="flex flex-wrap items-center gap-3">
-              <span
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${statusCls}`}
-              >
-                <StatusIcon className="w-3 h-3" />
-                {pt(`status_${project.status.replace("-", "_")}`)}
-              </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-secondary/60 text-muted-foreground border border-border/50">
-                {project.year}
-              </span>
-            </div>
+          <p className="rise mt-10 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground" style={{ "--d": 1 } as React.CSSProperties}>
+            {item.year} · {t(`kinds.${item.kind}`)}
+          </p>
+          <h1
+            id="project-title"
+            className="rise mt-5 font-display text-[clamp(3rem,8vw,6.5rem)] leading-[1] tracking-[-0.03em] text-foreground text-balance"
+            style={{ "--d": 2 } as React.CSSProperties}
+          >
+            {t(`items.${item.id}.title`)}
+          </h1>
+          <p className="rise mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground sm:text-xl" style={{ "--d": 3 } as React.CSSProperties}>
+            {t(`items.${item.id}.summary`)}
+          </p>
 
-            {/* Title */}
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tighter leading-[1.08] text-foreground text-balance">
-              {title}
-            </h1>
-
-            {/* Tagline */}
-            <p className={`text-xl md:text-2xl font-semibold ${project.accentClass}`}>
-              {tagline}
-            </p>
-
-            {/* Description */}
-            <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl font-medium">
-              {description}
-            </p>
-
-            {/* Tech stack */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              {project.tech.map((tech) => (
-                <Badge
-                  key={tech}
-                  variant="outline"
-                  className="text-xs font-semibold px-3 py-1 border-border/60 text-muted-foreground"
+          <div className="rise mt-9 flex flex-wrap items-center gap-3" style={{ "--d": 4 } as React.CSSProperties}>
+            {item.href ? (
+              item.external ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-transform duration-300 hover:-translate-y-0.5"
                 >
-                  {tech}
-                </Badge>
-              ))}
-            </div>
-
-            {/* CTA links */}
-            {project.link && (
-              <div className="flex flex-wrap gap-3 pt-2">
-                {isInternal ? (
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  <Link href={project.link as any}>
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
-                    >
-                      {pt("case_study.view_demo")}
-                      <ArrowUpRight className="w-4 h-4" />
-                    </button>
-                  </Link>
-                ) : (
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/25"
-                  >
-                    {pt("case_study.view_live")}
-                    <ExternalLink className="w-4 h-4" />
-                  </a>
-                )}
-              </div>
+                  {t("labels.visit_external")}
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                  <span className="sr-only">{t("labels.opens_new_tab")}</span>
+                </a>
+              ) : (
+                <Link
+                  href={item.href as "/"}
+                  className="group inline-flex h-12 items-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-transform duration-300 hover:-translate-y-0.5"
+                >
+                  {t("labels.visit")}
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                </Link>
+              )
+            ) : (
+              <p className="text-sm text-muted-foreground">{t("labels.no_public")}</p>
             )}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ── Case Study Body ── */}
-      <main className="container mx-auto px-6 lg:px-12 py-20 max-w-4xl">
-        <div className="grid gap-12">
-
-          {/* Challenge */}
-          <CaseStudySection
-            number="01"
-            label={pt("case_study.challenge_label")}
-            accentClass={project.accentClass}
-          >
-            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
-              {pt(`projects.${i18nKey}.challenge`)}
-            </p>
-          </CaseStudySection>
-
-          {/* Solution */}
-          <CaseStudySection
-            number="02"
-            label={pt("case_study.solution_label")}
-            accentClass={project.accentClass}
-          >
-            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
-              {pt(`projects.${i18nKey}.solution`)}
-            </p>
-          </CaseStudySection>
-
-          {/* Outcome */}
-          <CaseStudySection
-            number="03"
-            label={pt("case_study.outcome_label")}
-            accentClass={project.accentClass}
-          >
-            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
-              {pt(`projects.${i18nKey}.outcome`)}
-            </p>
-          </CaseStudySection>
-
-          {/* Tech decisions */}
-          <CaseStudySection
-            number="04"
-            label={pt("case_study.tech_decision_label")}
-            accentClass={project.accentClass}
-          >
-            <p className="text-lg text-foreground/90 leading-relaxed font-medium">
-              {pt(`projects.${i18nKey}.tech_decision`)}
-            </p>
-
-            {/* Tech stack grid */}
-            <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {project.tech.map((tech) => (
-                <div
-                  key={tech}
-                  className="flex items-center gap-2.5 p-3 rounded-xl bg-card border border-border/60 text-sm font-semibold text-foreground/80"
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full ${project.accentClass.replace("text-", "bg-")}`} />
-                  {tech}
-                </div>
-              ))}
-            </div>
-          </CaseStudySection>
-        </div>
-
-        {/* ── Contact CTA ── */}
-        <div className="mt-20 rounded-3xl bg-card border border-border p-8 md:p-12 text-center space-y-6">
-          <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-            {pt("case_study.contact_cta_title")}
-          </h2>
-          <p className="text-muted-foreground font-medium max-w-lg mx-auto">
-            {pt("case_study.contact_cta_desc")}
-          </p>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <Link href={"/contact" as any}>
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-primary text-primary-foreground rounded-full font-bold hover:bg-primary/90 transition-all hover:scale-105 shadow-lg shadow-primary/20"
-            >
-              {pt("case_study.contact_cta_btn")}
-            </button>
-          </Link>
-        </div>
-
-        {/* ── Next Project ── */}
-        {nextProject && nextProject.id !== project.id && (
-          <div className="mt-10">
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            <Link href={`/projects/${nextProject.slug}` as any} className="group block">
-              <div className="flex items-center justify-between p-6 rounded-2xl border border-border hover:border-primary/40 hover:bg-card transition-all duration-300">
-                <div className="space-y-1">
-                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
-                    {pt("case_study.next_project")}
-                  </p>
-                  <p className="font-bold text-foreground group-hover:text-primary transition-colors">
-                    {pt(nextProject.titleKey)}
-                  </p>
-                </div>
-                <ArrowRight className="w-5 h-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
+        {item.image && (
+          <div className="mx-auto w-full max-w-[1200px] px-5 sm:px-8">
+            <div className="reveal relative aspect-[2/1] overflow-hidden rounded-[6px] border border-border bg-secondary">
+              <div className="absolute inset-x-0 top-0 z-10 flex h-8 items-center gap-1.5 border-b border-border bg-card/90 px-4 backdrop-blur" aria-hidden>
+                <span className="h-2.5 w-2.5 rounded-full bg-border" />
+                <span className="h-2.5 w-2.5 rounded-full bg-border" />
+                <span className="h-2.5 w-2.5 rounded-full bg-border" />
               </div>
-            </Link>
+              <Image
+                src={item.image}
+                alt={t(`items.${item.id}.image_alt`)}
+                fill
+                priority
+                sizes="(min-width: 1200px) 1136px, 100vw"
+                className="object-cover object-top pt-8"
+              />
+            </div>
           </div>
         )}
+
+        <section className="mx-auto w-full max-w-[1200px] px-5 py-20 sm:px-8 md:py-28">
+          <div className="grid gap-14 md:grid-cols-12 md:gap-8">
+            <div className="md:col-span-8">
+              <div className="reveal">
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("labels.what")}</h2>
+                <p className="mt-5 max-w-2xl font-display text-3xl leading-snug text-foreground sm:text-4xl">
+                  {t(`items.${item.id}.what`)}
+                </p>
+              </div>
+
+              <div className="reveal mt-16">
+                <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{highlightsTitle}</h2>
+                <ul className="mt-5 divide-y divide-border border-y border-border">
+                  {highlights.map((line, i) => (
+                    <li key={line} className="grid grid-cols-[2.5rem_1fr] gap-4 py-5">
+                      <span className="font-display text-2xl italic text-primary">{i + 1}</span>
+                      <p className="text-base leading-relaxed text-foreground/90 sm:text-lg">{line}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {notes.length > 0 && (
+                <div className="reveal mt-16">
+                  <h2 className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("labels.notes")}</h2>
+                  <ul className="mt-5 space-y-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                    {notes.map((n) => (
+                      <li key={n} className="relative pl-5 before:absolute before:left-0 before:top-[0.75em] before:h-px before:w-3 before:bg-primary">
+                        {n}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+
+            <aside className="reveal md:col-span-3 md:col-start-10">
+              <dl className="space-y-6 border-t border-border pt-6 text-sm md:sticky md:top-28">
+                <div>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t("labels.type")}</dt>
+                  <dd className="mt-2 text-foreground">{t(`kinds.${item.kind}`)}</dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t("labels.year")}</dt>
+                  <dd className="mt-2 text-foreground">{item.year}</dd>
+                </div>
+                <div>
+                  <dt className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t("labels.stack")}</dt>
+                  <dd className="mt-2 flex flex-wrap gap-2">
+                    {item.tags.map((tag) => (
+                      <span key={tag} className="rounded-full border border-border px-3 py-1 text-[13px] text-foreground/85">
+                        {tag}
+                      </span>
+                    ))}
+                  </dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
+        </section>
+
+        <section className="border-t border-border">
+          <Link
+            href={`/projects/${next.slug}` as "/projects"}
+            className="group mx-auto block w-full max-w-[1200px] px-5 py-16 sm:px-8 md:py-24"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("labels.next")}</p>
+            <p className="mt-4 flex items-baseline justify-between gap-6 font-display text-[clamp(2.4rem,6vw,5rem)] leading-none tracking-[-0.02em] text-foreground transition-transform duration-500 group-hover:translate-x-2">
+              {t(`items.${next.id}.title`)}
+              <ArrowUpRight className="h-8 w-8 shrink-0 text-muted-foreground transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary sm:h-12 sm:w-12" aria-hidden />
+            </p>
+          </Link>
+        </section>
+
+        <ContactBand />
       </main>
-
       <Footer />
-    </div>
-  );
-}
-
-function CaseStudySection({
-  number,
-  label,
-  accentClass,
-  children,
-}: {
-  number: string;
-  label: string;
-  accentClass: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="grid md:grid-cols-[200px_1fr] gap-6 md:gap-12">
-      <div className="flex md:flex-col gap-3 md:gap-2">
-        <span className={`text-4xl font-black tabular-nums opacity-20 ${accentClass}`}>
-          {number}
-        </span>
-        <h2 className="text-sm font-bold uppercase tracking-widest text-muted-foreground mt-1">
-          {label}
-        </h2>
-      </div>
-      <div className="pt-1">{children}</div>
     </div>
   );
 }

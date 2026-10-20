@@ -1,84 +1,50 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useTranslations, useLocale } from "next-intl";
-import { motion } from "framer-motion";
-import {
-  Code2,
-  Brain,
-  Layers,
-  Github,
-  Linkedin,
-  Mail,
-  Loader2,
-  CheckCircle2,
-  AlertCircle,
-} from "lucide-react";
+import { useTranslations } from "next-intl";
+import { AlertCircle, ArrowUpRight, CheckCircle2, Github, Linkedin, Loader2 } from "lucide-react";
+import { useLocale } from "next-intl";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { PageHero } from "@/components/layout/page-hero";
+import { CopyEmail } from "@/components/home/copy-email";
 import { SubjectSelect } from "@/components/ui/subject-select";
 import { siteConfig } from "@/data/site-config";
 
-// ─── Schema ───────────────────────────────────────────────────────────────────
+const makeSchema = (m: { name: string; email: string; subject: string; message: string }) =>
+  z.object({
+    name: z.string().trim().min(2, m.name),
+    email: z.string().trim().email(m.email),
+    subject: z.enum(["project", "ai", "consulting", "job", "other"], { message: m.subject }),
+    message: z.string().trim().min(20, m.message),
+    website: z.string().optional(),
+  });
 
-const contactSchema = z.object({
-  name: z.string().min(2),
-  email: z.string().email(),
-  subject: z.enum(["project", "ai", "consulting", "job", "other"]),
-  message: z.string().min(20),
-  website: z.string().optional(),
-});
-
-type ContactFormData = z.infer<typeof contactSchema>;
-
-// ─── Input primitives ─────────────────────────────────────────────────────────
+type ContactFormData = z.infer<ReturnType<typeof makeSchema>>;
 
 const inputCls =
-  "w-full h-11 bg-secondary/20 border border-border/50 rounded-xl px-4 text-sm text-foreground placeholder-muted-foreground/40 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all duration-200";
+  "w-full h-12 rounded-[6px] border border-border bg-card px-4 text-sm text-foreground placeholder:text-muted-foreground/70 outline-none transition-colors duration-200 focus:border-foreground focus-visible:ring-2 focus-visible:ring-primary/40";
+const labelCls = "mb-2 block font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground";
 
-const labelCls = "block text-xs font-semibold text-foreground/70 mb-1.5";
-
-function FieldError({ msg }: { msg?: string }) {
+function FieldError({ id, msg }: { id: string; msg?: string }) {
   if (!msg) return null;
   return (
-    <p className="mt-1.5 flex items-center gap-1 text-xs text-destructive font-medium">
-      <AlertCircle className="w-3 h-3 flex-shrink-0" />
+    <p id={id} role="alert" className="mt-2 flex items-center gap-1.5 text-xs font-medium text-destructive">
+      <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden />
       {msg}
     </p>
   );
 }
 
-// ─── Service cards ────────────────────────────────────────────────────────────
-
-interface ServiceCardProps {
-  icon: React.ReactNode;
-  title: string;
-  desc: string;
-}
-
-function ServiceCard({ icon, title, desc }: ServiceCardProps) {
-  return (
-    <div className="flex gap-3.5 p-4 rounded-xl border border-border/50 bg-card/60 hover:border-primary/25 hover:bg-card transition-all duration-200 group">
-      <div className="w-8 h-8 rounded-lg bg-primary/8 border border-primary/15 flex items-center justify-center shrink-0 text-primary group-hover:bg-primary/12 transition-colors mt-0.5">
-        {icon}
-      </div>
-      <div>
-        <p className="text-sm font-bold text-foreground">{title}</p>
-        <p className="text-xs text-muted-foreground leading-relaxed mt-0.5">{desc}</p>
-      </div>
-    </div>
-  );
-}
-
-// ─── Main page ────────────────────────────────────────────────────────────────
-
 export default function ContactPage() {
-  const t = useTranslations("ContactPage");
+  const t = useTranslations("ContactMe");
+  const tf = useTranslations("ContactPage");
   const locale = useLocale();
-  const [submitState, setSubmitState] = useState<"idle" | "success" | "error">("idle");
+  const [state, setState] = useState<"idle" | "success" | "error">("idle");
 
   const {
     register,
@@ -87,182 +53,106 @@ export default function ContactPage() {
     control,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
+    resolver: zodResolver(
+      makeSchema({ name: t("err_name"), email: t("err_email"), subject: t("err_subject"), message: t("err_message") })
+    ),
   });
 
   const onSubmit = async (data: ContactFormData) => {
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept-Language": locale,
-        },
+        headers: { "Content-Type": "application/json", "Accept-Language": locale },
         body: JSON.stringify(data),
       });
       if (!res.ok) throw new Error("server_error");
-      setSubmitState("success");
+      setState("success");
       reset();
     } catch {
-      setSubmitState("error");
+      setState("error");
     }
   };
 
-  const socialLinks = [
-    {
-      icon: Github,
-      label: "GitHub",
-      href: siteConfig.github,
-      display: "github.com/berkay-turkyilmaz",
-    },
-    {
-      icon: Linkedin,
-      label: "LinkedIn",
-      href: siteConfig.linkedin,
-      display: "linkedin.com/in/berkay-turkyilmaz",
-    },
-    {
-      icon: Mail,
-      label: "Email",
-      href: `mailto:${siteConfig.email}`,
-      display: siteConfig.email,
-    },
-  ];
-
-  const services = [
-    {
-      icon: <Code2 className="w-4 h-4" />,
-      title: t("service_1_title"),
-      desc: t("service_1_desc"),
-    },
-    {
-      icon: <Brain className="w-4 h-4" />,
-      title: t("service_2_title"),
-      desc: t("service_2_desc"),
-    },
-    {
-      icon: <Layers className="w-4 h-4" />,
-      title: t("service_3_title"),
-      desc: t("service_3_desc"),
-    },
-  ];
-
   const subjectOptions = [
-    { value: "project", label: t("form_subject_project") },
-    { value: "ai", label: t("form_subject_ai") },
-    { value: "consulting", label: t("form_subject_consulting") },
-    { value: "job", label: t("form_subject_job") },
-    { value: "other", label: t("form_subject_other") },
+    { value: "project", label: tf("form_subject_project") },
+    { value: "ai", label: tf("form_subject_ai") },
+    { value: "consulting", label: tf("form_subject_consulting") },
+    { value: "job", label: tf("form_subject_job") },
+    { value: "other", label: tf("form_subject_other") },
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-background selection:bg-primary/20 font-sans">
+    <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/20">
       <Header />
+      <main id="main">
+        <PageHero
+          eyebrow={t("eyebrow")}
+          title={t.rich("title", { em: (c) => <em className="italic text-primary">{c}</em> })}
+          lead={t("lead")}
+        />
 
-      <main className="flex-1 pt-28 pb-20">
-        <div className="container mx-auto px-5 sm:px-6 lg:px-12 max-w-6xl">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-start">
-
-            {/* ── LEFT COLUMN (sticky) ─────────────────────────────────── */}
-            <motion.div
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-2 lg:sticky lg:top-28 space-y-6"
-            >
-              {/* Hero text */}
-              <div className="space-y-4">
-                {/* Availability badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/25 bg-emerald-500/8 text-emerald-600 dark:text-emerald-400 text-xs font-bold">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-                  </span>
-                  {t("availability_badge")}
-                </div>
-
-                <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-foreground leading-[1.08]">
-                  {t("hero_title")}
-                </h1>
-                <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
-                  {t("hero_subtitle")}
-                </p>
-
-                {/* Meta info */}
-                <div className="space-y-1.5 pt-1">
-                  <p className="text-xs text-muted-foreground/70 flex items-center gap-2">
-                    <span className="text-primary">⚡</span>
-                    {t("response_time")}
-                  </p>
-                  <p className="text-xs text-muted-foreground/70 flex items-center gap-2">
-                    <span>📍</span>
-                    {t("location")}
-                  </p>
+        <section className="mx-auto w-full max-w-[1200px] px-5 pb-24 sm:px-8 md:pb-32">
+          <div className="grid gap-14 md:grid-cols-12 md:gap-10">
+            <aside className="space-y-10 md:col-span-5">
+              <div className="reveal">
+                <h2 className={labelCls}>{t("direct")}</h2>
+                <a
+                  href={`mailto:${siteConfig.email}`}
+                  className="group mt-1 inline-flex items-center gap-2 break-all font-display text-2xl text-foreground sm:text-3xl"
+                >
+                  <span className="link-draw">{siteConfig.email}</span>
+                  <ArrowUpRight className="h-5 w-5 shrink-0 text-muted-foreground transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden />
+                </a>
+                <div className="mt-5">
+                  <CopyEmail email={siteConfig.email} copyLabel={t("copy")} copiedLabel={t("copied")} />
                 </div>
               </div>
 
-              {/* Service cards */}
-              <div className="space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/70 mb-3">
-                  {t("services_title")}
-                </p>
-                {services.map((s) => (
-                  <ServiceCard key={s.title} icon={s.icon} title={s.title} desc={s.desc} />
-                ))}
-              </div>
-
-              {/* Social links */}
-              <div className="space-y-2 pt-2 border-t border-border/30">
-                {socialLinks.map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <a
-                      key={link.label}
-                      href={link.href}
-                      target={link.href.startsWith("mailto") ? undefined : "_blank"}
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-3 text-sm text-muted-foreground hover:text-foreground transition-colors group py-1"
-                    >
-                      <Icon className="w-4 h-4 shrink-0 text-muted-foreground/70 group-hover:text-primary transition-colors" />
-                      <span className="font-mono text-xs group-hover:text-primary transition-colors truncate">
-                        {link.display}
-                      </span>
+              <div className="reveal">
+                <h2 className={labelCls}>{t("elsewhere")}</h2>
+                <ul className="space-y-3 text-sm">
+                  <li>
+                    <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-foreground transition-colors hover:text-primary">
+                      <Github className="h-4 w-4" aria-hidden /> GitHub
                     </a>
-                  );
-                })}
+                  </li>
+                  <li>
+                    <a href={siteConfig.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-foreground transition-colors hover:text-primary">
+                      <Linkedin className="h-4 w-4" aria-hidden /> LinkedIn
+                    </a>
+                  </li>
+                </ul>
               </div>
-            </motion.div>
 
-            {/* ── RIGHT COLUMN (form) ──────────────────────────────────── */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-3"
-            >
-              <div className="bg-card border border-border/50 rounded-2xl p-6 sm:p-8 shadow-sm">
-                <h2 className="text-lg font-bold text-foreground mb-6">{t("form_title")}</h2>
+              <div className="reveal relative hidden aspect-[4/3] overflow-hidden rounded-[4px] bg-secondary md:block">
+                <Image
+                  src="/images/galata-ferry.jpg"
+                  alt={t("photo_alt")}
+                  fill
+                  sizes="(min-width: 768px) 40vw, 100vw"
+                  className="object-cover object-[50%_60%]"
+                />
+              </div>
+            </aside>
 
-                {submitState === "success" ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.97 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="py-12 text-center space-y-4"
-                  >
-                    <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mx-auto">
-                      <CheckCircle2 className="w-7 h-7 text-emerald-500" />
-                    </div>
-                    <p className="text-sm font-semibold text-foreground">{t("form_success")}</p>
+            <div className="reveal md:col-span-7">
+              <div className="rounded-[6px] border border-border bg-card p-6 sm:p-8">
+                <h2 className="font-display text-3xl text-foreground">{t("form_title")}</h2>
+
+                {state === "success" ? (
+                  <div className="mt-8 space-y-5 py-6" role="status">
+                    <CheckCircle2 className="h-8 w-8 text-primary" aria-hidden />
+                    <p className="text-base leading-relaxed text-foreground">{t("success")}</p>
                     <button
                       type="button"
-                      onClick={() => setSubmitState("idle")}
-                      className="text-xs text-primary hover:text-primary/70 transition-colors font-medium"
+                      onClick={() => setState("idle")}
+                      className="text-sm font-medium text-foreground underline decoration-border underline-offset-[6px] transition-colors hover:decoration-primary"
                     >
-                      {locale === "tr" ? "Yeni mesaj gönder" : "Send another message"}
+                      {t("success_again")}
                     </button>
-                  </motion.div>
+                  </div>
                 ) : (
-                  <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" noValidate>
+                  <form onSubmit={handleSubmit(onSubmit)} className="mt-8 space-y-6" noValidate>
                     <input
                       {...register("website")}
                       type="text"
@@ -271,37 +161,40 @@ export default function ContactPage() {
                       aria-hidden="true"
                       className="absolute -left-[9999px] h-0 w-0 opacity-0"
                     />
-                    {/* Name + Email row */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                    <div className="grid gap-6 sm:grid-cols-2">
                       <div>
-                        <label className={labelCls}>{t("form_name_label")}</label>
+                        <label htmlFor="c-name" className={labelCls}>{tf("form_name_label")}</label>
                         <input
+                          id="c-name"
                           {...register("name")}
                           type="text"
-                          placeholder={t("form_name_placeholder")}
+                          placeholder={tf("form_name_placeholder")}
                           className={inputCls}
                           autoComplete="name"
+                          aria-invalid={!!errors.name}
+                          aria-describedby={errors.name ? "c-name-err" : undefined}
                         />
-                        <FieldError msg={errors.name?.message} />
+                        <FieldError id="c-name-err" msg={errors.name?.message} />
                       </div>
                       <div>
-                        <label className={labelCls}>{t("form_email_label")}</label>
+                        <label htmlFor="c-email" className={labelCls}>{tf("form_email_label")}</label>
                         <input
+                          id="c-email"
                           {...register("email")}
                           type="email"
-                          placeholder={t("form_email_placeholder")}
+                          placeholder={tf("form_email_placeholder")}
                           className={inputCls}
                           autoComplete="email"
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? "c-email-err" : undefined}
                         />
-                        <FieldError msg={errors.email?.message} />
+                        <FieldError id="c-email-err" msg={errors.email?.message} />
                       </div>
                     </div>
 
-                    {/* Subject */}
                     <div>
-                      <label className={labelCls} htmlFor="contact-subject">
-                        {t("form_subject_label")}
-                      </label>
+                      <label htmlFor="contact-subject" className={labelCls}>{tf("form_subject_label")}</label>
                       <Controller
                         name="subject"
                         control={control}
@@ -315,68 +208,56 @@ export default function ContactPage() {
                           />
                         )}
                       />
-                      <FieldError msg={errors.subject?.message} />
+                      <FieldError id="c-subject-err" msg={errors.subject?.message} />
                     </div>
 
-                    {/* Message */}
                     <div>
-                      <label className={labelCls}>{t("form_message_label")}</label>
+                      <label htmlFor="c-message" className={labelCls}>{tf("form_message_label")}</label>
                       <textarea
+                        id="c-message"
                         {...register("message")}
-                        placeholder={t("form_message_placeholder")}
+                        placeholder={tf("form_message_placeholder")}
                         rows={6}
-                        className={`${inputCls} h-auto py-3 resize-none leading-relaxed`}
+                        className={`${inputCls} h-auto resize-none py-3 leading-relaxed`}
+                        aria-invalid={!!errors.message}
+                        aria-describedby={errors.message ? "c-message-err" : undefined}
                       />
-                      <FieldError msg={errors.message?.message} />
+                      <FieldError id="c-message-err" msg={errors.message?.message} />
                     </div>
 
-                    {/* Error state */}
-                    {submitState === "error" && (
-                      <motion.div
-                        initial={{ opacity: 0, y: -4 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-start gap-2.5 p-3.5 rounded-xl border border-destructive/20 bg-destructive/5 text-xs text-destructive font-medium"
-                      >
-                        <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                    {state === "error" && (
+                      <p role="alert" className="flex items-start gap-2.5 rounded-[6px] border border-destructive/30 bg-destructive/5 p-4 text-sm text-destructive">
+                        <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
                         <span>
-                          {t("form_error")}{" "}
-                          <a
-                            href={`mailto:${siteConfig.email}`}
-                            className="underline hover:no-underline"
-                          >
+                          {t("error")}{" "}
+                          <a href={`mailto:${siteConfig.email}`} className="underline">
                             {siteConfig.email}
                           </a>
                         </span>
-                      </motion.div>
+                      </p>
                     )}
 
-                    {/* Submit */}
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className={`w-full h-11 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-200 ${
-                        isSubmitting
-                          ? "bg-secondary/50 text-muted-foreground cursor-not-allowed"
-                          : "bg-foreground text-background hover:bg-foreground/90 shadow-sm hover:shadow-md active:scale-[0.99]"
-                      }`}
+                      className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-6 text-sm font-medium text-background transition-transform duration-300 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     >
                       {isSubmitting ? (
                         <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          {t("form_submitting")}
+                          <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                          {t("submitting")}
                         </>
                       ) : (
-                        t("form_submit")
+                        t("submit")
                       )}
                     </button>
                   </form>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
-        </div>
+        </section>
       </main>
-
       <Footer />
     </div>
   );

@@ -1,248 +1,145 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { ArrowUpRight, Github, Linkedin, Mail, MapPin } from "lucide-react";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Link } from "@/i18n/routing";
 import { SKILL_CATEGORIES } from "@/data/skills";
 import { RESUME_EXPERIENCE, RESUME_PROJECTS } from "@/data/resume";
 import { ResumeActions } from "@/components/features/resume/resume-actions";
 import { siteConfig } from "@/data/site-config";
-import {
-  MapPin,
-  Github,
-  Mail,
-  Linkedin,
-  ExternalLink,
-  Globe,
-} from "lucide-react";
 
-export default async function ResumePage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+const label = "font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground";
+
+export default async function ResumePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "ResumePage" });
-  const tAbout = await getTranslations({ locale, namespace: "AboutPage" });
-
-  const skillCategoryLabels: Record<string, string> = {
-    languages: tAbout("skills.languages"),
-    libraries: tAbout("skills.libraries"),
-    tools: tAbout("skills.tools"),
-  };
+  const tSkills = await getTranslations({ locale, namespace: "AboutPage.skills" });
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <Header />
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20 print:bg-white print:text-black">
+      <div className="print:hidden">
+        <Header />
+      </div>
 
-      <main className="container mx-auto px-6 lg:px-12 pt-36 pb-24 max-w-5xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-12">
-          <p className="text-xs font-bold uppercase tracking-widest text-primary font-mono">
-            {t("badge")}
-          </p>
-          <ResumeActions
-            printLabel={t("print_btn")}
-            downloadLabel={t("download_btn")}
-            email={siteConfig.email}
-          />
+      <main id="main" className="mx-auto w-full max-w-[1100px] px-5 pb-24 pt-28 sm:px-8 md:pt-36 print:max-w-none print:p-0">
+        <div className="rise flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className={label}>{t("badge")}</p>
+            <h1 className="mt-4 font-display text-[clamp(2.8rem,7vw,5.5rem)] leading-[1] tracking-[-0.03em]">
+              {t("title")}
+            </h1>
+            <p className="mt-3 text-lg text-primary">{t("subtitle")}</p>
+          </div>
+          <ResumeActions printLabel={t("print_btn")} downloadLabel={t("download_btn")} email={siteConfig.email} />
         </div>
 
-        <div className="grid lg:grid-cols-[280px_1fr] gap-10 lg:gap-16">
-          {/* ── Left Column ── */}
-          <aside className="space-y-8">
-            <div className="space-y-3">
-              <h1 className="text-3xl font-extrabold tracking-tighter text-foreground">
-                {t("title")}
-              </h1>
-              <p className="text-sm font-semibold text-primary leading-relaxed">
-                {t("subtitle")}
-              </p>
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <MapPin className="w-3.5 h-3.5 shrink-0" />
-                {t("location")}
+        <div className="mt-14 grid gap-12 border-t border-border pt-10 md:grid-cols-[260px_1fr] md:gap-16 print:mt-6 print:gap-8">
+          <aside className="space-y-9">
+            <div>
+              <h2 className={label}>{t("contact_title")}</h2>
+              <ul className="mt-4 space-y-3 text-sm">
+                <li className="flex items-center gap-2.5 text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden /> {t("location")}
+                </li>
+                <li>
+                  <a href={`mailto:${siteConfig.email}`} className="inline-flex items-center gap-2.5 break-all text-foreground transition-colors hover:text-primary">
+                    <Mail className="h-3.5 w-3.5 shrink-0" aria-hidden /> {siteConfig.email}
+                  </a>
+                </li>
+                <li>
+                  <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-foreground transition-colors hover:text-primary">
+                    <Github className="h-3.5 w-3.5 shrink-0" aria-hidden /> github.com/berkay-turkyilmaz
+                  </a>
+                </li>
+                <li>
+                  <a href={siteConfig.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2.5 text-foreground transition-colors hover:text-primary">
+                    <Linkedin className="h-3.5 w-3.5 shrink-0" aria-hidden /> linkedin.com/in/berkay-turkyilmaz
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h2 className={label}>{t("skills_title")}</h2>
+              <div className="mt-4 space-y-5">
+                {SKILL_CATEGORIES.map((cat) => (
+                  <div key={cat.id}>
+                    <p className="text-sm font-medium text-foreground">{tSkills(cat.labelKey)}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{cat.skills.join(", ")}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="space-y-2">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
-                {t("contact_title")}
-              </h3>
-              <div className="space-y-2">
-                <a
-                  href={`mailto:${siteConfig.email}`}
-                  className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <Mail className="w-3.5 h-3.5 group-hover:text-primary transition-colors" />
-                  {siteConfig.email}
-                </a>
-                <a
-                  href={siteConfig.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <Github className="w-3.5 h-3.5 group-hover:text-primary transition-colors" />
-                  github.com/berkay-turkyilmaz
-                  <ExternalLink className="w-3 h-3 opacity-40" />
-                </a>
-                <a
-                  href={siteConfig.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-                >
-                  <Linkedin className="w-3.5 h-3.5 group-hover:text-primary transition-colors" />
-                  linkedin.com/in/berkay-turkyilmaz
-                  <ExternalLink className="w-3 h-3 opacity-40" />
-                </a>
-              </div>
+            <div>
+              <h2 className={label}>{t("language_title")}</h2>
+              <p className="mt-4 text-sm text-muted-foreground">{t("language_value")}</p>
             </div>
 
-            <div className="space-y-2">
-              <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
-                {t("language_title")}
-              </h3>
-              <p className="text-sm text-muted-foreground">{t("language_value")}</p>
+            <div>
+              <h2 className={label}>{t("education_title")}</h2>
+              <p className="mt-4 text-sm font-medium text-foreground">{t("edu_1_degree")}</p>
+              <p className="text-sm text-muted-foreground">{t("edu_1_school")}</p>
+              <p className="mt-1 font-mono text-[11px] text-muted-foreground">{t("edu_1_period")}</p>
             </div>
           </aside>
 
-          {/* ── Right Column ── */}
-          <div className="space-y-12">
-            {/* Summary */}
-            <section className="space-y-3">
-              <h2 className="text-lg font-extrabold text-foreground tracking-tight border-b border-border pb-3">
-                {t("summary_title")}
-              </h2>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {t("summary")}
-              </p>
+          <div className="space-y-14">
+            <section aria-labelledby="cv-summary">
+              <h2 id="cv-summary" className={label}>{t("summary_title")}</h2>
+              <p className="mt-4 text-lg leading-[1.7] text-foreground/90">{t("summary")}</p>
             </section>
 
-            {/* Experience */}
-            <section className="space-y-8">
-              <h2 className="text-lg font-extrabold text-foreground tracking-tight border-b border-border pb-3">
-                {t("experience_title")}
-              </h2>
-
-              {RESUME_EXPERIENCE.map((exp) => (
-                <div key={exp.id} className="space-y-2">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                    <h3 className="font-bold text-foreground">{t(exp.roleKey)}</h3>
-                    <span className="text-xs font-mono text-muted-foreground whitespace-nowrap">
-                      {t(exp.periodKey)}
-                    </span>
-                  </div>
-                  <p className="text-sm font-semibold text-primary">{t(exp.companyKey)}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed mt-2">
-                    {t(exp.descKey)}
-                  </p>
-                  <ul className="mt-3 space-y-2">
-                    {exp.bulletKeys.map((bulletKey) => (
-                      <li
-                        key={bulletKey}
-                        className="flex items-start gap-2.5 text-sm text-foreground/80"
-                      >
-                        <span className="text-primary mt-0.5 shrink-0 font-bold">→</span>
-                        {t(bulletKey)}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </section>
-
-            {/* Skills */}
-            <section className="space-y-5">
-              <h2 className="text-lg font-extrabold text-foreground tracking-tight border-b border-border pb-3">
-                {t("skills_title")}
-              </h2>
-              <div className="space-y-4">
-                {SKILL_CATEGORIES.map((cat) => (
-                  <div key={cat.id} className="space-y-2">
-                    <h4 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
-                      {skillCategoryLabels[cat.id] ?? cat.labelKey}
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {cat.skills.map((skill) => (
-                        <span
-                          key={skill}
-                          className="px-3 py-1 text-[12px] font-semibold bg-secondary/60 text-foreground/80 rounded-lg border border-border/50"
-                        >
-                          {skill}
-                        </span>
+            <section aria-labelledby="cv-exp">
+              <h2 id="cv-exp" className={label}>{t("experience_title")}</h2>
+              <ol className="mt-6 space-y-10">
+                {RESUME_EXPERIENCE.map((exp) => (
+                  <li key={exp.id} className="border-t border-border pt-6">
+                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline">
+                      <h3 className="font-display text-2xl text-foreground sm:text-3xl">{t(exp.roleKey)}</h3>
+                      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t(exp.periodKey)}</span>
+                    </div>
+                    <p className="mt-1 text-primary">{t(exp.companyKey)}</p>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{t(exp.descKey)}</p>
+                    <ul className="mt-4 space-y-2 text-sm leading-relaxed text-foreground/85 sm:text-base">
+                      {exp.bulletKeys.map((key) => (
+                        <li key={key} className="relative pl-5 before:absolute before:left-0 before:top-[0.7em] before:h-px before:w-3 before:bg-primary">
+                          {t(key)}
+                        </li>
                       ))}
-                    </div>
-                  </div>
+                    </ul>
+                  </li>
                 ))}
-              </div>
+              </ol>
             </section>
 
-            {/* Education */}
-            <section className="space-y-4">
-              <h2 className="text-lg font-extrabold text-foreground tracking-tight border-b border-border pb-3">
-                {t("education_title")}
-              </h2>
-              <div className="space-y-1">
-                <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                  <h3 className="font-bold text-foreground">{t("edu_1_degree")}</h3>
-                  <span className="text-xs font-mono text-muted-foreground">
-                    {t("edu_1_period")}
-                  </span>
-                </div>
-                <p className="text-sm font-semibold text-primary">{t("edu_1_school")}</p>
-              </div>
-            </section>
-
-            {/* Software Projects */}
-            <section className="space-y-6">
-              <h2 className="text-lg font-extrabold text-foreground tracking-tight border-b border-border pb-3">
-                {t("projects_title")}
-              </h2>
-              <div className="space-y-6">
-                {RESUME_PROJECTS.map((project) => (
-                  <div key={project.id} className="space-y-2">
-                    <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1">
-                      <h3 className="font-bold text-foreground flex items-center gap-2 flex-wrap">
-                        {t(project.titleKey)}
-                        {project.url && (
-                          <a
-                            href={project.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 text-xs font-semibold text-primary hover:underline"
-                          >
-                            <Globe className="w-3 h-3" />
-                            {project.url.replace("https://", "")}
-                          </a>
-                        )}
-                      </h3>
-                      <span className="text-xs font-mono text-muted-foreground">
-                        {t(project.periodKey)}
-                      </span>
+            <section aria-labelledby="cv-projects">
+              <h2 id="cv-projects" className={label}>{t("projects_title")}</h2>
+              <ul className="mt-6 space-y-8">
+                {RESUME_PROJECTS.map((p) => (
+                  <li key={p.id} className="border-t border-border pt-6">
+                    <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-baseline">
+                      <h3 className="font-display text-2xl text-foreground sm:text-3xl">{t(p.titleKey)}</h3>
+                      <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t(p.periodKey)}</span>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {t(project.descKey)}
-                    </p>
-                  </div>
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">{t(p.descKey)}</p>
+                    {p.url && (
+                      <a href={p.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex items-center gap-1 text-sm text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-primary">
+                        {p.url.replace("https://", "")}
+                        <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+                      </a>
+                    )}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </section>
           </div>
         </div>
-
-        <div className="mt-16 rounded-3xl bg-primary/5 border border-primary/20 p-8 text-center space-y-4 print:hidden">
-          <p className="font-semibold text-foreground">{t("cta_text")}</p>
-          <Link href="/contact">
-            <button
-              type="button"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold text-sm hover:bg-primary/90 transition-all hover:scale-105"
-            >
-              {t("cta_btn")}
-            </button>
-          </Link>
-        </div>
       </main>
 
-      <Footer />
+      <div className="print:hidden">
+        <Footer />
+      </div>
     </div>
   );
 }

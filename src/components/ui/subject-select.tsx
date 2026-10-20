@@ -46,7 +46,7 @@ export function SubjectSelect({
         aria-expanded={open}
         onClick={() => setOpen((prev) => !prev)}
         className={cn(
-          "w-full h-11 bg-secondary/20 border border-border/50 rounded-xl px-4 text-sm text-left flex items-center justify-between transition-all duration-200",
+          "w-full h-11 bg-card border border-border/50 rounded-[6px] px-4 text-sm text-left flex items-center justify-between transition-all duration-200",
           "focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50",
           error && "border-destructive/50 focus:ring-destructive/20",
           !selected && "text-muted-foreground/70"
@@ -66,7 +66,7 @@ export function SubjectSelect({
       {open && (
         <ul
           role="listbox"
-          className="absolute z-50 mt-1.5 w-full rounded-xl border border-border/60 bg-card shadow-xl py-1 overflow-hidden"
+          className="absolute z-50 mt-1.5 w-full rounded-[6px] border border-border/60 bg-card shadow-xl py-1 overflow-hidden"
         >
           {options.map((option) => (
             <li key={option.value} role="option" aria-selected={value === option.value}>

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getBlogPostSlugs } from "@/lib/blog/posts";
 import { getBlogPostContent } from "@/lib/blog/content";
-import { getProjectSlugs } from "@/data/projects";
+import { getWorkSlugs } from "@/data/work";
 import { INDEXED_LOCALES, localePath } from "@/lib/seo/page-metadata";
 
 const SITE_UPDATED = new Date("2026-10-20");
@@ -51,7 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       });
     }
 
-    for (const slug of getProjectSlugs()) {
+    for (const slug of getWorkSlugs()) {
       entries.push({
         url: localePath(locale, `/projects/${slug}`),
         lastModified: SITE_UPDATED,

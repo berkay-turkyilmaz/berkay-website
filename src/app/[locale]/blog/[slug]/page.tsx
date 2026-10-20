@@ -1,24 +1,21 @@
+import { Suspense } from "react";
+import { notFound } from "next/navigation";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowLeft } from "lucide-react";
+import { ContactBand } from "@/components/home/contact-band";
 import { ShareArticleButton } from "@/components/features/blog/share-article-button";
-import { Link } from "@/i18n/routing";
-import { notFound } from "next/navigation";
-import { getTranslations, setRequestLocale } from "next-intl/server";
-import { JsonLd, blogPostingJsonLd } from "@/lib/seo/json-ld";
-import { localePath } from "@/lib/seo/page-metadata";
 import { AudioPlayer } from "@/components/features/blog/audio-player";
-import { Suspense } from "react";
+import { Link, routing } from "@/i18n/routing";
+import { JsonLd, blogPostingJsonLd } from "@/lib/seo/json-ld";
+import { createPageMetadata, localePath } from "@/lib/seo/page-metadata";
 import { getBlogPostContent } from "@/lib/blog/content";
-import { getBlogPostMetaBySlug, getBlogPostSlugs } from "@/lib/blog/posts";
-import { createPageMetadata } from "@/lib/seo/page-metadata";
-import { routing } from "@/i18n/routing";
-import type { Metadata } from "next";
+import { BLOG_POSTS, getBlogPostMetaBySlug, getBlogPostSlugs } from "@/lib/blog/posts";
 
-async function getBlogPost(slug: string, locale: string) {
-  if (!getBlogPostMetaBySlug(slug)) return null;
-  return getBlogPostContent(slug, locale);
+export function generateStaticParams() {
+  return getBlogPostSlugs().flatMap((slug) => routing.locales.map((locale) => ({ slug, locale })));
 }
 
 export async function generateMetadata({
@@ -29,58 +26,38 @@ export async function generateMetadata({
   const { slug, locale } = await params;
   const meta = getBlogPostMetaBySlug(slug);
   if (!meta) return {};
-
-  const t = await getTranslations({ locale, namespace: "BlogHub" });
-  const title = t(`posts.${meta.id}.title`);
-  const description = t(`posts.${meta.id}.excerpt`);
-
+  const content = getBlogPostContent(slug, locale);
   return createPageMetadata({
     locale,
     path: `/blog/${slug}`,
-    title,
-    description,
+    title: content?.title ?? "",
+    description: content?.excerpt ?? "",
   });
 }
 
-export function generateStaticParams() {
-  return getBlogPostSlugs().flatMap((slug) =>
-    routing.locales.map((locale) => ({ slug, locale }))
-  );
-}
-
-// --- LOADING COMPONENT ---
-function AudioPlayerSkeleton() {
-  return (
-    <div className="w-full h-48 bg-zinc-900/50 backdrop-blur-xl border border-zinc-800/50 rounded-3xl animate-pulse" />
-  );
-}
-
-// --- PAGE COMPONENT ---
-export default async function BlogDetail({
-  params,
-}: {
-  params: Promise<{ slug: string; locale: string }>;
-}) {
+export default async function BlogDetail({ params }: { params: Promise<{ slug: string; locale: string }> }) {
   const { slug, locale } = await params;
   setRequestLocale(locale);
 
-  // Parallel data fetching
-  const [post, t, tHub] = await Promise.all([
-    getBlogPost(slug, locale),
-    getTranslations({ locale, namespace: "BlogDetail" }),
-    getTranslations({ locale, namespace: "BlogHub" }),
-  ]);
-
   const meta = getBlogPostMetaBySlug(slug);
-  if (!post || !meta) {
-    notFound();
-  }
+  const post = meta ? getBlogPostContent(slug, locale) : null;
+  if (!post || !meta) notFound();
 
-  // Clean text for audio player
+  const t = await getTranslations("BlogDetail");
+  const tHub = await getTranslations("BlogHub");
   const cleanText = post.content.replace(/<[^>]*>/g, "");
 
+  const index = BLOG_POSTS.findIndex((p) => p.slug === slug);
+  const next = BLOG_POSTS[(index + 1) % BLOG_POSTS.length];
+
+  const date = new Intl.DateTimeFormat(locale === "tr" ? "tr-TR" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(post.date));
+
   return (
-    <div className="min-h-screen bg-background selection:bg-primary/20">
+    <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/20">
       <JsonLd
         data={blogPostingJsonLd({
           title: post.title,
@@ -89,114 +66,81 @@ export default async function BlogDetail({
           datePublished: post.date,
         })}
       />
-      {/* Fixed Header */}
-      <div className="fixed top-0 left-0 w-full z-50">
-        <Header />
-      </div>
-
-      <main className="container mx-auto px-6 lg:px-12 pt-32 pb-24 max-w-4xl">
-        {/* Navigation Bar */}
-        <nav className="mb-12 flex items-center justify-between">
-          <Link
-            href="/blog"
-            className="group inline-flex items-center gap-3 text-sm font-semibold text-muted-foreground hover:text-foreground transition-colors"
-          >
-            <div className="p-2 rounded-full bg-secondary/50 group-hover:bg-secondary border border-transparent group-hover:border-border/50 transition-all">
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            </div>
-            <span>{t("back_to_blog")}</span>
-          </Link>
-
-          <ShareArticleButton
-            title={post.title}
-            label={t("share")}
-            copiedLabel={t("share_copied")}
-          />
-        </nav>
-
-        {/* Article Header */}
-        <header className="space-y-8 mb-16 pb-12 border-b border-border/30">
-          {/* Metadata */}
-          <div className="flex flex-wrap items-center gap-4">
-            <Badge
-              variant="outline"
-              className="rounded-lg px-4 py-1.5 text-[11px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 font-bold"
-            >
-              {tHub(`categories.${meta.category}`)}
-            </Badge>
-
-            <div className="flex items-center gap-4 text-xs text-muted-foreground font-mono">
-              <span className="flex items-center gap-2">
-                <Calendar className="h-3.5 w-3.5" />
-                {new Date(post.date).toLocaleDateString(locale, {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </span>
-              <span className="opacity-50">•</span>
-              <span className="flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5" />
-                {post.readTime}
-              </span>
-            </div>
-          </div>
-
-          {/* Title */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter leading-[1.1] text-foreground">
-            {post.title}
-          </h1>
-
-          {/* Excerpt */}
-          <p className="text-lg sm:text-xl text-muted-foreground font-normal leading-relaxed max-w-3xl">
-            {post.excerpt}
-          </p>
-
-          {/* Audio Player */}
-          {post.hasAudio && (
-            <Suspense fallback={<AudioPlayerSkeleton />}>
-              <AudioPlayer title={post.title} text={cleanText} />
-            </Suspense>
-          )}
-        </header>
-
-        {/* Article Content */}
-        <article
-          className="prose prose-lg prose-zinc dark:prose-invert max-w-none
-            prose-headings:font-bold prose-headings:tracking-tight prose-headings:scroll-mt-24
-            prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-6
-            prose-h3:text-2xl prose-h3:mt-10 prose-h3:mb-4
-            prose-p:leading-relaxed prose-p:text-foreground/90 prose-p:mb-6
-            prose-a:text-primary prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-a:transition-all
-            prose-strong:text-foreground prose-strong:font-bold
-            prose-code:text-primary prose-code:bg-primary/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:font-mono prose-code:text-sm
-            prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800 prose-pre:rounded-2xl prose-pre:shadow-2xl
-            prose-img:rounded-2xl prose-img:shadow-2xl prose-img:border prose-img:border-border/50
-            prose-blockquote:border-l-4 prose-blockquote:border-primary prose-blockquote:bg-primary/5 prose-blockquote:py-4 prose-blockquote:px-6 prose-blockquote:rounded-r-xl prose-blockquote:not-italic
-            prose-ul:list-disc prose-ul:pl-6 prose-ol:list-decimal prose-ol:pl-6
-            prose-li:mb-2
-            prose-lead:text-xl prose-lead:text-muted-foreground prose-lead:font-normal prose-lead:leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: post.content }}
-        />
-
-        {/* Article Footer / CTA (Optional) */}
-        <div className="mt-20 pt-12 border-t border-border/30">
-          <div className="text-center space-y-4">
-            <p className="text-sm text-muted-foreground">
-              {t("enjoyed_article")}
-            </p>
-            <div className="flex items-center justify-center gap-4">
+      <Header />
+      <main id="main">
+        <article>
+          <header className="mx-auto w-full max-w-[860px] px-5 pb-12 pt-28 sm:px-8 md:pt-36">
+            <div className="rise flex items-center justify-between">
               <Link
                 href="/blog"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:bg-primary/90 transition-all hover:scale-105"
+                className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
               >
-                {t("read_more_articles")}
+                <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
+                {t("back_to_blog")}
               </Link>
+              <ShareArticleButton title={post.title} label={t("share")} copiedLabel={t("share_copied")} />
             </div>
-          </div>
-        </div>
-      </main>
 
+            <p
+              className="rise mt-10 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+              style={{ "--d": 1 } as React.CSSProperties}
+            >
+              <span className="text-primary">{tHub(`categories.${meta.category}`)}</span>
+              <span className="mx-2" aria-hidden>
+                /
+              </span>
+              <time dateTime={post.date}>{date}</time>
+              <span className="mx-2" aria-hidden>
+                /
+              </span>
+              {post.readTime}
+            </p>
+
+            <h1
+              className="rise mt-6 font-display text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.04] tracking-[-0.025em] text-foreground text-balance"
+              style={{ "--d": 2 } as React.CSSProperties}
+            >
+              {post.title}
+            </h1>
+            <p
+              className="rise mt-7 text-lg leading-relaxed text-muted-foreground sm:text-xl"
+              style={{ "--d": 3 } as React.CSSProperties}
+            >
+              {post.excerpt}
+            </p>
+
+            {post.hasAudio && (
+              <div className="rise mt-10" style={{ "--d": 4 } as React.CSSProperties}>
+                <Suspense fallback={<div className="h-40 animate-pulse rounded-[6px] bg-secondary" />}>
+                  <AudioPlayer title={post.title} text={cleanText} />
+                </Suspense>
+              </div>
+            )}
+          </header>
+
+          <div className="mx-auto w-full max-w-[860px] px-5 pb-24 sm:px-8">
+            <div className="article" dangerouslySetInnerHTML={{ __html: post.content }} />
+          </div>
+        </article>
+
+        <section className="border-t border-border">
+          <Link
+            href={`/blog/${next.slug}` as "/blog"}
+            className="group mx-auto block w-full max-w-[1200px] px-5 py-16 sm:px-8 md:py-24"
+          >
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{t("next_post")}</p>
+            <p className="mt-4 flex items-baseline justify-between gap-6 font-display text-[clamp(2rem,5vw,4rem)] leading-tight tracking-[-0.02em] text-foreground transition-transform duration-500 group-hover:translate-x-2">
+              {getBlogPostContent(next.slug, locale)?.title}
+              <ArrowUpRight
+                className="h-8 w-8 shrink-0 text-muted-foreground transition-all duration-500 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary sm:h-10 sm:w-10"
+                aria-hidden
+              />
+            </p>
+          </Link>
+        </section>
+
+        <ContactBand />
+      </main>
       <Footer />
     </div>
   );

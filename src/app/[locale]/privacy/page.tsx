@@ -1,59 +1,41 @@
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
-import { Shield } from "lucide-react";
+import { PageHero } from "@/components/layout/page-hero";
 
-export default async function PrivacyPage({
-  params,
-}: {
-  params: Promise<{ locale: string }>;
-}) {
+const SECTION_COUNT = 7;
+
+export default async function PrivacyPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  setRequestLocale(locale);
   const t = await getTranslations({ locale, namespace: "PrivacyPage" });
 
-  const sections = [
-    { title: t("section_1_title"), body: t("section_1_body") },
-    { title: t("section_2_title"), body: t("section_2_body") },
-    { title: t("section_3_title"), body: t("section_3_body") },
-    { title: t("section_4_title"), body: t("section_4_body") },
-    { title: t("section_5_title"), body: t("section_5_body") },
-    { title: t("section_6_title"), body: t("section_6_body") },
-    { title: t("section_7_title"), body: t("section_7_body") },
-  ];
+  const sections = Array.from({ length: SECTION_COUNT }, (_, i) => ({
+    title: t(`section_${i + 1}_title`),
+    body: t(`section_${i + 1}_body`),
+  }));
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-background text-foreground selection:bg-primary/20">
       <Header />
+      <main id="main">
+        <PageHero eyebrow={t("badge")} title={t("title")} lead={t("intro")} />
 
-      <main className="container mx-auto px-6 lg:px-12 pt-36 pb-24 max-w-3xl">
-        {/* Header */}
-        <div className="mb-14 space-y-4">
-          <div className="inline-flex items-center gap-2 text-primary font-mono text-[11px] font-bold tracking-[0.2em] uppercase">
-            <Shield className="w-3.5 h-3.5" />
-            {t("badge")}
-          </div>
-          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tighter text-foreground">
-            {t("title")}
-          </h1>
-          <p className="text-xs font-mono text-muted-foreground/60">
-            {t("last_updated")}
-          </p>
-          <p className="text-muted-foreground leading-relaxed font-medium max-w-2xl">
-            {t("intro")}
-          </p>
-        </div>
-
-        {/* Sections */}
-        <div className="space-y-10">
-          {sections.map((section, i) => (
-            <div key={i} className="space-y-3">
-              <h2 className="text-lg font-bold text-foreground">{section.title}</h2>
-              <p className="text-muted-foreground leading-relaxed">{section.body}</p>
-            </div>
-          ))}
-        </div>
+        <section className="mx-auto w-full max-w-[1200px] px-5 pb-24 sm:px-8 md:pb-32">
+          <p className="mb-10 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{t("last_updated")}</p>
+          <ol className="divide-y divide-border border-y border-border">
+            {sections.map((section, i) => (
+              <li key={section.title} className="grid gap-4 py-8 md:grid-cols-12 md:gap-8">
+                <div className="md:col-span-4">
+                  <span className="font-display text-2xl italic text-primary">{String(i + 1).padStart(2, "0")}</span>
+                  <h2 className="mt-2 font-display text-2xl leading-snug text-foreground">{section.title}</h2>
+                </div>
+                <p className="leading-relaxed text-muted-foreground md:col-span-8">{section.body}</p>
+              </li>
+            ))}
+          </ol>
+        </section>
       </main>
-
       <Footer />
     </div>
   );

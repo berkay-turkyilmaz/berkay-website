@@ -22,6 +22,43 @@ const AI_LAB_LEGACY = [
   ["/ai-lab/english-practice", "/ai-lab/english-path"],
 ];
 
+/** Old project case-study slugs -> new ones. */
+const PROJECT_SLUGS = [
+  ["bex-assistant", "ai-lab"],
+  ["pdf-analyzer", "ai-lab"],
+  ["portfolio-infra", "this-site"],
+  ["booking-crm", "booking-demo"],
+  ["saas-starter", ""],
+];
+
+const projectRedirects = PROJECT_SLUGS.flatMap(([from, to]) => {
+  const dest = to ? "/projects/" + to : "/projects";
+  return [
+    { source: "/projects/" + from, destination: dest, permanent: true },
+    { source: "/:locale(en|de|es|fr|ar|ja)/projects/" + from, destination: "/:locale" + dest, permanent: true },
+  ];
+});
+
+/** Old blog slugs -> rewritten posts (or the blog index when there is no equivalent). */
+const BLOG_SLUGS = [
+  ["nextjs-portfolio-guide", "static-rendering-next-intl"],
+  ["nextjs-i18n-nextintl-guide", "static-rendering-next-intl"],
+  ["ai-automation-guide", "protecting-ai-endpoints"],
+  ["groq-streaming-llm-integration", "streaming-errors-ai-sdk"],
+  ["n8n-workflow-automation", "hide-n8n-webhooks"],
+  ["supabase-fullstack-architecture", ""],
+  ["typescript-type-safe-api", ""],
+  ["vercel-edge-runtime-guide", ""],
+];
+
+const blogRedirects = BLOG_SLUGS.flatMap(([from, to]) => {
+  const dest = to ? "/blog/" + to : "/blog";
+  return [
+    { source: "/blog/" + from, destination: dest, permanent: true },
+    { source: "/:locale(en|de|es|fr|ar|ja)/blog/" + from, destination: "/:locale" + dest, permanent: true },
+  ];
+});
+
 const aiLabRedirects = AI_LAB_LEGACY.flatMap(([from, to]) => [
   { source: from, destination: to, permanent: true },
   {
@@ -40,6 +77,8 @@ const nextConfig = {
   async redirects() {
     return [
       ...aiLabRedirects,
+      ...projectRedirects,
+      ...blogRedirects,
       { source: "/now", destination: "/", permanent: true },
       {
         source: "/:locale(en|de|es|fr|ar|ja)/now",

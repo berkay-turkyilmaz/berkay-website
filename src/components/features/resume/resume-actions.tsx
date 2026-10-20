@@ -10,20 +10,20 @@ interface ResumeActionsProps {
 
 export function ResumeActions({ printLabel, downloadLabel, email }: ResumeActionsProps) {
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex flex-wrap items-center gap-3 print:hidden">
       <button
         onClick={() => window.print()}
         type="button"
-        className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-bold text-muted-foreground bg-secondary/60 hover:bg-secondary border border-border/50 rounded-xl transition-all hover:text-foreground print:hidden"
+        className="inline-flex h-11 items-center gap-2 rounded-full border border-border px-5 text-sm font-medium text-foreground transition-colors duration-300 hover:border-foreground"
       >
-        <Printer className="w-4 h-4" />
+        <Printer className="h-4 w-4" aria-hidden />
         {printLabel}
       </button>
       <a
         href={`mailto:${email}?subject=CV Request`}
-        className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-all hover:scale-105 shadow-sm shadow-primary/20 print:hidden"
+        className="inline-flex h-11 items-center gap-2 rounded-full bg-foreground px-5 text-sm font-medium text-background transition-transform duration-300 hover:-translate-y-0.5"
       >
-        <Download className="w-4 h-4" />
+        <Download className="h-4 w-4" aria-hidden />
         {downloadLabel}
       </a>
     </div>
