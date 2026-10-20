@@ -1,11 +1,14 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { getMessages, getTranslations } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
+import { notFound } from "next/navigation";
+import { routing } from "@/i18n/routing";
 import type { Metadata } from "next";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
-import { buildLanguageAlternates, openGraphImagePath } from "@/lib/seo/page-metadata";
+import { buildLanguageAlternates, isIndexedLocale, openGraphImagePath } from "@/lib/seo/page-metadata";
+import { siteConfig } from "@/data/site-config";
 import "./globals.css";
 
 // --- FONT CONFIGURATION ---
@@ -19,6 +22,10 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export function generateStaticParams() {
+  return routing.locales.map((locale) => ({ locale }));
+}
+
 // --- DYNAMIC METADATA (i18n SEO) ---
 export async function generateMetadata({ 
   params 
@@ -31,7 +38,7 @@ export async function generateMetadata({
   const t = await getTranslations({ locale, namespace: "Metadata" });
 
   return {
-    metadataBase: new URL("https://berkay-dev.vercel.app"),
+    metadataBase: new URL(siteConfig.baseUrl),
     title: {
       default: t("site_title"),
       template: `%s | ${t("site_name")}`,
@@ -39,7 +46,8 @@ export async function generateMetadata({
     description: t("description"),
     keywords: ["Next.js", "AI Architecture", "n8n", "React", "Frontend", "Enterprise Web"],
     authors: [{ name: "Berkay Türkyılmaz" }],
-    alternates: buildLanguageAlternates("/"),
+    alternates: buildLanguageAlternates("/", locale),
+    ...(isIndexedLocale(locale) ? {} : { robots: { index: false, follow: true } }),
     icons: {
       icon: [
         { url: "/favicon.ico", sizes: "any" },
@@ -63,7 +71,7 @@ export async function generateMetadata({
                   : locale === "ar"
                     ? "ar_SA"
                     : "en_US",
-      url: "https://berkay-dev.vercel.app/",
+      url: siteConfig.baseUrl + "/",
       siteName: "BERKAY",
       images: [
         {
@@ -86,6 +94,10 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  if (!routing.locales.includes(locale as (typeof routing.locales)[number])) {
+    notFound();
+  }
+  setRequestLocale(locale);
   const messages = await getMessages();
 
   return (

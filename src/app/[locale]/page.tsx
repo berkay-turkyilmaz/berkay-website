@@ -6,11 +6,14 @@ import { AiLabPreview } from "@/components/features/home/ailab-preview";
 import { BlogPreview } from "@/components/features/home/blog-preview";
 import { CurrentFocusWidget } from "@/components/features/home/current-focus-widget";
 import { GitHubActivity } from "@/components/github-activity";
+import { JsonLd, personJsonLd, websiteJsonLd } from "@/lib/seo/json-ld";
 import { ContactCTA } from "@/components/features/home/contact-cta";
 
 export default function Home() {
   return (
     <div className="relative min-h-screen bg-background text-foreground selection:bg-primary/20 font-sans">
+      <JsonLd data={personJsonLd()} />
+      <JsonLd data={websiteJsonLd()} />
       <Header />
 
       <main className="flex w-full flex-col items-center">

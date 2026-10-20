@@ -299,3 +299,14 @@ button:disabled,
     transition: background-color 0.3s ease, color 0.3s ease; /* Mod geçişini yumuşatır */
   }
 }
+/* Brand intro: pure CSS so it never blocks first paint on hydration. */
+@keyframes intro-curtain {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-100%); visibility: hidden; }
+}
+.intro-curtain {
+  animation: intro-curtain 0.5s cubic-bezier(0.76, 0, 0.24, 1) 0.2s forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro-curtain { display: none; }
+}

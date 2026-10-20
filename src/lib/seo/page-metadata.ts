@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
 import { routing } from "@/i18n/routing";
+import { siteConfig } from "@/data/site-config";
 
-const BASE_URL = "https://berkay-dev.vercel.app";
+const BASE_URL = siteConfig.baseUrl;
+
+/** Locales with real, fully translated content. Others are served but kept out of search. */
+export const INDEXED_LOCALES = ["tr", "en"] as const;
+
+export function isIndexedLocale(locale: string): boolean {
+  return (INDEXED_LOCALES as readonly string[]).includes(locale);
+}
 
 const OG_LOCALE: Record<string, string> = {
   tr: "tr_TR",
@@ -28,13 +36,19 @@ export function localePath(locale: string, path: string): string {
   return `${BASE_URL}/${locale}${normalized === "/" ? "" : normalized}`;
 }
 
-export function buildLanguageAlternates(path: string): Metadata["alternates"] {
+export function buildLanguageAlternates(
+  path: string,
+  locale?: string
+): Metadata["alternates"] {
   const languages: Record<string, string> = {};
-  for (const locale of routing.locales) {
-    languages[locale] = localePath(locale, path);
+  for (const l of INDEXED_LOCALES) {
+    languages[l] = localePath(l, path);
   }
   languages["x-default"] = localePath(routing.defaultLocale, path);
-  return { languages };
+  return {
+    languages,
+    ...(locale ? { canonical: localePath(locale, path) } : {}),
+  };
 }
 
 type PageMetadataOptions = {
@@ -55,7 +69,8 @@ export function createPageMetadata({
   return {
     title,
     description,
-    alternates: buildLanguageAlternates(path),
+    alternates: buildLanguageAlternates(path, locale),
+    ...(isIndexedLocale(locale) ? {} : { robots: { index: false, follow: true } }),
     openGraph: {
       title,
       description,

@@ -1,11 +1,13 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, Clock, ArrowLeft, Eye } from "lucide-react";
+import { Calendar, Clock, ArrowLeft } from "lucide-react";
 import { ShareArticleButton } from "@/components/features/blog/share-article-button";
 import { Link } from "@/i18n/routing";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
+import { JsonLd, blogPostingJsonLd } from "@/lib/seo/json-ld";
+import { localePath } from "@/lib/seo/page-metadata";
 import { AudioPlayer } from "@/components/features/blog/audio-player";
 import { Suspense } from "react";
 import { getBlogPostContent } from "@/lib/blog/content";
@@ -60,6 +62,7 @@ export default async function BlogDetail({
   params: Promise<{ slug: string; locale: string }>;
 }) {
   const { slug, locale } = await params;
+  setRequestLocale(locale);
 
   // Parallel data fetching
   const [post, t, tHub] = await Promise.all([
@@ -78,6 +81,14 @@ export default async function BlogDetail({
 
   return (
     <div className="min-h-screen bg-background selection:bg-primary/20">
+      <JsonLd
+        data={blogPostingJsonLd({
+          title: post.title,
+          description: post.excerpt,
+          url: localePath(locale, `/blog/${slug}`),
+          datePublished: post.date,
+        })}
+      />
       {/* Fixed Header */}
       <div className="fixed top-0 left-0 w-full z-50">
         <Header />
@@ -109,7 +120,7 @@ export default async function BlogDetail({
           <div className="flex flex-wrap items-center gap-4">
             <Badge
               variant="outline"
-              className="rounded-lg px-4 py-1.5 text-[10px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 font-bold"
+              className="rounded-lg px-4 py-1.5 text-[11px] uppercase tracking-widest border-primary/30 text-primary bg-primary/5 font-bold"
             >
               {tHub(`categories.${meta.category}`)}
             </Badge>
@@ -128,15 +139,6 @@ export default async function BlogDetail({
                 <Clock className="h-3.5 w-3.5" />
                 {post.readTime}
               </span>
-              {post.views && (
-                <>
-                  <span className="opacity-50">•</span>
-                  <span className="flex items-center gap-2">
-                    <Eye className="h-3.5 w-3.5" />
-                    {post.views.toLocaleString()}
-                  </span>
-                </>
-              )}
             </div>
           </div>
 
