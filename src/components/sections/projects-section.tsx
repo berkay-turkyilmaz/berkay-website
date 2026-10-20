@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Badge } from "@/components/ui/badge";
 import { Link } from "@/i18n/routing";
 import {
   ArrowUpRight,
@@ -48,7 +47,7 @@ function StatusBadge({ status }: { status: ProjectStatus }) {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${cls}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${cls}`}
     >
       {icon}
       {label}
@@ -99,13 +98,13 @@ function ProjectCard({ project, index, size = "normal" }: ProjectCardProps) {
             {project.tech.slice(0, 4).map((tech) => (
               <span
                 key={tech}
-                className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/30 text-white/80 backdrop-blur-sm border border-white/10"
+                className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/30 text-white/80 backdrop-blur-sm border border-white/10"
               >
                 {tech}
               </span>
             ))}
             {project.tech.length > 4 && (
-              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-black/30 text-white/60 backdrop-blur-sm border border-white/10">
+              <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-black/30 text-white/60 backdrop-blur-sm border border-white/10">
                 +{project.tech.length - 4}
               </span>
             )}
@@ -114,7 +113,7 @@ function ProjectCard({ project, index, size = "normal" }: ProjectCardProps) {
 
         {/* Year badge */}
         <div className="absolute top-3 left-4">
-          <span className="text-[10px] font-bold tabular-nums text-white/50">
+          <span className="text-[11px] font-bold tabular-nums text-white/50">
             {project.year}
           </span>
         </div>
@@ -232,7 +231,7 @@ function FilterTabs({
         >
           {label}
           <span
-            className={`ml-1.5 text-[10px] tabular-nums ${
+            className={`ml-1.5 text-[11px] tabular-nums ${
               active === value ? "opacity-70" : "opacity-40"
             }`}
           >

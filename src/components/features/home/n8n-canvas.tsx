@@ -3,9 +3,9 @@
 import { motion } from "framer-motion";
 import { 
   Code2, Cpu, Sparkles, Database, Share2, Globe, 
-  CheckCircle2, Zap, ArrowDown
+  Zap
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useMediaQuery, useMounted } from "@/lib/hooks";
 import { useTranslations } from "next-intl";
 
 // --- SABİTLER & VERİLER ---
@@ -44,27 +44,11 @@ const connectionPaths = [
 
 export default function N8NCanvas() {
   const t = useTranslations("HomePage.automation");
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [reduceMotion, setReduceMotion] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
+  const mounted = useMounted();
+  const reduceMotion = useMediaQuery("(prefers-reduced-motion: reduce)");
 
   const primaryColor = "#22d3ee";
-
-  useEffect(() => {
-    setMounted(true);
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(mq.matches);
-    const onChange = () => setReduceMotion(mq.matches);
-    mq.addEventListener("change", onChange);
-
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => {
-      mq.removeEventListener("change", onChange);
-      window.removeEventListener("resize", checkMobile);
-    };
-  }, []);
   
   if (!mounted) return <div className="w-full h-full bg-slate-950 animate-pulse" />;
 
@@ -79,7 +63,7 @@ export default function N8NCanvas() {
           
           {/* Header */}
           <div className="text-center space-y-2 mb-2 sticky top-0 bg-slate-950/80 backdrop-blur-md py-2 z-20 w-full">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono text-cyan-400">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-[11px] font-mono text-cyan-400">
                <Zap size={10} />
                <span>{t("mobile_pipeline")}</span>
             </div>
@@ -145,7 +129,7 @@ export default function N8NCanvas() {
                           <div className={`text-xs font-bold truncate ${node.type === 'main' ? 'text-cyan-50' : 'text-slate-300'}`}>
                             {node.label}
                           </div>
-                          <div className="text-[8px] text-slate-500 font-mono uppercase tracking-wider mt-0.5">
+                          <div className="text-[11px] text-slate-500 font-mono uppercase tracking-wider mt-0.5">
                             {node.type}
                           </div>
                         </div>
@@ -300,7 +284,7 @@ export default function N8NCanvas() {
                     <div className="text-[11px] font-bold text-slate-200 truncate leading-tight">
                       {node.label}
                     </div>
-                    <div className="text-[8px] text-slate-500 font-mono uppercase tracking-wider mt-0.5">
+                    <div className="text-[11px] text-slate-500 font-mono uppercase tracking-wider mt-0.5">
                       {node.type}
                     </div>
                   </div>
@@ -313,7 +297,7 @@ export default function N8NCanvas() {
         </div>
       </div>
       
-      <div className="absolute bottom-4 right-4 flex items-center gap-3 rounded-full border border-white/[0.06] bg-black/40 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.12em] text-slate-500 backdrop-blur-md sm:right-6">
+      <div className="absolute bottom-4 right-4 flex items-center gap-3 rounded-full border border-white/[0.06] bg-black/40 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-slate-500 backdrop-blur-md sm:right-6">
          <div className="flex items-center gap-1.5 text-cyan-400/90">
            <Zap size={10} />
            <span>Live</span>

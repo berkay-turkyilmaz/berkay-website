@@ -101,7 +101,7 @@ export function Footer() {
           <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground/60">
             {t("copyright", { year: new Date().getFullYear() })}
           </p>
-          <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">
+          <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-muted-foreground/70">
             <Cpu className="h-3 w-3 text-primary/70 shrink-0" />
             <span>{t("powered_by")}</span>
             <span className="text-primary/70">{t("stack_label")}</span>

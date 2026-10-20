@@ -44,7 +44,7 @@ export function BlogPreview() {
           >
             <Link href={`/blog/${post.slug}`} className="group block h-full">
               <article className="flex h-full flex-col rounded-xl border border-border/50 bg-card p-5 transition-all duration-300 hover:border-primary/20 hover:shadow-md sm:p-6">
-                <span className="mb-3 inline-flex w-fit rounded-md bg-secondary px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                <span className="mb-3 inline-flex w-fit rounded-md bg-secondary px-2 py-1 text-[11px] font-bold uppercase tracking-wider text-primary">
                   {tHub(`categories.${post.category}`)}
                 </span>
                 <h3 className="text-lg font-bold leading-snug text-foreground transition-colors group-hover:text-primary">

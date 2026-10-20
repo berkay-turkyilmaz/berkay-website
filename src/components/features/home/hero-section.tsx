@@ -1,23 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/routing";
-import { motion, type Variants } from "framer-motion";
+import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { ArrowRight, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export function HeroSection() {
   const t = useTranslations("HomePage");
-  const [reduceMotion, setReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduceMotion(mq.matches);
-    const fn = () => setReduceMotion(mq.matches);
-    mq.addEventListener("change", fn);
-    return () => mq.removeEventListener("change", fn);
-  }, []);
+  const reduceMotion = useReducedMotion() ?? false;
 
   const scrollToContent = () => {
     document.getElementById("home-content")?.scrollIntoView({ behavior: "smooth" });
@@ -114,7 +105,7 @@ export function HeroSection() {
         className="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 flex-col items-center gap-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded-full p-2"
         aria-label={t("hero.scroll_down")}
       >
-        <span className="text-[10px] font-semibold uppercase tracking-[0.2em]">
+        <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
           {t("hero.scroll_hint")}
         </span>
         <ChevronDown

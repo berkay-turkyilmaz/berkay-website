@@ -117,12 +117,12 @@ export default function Blog() {
                         />
                         {/* Category badge on cover */}
                         <div className="absolute top-4 left-5 flex items-center gap-2">
-                          <Badge variant="secondary" className="bg-black/40 text-white/80 border-white/10 text-[10px] tracking-widest uppercase px-3 py-1 font-bold backdrop-blur-sm">
+                          <Badge variant="secondary" className="bg-black/40 text-white/80 border-white/10 text-[11px] tracking-widest uppercase px-3 py-1 font-bold backdrop-blur-sm">
                             {t(`categories.${post.category}`)}
                           </Badge>
                           {post.hasAudio && (
                             <div
-                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/20 text-green-300 text-[10px] font-bold uppercase tracking-wider border border-green-500/30 backdrop-blur-sm"
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-green-500/20 text-green-300 text-[11px] font-bold uppercase tracking-wider border border-green-500/30 backdrop-blur-sm"
                               title={t("audio_article")}
                             >
                               <Headphones className="w-3 h-3" />

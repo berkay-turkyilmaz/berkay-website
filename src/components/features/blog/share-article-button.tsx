@@ -18,7 +18,6 @@ export function ShareArticleButton({ title, label, copiedLabel = "Link copied!" 
         return;
       }
       await navigator.clipboard.writeText(url);
-      // eslint-disable-next-line no-alert
       alert(copiedLabel);
     } catch {
       /* user cancelled share */

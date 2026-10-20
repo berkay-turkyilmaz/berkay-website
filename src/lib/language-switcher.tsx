@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
         <button
           key={lang.code}
           onClick={() => handleLanguageChange(lang.code)}
-          className={`relative px-3 py-1 text-[10px] font-bold tracking-widest rounded-full transition-all duration-300 ${
+          className={`relative px-3 py-1 text-[11px] font-bold tracking-widest rounded-full transition-all duration-300 ${
             locale === lang.code ? "text-black" : "text-zinc-500 hover:text-foreground"
           }`}
         >

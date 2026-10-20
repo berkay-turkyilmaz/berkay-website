@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    rules: {
+      // Mount-time localStorage loads and prop/route syncs are intentional (SSR-safe hydration).
+      // Kept visible as warnings so new cases are still reviewed.
+      "react-hooks/set-state-in-effect": "warn",
+    },
+  },
 ]);
 
 export default eslintConfig;

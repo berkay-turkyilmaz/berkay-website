@@ -46,11 +46,11 @@ export function AiLabPreview() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500/60 opacity-75 motion-reduce:animate-none" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
+            <span className="font-mono text-[11px] font-medium uppercase tracking-[0.18em] text-foreground/70 sm:text-[11px]">
               {t("automation.system_active")}
             </span>
           </div>
-          <span className="rounded-full border border-border/40 bg-background/60 px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+          <span className="rounded-full border border-border/40 bg-background/60 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
             {t("ai_lab.tag")}
           </span>
         </div>

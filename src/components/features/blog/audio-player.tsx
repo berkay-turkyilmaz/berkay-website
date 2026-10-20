@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Play, Pause, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -20,16 +20,14 @@ export function AudioPlayer({ title, text }: AudioPlayerProps) {
   // State
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
   // Metni birleştir
   const cleanText = `${title}. ${text}`;
 
   // 1. Süre Hesaplama (Ortalama 145 kelime/dakika)
-  useEffect(() => {
-    const wordCount = cleanText.split(/\s+/).length;
-    const estimatedSeconds = Math.ceil((wordCount / 145) * 60);
-    setDuration(estimatedSeconds);
+  const duration = useMemo(() => {
+    const wordCount = cleanText.split(/s+/).length;
+    return Math.ceil((wordCount / 145) * 60);
   }, [cleanText]);
 
   // 2. Player Hazırlığı
@@ -85,7 +83,9 @@ export function AudioPlayer({ title, text }: AudioPlayerProps) {
           window.speechSynthesis.cancel();
       };
     }
-  }, [cleanText, duration]); // currentTime dependency removed to prevent restart loop
+  // currentTime is intentionally omitted: including it would restart playback every tick.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cleanText, duration]);
 
   // --- KONTROLLER ---
 
@@ -144,7 +144,7 @@ export function AudioPlayer({ title, text }: AudioPlayerProps) {
                 </div>
                 <div>
                     <h3 className="text-sm font-bold text-foreground line-clamp-1">{t("audio_title")}</h3>
-                    <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-mono">
+                    <p className="text-[11px] text-muted-foreground uppercase tracking-widest font-mono">
                         {isPlaying ? t("audio_playing") : t("audio_idle")}
                     </p>
                 </div>

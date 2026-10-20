@@ -23,7 +23,7 @@ export function SignsChapterSection({
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-amber-500/80">
           {chapter.reference}
         </p>
-        <span className="rounded-full border border-amber-900/30 bg-amber-950/30 px-2 py-0.5 text-[10px] font-mono text-amber-200/40">
+        <span className="rounded-full border border-amber-900/30 bg-amber-950/30 px-2 py-0.5 text-[11px] font-mono text-amber-200/40">
           {String(index + 1).padStart(2, "0")}
         </span>
       </div>

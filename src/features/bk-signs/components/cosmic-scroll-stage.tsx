@@ -117,7 +117,7 @@ export function CosmicScrollStage() {
         </motion.div>
 
         <motion.p
-          className="absolute top-8 text-center text-[10px] uppercase tracking-[0.3em] text-white/25"
+          className="absolute top-8 text-center text-[11px] uppercase tracking-[0.3em] text-white/25"
           style={{ opacity: labelOpacity }}
         >
           Aşağı kaydır

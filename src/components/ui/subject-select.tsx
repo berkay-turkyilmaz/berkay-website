@@ -49,7 +49,7 @@ export function SubjectSelect({
           "w-full h-11 bg-secondary/20 border border-border/50 rounded-xl px-4 text-sm text-left flex items-center justify-between transition-all duration-200",
           "focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/50",
           error && "border-destructive/50 focus:ring-destructive/20",
-          !selected && "text-muted-foreground/40"
+          !selected && "text-muted-foreground/70"
         )}
       >
         <span className={selected ? "text-foreground" : undefined}>
@@ -57,7 +57,7 @@ export function SubjectSelect({
         </span>
         <ChevronDown
           className={cn(
-            "w-4 h-4 text-muted-foreground/50 transition-transform shrink-0",
+            "w-4 h-4 text-muted-foreground/70 transition-transform shrink-0",
             open && "rotate-180"
           )}
         />

@@ -56,14 +56,14 @@ export function CurrentFocusWidget() {
 
         {/* Badge */}
         <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${config.badgeCls}`}
+          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${config.badgeCls}`}
         >
           <Icon className="w-3 h-3" />
           {t(config.badgeKey)}
         </span>
 
         {/* Since */}
-        <span className="ml-auto text-[11px] text-muted-foreground/50 font-mono">
+        <span className="ml-auto text-[11px] text-muted-foreground/70 font-mono">
           {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {(t as any)(currentFocus.sinceKey)}
         </span>
@@ -71,7 +71,7 @@ export function CurrentFocusWidget() {
 
       {/* Project + description */}
       <div className="space-y-1.5">
-        <p className="text-xs font-bold text-muted-foreground/50 uppercase tracking-widest">
+        <p className="text-xs font-bold text-muted-foreground/70 uppercase tracking-widest">
           {t("building_label")}
         </p>
         <h3 className="text-base font-bold text-foreground">
@@ -87,7 +87,7 @@ export function CurrentFocusWidget() {
       {/* Available for + CTA */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-2 border-t border-border/30">
         <div className="flex-1 space-y-1.5">
-          <p className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest">
+          <p className="text-[11px] font-bold text-muted-foreground/70 uppercase tracking-widest">
             {t("available_for_title")}
           </p>
           <div className="flex flex-wrap gap-1.5">

@@ -91,7 +91,7 @@ export async function GitHubActivity() {
     <div className="w-full bg-card border border-border/60 rounded-2xl p-5 sm:p-6 space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between mb-1">
-        <span className="text-[10px] font-bold text-muted-foreground/50 uppercase tracking-widest flex items-center gap-1.5">
+        <span className="text-[11px] font-bold text-muted-foreground/70 uppercase tracking-widest flex items-center gap-1.5">
           <GitBranch className="w-3 h-3" />
           GitHub Activity
         </span>
@@ -118,7 +118,7 @@ export async function GitHubActivity() {
             <span className="flex-1 leading-relaxed group-hover:text-foreground/80 transition-colors">
               <EventDescription event={event} />
             </span>
-            <span className="text-[10px] text-muted-foreground/35 shrink-0 mt-0.5">
+            <span className="text-[11px] text-muted-foreground/70 shrink-0 mt-0.5">
               {formatRelativeTime(event.created_at)}
             </span>
           </li>

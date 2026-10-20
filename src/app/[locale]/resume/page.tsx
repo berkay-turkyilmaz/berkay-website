@@ -63,7 +63,7 @@ export default async function ResumePage({
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
                 {t("contact_title")}
               </h3>
               <div className="space-y-2">
@@ -98,7 +98,7 @@ export default async function ResumePage({
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+              <h3 className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
                 {t("language_title")}
               </h3>
               <p className="text-sm text-muted-foreground">{t("language_value")}</p>
